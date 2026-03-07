@@ -1,6 +1,6 @@
 <?php
 /*-------------------------------------------------
-   planning_platform.php – منصة نطاق منى حج 47
+   planning_platform.php – منصة نطاق منى 
 --------------------------------------------------*/
 date_default_timezone_set('Asia/Riyadh');
 ?>
@@ -9,7 +9,7 @@ date_default_timezone_set('Asia/Riyadh');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة نطاق منى حج 47</title>
+    <title>منصة نطاق منى</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         *{box-sizing:border-box;margin:0;padding:0}
@@ -137,15 +137,15 @@ date_default_timezone_set('Asia/Riyadh');
 <button class="hamburger-btn" id="hamburgerBtn"><i class="fas fa-bars"></i></button>
 
 <div class="sidebar" id="sidebar">
-    <div class="logo">منصة نطاق منى حج 47</div>
+    <div class="logo">منصة نطاق منى </div>
     <ul>
-        <li class="active" data-form="groundEMS"><i class="fas fa-ambulance"></i> الإسعاف الأرضي</li>
+        <li class="active" data-form="groundEMS"><i class="fas fa-ambulance"></i> التحضير اليومي</li>
         <li data-form="logistics"><i class="fas fa-dolly"></i> نموذج تسليم مناوبة</li>
     </ul>
 </div>
 
 <div class="main-content">
-    <div class="header"><h2>منصة فريق التخطيط</h2></div>
+    <div class="header"><h2>منصة نطاق منى</h2></div>
 
     <div class="form-container" id="groundEMS" style="display:block">
         <div class="form-section">
@@ -153,11 +153,8 @@ date_default_timezone_set('Asia/Riyadh');
             <label for="scope">النطاق:</label>
             <select id="scope" required>
                 <option value="" disabled selected>اختر النطاق</option>
-                <option value="الحرم">نطاق الحرم</option>
-                <option value="العاصمة المقدسة">نطاق العاصمة المقدسة</option>
                 <option value="منى">نطاق منى</option>
-                <option value="عرفات ومزدلفة">نطاق عرفات ومزدلفة</option>
-                <option value="طريق الحاج">نطاق طريق الحاج</option>
+
             </select>
 
             <label for="sector">القطاع:</label>

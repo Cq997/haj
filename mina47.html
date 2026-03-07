@@ -33,10 +33,6 @@
             transition: width 0.3s;
         }
 
-        .sidebar.collapsed {
-            width: 60px;
-        }
-
         .sidebar .logo {
             text-align: center;
             font-size: 20px;
@@ -137,7 +133,8 @@
         select,
         input[type="number"],
         input[type="text"],
-        input[type="datetime-local"] {
+        input[type="datetime-local"],
+        textarea {
             width: 100%;
             padding: 10px 12px;
             border: 1px solid #b2bec3;
@@ -149,10 +146,17 @@
         }
 
         select:focus,
-        input:focus {
+        input:focus,
+        textarea:focus {
             background: #fff;
             border-color: #0984e3;
             outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+            line-height: 1.8;
         }
 
         table {
@@ -190,6 +194,13 @@
             background: #00a383;
         }
 
+        .helper-text {
+            font-size: 13px;
+            color: #636e72;
+            margin-top: -6px;
+            margin-bottom: 12px;
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 position: fixed;
@@ -201,10 +212,6 @@
 
             .sidebar.active {
                 left: 0;
-            }
-
-            .sidebar.collapsed {
-                left: -60px;
             }
 
             .hamburger-btn {
@@ -260,32 +267,14 @@
                     <option value="القطارات">القطارات</option>
                     <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
                     <option value="بطن منى الشمالي">بطن منى الشمالي</option>
-                    <option value="الشعيبين">الشعيبين</option>
                     <option value="منى الجديد 1">منى الجديد 1</option>
                     <option value="منى الجديد 2">منى الجديد 2</option>
+                    <option value="الشعيبين">الشعيبين</option>
                 </select>
             </div>
 
             <div class="form-section">
                 <h3>معلومات المناوبة</h3>
-
-                <label for="ems_lead">اسم كبير مسعفي القطاع:</label>
-                <input type="text" id="ems_lead" required>
-
-                <label for="assistant1">اسم مساعد كبير المسعفين 1:</label>
-                <input type="text" id="assistant1" required>
-
-                <label for="assistant2">اسم مساعد كبير المسعفين 2:</label>
-                <input type="text" id="assistant2" required>
-
-                <label for="assistant3">اسم مساعد كبير المسعفين 3:</label>
-                <input type="text" id="assistant3" required>
-
-                <label for="assistant4">اسم مساعد كبير المسعفين 4:</label>
-                <input type="text" id="assistant4" required>
-
-                <label for="shift_datetime">التاريخ والوقت:</label>
-                <input type="datetime-local" id="shift_datetime" required>
 
                 <label for="shift_time">فترة المناوبة:</label>
                 <select id="shift_time" required>
@@ -293,6 +282,24 @@
                     <option value="الصباحية">الصباحية</option>
                     <option value="المسائية">المسائية</option>
                 </select>
+
+                <label for="ems_lead">اسم كبير مسعفي القطاع:</label>
+                <input type="text" id="ems_lead" readonly>
+
+                <label for="assistant1">اسم مساعد كبير المسعفين 1:</label>
+                <input type="text" id="assistant1" readonly>
+
+                <label for="assistant2">اسم مساعد كبير المسعفين 2:</label>
+                <input type="text" id="assistant2" readonly>
+
+                <label for="assistant3">اسم مساعد كبير المسعفين 3:</label>
+                <input type="text" id="assistant3" readonly>
+
+                <label for="assistant4">اسم مساعد كبير المسعفين 4:</label>
+                <input type="text" id="assistant4" readonly>
+
+                <label for="shift_datetime">التاريخ والوقت:</label>
+                <input type="datetime-local" id="shift_datetime" required>
             </div>
 
             <div class="form-section">
@@ -340,18 +347,9 @@
 
             <div class="form-section">
                 <h3>ملاحظات المناوبة</h3>
-
-                <label for="note1">الملاحظة 1:</label>
-                <input type="text" id="note1">
-
-                <label for="note2">الملاحظة 2:</label>
-                <input type="text" id="note2">
-
-                <label for="note3">الملاحظة 3:</label>
-                <input type="text" id="note3">
-
-                <label for="note4">الملاحظة 4:</label>
-                <input type="text" id="note4">
+                <label for="notes">الملاحظات:</label>
+                <textarea id="notes" placeholder="اكتب كل ملاحظة في سطر مستقل"></textarea>
+                <div class="helper-text">سيتم إرسال كل سطر كنقطة مستقلة.</div>
             </div>
 
             <button type="button" class="submit-btn" onclick="sendGroundEMS()">
@@ -394,17 +392,198 @@
             });
         });
 
+        const teamsData = {
+            "الجمرات": {
+                "الصباحية": {
+                    lead: "راكان منصور الحصيني",
+                    assistants: [
+                        "فواز حميد الظفيري",
+                        "تركي أحمد عبدالله الغامدي",
+                        "محمد علي عبدالله القحطاني",
+                        "فيصل جري المطيري"
+                    ]
+                },
+                "المسائية": {
+                    lead: "محمد عبدالکريم إبراهيم الدعيجي",
+                    assistants: [
+                        "عبدالله علي القحطاني",
+                        "عبدالعزيز محمد الجهني",
+                        "أحمد عبدالرحمن التركستاني",
+                        ""
+                    ]
+                }
+            },
+
+            "بطن منى الشمالي": {
+                "الصباحية": {
+                    lead: "حمود سويد العنزي",
+                    assistants: [
+                        "إبراهيم علي إبراهيم جبران",
+                        "مشري حامد العتيبي",
+                        "",
+                        ""
+                    ]
+                },
+                "المسائية": {
+                    lead: "فيصل حمود عبيد العتيبي",
+                    assistants: [
+                        "ناصر عبدالله زوايد",
+                        "",
+                        "",
+                        ""
+                    ]
+                }
+            },
+
+            "بطن منى الجنوبي": {
+                "الصباحية": {
+                    lead: "سلمان نهير العنزي",
+                    assistants: [
+                        "عبدالرحمن عبدالعزيز السهلي",
+                        "مساعد حمد الدغيمان",
+                        "",
+                        ""
+                    ]
+                },
+                "المسائية": {
+                    lead: "محمد منديل المنديل",
+                    assistants: [
+                        "فيصل محمد مقبول السيالي",
+                        "",
+                        "",
+                        ""
+                    ]
+                }
+            },
+
+            "القطارات": {
+                "الصباحية": {
+                    lead: "مرزوق معيلي الدوسري",
+                    assistants: [
+                        "عبيد سالم رشيدان الرويس",
+                        "خالد محمد عبدالمجيد العياضي",
+                        "",
+                        ""
+                    ]
+                },
+                "المسائية": {
+                    lead: "خالد نايف لطيف الشمري",
+                    assistants: [
+                        "خالد علي العنزي",
+                        "محمد إبراهيم بحري",
+                        "",
+                        ""
+                    ]
+                }
+            },
+
+            "منى الجديد 1": {
+                "الصباحية": {
+                    lead: "عبدالله صالح محمد الغامدي",
+                    assistants: [
+                        "وليد حمود العنزي",
+                        "فهد حمد الشمري",
+                        "",
+                        ""
+                    ]
+                },
+                "المسائية": {
+                    lead: "عبدالله باني العنزي",
+                    assistants: [
+                        "سعدون فريح  الشمري",
+                        "",
+                        "",
+                        ""
+                    ]
+                }
+            },
+
+            "منى الجديد 2": {
+                "الصباحية": {
+                    lead: "جاسم عبدالجواد جاسم الجريدان",
+                    assistants: [
+                        "فيصل صقر المطيري",
+                        "زياد سعيد الشهراني",
+                        "",
+                        ""
+                    ]
+                },
+                "المسائية": {
+                    lead: "بندر أحمد علواني",
+                    assistants: [
+                        "حاكم سعد الدعرمي",
+                        "تركي نزال السبيعي",
+                        "",
+                        ""
+                    ]
+                }
+            },
+
+            "الشعيبين": {
+                "الصباحية": {
+                    lead: "موسى علي أحمد غروي",
+                    assistants: [
+                        "طلال علي الشمري",
+                        "فهد حمود الشمري",
+                        "",
+                        ""
+                    ]
+                },
+                "المسائية": {
+                    lead: "فواز فهد الأشجعي",
+                    assistants: [
+                        "علي سلامة العنزي",
+                        "مبارك محسن العجمي",
+                        "",
+                        ""
+                    ]
+                }
+            }
+        };
+
+        const sectorSelect = document.getElementById('sector');
+        const shiftTimeSelect = document.getElementById('shift_time');
+        const emsLeadInput = document.getElementById('ems_lead');
+        const assistant1Input = document.getElementById('assistant1');
+        const assistant2Input = document.getElementById('assistant2');
+        const assistant3Input = document.getElementById('assistant3');
+        const assistant4Input = document.getElementById('assistant4');
+
+        function clearTeamFields() {
+            emsLeadInput.value = '';
+            assistant1Input.value = '';
+            assistant2Input.value = '';
+            assistant3Input.value = '';
+            assistant4Input.value = '';
+        }
+
+        function fillTeamData() {
+            const sector = sectorSelect.value;
+            const shift = shiftTimeSelect.value;
+
+            clearTeamFields();
+
+            if (!sector || !shift) return;
+            if (!teamsData[sector] || !teamsData[sector][shift]) return;
+
+            const team = teamsData[sector][shift];
+
+            emsLeadInput.value = team.lead || '';
+            assistant1Input.value = team.assistants[0] || '';
+            assistant2Input.value = team.assistants[1] || '';
+            assistant3Input.value = team.assistants[2] || '';
+            assistant4Input.value = team.assistants[3] || '';
+        }
+
+        sectorSelect.addEventListener('change', fillTeamData);
+        shiftTimeSelect.addEventListener('change', fillTeamData);
+
         function sendGroundEMS() {
             const required = [
                 'scope',
                 'sector',
-                'ems_lead',
-                'assistant1',
-                'assistant2',
-                'assistant3',
-                'assistant4',
-                'shift_datetime',
-                'shift_time'
+                'shift_time',
+                'shift_datetime'
             ];
 
             for (let id of required) {
@@ -417,15 +596,21 @@
 
             const scope = document.getElementById('scope').value;
             const sector = document.getElementById('sector').value;
-
-            const emsLead = document.getElementById('ems_lead').value;
-            const assistant1 = document.getElementById('assistant1').value;
-            const assistant2 = document.getElementById('assistant2').value;
-            const assistant3 = document.getElementById('assistant3').value;
-            const assistant4 = document.getElementById('assistant4').value;
-
-            const datetime = document.getElementById('shift_datetime').value;
             const shift = document.getElementById('shift_time').value;
+            const datetime = document.getElementById('shift_datetime').value;
+
+            if (!teamsData[sector] || !teamsData[sector][shift]) {
+                alert('لا توجد بيانات فريق مرتبطة بهذا القطاع وهذه الفترة.');
+                return;
+            }
+
+            const team = teamsData[sector][shift];
+
+            const emsLead = team.lead || '-';
+            const assistant1 = document.getElementById('assistant1').value || '-';
+            const assistant2 = document.getElementById('assistant2').value || '-';
+            const assistant3 = document.getElementById('assistant3').value || '-';
+            const assistant4 = document.getElementById('assistant4').value || '-';
 
             const operational = document.getElementById('operational_units').value || 0;
             const providers = document.getElementById('total_providers').value || 0;
@@ -435,23 +620,19 @@
             const golfs = document.getElementById('golf_count').value || 0;
             const walking = document.getElementById('walking_count').value || 0;
 
-            const note1 = document.getElementById('note1').value.trim();
-            const note2 = document.getElementById('note2').value.trim();
-            const note3 = document.getElementById('note3').value.trim();
-            const note4 = document.getElementById('note4').value.trim();
+            const notes = document.getElementById('notes').value.trim();
 
             let msg = `🚑 منصة نطاق منى – التحضير اليومي\n\n`;
             msg += `📍 النطاق: ${scope}\n`;
-            msg += `📍 القطاع: ${sector}\n\n`;
+            msg += `📍 القطاع: ${sector}\n`;
+            msg += `🕘 فترة المناوبة: ${shift}\n`;
+            msg += `🕒 التاريخ والوقت: ${datetime}\n\n`;
 
             msg += `👨‍⚕️ كبير مسعفي القطاع: ${emsLead}\n`;
             msg += `مساعد كبير المسعفين 1: ${assistant1}\n`;
             msg += `مساعد كبير المسعفين 2: ${assistant2}\n`;
             msg += `مساعد كبير المسعفين 3: ${assistant3}\n`;
             msg += `مساعد كبير المسعفين 4: ${assistant4}\n\n`;
-
-            msg += `🕒 التاريخ والوقت: ${datetime}\n`;
-            msg += `فترة المناوبة: ${shift}\n\n`;
 
             msg += `📊 الطاقة التشغيلية\n`;
             msg += `عدد الوحدات التشغيلية في المناوبة: ${operational}\n`;
@@ -463,10 +644,16 @@
             msg += `عدد الفرق الراجلة: ${walking}\n\n`;
 
             msg += `📝 ملاحظات المناوبة\n`;
-            if (note1) msg += `1- ${note1}\n`;
-            if (note2) msg += `2- ${note2}\n`;
-            if (note3) msg += `3- ${note3}\n`;
-            if (note4) msg += `4- ${note4}\n`;
+            if (notes) {
+                const lines = notes.split('\n');
+                lines.forEach(line => {
+                    if (line.trim() !== '') {
+                        msg += `• ${line.trim()}\n`;
+                    }
+                });
+            } else {
+                msg += `• لا توجد ملاحظات\n`;
+            }
 
             const encoded = encodeURIComponent(msg);
 
@@ -476,6 +663,8 @@
 
             window.open(url, '_blank');
         }
+
+        fillTeamData();
     </script>
 </body>
 </html>

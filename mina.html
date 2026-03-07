@@ -205,17 +205,6 @@ date_default_timezone_set('Asia/Riyadh');
             </table>
         </div>
 
-        <div class="form-section">
-            <h3>الموارد التقنية</h3>
-            <table id="tech_resources">
-                <thead><tr><th>الاسم</th><th>العدد</th></tr></thead>
-                <tbody>
-
-                    <tr><td>جهاز مسعف إلكتروني</td><td><input type="number" min="0" placeholder="0"></td></tr>
-                    <tr><td>جهاز اتصال لاسلكي</td><td><input type="number" min="0" placeholder="0"></td></tr>
-                </tbody>
-            </table>
-        </div>
 
         <div class="form-section">
             <h3>ملاحظات المناوبة</h3>
@@ -360,16 +349,20 @@ function sendGroundEMS(){
     let msg=`== منصة نطاق منى – التحضير اليومي ==\n\n`;
     msg+=`النطاق: ${scopeSelect.value}\nالقطاع: ${sectorSelect.value}\n`;
     msg+=`كبير المسعفين: ${document.getElementById('ems_lead').value}\n`;
-    msg+=`الكود الوظيفي: ${document.getElementById('ems_code').value}\n`;
+       msg+=`مساعد كبير المسعفين 1: ${document.getElementById('ems_lead').value}\n`;
+       msg+=`2 مساعد كبير المسعفين: ${document.getElementById('ems_lead').value}\n`;
+       msg+=`3 مساعد كبير المسعفين: ${document.getElementById('ems_lead').value}\n`;
+       msg+=`4 مساعد كبير المسعفين: ${document.getElementById('ems_lead').value}\n`;
     msg+=`التاريخ والوقت: ${document.getElementById('shift_datetime').value}\n`;
-    msg+=`رقم المناوبة: ${document.getElementById('shift_number').value}\n\n`;
+    msg+=`فترة المناوبة: ${document.getElementById('shift_number').value}\n\n`;
     msg+=`عدد الوحدات التشغيلية: ${document.getElementById('operational_units').value}\n`;
     msg+=`مقدمو الخدمة: ${document.getElementById('total_providers').value}\n`;
     msg+=`الموظفون: ${document.getElementById('employees_count').value}\n`;
     msg+=`المتطوعون: ${document.getElementById('volunteers_count').value}\n\n`;
-    msg+=`-- الموارد التقنية --\n${collectTableNumbers(document.getElementById('tech_resources'))}\n\n`;
-    msg+=`-- الموارد الطبية --\n${collectTableNumbers(document.getElementById('medical_resources'))}\n\n`;
-    msg+=`-- وسائل النقل --\n${collectTableNumbers(document.getElementById('transport_resources'))}`;
+    msg+=`المركبات: ${document.getElementById('vehicles').value}\n\n`;
+    msg+=`القولفات: ${document.getElementById('golves').value}\n\n`;
+    msg+=`الراجلة: ${document.getElementById('walcar').value}\n\n`;
+    msg+=`الملاحظات: ${document.getElementById('nots').value}\n\n`;
     const encoded=encodeURIComponent(msg);
     const link=/iPhone|iPad|iPod/i.test(navigator.userAgent)?`whatsapp://send?text=${encoded}`:`https://wa.me/?text=${encoded}`;
     window.open(link,'_blank');

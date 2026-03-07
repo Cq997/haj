@@ -191,27 +191,6 @@ date_default_timezone_set('Asia/Riyadh');
             <h3>الطاقة التشغيلية</h3>
             <label for="operational_units">عدد الوحدات التشغيلية في المناوبة:</label>
             <input type="number" id="operational_units" required>
-
-            <label for="total_providers">عدد مقدمي الخدمة الإسعافية:</label>
-            <input type="number" id="total_providers" required>
-
-            <label for="employees_count">عدد الموظفين:</label>
-            <input type="number" id="employees_count" required>
-
-            <label for="volunteers_count">عدد المتطوعين:</label>
-            <input type="number" id="volunteers_count" required>
-
-            <label for="volunteers_count">عدد فرقة قولف:</label>
-            <input type="number" id="volunteers_count" required>
-
-            <label for="volunteers_count">عدد فرقة اسعافية:</label>
-            <input type="number" id="volunteers_count" required>
-
-            <label for="volunteers_count">عدد فرقة راجلة:</label>
-            <input type="number" id="volunteers_count" required>
-
-            <label for="volunteers_count">عدد فرقة تدخل سريع مركبة:</label>
-            <input type="number" id="volunteers_count" required>
            
             <table id="tech_resources">
                 <thead><tr><th>النوع</th><th>العدد</th></tr></thead>
@@ -232,8 +211,7 @@ date_default_timezone_set('Asia/Riyadh');
             <table id="tech_resources">
                 <thead><tr><th>الاسم</th><th>العدد</th></tr></thead>
                 <tbody>
-                    <tr><td>جهاز حاسب آلي</td><td><input type="number" min="0" placeholder="0"></td></tr>
-                    <tr><td>جهاز تابلت</td><td><input type="number" min="0" placeholder="0"></td></tr>
+
                     <tr><td>جهاز مسعف إلكتروني</td><td><input type="number" min="0" placeholder="0"></td></tr>
                     <tr><td>جهاز اتصال لاسلكي</td><td><input type="number" min="0" placeholder="0"></td></tr>
                 </tbody>
@@ -257,29 +235,7 @@ date_default_timezone_set('Asia/Riyadh');
             </table>
         </div>
 
-        <div class="form-section">
-            <h3>وسائل النقل</h3>
-            <table id="transport_resources">
-                <thead><tr><th>الاسم</th><th>العدد</th></tr></thead>
-                <tbody>
-                    <tr><td>سيارات الإسعاف        </td><td><input type="number" min="0" placeholder="0"></td></tr>
-                    <tr><td>القولف               </td><td><input type="number" min="0" placeholder="0"></td></tr>
-                    <tr><td>دراجات نارية        </td><td><input type="number" min="0" placeholder="0"></td></tr>
-                    <tr><td>دراجات كهربائية      </td><td><input type="number" min="0" placeholder="0"></td></tr>
-                    <tr><td>سكوترات              </td><td><input type="number" min="0" placeholder="0"></td></tr>
-                    <tr><td>بولاريس              </td><td><input type="number" min="0" placeholder="0"></td></tr>
-                    <tr><td>مركبة تدخل سريع عبيًة                </td><td><input type="number" min="0" placeholder="0"></td></tr>
-                    <tr><td>طويق                 </td><td><input type="number" min="0" placeholder="0"></td></tr>
-                    <tr><td>طويق ICU             </td><td><input type="number" min="0" placeholder="0"></td></tr>
-                    <tr><td>سلمى                 </td><td><input type="number" min="0" placeholder="0"></td></tr>
-                    <tr><td>سند                  </td><td><input type="number" min="0" placeholder="0"></td></tr>
-                    <tr><td>تنهات                </td><td><input type="number" min="0" placeholder="0"></td></tr>
-                    <tr><td>خزام                 </td><td><input type="number" min="0" placeholder="0"></td></tr>
-                    <tr><td>هداج                 </td><td><input type="number" min="0" placeholder="0"></td></tr>
-                    <tr><td>ضمك                  </td><td><input type="number" min="0" placeholder="0"></td></tr>
-                </tbody>
-            </table>
-        </div>
+
 
         <button type="button" class="submit-btn" onclick="sendGroundEMS()">إرسال</button>
     </div>
@@ -409,7 +365,7 @@ function sendGroundEMS(){
         const el=document.getElementById(id);
         if(!el.value.trim()){alert('يرجى تعبئة جميع الحقول المطلوبة');return;}
     }
-    let msg=`== منصة تخطيط – الإسعاف الأرضي ==\n\n`;
+    let msg=`== منصة نطاق منى – التحضير اليومي ==\n\n`;
     msg+=`النطاق: ${scopeSelect.value}\nالقطاع: ${sectorSelect.value}\n`;
     msg+=`كبير المسعفين: ${document.getElementById('ems_lead').value}\n`;
     msg+=`الكود الوظيفي: ${document.getElementById('ems_code').value}\n`;

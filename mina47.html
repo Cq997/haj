@@ -243,7 +243,6 @@
             <h2>منصة نطاق منى</h2>
         </div>
 
-        <!-- نموذج التحضير اليومي -->
         <div class="form-container" id="groundEMS" style="display: block;">
             <div class="form-section">
                 <h3>بيانات النطاق والقطاع</h3>
@@ -262,8 +261,8 @@
                     <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
                     <option value="بطن منى الشمالي">بطن منى الشمالي</option>
                     <option value="الشعيبين">الشعيبين</option>
-                     <option value="منى الجديد 1">منى الجديد 1</option>
-                     <option value="منى الجديد 2">منى الجديد 2</option>
+                    <option value="منى الجديد 1">منى الجديد 1</option>
+                    <option value="منى الجديد 2">منى الجديد 2</option>
                 </select>
             </div>
 
@@ -288,10 +287,12 @@
                 <label for="shift_datetime">التاريخ والوقت:</label>
                 <input type="datetime-local" id="shift_datetime" required>
 
-                <label for="shift_datetime">التاريخ والوقت:</label>
-                <option value="" disabled selected>اختر فترة المناوبة</option>
+                <label for="shift_time">فترة المناوبة:</label>
+                <select id="shift_time" required>
+                    <option value="" disabled selected>اختر فترة المناوبة</option>
                     <option value="الصباحية">الصباحية</option>
                     <option value="المسائية">المسائية</option>
+                </select>
             </div>
 
             <div class="form-section">
@@ -354,11 +355,10 @@
             </div>
 
             <button type="button" class="submit-btn" onclick="sendGroundEMS()">
-                إرسال التقرير 
+                إرسال التقرير
             </button>
         </div>
 
-        <!-- نموذج تسليم المناوبة -->
         <div class="form-container" id="logistics">
             <div class="form-section">
                 <h3>نموذج تسليم مناوبة</h3>
@@ -409,7 +409,7 @@
 
             for (let id of required) {
                 const el = document.getElementById(id);
-                if (!el || !el.value.trim()) {
+                if (!el || !el.value || !el.value.trim()) {
                     alert('يرجى تعبئة جميع الحقول المطلوبة');
                     return;
                 }
@@ -479,5 +479,3 @@
     </script>
 </body>
 </html>
-
-

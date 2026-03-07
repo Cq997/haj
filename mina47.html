@@ -257,11 +257,13 @@
                 <label for="sector">القطاع:</label>
                 <select id="sector" required>
                     <option value="" disabled selected>اختر القطاع</option>
-                    <option value="القطاع الأول">القطاع الأول</option>
-                    <option value="القطاع الثاني">القطاع الثاني</option>
-                    <option value="القطاع الثالث">القطاع الثالث</option>
-                    <option value="القطاع الرابع">القطاع الرابع</option>
-                    <option value="القطاع الخامس">القطاع الخامس</option>
+                    <option value="الجمرات">الجمرات</option>
+                    <option value="القطارات">القطارات</option>
+                    <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
+                    <option value="بطن منى الشمالي">بطن منى الشمالي</option>
+                    <option value="الشعيبين">الشعيبين</option>
+                     <option value="منى الجديد 1">منى الجديد 1</option>
+                     <option value="منى الجديد 2">منى الجديد 2</option>
                 </select>
             </div>
 
@@ -286,8 +288,11 @@
                 <label for="shift_datetime">التاريخ والوقت:</label>
                 <input type="datetime-local" id="shift_datetime" required>
 
-                <label for="shift_time">فترة المناوبة:</label>
-                <input type="text" id="shift_time" placeholder="مثال: الصباحية / المسائية / الليلية" required>
+ <label for="sector">فترة المناوبة:</label>
+                <select id="sector" required>
+                    <option value="" disabled selected>اختر فترة المناوبة</option>
+                    <option value="الصباحية">الصباحية</option>
+                    <option value="المسائية">المسائية</option>
             </div>
 
             <div class="form-section">
@@ -350,7 +355,7 @@
             </div>
 
             <button type="button" class="submit-btn" onclick="sendGroundEMS()">
-                إرسال التقرير عبر واتساب
+                إرسال التقرير 
             </button>
         </div>
 

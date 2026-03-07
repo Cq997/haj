@@ -1,1 +1,479 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>منصة نطاق منى</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: #f4f7fa;
+            direction: rtl;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: #2d3436;
+            color: #dfe6e9;
+            display: flex;
+            flex-direction: column;
+            padding-top: 20px;
+            transition: width 0.3s;
+        }
+
+        .sidebar.collapsed {
+            width: 60px;
+        }
+
+        .sidebar .logo {
+            text-align: center;
+            font-size: 20px;
+            margin-bottom: 25px;
+            font-weight: bold;
+            color: #dfe6e9;
+            padding: 0 10px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            flex-grow: 1;
+        }
+
+        .sidebar li {
+            padding: 15px 18px;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar li i {
+            font-size: 17px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .sidebar li:hover,
+        .sidebar li.active {
+            background: #636e72;
+        }
+
+        .hamburger-btn {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            background: #2d3436;
+            color: #dfe6e9;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 2000;
+            display: none;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 25px 20px;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header h2 {
+            color: #2d3436;
+            font-size: 24px;
+        }
+
+        .form-container {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 25px 20px;
+            display: none;
+        }
+
+        .form-section {
+            margin-bottom: 22px;
+        }
+
+        .form-section h3 {
+            background: #0984e3;
+            color: #fff;
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-size: 18px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #2d3436;
+            font-size: 15px;
+        }
+
+        select,
+        input[type="number"],
+        input[type="text"],
+        input[type="datetime-local"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #b2bec3;
+            border-radius: 6px;
+            font-size: 15px;
+            background: #dfe6e9;
+            transition: border-color 0.3s, background 0.3s;
+            margin-bottom: 12px;
+        }
+
+        select:focus,
+        input:focus {
+            background: #fff;
+            border-color: #0984e3;
+            outline: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #b2bec3;
+            padding: 10px 8px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        table th {
+            background: #74b9ff;
+            color: #fff;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px 10px;
+            background: #00b894;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 17px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #00a383;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                height: 100%;
+                z-index: 1500;
+                left: -240px;
+                top: 0;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .sidebar.collapsed {
+                left: -60px;
+            }
+
+            .hamburger-btn {
+                display: block;
+            }
+
+            .main-content {
+                padding: 80px 15px 20px;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="hamburger-btn" id="hamburgerBtn">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="sidebar" id="sidebar">
+        <div class="logo">منصة نطاق منى</div>
+        <ul>
+            <li class="active" data-form="groundEMS">
+                <i class="fas fa-ambulance"></i>
+                <span>التحضير اليومي</span>
+            </li>
+            <li data-form="logistics">
+                <i class="fas fa-dolly"></i>
+                <span>نموذج تسليم مناوبة</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <h2>منصة نطاق منى</h2>
+        </div>
+
+        <!-- نموذج التحضير اليومي -->
+        <div class="form-container" id="groundEMS" style="display: block;">
+            <div class="form-section">
+                <h3>بيانات النطاق والقطاع</h3>
+
+                <label for="scope">النطاق:</label>
+                <select id="scope" required>
+                    <option value="" disabled selected>اختر النطاق</option>
+                    <option value="نطاق منى">نطاق منى</option>
+                </select>
+
+                <label for="sector">القطاع:</label>
+                <select id="sector" required>
+                    <option value="" disabled selected>اختر القطاع</option>
+                    <option value="القطاع الأول">القطاع الأول</option>
+                    <option value="القطاع الثاني">القطاع الثاني</option>
+                    <option value="القطاع الثالث">القطاع الثالث</option>
+                    <option value="القطاع الرابع">القطاع الرابع</option>
+                    <option value="القطاع الخامس">القطاع الخامس</option>
+                </select>
+            </div>
+
+            <div class="form-section">
+                <h3>معلومات المناوبة</h3>
+
+                <label for="ems_lead">اسم كبير مسعفي القطاع:</label>
+                <input type="text" id="ems_lead" required>
+
+                <label for="assistant1">اسم مساعد كبير المسعفين 1:</label>
+                <input type="text" id="assistant1" required>
+
+                <label for="assistant2">اسم مساعد كبير المسعفين 2:</label>
+                <input type="text" id="assistant2" required>
+
+                <label for="assistant3">اسم مساعد كبير المسعفين 3:</label>
+                <input type="text" id="assistant3" required>
+
+                <label for="assistant4">اسم مساعد كبير المسعفين 4:</label>
+                <input type="text" id="assistant4" required>
+
+                <label for="shift_datetime">التاريخ والوقت:</label>
+                <input type="datetime-local" id="shift_datetime" required>
+
+                <label for="shift_time">فترة المناوبة:</label>
+                <input type="text" id="shift_time" placeholder="مثال: الصباحية / المسائية / الليلية" required>
+            </div>
+
+            <div class="form-section">
+                <h3>الطاقة التشغيلية</h3>
+
+                <table id="tech_resources">
+                    <thead>
+                        <tr>
+                            <th>النوع</th>
+                            <th>العدد</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>عدد الوحدات التشغيلية في المناوبة</td>
+                            <td><input type="number" id="operational_units" min="0" placeholder="0"></td>
+                        </tr>
+                        <tr>
+                            <td>عدد مقدمي الخدمة الإسعافية</td>
+                            <td><input type="number" id="total_providers" min="0" placeholder="0"></td>
+                        </tr>
+                        <tr>
+                            <td>عدد الموظفين</td>
+                            <td><input type="number" id="employees_count" min="0" placeholder="0"></td>
+                        </tr>
+                        <tr>
+                            <td>عدد المتطوعين</td>
+                            <td><input type="number" id="volunteers_count" min="0" placeholder="0"></td>
+                        </tr>
+                        <tr>
+                            <td>عدد فرق المركبات الإسعافية</td>
+                            <td><input type="number" id="vehicles_count" min="0" placeholder="0"></td>
+                        </tr>
+                        <tr>
+                            <td>عدد فرق عربات القولف</td>
+                            <td><input type="number" id="golf_count" min="0" placeholder="0"></td>
+                        </tr>
+                        <tr>
+                            <td>عدد الفرق الراجلة</td>
+                            <td><input type="number" id="walking_count" min="0" placeholder="0"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-section">
+                <h3>ملاحظات المناوبة</h3>
+
+                <label for="note1">الملاحظة 1:</label>
+                <input type="text" id="note1">
+
+                <label for="note2">الملاحظة 2:</label>
+                <input type="text" id="note2">
+
+                <label for="note3">الملاحظة 3:</label>
+                <input type="text" id="note3">
+
+                <label for="note4">الملاحظة 4:</label>
+                <input type="text" id="note4">
+            </div>
+
+            <button type="button" class="submit-btn" onclick="sendGroundEMS()">
+                إرسال التقرير عبر واتساب
+            </button>
+        </div>
+
+        <!-- نموذج تسليم المناوبة -->
+        <div class="form-container" id="logistics">
+            <div class="form-section">
+                <h3>نموذج تسليم مناوبة</h3>
+                <p style="text-align:center; color:#636e72; font-size:16px;">
+                    سيتم إضافة هذا النموذج لاحقًا.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const menuItems = document.querySelectorAll('.sidebar li');
+        const forms = document.querySelectorAll('.form-container');
+
+        hamburgerBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                menuItems.forEach(li => li.classList.remove('active'));
+                item.classList.add('active');
+
+                const targetForm = item.getAttribute('data-form');
+                forms.forEach(form => form.style.display = 'none');
+                document.getElementById(targetForm).style.display = 'block';
+
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        });
+
+        function sendGroundEMS() {
+            const required = [
+                'scope',
+                'sector',
+                'ems_lead',
+                'assistant1',
+                'assistant2',
+                'assistant3',
+                'assistant4',
+                'shift_datetime',
+                'shift_time'
+            ];
+
+            for (let id of required) {
+                const el = document.getElementById(id);
+                if (!el || !el.value.trim()) {
+                    alert('يرجى تعبئة جميع الحقول المطلوبة');
+                    return;
+                }
+            }
+
+            const scope = document.getElementById('scope').value;
+            const sector = document.getElementById('sector').value;
+
+            const emsLead = document.getElementById('ems_lead').value;
+            const assistant1 = document.getElementById('assistant1').value;
+            const assistant2 = document.getElementById('assistant2').value;
+            const assistant3 = document.getElementById('assistant3').value;
+            const assistant4 = document.getElementById('assistant4').value;
+
+            const datetime = document.getElementById('shift_datetime').value;
+            const shift = document.getElementById('shift_time').value;
+
+            const operational = document.getElementById('operational_units').value || 0;
+            const providers = document.getElementById('total_providers').value || 0;
+            const employees = document.getElementById('employees_count').value || 0;
+            const volunteers = document.getElementById('volunteers_count').value || 0;
+            const vehicles = document.getElementById('vehicles_count').value || 0;
+            const golfs = document.getElementById('golf_count').value || 0;
+            const walking = document.getElementById('walking_count').value || 0;
+
+            const note1 = document.getElementById('note1').value.trim();
+            const note2 = document.getElementById('note2').value.trim();
+            const note3 = document.getElementById('note3').value.trim();
+            const note4 = document.getElementById('note4').value.trim();
+
+            let msg = `🚑 منصة نطاق منى – التحضير اليومي\n\n`;
+            msg += `📍 النطاق: ${scope}\n`;
+            msg += `📍 القطاع: ${sector}\n\n`;
+
+            msg += `👨‍⚕️ كبير مسعفي القطاع: ${emsLead}\n`;
+            msg += `مساعد كبير المسعفين 1: ${assistant1}\n`;
+            msg += `مساعد كبير المسعفين 2: ${assistant2}\n`;
+            msg += `مساعد كبير المسعفين 3: ${assistant3}\n`;
+            msg += `مساعد كبير المسعفين 4: ${assistant4}\n\n`;
+
+            msg += `🕒 التاريخ والوقت: ${datetime}\n`;
+            msg += `فترة المناوبة: ${shift}\n\n`;
+
+            msg += `📊 الطاقة التشغيلية\n`;
+            msg += `عدد الوحدات التشغيلية في المناوبة: ${operational}\n`;
+            msg += `عدد مقدمي الخدمة الإسعافية: ${providers}\n`;
+            msg += `عدد الموظفين: ${employees}\n`;
+            msg += `عدد المتطوعين: ${volunteers}\n`;
+            msg += `عدد فرق المركبات الإسعافية: ${vehicles}\n`;
+            msg += `عدد فرق عربات القولف: ${golfs}\n`;
+            msg += `عدد الفرق الراجلة: ${walking}\n\n`;
+
+            msg += `📝 ملاحظات المناوبة\n`;
+            if (note1) msg += `1- ${note1}\n`;
+            if (note2) msg += `2- ${note2}\n`;
+            if (note3) msg += `3- ${note3}\n`;
+            if (note4) msg += `4- ${note4}\n`;
+
+            const encoded = encodeURIComponent(msg);
+
+            const url = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+                ? `https://wa.me/?text=${encoded}`
+                : `https://web.whatsapp.com/send?text=${encoded}`;
+
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
+
 

@@ -24,7 +24,7 @@
         }
 
         .sidebar {
-            width: 240px;
+            width: 260px;
             background: #2d3436;
             color: #dfe6e9;
             display: flex;
@@ -40,6 +40,7 @@
             font-weight: bold;
             color: #dfe6e9;
             padding: 0 10px;
+            line-height: 1.8;
         }
 
         .sidebar ul {
@@ -133,6 +134,7 @@
         select,
         input[type="number"],
         input[type="text"],
+        input[type="date"],
         input[type="datetime-local"],
         textarea {
             width: 100%;
@@ -171,6 +173,7 @@
             padding: 10px 8px;
             text-align: center;
             font-size: 14px;
+            vertical-align: middle;
         }
 
         table th {
@@ -201,12 +204,73 @@
             margin-bottom: 12px;
         }
 
+        .placeholder-box {
+            text-align: center;
+            padding: 35px 20px;
+            color: #636e72;
+            background: #f8fafc;
+            border: 1px dashed #b2bec3;
+            border-radius: 8px;
+            line-height: 2;
+        }
+
+        #handoverTable input,
+        #handoverTable select {
+            margin-bottom: 0;
+            background: #fff;
+        }
+
+        .priority-high,
+        .status-review {
+            background: #ff7675 !important;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .priority-medium,
+        .status-progress {
+            background: #fdcb6e !important;
+            color: #2d3436;
+            font-weight: bold;
+        }
+
+        .priority-low {
+            background: #55efc4 !important;
+            color: #2d3436;
+            font-weight: bold;
+        }
+
+        .status-complete {
+            background: #00b894 !important;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .btn-row .submit-btn {
+            flex: 1;
+        }
+
+        .btn-danger {
+            background: #d63031;
+        }
+
+        .btn-danger:hover {
+            background: #b71c1c;
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 position: fixed;
                 height: 100%;
                 z-index: 1500;
-                left: -240px;
+                left: -260px;
                 top: 0;
             }
 
@@ -222,6 +286,10 @@
                 padding: 80px 15px 20px;
                 width: 100%;
             }
+
+            .btn-row {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -232,24 +300,56 @@
     </button>
 
     <div class="sidebar" id="sidebar">
-        <div class="logo">منصة نطاق منى      حج 1447هـ</div>
+        <div class="logo">منصة نطاق منى<br>حج 1447هـ</div>
         <ul>
             <li class="active" data-form="groundEMS">
                 <i class="fas fa-ambulance"></i>
                 <span>التحضير اليومي</span>
             </li>
+
             <li data-form="logistics">
                 <i class="fas fa-dolly"></i>
                 <span>نموذج تسليم مناوبة</span>
+            </li>
+
+            <li data-form="unitsCheck">
+                <i class="fas fa-truck-medical"></i>
+                <span>نموذج تشييك الوحدات التشغيلية</span>
+            </li>
+
+            <li data-form="strategicStock">
+                <i class="fas fa-boxes-stacked"></i>
+                <span>تشييك الخزن الاستراتيجي</span>
+            </li>
+
+            <li data-form="minaMaps">
+                <i class="fas fa-map-location-dot"></i>
+                <span>خرائط نطاق منى</span>
+            </li>
+
+            <li data-form="deploymentPlan">
+                <i class="fas fa-network-wired"></i>
+                <span>خطة الانتشار</span>
+            </li>
+
+            <li data-form="extra1">
+                <i class="fas fa-folder-plus"></i>
+                <span>إضافي 1</span>
+            </li>
+
+            <li data-form="extra2">
+                <i class="fas fa-folder-plus"></i>
+                <span>إضافي 2</span>
             </li>
         </ul>
     </div>
 
     <div class="main-content">
         <div class="header">
-            <h2> منصة نطاق منى لموسم حج 1447هـ</h2>
+            <h2>منصة نطاق منى لموسم حج 1447هـ</h2>
         </div>
 
+        <!-- التحضير اليومي -->
         <div class="form-container" id="groundEMS" style="display: block;">
             <div class="form-section">
                 <h3>بيانات النطاق والقطاع</h3>
@@ -357,12 +457,143 @@
             </button>
         </div>
 
+        <!-- تسليم المناوبة -->
         <div class="form-container" id="logistics">
             <div class="form-section">
-                <h3>نموذج تسليم مناوبة</h3>
-                <p style="text-align:center; color:#636e72; font-size:16px;">
-                    سيتم إضافة هذا النموذج لاحقًا.
-                </p>
+                <h3>نموذج تسليم المناوبة</h3>
+
+                <label for="handover_title">عنوان الملف:</label>
+                <input type="text" id="handover_title" value="ملف التسليم">
+
+                <label for="handover_date">التاريخ:</label>
+                <input type="date" id="handover_date">
+
+                <label for="handover_shift">فترة المناوبة:</label>
+                <select id="handover_shift">
+                    <option value="" disabled selected>اختر الفترة</option>
+                    <option value="النوبة الصباحية">النوبة الصباحية</option>
+                    <option value="النوبة المسائية">النوبة المسائية</option>
+                </select>
+
+                <label for="handover_sector">القطاع:</label>
+                <select id="handover_sector">
+                    <option value="" disabled selected>اختر القطاع</option>
+                    <option value="الجمرات">الجمرات</option>
+                    <option value="القطارات">القطارات</option>
+                    <option value="بطن منى الشمالي">بطن منى الشمالي</option>
+                    <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
+                    <option value="منى الجديد 1">منى الجديد 1</option>
+                    <option value="منى الجديد 2">منى الجديد 2</option>
+                    <option value="الشعيبين">الشعيبين</option>
+                </select>
+            </div>
+
+            <div class="form-section">
+                <h3>بنود التسليم</h3>
+
+                <table id="handoverTable">
+                    <thead>
+                        <tr>
+                            <th>التصنيف</th>
+                            <th>الوصف</th>
+                            <th>الأهمية</th>
+                            <th>الحالة</th>
+                            <th>ملاحظات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" placeholder="مثال: المهام / البريد / أخرى"></td>
+                            <td><input type="text" placeholder="اكتب الوصف"></td>
+                            <td>
+                                <select class="priority-select" onchange="updateCellStyle(this)">
+                                    <option value="مرتفع">مرتفع</option>
+                                    <option value="متوسط">متوسط</option>
+                                    <option value="منخفض">منخفض</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="status-select" onchange="updateCellStyle(this)">
+                                    <option value="مكتمل">مكتمل</option>
+                                    <option value="يحتاج إلى مراجعة">يحتاج إلى مراجعة</option>
+                                    <option value="جاري">جاري</option>
+                                </select>
+                            </td>
+                            <td><input type="text" placeholder="ملاحظات إضافية"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="btn-row">
+                    <button type="button" class="submit-btn" onclick="addHandoverRow()">إضافة بند</button>
+                    <button type="button" class="submit-btn btn-danger" onclick="removeLastHandoverRow()">حذف آخر بند</button>
+                </div>
+            </div>
+
+            <button type="button" class="submit-btn" onclick="sendHandover()">
+                إرسال ملف التسليم
+            </button>
+        </div>
+
+        <!-- تشييك الوحدات التشغيلية -->
+        <div class="form-container" id="unitsCheck">
+            <div class="form-section">
+                <h3>نموذج تشييك الوحدات التشغيلية</h3>
+                <div class="placeholder-box">
+                    تم إنشاء التبويب بنجاح.<br>
+                    أرسل الحقول المطلوبة لهذا النموذج وسأكوّده لك مباشرة داخل هذه الصفحة.
+                </div>
+            </div>
+        </div>
+
+        <!-- تشييك الخزن الاستراتيجي -->
+        <div class="form-container" id="strategicStock">
+            <div class="form-section">
+                <h3>تشييك الخزن الاستراتيجي</h3>
+                <div class="placeholder-box">
+                    تم إنشاء التبويب بنجاح.<br>
+                    أرسل نموذج الخزن الاستراتيجي وسأضيفه بنفس التصميم.
+                </div>
+            </div>
+        </div>
+
+        <!-- خرائط نطاق منى -->
+        <div class="form-container" id="minaMaps">
+            <div class="form-section">
+                <h3>خرائط نطاق منى</h3>
+                <div class="placeholder-box">
+                    هذا القسم مخصص لإضافة روابط الخرائط أو صور الخرائط أو التضمين لاحقًا.
+                </div>
+            </div>
+        </div>
+
+        <!-- خطة الانتشار -->
+        <div class="form-container" id="deploymentPlan">
+            <div class="form-section">
+                <h3>خطة الانتشار</h3>
+                <div class="placeholder-box">
+                    هذا القسم مخصص لخطة الانتشار التشغيلية، ويمكن إضافة الجداول أو الصور أو الملفات لاحقًا.
+                </div>
+            </div>
+        </div>
+
+        <!-- إضافي 1 -->
+        <div class="form-container" id="extra1">
+            <div class="form-section">
+                <h3>إضافي 1</h3>
+                <div class="placeholder-box">
+                    تبويب إضافي جاهز للاستخدام.
+                </div>
+            </div>
+        </div>
+
+        <!-- إضافي 2 -->
+        <div class="form-container" id="extra2">
+            <div class="form-section">
+                <h3>إضافي 2</h3>
+                <div class="placeholder-box">
+                    تبويب إضافي جاهز للاستخدام.
+                </div>
             </div>
         </div>
     </div>
@@ -384,7 +615,11 @@
 
                 const targetForm = item.getAttribute('data-form');
                 forms.forEach(form => form.style.display = 'none');
-                document.getElementById(targetForm).style.display = 'block';
+
+                const targetEl = document.getElementById(targetForm);
+                if (targetEl) {
+                    targetEl.style.display = 'block';
+                }
 
                 if (window.innerWidth <= 768) {
                     sidebar.classList.remove('active');
@@ -579,12 +814,7 @@
         shiftTimeSelect.addEventListener('change', fillTeamData);
 
         function sendGroundEMS() {
-            const required = [
-                'scope',
-                'sector',
-                'shift_time',
-                'shift_datetime'
-            ];
+            const required = ['scope', 'sector', 'shift_time', 'shift_datetime'];
 
             for (let id of required) {
                 const el = document.getElementById(id);
@@ -619,7 +849,6 @@
             const vehicles = document.getElementById('vehicles_count').value || 0;
             const golfs = document.getElementById('golf_count').value || 0;
             const walking = document.getElementById('walking_count').value || 0;
-
             const notes = document.getElementById('notes').value.trim();
 
             let msg = `🚑 منصة نطاق منى – التحضير اليومي\n\n`;
@@ -656,7 +885,6 @@
             }
 
             const encoded = encodeURIComponent(msg);
-
             const url = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
                 ? `https://wa.me/?text=${encoded}`
                 : `https://web.whatsapp.com/send?text=${encoded}`;
@@ -664,7 +892,130 @@
             window.open(url, '_blank');
         }
 
-        fillTeamData();
+        function updateCellStyle(selectEl) {
+            selectEl.classList.remove(
+                'priority-high',
+                'priority-medium',
+                'priority-low',
+                'status-complete',
+                'status-review',
+                'status-progress'
+            );
+
+            const value = selectEl.value;
+
+            if (value === 'مرتفع') {
+                selectEl.classList.add('priority-high');
+            } else if (value === 'متوسط') {
+                selectEl.classList.add('priority-medium');
+            } else if (value === 'منخفض') {
+                selectEl.classList.add('priority-low');
+            } else if (value === 'مكتمل') {
+                selectEl.classList.add('status-complete');
+            } else if (value === 'يحتاج إلى مراجعة') {
+                selectEl.classList.add('status-review');
+            } else if (value === 'جاري') {
+                selectEl.classList.add('status-progress');
+            }
+        }
+
+        function addHandoverRow() {
+            const tbody = document.querySelector('#handoverTable tbody');
+            const row = document.createElement('tr');
+
+            row.innerHTML = `
+                <td><input type="text" placeholder="مثال: المهام / البريد / أخرى"></td>
+                <td><input type="text" placeholder="اكتب الوصف"></td>
+                <td>
+                    <select class="priority-select" onchange="updateCellStyle(this)">
+                        <option value="مرتفع">مرتفع</option>
+                        <option value="متوسط">متوسط</option>
+                        <option value="منخفض">منخفض</option>
+                    </select>
+                </td>
+                <td>
+                    <select class="status-select" onchange="updateCellStyle(this)">
+                        <option value="مكتمل">مكتمل</option>
+                        <option value="يحتاج إلى مراجعة">يحتاج إلى مراجعة</option>
+                        <option value="جاري">جاري</option>
+                    </select>
+                </td>
+                <td><input type="text" placeholder="ملاحظات إضافية"></td>
+            `;
+
+            tbody.appendChild(row);
+            row.querySelectorAll('select').forEach(select => updateCellStyle(select));
+        }
+
+        function removeLastHandoverRow() {
+            const tbody = document.querySelector('#handoverTable tbody');
+            const rows = tbody.querySelectorAll('tr');
+
+            if (rows.length > 1) {
+                tbody.removeChild(rows[rows.length - 1]);
+            } else {
+                alert('لا يمكن حذف آخر بند متبقٍ في الجدول');
+            }
+        }
+
+        function sendHandover() {
+            const title = document.getElementById('handover_title').value.trim();
+            const date = document.getElementById('handover_date').value;
+            const shift = document.getElementById('handover_shift').value;
+            const sector = document.getElementById('handover_sector').value;
+
+            if (!title || !date || !shift || !sector) {
+                alert('يرجى تعبئة بيانات نموذج التسليم الأساسية');
+                return;
+            }
+
+            const rows = document.querySelectorAll('#handoverTable tbody tr');
+            let msg = `📋 ${title}\n\n`;
+            msg += `📅 التاريخ: ${date}\n`;
+            msg += `🕘 الفترة: ${shift}\n`;
+            msg += `📍 القطاع: ${sector}\n\n`;
+            msg += `تفاصيل التسليم:\n\n`;
+
+            let hasItems = false;
+
+            rows.forEach((row, index) => {
+                const inputs = row.querySelectorAll('input, select');
+                const category = inputs[0].value.trim();
+                const description = inputs[1].value.trim();
+                const priority = inputs[2].value;
+                const status = inputs[3].value;
+                const notes = inputs[4].value.trim();
+
+                if (category || description || notes) {
+                    hasItems = true;
+                    msg += `• البند ${index + 1}\n`;
+                    msg += `التصنيف: ${category || '-'}\n`;
+                    msg += `الوصف: ${description || '-'}\n`;
+                    msg += `الأهمية: ${priority}\n`;
+                    msg += `الحالة: ${status}\n`;
+                    msg += `ملاحظات: ${notes || '-'}\n\n`;
+                }
+            });
+
+            if (!hasItems) {
+                alert('يرجى إدخال بند واحد على الأقل في ملف التسليم');
+                return;
+            }
+
+            const encoded = encodeURIComponent(msg);
+            const url = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+                ? `https://wa.me/?text=${encoded}`
+                : `https://web.whatsapp.com/send?text=${encoded}`;
+
+            window.open(url, '_blank');
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            fillTeamData();
+            document.querySelectorAll('#handoverTable select').forEach(select => {
+                updateCellStyle(select);
+            });
+        });
     </script>
 </body>
 </html>

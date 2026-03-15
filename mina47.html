@@ -187,6 +187,28 @@
       margin-top:18px;
     }
 
+    .quick-links{
+      display:none;
+      margin-top:14px;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:10px;
+    }
+
+    .quick-links.show{display:grid}
+
+    .quick-card{
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.18);
+      padding:12px;
+      border-radius:14px;
+      font-weight:700;
+      cursor:pointer;
+      transition:.2s ease;
+      text-align:center;
+    }
+
+    .quick-card:hover{background:rgba(255,255,255,.18)}
+
     .btn{
       display:inline-flex;
       align-items:center;
@@ -243,6 +265,7 @@
       color:var(--muted);
       font-size:12px;
       margin-top:8px;
+      line-height:1.7;
     }
 
     .panel{
@@ -429,16 +452,19 @@
       z-index:1;
     }
 
-    .map-frame,
-    .ops-frame{
+    .compact-number{
+      width:90px !important;
+      min-width:90px;
+      text-align:center;
+    }
+
+    .map-frame{
       width:100%;
       border:none;
       border-radius:18px;
       background:#eef2ff;
+      height:520px;
     }
-
-    .map-frame{height:520px}
-    .ops-frame{height:680px}
 
     .note{
       background:#fff7ed;
@@ -450,11 +476,27 @@
       font-size:14px;
     }
 
+    .bullets-box{
+      margin-top:14px;
+    }
+
+    .bullets-box textarea{
+      min-height:120px;
+    }
+
     .footer{
       text-align:center;
       color:var(--muted);
       font-size:13px;
       padding:8px 0 18px;
+    }
+
+    .leader-sign{
+      text-align:center;
+      margin-top:14px;
+      font-size:16px;
+      font-weight:700;
+      color:#374151;
     }
 
     .hidden{display:none!important}
@@ -481,7 +523,7 @@
     <aside class="sidebar" id="sidebar">
       <div class="brand">
         <h1>منصة نطاق منى</h1>
-        <p>واجهة تشغيلية موحدة للتحضير اليومي، تسليم المناوبات، التشييك، الخزن الاستراتيجي، وخطة الانتشار مع لوحة عمليات حية.</p>
+        <p>واجهة تشغيلية موحدة للتحضير اليومي، تسليم المناوبات، التشييك، الخزن الاستراتيجي، وخطة الانتشار.</p>
       </div>
 
       <div class="side-title">القائمة الرئيسية</div>
@@ -493,7 +535,6 @@
         <li data-target="stockPanel"><i class="fas fa-boxes-stacked"></i><span>الخزن الاستراتيجي</span></li>
         <li data-target="deploymentPanel"><i class="fas fa-network-wired"></i><span>خطة الانتشار</span></li>
         <li data-target="mapsPanel"><i class="fas fa-map-location-dot"></i><span>خرائط نطاق منى</span></li>
-        <li data-target="opsPanel"><i class="fas fa-tv"></i><span>لوحة العمليات الحية</span></li>
       </ul>
     </aside>
 
@@ -506,22 +547,53 @@
       </div>
 
       <section class="hero">
-        <h3>غرفة عمليات رقمية لنطاق منى</h3>
+        <h3>نطاق منى حج 1447هـ</h3>
         <p>
-          هذه الواجهة مصممة لتكون منصة تشغيل موحدة تشمل التحضير اليومي، تسليم المناوبات،
-          التشييك على الوحدات التشغيلية، مراقبة الخزن الاستراتيجي، وإدارة خطة الانتشار مع ربط مباشر بلوحة قائد حية.
+          هذه الواجهة مصممة لتكون منصة تشغيل موحدة 
+          ﴿رَبِّ اجْعَلْ هَذَا بَلَدًا آمِنًا﴾
+          
         </p>
         <div class="hero-actions">
-          <button class="btn btn-primary" onclick="activatePanel('groundEMS')"><i class="fas fa-paper-plane"></i> ابدأ رفع التقارير</button>
-          <button class="btn btn-secondary" onclick="activatePanel('opsPanel')"><i class="fas fa-chart-line"></i> عرض لوحة العمليات</button>
+          <button class="btn btn-primary" onclick="toggleQuickLinks()"><i class="fas fa-paper-plane"></i> ابدأ رفع التقارير</button>
+          <a class="btn btn-secondary" href="https://script.google.com/macros/s/AKfycbz3W0hz7cJA9G248qj9SlDpqTLVlw5Vktr2QtRukqpiiqOH7g7-nXsCqVILpAmmNWk/exec" target="_blank"><i class="fas fa-tv"></i> فتح لوحة القائد</a>
+        </div>
+
+        <div class="quick-links" id="quickLinks">
+          <div class="quick-card" onclick="activatePanel('groundEMS')">التحضير اليومي</div>
+          <div class="quick-card" onclick="activatePanel('handoverPanel')">تسليم المناوبة</div>
+          <div class="quick-card" onclick="activatePanel('unitsCheckPanel')">تشييك الوحدة</div>
+          <div class="quick-card" onclick="activatePanel('stockPanel')">الخزن الاستراتيجي</div>
+          <div class="quick-card" onclick="activatePanel('deploymentPanel')">خطة الانتشار</div>
+          <div class="quick-card" onclick="activatePanel('mapsPanel')">خرائط نطاق منى</div>
         </div>
       </section>
 
       <section class="kpis">
-        <div class="kpi"><div class="label">عدد القطاعات</div><div class="value">7</div><div class="sub">قطاعات نطاق منى</div></div>
-        <div class="kpi"><div class="label">النماذج المتاحة</div><div class="value">6</div><div class="sub">تشغيلية وإدارية</div></div>
-        <div class="kpi"><div class="label">الربط</div><div class="value">نشط</div><div class="sub">Apps Script + Google Sheets</div></div>
-        <div class="kpi"><div class="label">لوحة القائد</div><div class="value">حية</div><div class="sub">تحديث مباشر من السكريبت</div></div>
+        <div class="kpi">
+          <div class="label">عدد القطاعات</div>
+          <div class="value">7</div>
+          <div class="sub">قطاعات نطاق منى</div>
+        </div>
+        <div class="kpi">
+          <div class="label">إجمالي الفرق المتاحة</div>
+          <div class="value">185</div>
+          <div class="sub">جميع الفرق المعتمدة في القطاعات</div>
+        </div>
+        <div class="kpi">
+          <div class="label">المركبات الإسعافية</div>
+          <div class="value">119</div>
+          <div class="sub">الإجمالي المعتمد في النطاق</div>
+        </div>
+        <div class="kpi">
+          <div class="label">عربات القولف</div>
+          <div class="value">47</div>
+          <div class="sub">الإجمالي المعتمد في النطاق</div>
+        </div>
+        <div class="kpi">
+          <div class="label">الفرق الراجلة</div>
+          <div class="value">19</div>
+          <div class="sub">الإجمالي المعتمد في النطاق</div>
+        </div>
       </section>
 
       <!-- الرئيسية -->
@@ -551,18 +623,18 @@
           </div>
           <div class="card">
             <h4>الخزن الاستراتيجي</h4>
-            <p>تسجيل كميات الأصناف ومراقبة الحد الأدنى والحد الأعلى مع التنبيهات.</p>
+            <p>تسجيل حالة الأصناف وإظهار النقص مع الملاحظات التشغيلية.</p>
             <div class="actions"><button class="btn btn-blue" onclick="activatePanel('stockPanel')">فتح النموذج</button></div>
           </div>
           <div class="card">
             <h4>خطة الانتشار</h4>
-            <p>تسجيل حالة نقاط الانتشار ورصد الاختلافات وأسبابها والملاحظات التشغيلية.</p>
+            <p>تسجيل حالة نقاط الانتشار تلقائيًا حسب القطاع والمناوبة مع إمكانية الإدخال اليدوي.</p>
             <div class="actions"><button class="btn btn-blue" onclick="activatePanel('deploymentPanel')">فتح النموذج</button></div>
           </div>
           <div class="card">
-            <h4>لوحة العمليات الحية</h4>
-            <p>عرض حي للوحة القائد، الخريطة، المؤشرات، التنبيهات، والملخصات الإجمالية.</p>
-            <div class="actions"><button class="btn btn-blue" onclick="activatePanel('opsPanel')">فتح اللوحة</button></div>
+            <h4>لوحة القائد</h4>
+            <p>تفتح في نافذة مستقلة وتتضمن الإجماليات والتفاصيل والخريطة والتنبيهات التشغيلية.</p>
+            <div class="actions"><a class="btn btn-dark" href="https://script.google.com/macros/s/AKfycbz3W0hz7cJA9G248qj9SlDpqTLVlw5Vktr2QtRukqpiiqOH7g7-nXsCqVILpAmmNWk/exec" target="_blank">فتح اللوحة</a></div>
           </div>
         </div>
       </section>
@@ -955,7 +1027,7 @@
         <div class="panel-head">
           <div>
             <h3>الخزن الاستراتيجي</h3>
-            <p>فحص الكميات ومراقبة الحد الأدنى والحد الأعلى مع التنبيهات.</p>
+            <p>فحص حالة الأصناف وإظهار النقص مع الملاحظات التشغيلية.</p>
           </div>
         </div>
 
@@ -982,13 +1054,17 @@
                     <th>الصنف</th>
                     <th>الحالة</th>
                     <th>الكمية الحالية</th>
-                    <th>الحد الأدنى</th>
-                    <th>الحد الأعلى</th>
-                    <th>التنبيه</th>
                   </tr>
                 </thead>
                 <tbody id="strategicTableBody"></tbody>
               </table>
+            </div>
+
+            <div class="bullets-box">
+              <div class="field">
+                <label for="stock_notes">ملاحظات الخزن</label>
+                <textarea id="stock_notes" placeholder="اكتب كل ملاحظة في سطر مستقل"></textarea>
+              </div>
             </div>
           </div>
         </div>
@@ -1003,7 +1079,7 @@
         <div class="panel-head">
           <div>
             <h3>خطة الانتشار</h3>
-            <p>تسجيل حالة نقاط الانتشار، أسباب الاختلاف، والملاحظات التشغيلية.</p>
+            <p>تسجيل حالة نقاط الانتشار تلقائيًا حسب القطاع والمناوبة مع إمكانية التدعيم اليدوي.</p>
           </div>
         </div>
 
@@ -1027,12 +1103,12 @@
             </div>
 
             <div class="field">
-              <label for="deploy_shift">الفترة</label>
+              <label for="deploy_shift">المناوبة</label>
               <select id="deploy_shift">
-                <option value="" disabled selected>اختر الفترة</option>
-                <option value="الصباحية">الصباحية</option>
-                <option value="المسائية">المسائية</option>
-                <option value="تكميلية">تكميلية</option>
+                <option value="" disabled selected>اختر المناوبة</option>
+                <option value="الصباحية">نوبة صباحية</option>
+                <option value="المسائية">نوبة مسائية</option>
+                <option value="تكميلية">نوبة تكميلية</option>
               </select>
             </div>
 
@@ -1046,13 +1122,21 @@
             </div>
 
             <div class="field"><label for="deploy_lead_name">اسم كبير المسعفين</label><input type="text" id="deploy_lead_name" readonly></div>
+
             <div class="field">
               <label for="deploy_assistant_name">اسم مساعد كبير المسعفين</label>
               <select id="deploy_assistant_name">
                 <option value="" disabled selected>اختر اسم المساعد</option>
               </select>
             </div>
+
             <div class="field"><label for="deploy_current_lead">اسم كبير المسعفين المناوب</label><input type="text" id="deploy_current_lead" readonly></div>
+
+            <div class="field"><label for="deploy_assistant1_auto">مساعد 1</label><input type="text" id="deploy_assistant1_auto" readonly></div>
+            <div class="field"><label for="deploy_assistant2_auto">مساعد 2</label><input type="text" id="deploy_assistant2_auto" readonly></div>
+            <div class="field"><label for="deploy_assistant3_auto">مساعد 3</label><input type="text" id="deploy_assistant3_auto" readonly></div>
+            <div class="field"><label for="deploy_assistant4_auto">مساعد 4</label><input type="text" id="deploy_assistant4_auto" readonly></div>
+
             <div class="field"><label for="deployment_date">التاريخ</label><input type="date" id="deployment_date"></div>
             <div class="field"><label for="deployment_time">الوقت</label><input type="time" id="deployment_time"></div>
           </div>
@@ -1066,54 +1150,26 @@
                 <thead>
                   <tr>
                     <th>الرمز</th>
-                    <th>نوع الآلية</th>
+                    <th>نوع الوحدة</th>
+                    <th>المناوبة</th>
                     <th>الحالة</th>
-                    <th>عدد الفرق الفعلي</th>
-                    <th>سبب الاختلاف</th>
-                    <th>ملاحظات</th>
+                    <th>عدد الفرق</th>
+                    <th class="reason-col">سبب الاختلاف</th>
                   </tr>
                 </thead>
-                <tbody id="deploymentTableBody">
-                  <tr>
-                    <td><input type="text" class="dep-code" placeholder="مثال: VMH1"></td>
-                    <td>
-                      <select class="dep-type">
-                        <option value="مركبة اسعافية">مركبة إسعافية</option>
-                        <option value="قولف">قولف</option>
-                        <option value="راجلة">راجلة</option>
-                      </select>
-                    </td>
-                    <td>
-                      <select class="dep-status">
-                        <option value="جاهز">جاهز</option>
-                        <option value="خارج الخدمة">خارج الخدمة</option>
-                        <option value="نوبة تكميلية">نوبة تكميلية</option>
-                        <option value="إضافي 1">إضافي 1</option>
-                        <option value="إضافي 2">إضافي 2</option>
-                      </select>
-                    </td>
-                    <td><input type="number" class="dep-count" min="0" value="1"></td>
-                    <td>
-                      <select class="dep-reason">
-                        <option value="">اختر السبب</option>
-                        <option value="نوبة تكميلية">نوبة تكميلية</option>
-                        <option value="تدعيم لحرم">تدعيم لحرم</option>
-                        <option value="تدعيم للعاصمة">تدعيم للعاصمة</option>
-                        <option value="تدعيم لعرفات">تدعيم لعرفات</option>
-                        <option value="تدعيم لمزدلفة">تدعيم لمزدلفة</option>
-                        <option value="تدعيم لطريق الحاج">تدعيم لطريق الحاج</option>
-                        <option value="راحة مقابل نوبة">راحة مقابل نوبة</option>
-                        <option value="اخرى">اخرى</option>
-                      </select>
-                    </td>
-                    <td><input type="text" class="dep-note"></td>
-                  </tr>
-                </tbody>
+                <tbody id="deploymentTableBody"></tbody>
               </table>
             </div>
 
             <div class="actions">
-              <button class="btn btn-outline" onclick="addDeploymentRow()"><i class="fas fa-plus"></i> إضافة صف</button>
+              <button class="btn btn-outline" onclick="addManualDeploymentRow()"><i class="fas fa-plus"></i> إضافة صف تدعيم يدوي</button>
+            </div>
+
+            <div class="bullets-box">
+              <div class="field">
+                <label for="deployment_notes">ملاحظات خطة الانتشار</label>
+                <textarea id="deployment_notes" placeholder="اكتب كل ملاحظة في سطر مستقل"></textarea>
+              </div>
             </div>
           </div>
         </div>
@@ -1128,7 +1184,7 @@
         <div class="panel-head">
           <div>
             <h3>خرائط نطاق منى</h3>
-            <p>الخريطة الميدانية المباشرة مع إمكانية فتحها في نافذة مستقلة.</p>
+            <p>الخريطة الميدانية المباشرة مع إمكانية فتح لوحة القائد في نافذة مستقلة.</p>
           </div>
         </div>
 
@@ -1140,36 +1196,20 @@
 
           <div class="card">
             <h4>خيارات سريعة</h4>
-            <p>يمكنك فتح الخريطة مباشرة أو عرض لوحة القائد المربوطة بالسكريبت.</p>
+            <p>يمكنك فتح الخريطة مباشرة أو الانتقال إلى لوحة القائد الشاملة.</p>
             <div class="actions">
               <a class="btn btn-blue" href="https://www.google.com/maps/d/viewer?mid=15jPyMtPR5xmD0hZpE7g2-B1J0rSosvM&ll=21.416799550046317%2C39.873667103872805&z=15" target="_blank"><i class="fas fa-map"></i> فتح الخريطة</a>
               <a class="btn btn-dark" href="https://script.google.com/macros/s/AKfycbz3W0hz7cJA9G248qj9SlDpqTLVlw5Vktr2QtRukqpiiqOH7g7-nXsCqVILpAmmNWk/exec" target="_blank"><i class="fas fa-tv"></i> فتح لوحة القائد</a>
             </div>
             <div class="note" style="margin-top:14px">
-              يفضل استخدام هذا التبويب لعرض الوضع العام ميدانيًا، بينما تكون لوحة العمليات الحية مخصصة للمؤشرات والتنبيهات والتقارير التفصيلية.
+              لوحة القائد تفتح في نافذة مستقلة وتعرض الإجماليات، التفاصيل، التنبيهات، والخريطة الحية.
             </div>
           </div>
         </div>
       </section>
 
-      <!-- لوحة العمليات -->
-      <section class="panel" id="opsPanel">
-        <div class="panel-head">
-          <div>
-            <h3>لوحة العمليات الحية</h3>
-            <p>تعرض لوحة القائد الكاملة من Apps Script مباشرة داخل المنصة.</p>
-          </div>
-          <div class="actions">
-            <a class="btn btn-dark" href="https://script.google.com/macros/s/AKfycbz3W0hz7cJA9G248qj9SlDpqTLVlw5Vktr2QtRukqpiiqOH7g7-nXsCqVILpAmmNWk/exec" target="_blank"><i class="fas fa-up-right-from-square"></i> فتح في نافذة مستقلة</a>
-          </div>
-        </div>
-
-        <iframe class="ops-frame" src="https://script.google.com/macros/s/AKfycbz3W0hz7cJA9G248qj9SlDpqTLVlw5Vktr2QtRukqpiiqOH7g7-nXsCqVILpAmmNWk/exec"></iframe>
-      </section>
-
-      <div class="footer">
-        منصة نطاق منى - نسخة تشغيلية احترافية مرتبطة بـ Google Sheets و Apps Script
-      </div>
+      <div class="leader-sign">قائد نطاق منى / فهد أحمد الشمري</div>
+      <div class="footer">منصة نطاق منى - نسخة تشغيلية محدثة ومرتبطة بـ Google Sheets و Apps Script</div>
     </main>
   </div>
 
@@ -1246,6 +1286,93 @@
       { category:'السلامة الشخصية', item:'صندوق خاص بالأبر' }
     ];
 
+    const deploymentTemplates = {
+      "الجمرات": {
+        "الصباحية": [
+          {code:"VMH1",type:"مركبة اسعافية",shift:"نوبة صباحية"},
+          {code:"VMH2",type:"مركبة اسعافية",shift:"نوبة صباحية"},
+          {code:"VMH3",type:"مركبة اسعافية",shift:"نوبة صباحية"},
+          {code:"VMH26",type:"قولف",shift:"نوبة صباحية"},
+          {code:"VMH28",type:"راجلة",shift:"نوبة صباحية"}
+        ],
+        "المسائية": [
+          {code:"VMH1",type:"مركبة اسعافية",shift:"نوبة مسائية"},
+          {code:"VMH2",type:"مركبة اسعافية",shift:"نوبة مسائية"},
+          {code:"VMH26",type:"قولف",shift:"نوبة مسائية"},
+          {code:"VMH28",type:"راجلة",shift:"نوبة مسائية"}
+        ],
+        "تكميلية": []
+      },
+      "القطارات": {
+        "الصباحية": [
+          {code:"VMH55",type:"مركبة اسعافية",shift:"نوبة صباحية"},
+          {code:"VMH56",type:"مركبة اسعافية",shift:"نوبة صباحية"},
+          {code:"MH57",type:"مركبة اسعافية",shift:"نوبة صباحية"}
+        ],
+        "المسائية": [
+          {code:"VMH55",type:"مركبة اسعافية",shift:"نوبة مسائية"},
+          {code:"VMH56",type:"مركبة اسعافية",shift:"نوبة مسائية"}
+        ],
+        "تكميلية": []
+      },
+      "بطن منى الجنوبي": {
+        "الصباحية": [
+          {code:"VMH78",type:"قولف",shift:"نوبة صباحية"},
+          {code:"VMH79",type:"قولف",shift:"نوبة صباحية"},
+          {code:"MH80",type:"مركبة اسعافية",shift:"نوبة صباحية"}
+        ],
+        "المسائية": [
+          {code:"VMH78",type:"قولف",shift:"نوبة مسائية"},
+          {code:"VMH79",type:"قولف",shift:"نوبة مسائية"}
+        ],
+        "تكميلية": []
+      },
+      "بطن منى الشمالي": {
+        "الصباحية": [
+          {code:"VMH94",type:"مركبة اسعافية",shift:"نوبة صباحية"},
+          {code:"VMH95",type:"قولف",shift:"نوبة صباحية"},
+          {code:"VMH96",type:"مركبة اسعافية",shift:"نوبة صباحية"}
+        ],
+        "المسائية": [
+          {code:"VMH94",type:"مركبة اسعافية",shift:"نوبة مسائية"},
+          {code:"VMH95",type:"قولف",shift:"نوبة مسائية"}
+        ],
+        "تكميلية": []
+      },
+      "منى الجديد 1": {
+        "الصباحية": [
+          {code:"VMH139",type:"مركبة اسعافية",shift:"نوبة صباحية"},
+          {code:"VMH140",type:"مركبة اسعافية",shift:"نوبة صباحية"}
+        ],
+        "المسائية": [
+          {code:"VMH139",type:"مركبة اسعافية",shift:"نوبة مسائية"}
+        ],
+        "تكميلية": []
+      },
+      "منى الجديد 2": {
+        "الصباحية": [
+          {code:"VMH156",type:"قولف",shift:"نوبة صباحية"},
+          {code:"VMH157",type:"مركبة اسعافية",shift:"نوبة صباحية"},
+          {code:"VMH158",type:"قولف",shift:"نوبة صباحية"}
+        ],
+        "المسائية": [
+          {code:"VMH157",type:"مركبة اسعافية",shift:"نوبة مسائية"},
+          {code:"VMH159",type:"مركبة اسعافية",shift:"نوبة مسائية"}
+        ],
+        "تكميلية": []
+      },
+      "الشعيبين": {
+        "الصباحية": [
+          {code:"VMH117",type:"مركبة اسعافية",shift:"نوبة صباحية"},
+          {code:"VMH118",type:"مركبة اسعافية",shift:"نوبة صباحية"}
+        ],
+        "المسائية": [
+          {code:"VMH117",type:"مركبة اسعافية",shift:"نوبة مسائية"}
+        ],
+        "تكميلية": []
+      }
+    };
+
     // التنقل
     const mobileBtn = document.getElementById('mobileBtn');
     const sidebar = document.getElementById('sidebar');
@@ -1267,6 +1394,10 @@
       document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
       document.getElementById(targetId)?.classList.add('active');
       window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    function toggleQuickLinks(){
+      document.getElementById('quickLinks').classList.toggle('show');
     }
 
     function showAlert(elId, type, message){
@@ -1409,9 +1540,9 @@
         const row = document.createElement('tr');
         row.innerHTML = `
           <td>${item === "أخرى حدد" ? `<input type="text" id="handover_unit_name_${index}" placeholder="حدد النوع الآخر">` : item}</td>
-          <td><input type="number" id="handover_unit_working_${index}" min="0" value="0"></td>
-          <td><input type="number" id="handover_unit_reserve_${index}" min="0" value="0"></td>
-          <td><input type="number" id="handover_unit_out_${index}" min="0" value="0"></td>
+          <td><input type="number" id="handover_unit_working_${index}" min="0" value="0" class="compact-number"></td>
+          <td><input type="number" id="handover_unit_reserve_${index}" min="0" value="0" class="compact-number"></td>
+          <td><input type="number" id="handover_unit_out_${index}" min="0" value="0" class="compact-number"></td>
           <td><input type="text" id="handover_unit_fault_reason_${index}" placeholder="اذكر السبب"></td>
         `;
         body.appendChild(row);
@@ -1529,7 +1660,7 @@
               <option value="غير متوفر">غير متوفر</option>
             </select>
           </td>
-          <td><input type="number" id="medical_count_${index}" min="0" value="0"></td>
+          <td><input type="number" id="medical_count_${index}" min="0" value="0" class="compact-number"></td>
           <td><input type="text" id="medical_note_${index}" placeholder="ملاحظات"></td>
         `;
         medicalBody.appendChild(row);
@@ -1619,12 +1750,10 @@
             <select id="stock_status_${index}">
               <option value="متوفر">متوفر</option>
               <option value="غير متوفر">غير متوفر</option>
+              <option value="يوجد نقص">يوجد نقص</option>
             </select>
           </td>
-          <td><input type="number" id="stock_current_${index}" min="0" value="0"></td>
-          <td><input type="number" id="stock_min_${index}" min="0" value="0"></td>
-          <td><input type="number" id="stock_max_${index}" min="0" value="0"></td>
-          <td id="stock_alert_${index}">سليم</td>
+          <td><input type="number" id="stock_current_${index}" min="0" value="0" class="compact-number"></td>
         `;
         body.appendChild(row);
       });
@@ -1635,21 +1764,19 @@
       const time = document.getElementById('stock_time').value;
       const checker = document.getElementById('stock_checker').value.trim();
       const location = document.getElementById('stock_location').value.trim();
+      const notes = document.getElementById('stock_notes').value.trim();
 
       if(!date || !time || !checker || !location){
         showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
         return;
       }
 
+      let shortageFound = false;
+
       const rows = stockItems.map((entry,index)=>{
         const status = document.getElementById(`stock_status_${index}`).value;
         const current = document.getElementById(`stock_current_${index}`).value || '0';
-        const min = document.getElementById(`stock_min_${index}`).value || '0';
-        const max = document.getElementById(`stock_max_${index}`).value || '0';
-
-        let alertStatus = 'سليم';
-        if(status === 'غير متوفر' || parseInt(current,10) < parseInt(min,10)) alertStatus = 'يوجد نقص';
-        else if(parseInt(max,10) > 0 && parseInt(current,10) > parseInt(max,10)) alertStatus = 'أعلى من الحد الأعلى';
+        if(status === 'يوجد نقص') shortageFound = true;
 
         return {
           "وقت الحفظ": new Date().toLocaleString('ar-SA'),
@@ -1661,9 +1788,7 @@
           "الصنف": entry.item,
           "الحالة": status,
           "الكمية الحالية": current,
-          "الحد الأدنى": min,
-          "الحد الأعلى": max,
-          "التنبيه": alertStatus
+          "ملاحظات": notes || '-'
         };
       });
 
@@ -1673,25 +1798,49 @@
           showAlert('stockAlert','error','تعذر حفظ بيانات الخزن');
           return;
         }
-        showAlert('stockAlert','success','تم حفظ نموذج الخزن الاستراتيجي بنجاح');
-        openWhatsApp(`📦 تقرير الخزن الاستراتيجي\n📅 ${date}\n⏰ ${time}\n👤 ${checker}\n📍 ${location}`);
+
+        if(shortageFound){
+          showAlert('stockAlert','error','تم الحفظ مع تنبيه: يوجد نقص في بعض الأصناف');
+        }else{
+          showAlert('stockAlert','success','تم حفظ نموذج الخزن الاستراتيجي بنجاح');
+        }
+
+        let msg = `📦 تقرير الخزن الاستراتيجي\n\n`;
+        msg += `📅 ${date}\n⏰ ${time}\n👤 ${checker}\n📍 ${location}\n`;
+        if(shortageFound) msg += `\n⚠ يوجد نقص في بعض الأصناف`;
+        openWhatsApp(msg);
       } catch {
         showAlert('stockAlert','error','حدث خطأ أثناء الاتصال بالخادم');
       }
     }
 
     // خطة الانتشار
-    document.getElementById('deploy_sector').addEventListener('change', fillDeploymentPeople);
-    document.getElementById('deploy_shift').addEventListener('change', fillDeploymentPeople);
-    document.getElementById('deploy_role').addEventListener('change', fillDeploymentPeople);
+    document.getElementById('deploy_sector').addEventListener('change', handleDeploymentContextChange);
+    document.getElementById('deploy_shift').addEventListener('change', handleDeploymentContextChange);
+    document.getElementById('deploy_role').addEventListener('change', handleDeploymentRoleChange);
+
+    function handleDeploymentContextChange(){
+      fillDeploymentPeople();
+      loadDeploymentTemplate();
+    }
+
+    function handleDeploymentRoleChange(){
+      fillDeploymentPeople();
+    }
 
     function fillDeploymentPeople(){
       const sector = document.getElementById('deploy_sector').value;
       const shift = document.getElementById('deploy_shift').value;
-      const team = teamsData?.[sector]?.[shift];
+      const role = document.getElementById('deploy_role').value;
+      const normalizedShift = shift === 'الصباحية' ? 'الصباحية' : shift === 'المسائية' ? 'المسائية' : 'الصباحية';
+      const team = teamsData?.[sector]?.[normalizedShift];
 
       document.getElementById('deploy_lead_name').value = team?.lead || '';
       document.getElementById('deploy_current_lead').value = team?.lead || '';
+      document.getElementById('deploy_assistant1_auto').value = (role === 'كبير مسعفين') ? (team?.assistants?.[0] || '') : '';
+      document.getElementById('deploy_assistant2_auto').value = (role === 'كبير مسعفين') ? (team?.assistants?.[1] || '') : '';
+      document.getElementById('deploy_assistant3_auto').value = (role === 'كبير مسعفين') ? (team?.assistants?.[2] || '') : '';
+      document.getElementById('deploy_assistant4_auto').value = (role === 'كبير مسعفين') ? (team?.assistants?.[3] || '') : '';
 
       const select = document.getElementById('deploy_assistant_name');
       select.innerHTML = '<option value="" disabled selected>اختر اسم المساعد</option>';
@@ -1705,44 +1854,116 @@
       });
     }
 
-    function addDeploymentRow(){
-      const tbody = document.getElementById('deploymentTableBody');
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td><input type="text" class="dep-code" placeholder="مثال: VMH2"></td>
-        <td>
-          <select class="dep-type">
-            <option value="مركبة اسعافية">مركبة إسعافية</option>
-            <option value="قولف">قولف</option>
-            <option value="راجلة">راجلة</option>
-          </select>
-        </td>
-        <td>
-          <select class="dep-status">
-            <option value="جاهز">جاهز</option>
-            <option value="خارج الخدمة">خارج الخدمة</option>
-            <option value="نوبة تكميلية">نوبة تكميلية</option>
-            <option value="إضافي 1">إضافي 1</option>
-            <option value="إضافي 2">إضافي 2</option>
-          </select>
-        </td>
-        <td><input type="number" class="dep-count" min="0" value="1"></td>
-        <td>
-          <select class="dep-reason">
-            <option value="">اختر السبب</option>
-            <option value="نوبة تكميلية">نوبة تكميلية</option>
-            <option value="تدعيم لحرم">تدعيم لحرم</option>
-            <option value="تدعيم للعاصمة">تدعيم للعاصمة</option>
-            <option value="تدعيم لعرفات">تدعيم لعرفات</option>
-            <option value="تدعيم لمزدلفة">تدعيم لمزدلفة</option>
-            <option value="تدعيم لطريق الحاج">تدعيم لطريق الحاج</option>
-            <option value="راحة مقابل نوبة">راحة مقابل نوبة</option>
-            <option value="اخرى">اخرى</option>
-          </select>
-        </td>
-        <td><input type="text" class="dep-note"></td>
+    function createDeploymentRowHTML(rowData = {}, isManual = false){
+      const code = rowData.code || '';
+      const type = rowData.type || 'مركبة اسعافية';
+      const shift = rowData.shift || 'نوبة صباحية';
+      const count = rowData.count || 1;
+
+      return `
+        <tr>
+          <td><input type="text" class="dep-code" value="${code}" ${isManual ? '' : 'readonly'}></td>
+          <td>
+            <select class="dep-type">
+              <option value="مركبة اسعافية" ${type==='مركبة اسعافية'?'selected':''}>مركبة إسعافية</option>
+              <option value="قولف" ${type==='قولف'?'selected':''}>قولف</option>
+              <option value="راجلة" ${type==='راجلة'?'selected':''}>راجلة</option>
+              <option value="دراجة نارية" ${type==='دراجة نارية'?'selected':''}>دراجة نارية</option>
+              <option value="أخرى" ${type==='أخرى'?'selected':''}>أخرى</option>
+            </select>
+          </td>
+          <td>
+            <select class="dep-shift">
+              <option value="نوبة صباحية" ${shift==='نوبة صباحية'?'selected':''}>نوبة صباحية</option>
+              <option value="نوبة مسائية" ${shift==='نوبة مسائية'?'selected':''}>نوبة مسائية</option>
+              <option value="نوبة تكميلية" ${shift==='نوبة تكميلية'?'selected':''}>نوبة تكميلية</option>
+            </select>
+          </td>
+          <td>
+            <select class="dep-status" onchange="toggleReasonColumn(this)">
+              <option value="جاهز">جاهز</option>
+              <option value="خارج الخدمة">خارج الخدمة</option>
+              <option value="نوبة تكميلية">نوبة تكميلية</option>
+              <option value="إضافي 1">إضافي 1</option>
+              <option value="إضافي 2">إضافي 2</option>
+            </select>
+          </td>
+          <td><input type="number" class="dep-count compact-number" min="0" value="${count}"></td>
+          <td class="reason-col-cell hidden">
+            <select class="dep-reason">
+              <option value="">اختر السبب</option>
+              <option value="نوبة تكميلية">نوبة تكميلية</option>
+              <option value="تدعيم لحرم">تدعيم لحرم</option>
+              <option value="تدعيم للعاصمة">تدعيم للعاصمة</option>
+              <option value="تدعيم لعرفات">تدعيم لعرفات</option>
+              <option value="تدعيم لمزدلفة">تدعيم لمزدلفة</option>
+              <option value="تدعيم لطريق الحاج">تدعيم لطريق الحاج</option>
+              <option value="راحة مقابل نوبة">راحة مقابل نوبة</option>
+              <option value="اخرى">اخرى</option>
+            </select>
+          </td>
+        </tr>
       `;
-      tbody.appendChild(tr);
+    }
+
+    function loadDeploymentTemplate(){
+      const sector = document.getElementById('deploy_sector').value;
+      const shift = document.getElementById('deploy_shift').value;
+      const body = document.getElementById('deploymentTableBody');
+      body.innerHTML = '';
+
+      if(!sector || !shift) return;
+
+      const shiftKey = shift === 'الصباحية' ? 'الصباحية' : shift === 'المسائية' ? 'المسائية' : 'تكميلية';
+      const displayShift = shift === 'الصباحية' ? 'نوبة صباحية' : shift === 'المسائية' ? 'نوبة مسائية' : 'نوبة تكميلية';
+      const rows = deploymentTemplates?.[sector]?.[shiftKey] || [];
+
+      rows.forEach(item => {
+        body.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
+          code: item.code,
+          type: item.type,
+          shift: displayShift,
+          count: 1
+        }, false));
+      });
+
+      updateReasonHeaderVisibility();
+    }
+
+    function addManualDeploymentRow(){
+      const tbody = document.getElementById('deploymentTableBody');
+      tbody.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
+        code: '',
+        type: 'مركبة اسعافية',
+        shift: 'نوبة تكميلية',
+        count: 1
+      }, true));
+      updateReasonHeaderVisibility();
+    }
+
+    function toggleReasonColumn(selectEl){
+      const row = selectEl.closest('tr');
+      const reasonCell = row.querySelector('.reason-col-cell');
+      const value = selectEl.value;
+      if(value === 'جاهز'){
+        reasonCell.classList.add('hidden');
+        reasonCell.querySelector('.dep-reason').value = '';
+      }else{
+        reasonCell.classList.remove('hidden');
+      }
+      updateReasonHeaderVisibility();
+    }
+
+    function updateReasonHeaderVisibility(){
+      const anyVisible = [...document.querySelectorAll('.reason-col-cell')].some(cell => !cell.classList.contains('hidden'));
+      document.querySelectorAll('.reason-col').forEach(h => h.classList.toggle('hidden', !anyVisible));
+      document.querySelectorAll('.reason-col-cell').forEach(cell => {
+        if(anyVisible){
+          if(cell.querySelector('.dep-reason').closest('tr').querySelector('.dep-status').value === 'جاهز'){
+            cell.classList.add('hidden');
+          }
+        }
+      });
     }
 
     async function sendDeploymentPlanSmart(){
@@ -1755,11 +1976,19 @@
       const entryName = role === 'كبير مسعفين'
         ? (document.getElementById('deploy_lead_name').value || '')
         : (document.getElementById('deploy_assistant_name').value || '');
+      const notes = document.getElementById('deployment_notes').value.trim();
 
       if(!sector || !shift || !role || !date || !time || !entryName){
         showAlert('deploymentAlert','error','يرجى تعبئة البيانات الأساسية لخطة الانتشار');
         return;
       }
+
+      const autoAssistants = [
+        document.getElementById('deploy_assistant1_auto').value || '-',
+        document.getElementById('deploy_assistant2_auto').value || '-',
+        document.getElementById('deploy_assistant3_auto').value || '-',
+        document.getElementById('deploy_assistant4_auto').value || '-'
+      ].join(' | ');
 
       const rows = [...document.querySelectorAll('#deploymentTableBody tr')].map(row => ({
         "وقت الحفظ": new Date().toLocaleString('ar-SA'),
@@ -1770,12 +1999,14 @@
         "صفة مدخل البيانات": role,
         "اسم مدخل البيانات": entryName,
         "اسم كبير المسعفين المناوب": lead,
+        "أسماء المساعدين": autoAssistants,
         "الرمز": row.querySelector('.dep-code')?.value || '-',
         "نوع الآلية": row.querySelector('.dep-type')?.value || '-',
+        "مناوبة النقطة": row.querySelector('.dep-shift')?.value || '-',
         "الحالة": row.querySelector('.dep-status')?.value || '-',
         "عدد الفرق الفعلي": row.querySelector('.dep-count')?.value || 0,
         "توضيح سبب الاختلاف": row.querySelector('.dep-reason')?.value || '-',
-        "ملاحظات": row.querySelector('.dep-note')?.value || '-',
+        "ملاحظات": notes || '-',
         "رابط النقطة": '-',
         "التصنيف": '-',
         "عدد الفرق بالنقطة": 1,
@@ -1792,10 +2023,11 @@
 
         let msg = `📍 خطة الانتشار - نطاق منى\n\n`;
         msg += `📍 القطاع: ${sector}\n`;
-        msg += `🕘 الفترة: ${shift}\n`;
+        msg += `🕘 المناوبة: ${shift}\n`;
         msg += `👤 مدخل البيانات: ${entryName}\n`;
         msg += `👨‍⚕️ كبير المسعفين المناوب: ${lead}\n`;
         msg += `📋 عدد السجلات: ${rows.length}\n`;
+        if(notes) msg += `\n📝 ملاحظات:\n${notes}`;
         openWhatsApp(msg);
       } catch {
         showAlert('deploymentAlert','error','حدث خطأ أثناء الاتصال بالخادم');

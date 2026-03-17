@@ -549,14 +549,12 @@
       <section class="hero">
         <h3>نطاق منى حج 1447هـ</h3>
         <p>
-          هذه الواجهة مصممة لتكون منصة تشغيل موحدة 
-       
+          هذه الواجهة مصممة لتكون منصة تشغيل موحدة
           ﴿رَبِّ اجْعَلْ هَذَا بَلَدًا آمِنًا﴾
-          
         </p>
         <div class="hero-actions">
           <button class="btn btn-primary" onclick="toggleQuickLinks()"><i class="fas fa-paper-plane"></i> ابدأ رفع التقارير</button>
-          <a class="btn btn-secondary" href="https://script.google.com/macros/s/AKfycbz3W0hz7cJA9G248qj9SlDpqTLVlw5Vktr2QtRukqpiiqOH7g7-nXsCqVILpAmmNWk/exec" target="_blank"><i class="fas fa-tv"></i> فتح لوحة القائد</a>
+          <a class="btn btn-secondary" href="?page=dashboard" target="_blank"><i class="fas fa-tv"></i> فتح لوحة القائد</a>
         </div>
 
         <div class="quick-links" id="quickLinks">
@@ -635,7 +633,7 @@
           <div class="card">
             <h4>لوحة القائد</h4>
             <p>تفتح في نافذة مستقلة وتتضمن الإجماليات والتفاصيل والخريطة والتنبيهات التشغيلية.</p>
-            <div class="actions"><a class="btn btn-dark" href="https://script.google.com/macros/s/AKfycbz3W0hz7cJA9G248qj9SlDpqTLVlw5Vktr2QtRukqpiiqOH7g7-nXsCqVILpAmmNWk/exec" target="_blank">فتح اللوحة</a></div>
+            <div class="actions"><a class="btn btn-dark" href="?page=dashboard" target="_blank">فتح اللوحة</a></div>
           </div>
         </div>
       </section>
@@ -757,7 +755,7 @@
         <div class="panel-head">
           <div>
             <h3>نموذج تسليم المناوبة</h3>
-            <p>تسليم بين كبير المسعفين مع ملخص الحالة والوحدات والأجهزة التقنية.</p>
+            <p>تم تعديل النموذج بالنسخة الكاملة حسب الرسالة التي أرسلتها.</p>
           </div>
         </div>
 
@@ -805,8 +803,8 @@
         <div class="section">
           <div class="section-title">ملخص الوضع الراهن</div>
           <div class="section-body grid-3">
-            <div class="field"><label for="avg_response">متوسط زمن الاستجابة</label><input type="text" id="avg_response"></div>
-            <div class="field"><label for="echo_response">متوسط استجابة ECHO</label><input type="text" id="echo_response"></div>
+            <div class="field"><label for="avg_response">متوسط زمن الاستجابة</label><input type="text" id="avg_response" placeholder="مثال: 10:09"></div>
+            <div class="field"><label for="echo_response">متوسط زمن استجابة ECHO</label><input type="text" id="echo_response" placeholder="مثال: 00:55"></div>
             <div class="field"><label for="total_cases">إجمالي البلاغات</label><input type="number" id="total_cases" min="0" value="0"></div>
             <div class="field"><label for="active_teams">عدد الفرق الفعالة</label><input type="number" id="active_teams" min="0" value="0"></div>
             <div class="field"><label for="planned_teams">عدد الفرق المعتمدة</label><input type="number" id="planned_teams" min="0" value="0"></div>
@@ -814,57 +812,123 @@
         </div>
 
         <div class="section">
-          <div class="section-title">التشييك على الوحدات التشغيلية</div>
-          <div class="section-body">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>نوع الوحدة</th>
-                    <th>العاملة</th>
-                    <th>الاحتياط</th>
-                    <th>خارج الخدمة</th>
-                    <th>سبب العطل</th>
-                  </tr>
-                </thead>
-                <tbody id="handoverUnitsTableBody"></tbody>
-              </table>
-            </div>
+          <div class="section-title">تصنيف البلاغات الطبية</div>
+          <div class="section-body grid-3">
+            <div class="field"><label for="case_omega">OMEGA</label><input type="number" id="case_omega" min="0" value="0"></div>
+            <div class="field"><label for="case_alpha">ALPHA</label><input type="number" id="case_alpha" min="0" value="0"></div>
+            <div class="field"><label for="case_bravo">BRAVO</label><input type="number" id="case_bravo" min="0" value="0"></div>
+            <div class="field"><label for="case_charly">CHARLY</label><input type="number" id="case_charly" min="0" value="0"></div>
+            <div class="field"><label for="case_delta">DELTA</label><input type="number" id="case_delta" min="0" value="0"></div>
+            <div class="field"><label for="case_echo">ECHO</label><input type="number" id="case_echo" min="0" value="0"></div>
           </div>
         </div>
 
         <div class="section">
-          <div class="section-title">الأجهزة التقنية</div>
-          <div class="section-body grid-2">
-            <div class="field"><label for="handover_radio_devices_count">عدد الأجهزة اللاسلكية</label><input type="number" id="handover_radio_devices_count" min="0" value="0"></div>
-            <div class="field"><label for="handover_radio_devices_notes">ملاحظات الأجهزة اللاسلكية</label><input type="text" id="handover_radio_devices_notes"></div>
-            <div class="field"><label for="handover_tablet_devices_count">عدد أجهزة التابلت</label><input type="number" id="handover_tablet_devices_count" min="0" value="0"></div>
-            <div class="field"><label for="handover_tablet_devices_notes">ملاحظات أجهزة التابلت</label><input type="text" id="handover_tablet_devices_notes"></div>
+          <div class="section-title">التشييك على الوحدات التشغيلية</div>
+          <div class="section-body grid-3">
+            <div class="field"><label><input type="checkbox" id="check_ambulance"> مركبات إسعافية</label></div>
+            <div class="field"><label><input type="checkbox" id="check_golf"> قولف</label></div>
+            <div class="field"><label><input type="checkbox" id="check_special_response"> استجابة نوعية</label></div>
           </div>
         </div>
 
         <div class="section">
           <div class="section-title">المركبات والدعم اللوجستي</div>
           <div class="section-body grid-2">
-            <div class="field"><label for="working_vehicles">عدد المركبات/الفرق العاملة</label><input type="text" id="working_vehicles"></div>
+            <div class="field"><label for="working_vehicles">عدد المركبات/الفرق العاملة</label><input type="number" id="working_vehicles" min="0" value="0"></div>
             <div class="field"><label for="reserve_vehicles">الاحتياط</label><input type="number" id="reserve_vehicles" min="0" value="0"></div>
             <div class="field"><label for="out_of_service">الخارج عن الخدمة</label><input type="number" id="out_of_service" min="0" value="0"></div>
-            <div class="field"><label for="logistic_reports">بلاغات الدعم اللوجستي</label><input type="number" id="logistic_reports" min="0" value="0"></div>
-            <div class="field"><label for="open_logistic_reports">بلاغات الدعم المفتوحة</label><input type="number" id="open_logistic_reports" min="0" value="0"></div>
-            <div class="field"><label for="deployment_sites">مواقع الانتشار</label><textarea id="deployment_sites"></textarea></div>
-            <div class="field"><label for="faulty_units">الوحدات الخارجة عن الخدمة ومواقعها</label><textarea id="faulty_units"></textarea></div>
+            <div class="field"><label for="logistic_reports">عدد بلاغات الدعم اللوجستي</label><input type="number" id="logistic_reports" min="0" value="0"></div>
+            <div class="field"><label for="open_logistic_reports">البلاغات المفتوحة</label><input type="number" id="open_logistic_reports" min="0" value="0"></div>
+            <div class="field"><label for="deployment_sites">مواقع الانتشار</label><textarea id="deployment_sites" placeholder="اكتب كل موقع في سطر مستقل"></textarea></div>
+            <div class="field"><label for="faulty_units">الوحدات المتعطلة ومواقعها</label><textarea id="faulty_units"></textarea></div>
           </div>
         </div>
 
         <div class="section">
-          <div class="section-title">ملاحظات عامة</div>
+          <div class="section-title">طلبات الدعم اللوجستي للمركبات</div>
           <div class="section-body">
-            <div class="field"><label for="handover_notes">الملاحظات</label><textarea id="handover_notes"></textarea></div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>البند</th>
+                    <th>نداء الفرقة</th>
+                    <th>توقيت العطل</th>
+                    <th>نوع العطل</th>
+                    <th>الإجراء المتبع</th>
+                    <th>العودة للخدمة</th>
+                    <th>لوحة المركبة</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td><input type="text" id="support_call_1"></td>
+                    <td><input type="time" id="support_time_1"></td>
+                    <td><input type="text" id="support_type_1"></td>
+                    <td><input type="text" id="support_action_1"></td>
+                    <td><input type="time" id="support_return_1"></td>
+                    <td><input type="text" id="support_plate_1"></td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td><input type="text" id="support_call_2"></td>
+                    <td><input type="time" id="support_time_2"></td>
+                    <td><input type="text" id="support_type_2"></td>
+                    <td><input type="text" id="support_action_2"></td>
+                    <td><input type="time" id="support_return_2"></td>
+                    <td><input type="text" id="support_plate_2"></td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td><input type="text" id="support_call_3"></td>
+                    <td><input type="time" id="support_time_3"></td>
+                    <td><input type="text" id="support_type_3"></td>
+                    <td><input type="text" id="support_action_3"></td>
+                    <td><input type="time" id="support_return_3"></td>
+                    <td><input type="text" id="support_plate_3"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">إحاطات الصحة والسلامة</div>
+          <div class="section-body grid-2">
+            <div class="field"><label for="weather_warning">التحذيرات الجوية</label><input type="text" id="weather_warning" placeholder="مثال: لايوجد"></div>
+            <div class="field"><label for="security_warning">التحذيرات الأمنية</label><input type="text" id="security_warning" placeholder="مثال: لايوجد"></div>
+            <div class="field"><label for="dangerous_sites">مواقع خطرة</label><input type="text" id="dangerous_sites"></div>
+            <div class="field"><label for="worker_injuries">إصابات العاملين</label><input type="text" id="worker_injuries" placeholder="مثال: لايوجد"></div>
+            <div class="field"><label for="other_briefings">إحاطات أخرى</label><textarea id="other_briefings"></textarea></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">ملخص الأحداث</div>
+          <div class="section-body">
+            <div class="field"><label for="events_summary">ملخص الأحداث</label><textarea id="events_summary"></textarea></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">ملخص الموارد المطلوبة وتوزيعها</div>
+          <div class="section-body">
+            <div class="field"><label for="resources_summary">ملخص الموارد المطلوبة وتوزيعها</label><textarea id="resources_summary"></textarea></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">ملاحظات عامة عن المناوبة</div>
+          <div class="section-body">
+            <div class="field"><label for="handover_notes">الملاحظات العامة</label><textarea id="handover_notes"></textarea></div>
           </div>
         </div>
 
         <div class="actions">
-          <button class="btn btn-success" onclick="sendHandoverMerged()">حفظ وإرسال</button>
+          <button class="btn btn-success" onclick="sendHandoverMerged()"><i class="fas fa-paper-plane"></i> حفظ وإرسال</button>
         </div>
       </section>
 
@@ -1200,7 +1264,7 @@
             <p>يمكنك فتح الخريطة مباشرة أو الانتقال إلى لوحة القائد الشاملة.</p>
             <div class="actions">
               <a class="btn btn-blue" href="https://www.google.com/maps/d/viewer?mid=15jPyMtPR5xmD0hZpE7g2-B1J0rSosvM&ll=21.416799550046317%2C39.873667103872805&z=15" target="_blank"><i class="fas fa-map"></i> فتح الخريطة</a>
-              <a class="btn btn-dark" href="https://script.google.com/macros/s/AKfycbz3W0hz7cJA9G248qj9SlDpqTLVlw5Vktr2QtRukqpiiqOH7g7-nXsCqVILpAmmNWk/exec" target="_blank"><i class="fas fa-tv"></i> فتح لوحة القائد</a>
+              <a class="btn btn-dark" href="?page=dashboard" target="_blank"><i class="fas fa-tv"></i> فتح لوحة القائد</a>
             </div>
             <div class="note" style="margin-top:14px">
               لوحة القائد تفتح في نافذة مستقلة وتعرض الإجماليات، التفاصيل، التنبيهات، والخريطة الحية.
@@ -1215,7 +1279,7 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz3W0hz7cJA9G248qj9SlDpqTLVlw5Vktr2QtRukqpiiqOH7g7-nXsCqVILpAmmNWk/exec";
+    const SCRIPT_URL = "PUT_YOUR_WEBAPP_URL_HERE";
 
     const teamsData = {
       "الجمرات": {
@@ -1247,10 +1311,6 @@
         "المسائية": { lead:"فواز فهد الأشجعي", assistants:["علي سلامة العنزي","مبارك محسن العجمي","",""] }
       }
     };
-
-    const unitTypesData = [
-      "مركبات إسعافية","قولف","راجلة","دراجة نارية","دراجة هوائية","سكوتر","بولاريس","طويق","طويق ICU","خزام","هداج","سلمى","سند","ضمك","ثريا","تنهات","أخرى حدد"
-    ];
 
     const medicalItemsData = [
       "جهاز لوكس","جهاز صدمات خارجي AED","جهاز تنفس صناعي","جهاز لايف باك","جهاز ميندري","جهاز قياس العلامات الحيوية","جهاز قياس النبض ونسبة الأكسجين بالدم","جهاز قياس السكر بالدم","جهاز الشفط المتنقل الكهربائي","جهاز الدريل العظمي","جهاز قياس الحرارة","سماعة طبية","مقص جراحي","ثاقب زجاج","كشاف ضوء","لوح بورد بلاستيكي طويل","نقالة طي","سكوب","سرير","كرسي الدرج","جبائر شد للفخذ","قاطع خواتم","حقيبة إسعافية بكامل ملحقاتها"
@@ -1374,7 +1434,6 @@
       }
     };
 
-    // التنقل
     const mobileBtn = document.getElementById('mobileBtn');
     const sidebar = document.getElementById('sidebar');
 
@@ -1528,98 +1587,220 @@
 
       document.getElementById('handover_sender').value = current?.lead || '';
       document.getElementById('handover_receiver').value = next?.lead || '';
-      document.getElementById('handover_assistant1').value = current?.assistants?.[0] || '';
-      document.getElementById('handover_assistant2').value = current?.assistants?.[1] || '';
-      document.getElementById('handover_assistant3').value = current?.assistants?.[2] || '';
-      document.getElementById('handover_assistant4').value = current?.assistants?.[3] || '';
+      document.getElementById('handover_assistant1').value = current?.assistants?.[0] || '-';
+      document.getElementById('handover_assistant2').value = current?.assistants?.[1] || '-';
+      document.getElementById('handover_assistant3').value = current?.assistants?.[2] || '-';
+      document.getElementById('handover_assistant4').value = current?.assistants?.[3] || '-';
     }
 
-    function buildHandoverUnitsTable(){
-      const body = document.getElementById('handoverUnitsTableBody');
-      body.innerHTML = '';
-      unitTypesData.forEach((item,index)=>{
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${item === "أخرى حدد" ? `<input type="text" id="handover_unit_name_${index}" placeholder="حدد النوع الآخر">` : item}</td>
-          <td><input type="number" id="handover_unit_working_${index}" min="0" value="0" class="compact-number"></td>
-          <td><input type="number" id="handover_unit_reserve_${index}" min="0" value="0" class="compact-number"></td>
-          <td><input type="number" id="handover_unit_out_${index}" min="0" value="0" class="compact-number"></td>
-          <td><input type="text" id="handover_unit_fault_reason_${index}" placeholder="اذكر السبب"></td>
-        `;
-        body.appendChild(row);
-      });
+    function getSupportRow(index){
+      return {
+        call: document.getElementById(`support_call_${index}`).value.trim(),
+        time: document.getElementById(`support_time_${index}`).value.trim(),
+        type: document.getElementById(`support_type_${index}`).value.trim(),
+        action: document.getElementById(`support_action_${index}`).value.trim(),
+        back: document.getElementById(`support_return_${index}`).value.trim(),
+        plate: document.getElementById(`support_plate_${index}`).value.trim()
+      };
+    }
+
+    function buildHandoverMessage(row){
+      const sites = (row["مواقع الانتشار"] || 'لايوجد')
+        .split('\n')
+        .map(s => s.trim())
+        .filter(Boolean)
+        .map(s => `• ${s}`)
+        .join('\n') || '• لايوجد';
+
+      const supportLines = [1,2,3]
+        .map(i => {
+          const call = row[`نداء الفرقة ${i}`];
+          const time = row[`توقيت العطل ${i}`];
+          const type = row[`نوع العطل ${i}`];
+          const action = row[`الإجراء المتبع ${i}`];
+          const back = row[`العودة للخدمة ${i}`];
+          const plate = row[`لوحة المركبة ${i}`];
+
+          if (!call && !time && !type && !action && !back && !plate) return '';
+          return `• بند ${i}
+  - نداء الفرقة: ${call || '-'}
+  - توقيت العطل: ${time || '-'}
+  - نوع العطل: ${type || '-'}
+  - الإجراء المتبع: ${action || '-'}
+  - العودة للخدمة: ${back || '-'}
+  - لوحة المركبة: ${plate || '-'}`;
+        })
+        .filter(Boolean)
+        .join('\n\n') || '• لايوجد';
+
+      const checkAmb = row["تشييك مركبات إسعافية"] === 'نعم' ? 'نعم' : 'لا';
+      const checkGolf = row["تشييك قولف"] === 'نعم' ? 'نعم' : 'لا';
+      const checkSpecial = row["تشييك استجابة نوعية"] === 'نعم' ? 'نعم' : 'لا';
+
+      return `📋 نموذج تسليم مناوبة كبير المسعفين
+
+📍 القطاع: ${row["القطاع"] || '-'}
+🕘 نوع المناوبة: ${row["نوع المناوبة"] || '-'}
+📅 التاريخ: ${row["التاريخ"] || '-'}
+⏰ الوقت: من ${row["الوقت من"] || '-'} إلى ${row["الوقت إلى"] || '-'}
+
+👨‍⚕️ كبير المسعفين المسلم: ${row["كبير المسعفين المسلم"] || '-'}
+👨‍⚕️ كبير المسعفين المستلم: ${row["كبير المسعفين المستلم"] || '-'}
+مساعد 1: ${row["مساعد 1"] || '-'}
+مساعد 2: ${row["مساعد 2"] || '-'}
+مساعد 3: ${row["مساعد 3"] || '-'}
+مساعد 4: ${row["مساعد 4"] || '-'}
+
+📊 ملخص الوضع الراهن
+• متوسط زمن الاستجابة: ${row["متوسط زمن الاستجابة"] || '0'}
+• متوسط زمن استجابة ECHO: ${row["متوسط زمن استجابة ECHO"] || '0'}
+• إجمالي البلاغات: ${row["إجمالي البلاغات"] || '0'}
+• عدد الفرق الفعالة: ${row["عدد الفرق الفعالة"] || '0'} من أصل ${row["عدد الفرق المعتمدة"] || '0'}
+
+🚨 تصنيف البلاغات الطبية
+• OMEGA: ${row["OMEGA"] || '0'}
+• ALPHA: ${row["ALPHA"] || '0'}
+• BRAVO: ${row["BRAVO"] || '0'}
+• CHARLY: ${row["CHARLY"] || '0'}
+• DELTA: ${row["DELTA"] || '0'}
+• ECHO: ${row["ECHO"] || '0'}
+
+✅ التشييك على الوحدات التشغيلية
+• مركبات إسعافية: ${checkAmb}
+• قولف: ${checkGolf}
+• استجابة نوعية: ${checkSpecial}
+
+🚑 المركبات والدعم اللوجستي
+• العاملة: ${row["العاملة"] || '0'}
+• الاحتياط: ${row["الاحتياط"] || '0'}
+• الخارج عن الخدمة: ${row["الخارج عن الخدمة"] || '0'}
+• عدد بلاغات الدعم اللوجستي: ${row["بلاغات الدعم اللوجستي"] || '0'}
+• البلاغات المفتوحة: ${row["البلاغات المفتوحة"] || '0'}
+
+📍 مواقع الانتشار
+${sites}
+
+🔧 الوحدات المتعطلة ومواقعها
+• ${row["الوحدات المتعطلة ومواقعها"] || 'لايوجد'}
+
+🚚 طلبات الدعم اللوجستي للمركبات
+${supportLines}
+
+🛡️ إحاطات الصحة والسلامة
+• التحذيرات الجوية: ${row["التحذيرات الجوية"] || 'لايوجد'}
+• التحذيرات الأمنية: ${row["التحذيرات الأمنية"] || 'لايوجد'}
+• مواقع خطرة: ${row["مواقع خطرة"] || 'لايوجد'}
+• إصابات العاملين: ${row["إصابات العاملين"] || 'لايوجد'}
+• إحاطات أخرى: ${row["إحاطات أخرى"] || 'لايوجد'}
+
+📝 ملخص الأحداث
+• ${row["ملخص الأحداث"] || 'لايوجد'}
+
+📦 ملخص الموارد المطلوبة وتوزيعها
+• ${row["ملخص الموارد المطلوبة وتوزيعها"] || 'لايوجد'}
+
+📌 ملاحظات عامة عن المناوبة
+• ${(row["ملاحظات عامة عن المناوبة"] || 'لايوجد').split('\n').filter(Boolean).join('\n• ')}`;
     }
 
     async function sendHandoverMerged(){
-      const required = ['handover_sector','handover_shift','handover_date'];
-      for(const id of required){
+      const required = ['handover_sector','handover_shift','handover_date','handover_time_from','handover_time_to'];
+      for (const id of required){
         const el = document.getElementById(id);
-        if(!el || !String(el.value).trim()){
-          showAlert('handoverAlert','error','يرجى تعبئة البيانات الأساسية');
+        if (!el || !String(el.value).trim()){
+          showAlert('handoverAlert','error','يرجى تعبئة البيانات الأساسية لنموذج تسليم المناوبة');
           return;
         }
       }
 
-      const handoverUnitSummary = unitTypesData.map((item,index)=>{
-        const name = item === "أخرى حدد"
-          ? (document.getElementById(`handover_unit_name_${index}`).value.trim() || "أخرى")
-          : item;
-        const working = document.getElementById(`handover_unit_working_${index}`).value || '0';
-        const reserve = document.getElementById(`handover_unit_reserve_${index}`).value || '0';
-        const out = document.getElementById(`handover_unit_out_${index}`).value || '0';
-        const reason = document.getElementById(`handover_unit_fault_reason_${index}`).value.trim() || '-';
-        return `${name}: عاملة=${working}, احتياط=${reserve}, خارج الخدمة=${out}, السبب=${reason}`;
-      });
+      const s1 = getSupportRow(1);
+      const s2 = getSupportRow(2);
+      const s3 = getSupportRow(3);
 
       const row = {
         "وقت الحفظ": new Date().toLocaleString('ar-SA'),
         "القطاع": document.getElementById('handover_sector').value,
         "نوع المناوبة": document.getElementById('handover_shift').value,
         "التاريخ": document.getElementById('handover_date').value,
-        "الوقت من": document.getElementById('handover_time_from').value || '',
-        "الوقت إلى": document.getElementById('handover_time_to').value || '',
-        "المسلم": document.getElementById('handover_sender').value || '-',
-        "المستلم": document.getElementById('handover_receiver').value || '-',
-        "مساعد1": document.getElementById('handover_assistant1').value || '-',
-        "مساعد2": document.getElementById('handover_assistant2').value || '-',
-        "مساعد3": document.getElementById('handover_assistant3').value || '-',
-        "مساعد4": document.getElementById('handover_assistant4').value || '-',
+        "الوقت من": document.getElementById('handover_time_from').value,
+        "الوقت إلى": document.getElementById('handover_time_to').value,
+        "كبير المسعفين المسلم": document.getElementById('handover_sender').value || '-',
+        "كبير المسعفين المستلم": document.getElementById('handover_receiver').value || '-',
+        "مساعد 1": document.getElementById('handover_assistant1').value || '-',
+        "مساعد 2": document.getElementById('handover_assistant2').value || '-',
+        "مساعد 3": document.getElementById('handover_assistant3').value || '-',
+        "مساعد 4": document.getElementById('handover_assistant4').value || '-',
+
         "متوسط زمن الاستجابة": document.getElementById('avg_response').value || '0',
-        "متوسط استجابة ECHO": document.getElementById('echo_response').value || '0',
+        "متوسط زمن استجابة ECHO": document.getElementById('echo_response').value || '0',
         "إجمالي البلاغات": document.getElementById('total_cases').value || '0',
         "عدد الفرق الفعالة": document.getElementById('active_teams').value || '0',
         "عدد الفرق المعتمدة": document.getElementById('planned_teams').value || '0',
-        "ملخص تشييك الوحدات التشغيلية": handoverUnitSummary.join(' || '),
-        "عدد الأجهزة اللاسلكية": document.getElementById('handover_radio_devices_count').value || '0',
-        "ملاحظات الأجهزة اللاسلكية": document.getElementById('handover_radio_devices_notes').value.trim() || '-',
-        "عدد أجهزة التابلت": document.getElementById('handover_tablet_devices_count').value || '0',
-        "ملاحظات أجهزة التابلت": document.getElementById('handover_tablet_devices_notes').value.trim() || '-',
-        "المركبات العاملة": document.getElementById('working_vehicles').value || '-',
+
+        "OMEGA": document.getElementById('case_omega').value || '0',
+        "ALPHA": document.getElementById('case_alpha').value || '0',
+        "BRAVO": document.getElementById('case_bravo').value || '0',
+        "CHARLY": document.getElementById('case_charly').value || '0',
+        "DELTA": document.getElementById('case_delta').value || '0',
+        "ECHO": document.getElementById('case_echo').value || '0',
+
+        "تشييك مركبات إسعافية": document.getElementById('check_ambulance').checked ? 'نعم' : 'لا',
+        "تشييك قولف": document.getElementById('check_golf').checked ? 'نعم' : 'لا',
+        "تشييك استجابة نوعية": document.getElementById('check_special_response').checked ? 'نعم' : 'لا',
+
+        "العاملة": document.getElementById('working_vehicles').value || '0',
         "الاحتياط": document.getElementById('reserve_vehicles').value || '0',
         "الخارج عن الخدمة": document.getElementById('out_of_service').value || '0',
-        "مواقع الانتشار": document.getElementById('deployment_sites').value || '',
-        "الوحدات الخارجة عن الخدمة": document.getElementById('faulty_units').value || '',
         "بلاغات الدعم اللوجستي": document.getElementById('logistic_reports').value || '0',
-        "بلاغات الدعم المفتوحة": document.getElementById('open_logistic_reports').value || '0',
-        "ملاحظات عامة": document.getElementById('handover_notes').value || ''
+        "البلاغات المفتوحة": document.getElementById('open_logistic_reports').value || '0',
+
+        "مواقع الانتشار": document.getElementById('deployment_sites').value.trim() || 'لايوجد',
+        "الوحدات المتعطلة ومواقعها": document.getElementById('faulty_units').value.trim() || 'لايوجد',
+
+        "نداء الفرقة 1": s1.call || '',
+        "توقيت العطل 1": s1.time || '',
+        "نوع العطل 1": s1.type || '',
+        "الإجراء المتبع 1": s1.action || '',
+        "العودة للخدمة 1": s1.back || '',
+        "لوحة المركبة 1": s1.plate || '',
+
+        "نداء الفرقة 2": s2.call || '',
+        "توقيت العطل 2": s2.time || '',
+        "نوع العطل 2": s2.type || '',
+        "الإجراء المتبع 2": s2.action || '',
+        "العودة للخدمة 2": s2.back || '',
+        "لوحة المركبة 2": s2.plate || '',
+
+        "نداء الفرقة 3": s3.call || '',
+        "توقيت العطل 3": s3.time || '',
+        "نوع العطل 3": s3.type || '',
+        "الإجراء المتبع 3": s3.action || '',
+        "العودة للخدمة 3": s3.back || '',
+        "لوحة المركبة 3": s3.plate || '',
+
+        "التحذيرات الجوية": document.getElementById('weather_warning').value.trim() || 'لايوجد',
+        "التحذيرات الأمنية": document.getElementById('security_warning').value.trim() || 'لايوجد',
+        "مواقع خطرة": document.getElementById('dangerous_sites').value.trim() || 'لايوجد',
+        "إصابات العاملين": document.getElementById('worker_injuries').value.trim() || 'لايوجد',
+        "إحاطات أخرى": document.getElementById('other_briefings').value.trim() || 'لايوجد',
+
+        "ملخص الأحداث": document.getElementById('events_summary').value.trim() || 'لايوجد',
+        "ملخص الموارد المطلوبة وتوزيعها": document.getElementById('resources_summary').value.trim() || 'لايوجد',
+        "ملاحظات عامة عن المناوبة": document.getElementById('handover_notes').value.trim() || 'لايوجد'
       };
+
+      row["الرسالة النهائية"] = buildHandoverMessage(row);
 
       try{
         const save = await saveToGoogleSheets('تسليم المناوبة', [row]);
+
         if(!save.success){
           showAlert('handoverAlert','error','تعذر حفظ بيانات تسليم المناوبة');
           return;
         }
-        showAlert('handoverAlert','success','تم حفظ نموذج تسليم المناوبة بنجاح');
 
-        let msg = `📋 نموذج تسليم مناوبة\n\n`;
-        msg += `📍 القطاع: ${row["القطاع"]}\n`;
-        msg += `🕘 الفترة: ${row["نوع المناوبة"]}\n`;
-        msg += `📅 التاريخ: ${row["التاريخ"]}\n`;
-        msg += `👨‍⚕️ المسلم: ${row["المسلم"]}\n`;
-        msg += `👨‍⚕️ المستلم: ${row["المستلم"]}\n`;
-        msg += `📊 إجمالي البلاغات: ${row["إجمالي البلاغات"]}\n`;
-        openWhatsApp(msg);
+        showAlert('handoverAlert','success','تم حفظ نموذج تسليم المناوبة بنجاح');
+        openWhatsApp(row["الرسالة النهائية"]);
       } catch {
         showAlert('handoverAlert','error','حدث خطأ أثناء الاتصال بالخادم');
       }
@@ -2036,7 +2217,6 @@
     }
 
     // تشغيل أولي
-    buildHandoverUnitsTable();
     buildMedicalCheckTable();
     buildStrategicTable();
   </script>

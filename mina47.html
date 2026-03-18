@@ -561,7 +561,6 @@
     }
 
     .hidden{display:none!important}
-    .admin-only.hidden-role{display:none!important}
 
     @media (max-width:1180px){
       .layout{grid-template-columns:1fr}
@@ -688,7 +687,7 @@
           </div>
           <div class="card">
             <h4>خطة الانتشار</h4>
-            <p>تحميل الفرق من الملف الرئيسي حسب القطاع مع الإحداثيات وصلاحيات التعديل لكبير المسعفين فقط.</p>
+            <p>تحميل الفرق من الملف الرئيسي حسب القطاع مع الإحداثيات وصلاحيات التعديل لكبير المسعفين أو مساعده.</p>
             <div class="actions"><button class="btn btn-blue" onclick="activatePanel('deploymentPanel')">فتح النموذج</button></div>
           </div>
           <div class="card">
@@ -1214,7 +1213,7 @@
         <div class="panel-head">
           <div>
             <h3>خطة الانتشار</h3>
-            <p>تحميل الفرق من الملف الرئيسي حسب القطاع، مع صلاحية التعديل والحذف والإضافة فقط لكبير المسعفين.</p>
+            <p>جميع نقاط القطاع متاحة في كل الأوقات، مع صلاحية التعديل والإضافة والحذف والتدعيم لكبير المسعفين أو مساعده.</p>
           </div>
         </div>
 
@@ -1231,19 +1230,19 @@
                 <option value="القطارات">القطارات</option>
                 <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
                 <option value="بطن منى الشمالي">بطن منى الشمالي</option>
+                <option value="الشعيبين">الشعيبين</option>
                 <option value="منى الجديد 1">منى الجديد 1</option>
                 <option value="منى الجديد 2">منى الجديد 2</option>
-                <option value="الشعيبين">الشعيبين</option>
               </select>
             </div>
 
             <div class="field">
-              <label for="deploy_shift">المناوبة</label>
+              <label for="deploy_shift">المناوبة الافتراضية</label>
               <select id="deploy_shift">
                 <option value="" disabled selected>اختر المناوبة</option>
-                <option value="الصباحية">نوبة صباحية</option>
-                <option value="المسائية">نوبة مسائية</option>
-                <option value="تكميلية">نوبة تكميلية</option>
+                <option value="الصباحية">صباحية</option>
+                <option value="المسائية">مسائية</option>
+                <option value="اوفرلاب">اوفرلاب</option>
               </select>
             </div>
 
@@ -1256,7 +1255,10 @@
               </select>
             </div>
 
-            <div class="field"><label for="deploy_lead_name">اسم كبير المسعفين</label><input type="text" id="deploy_lead_name" readonly></div>
+            <div class="field">
+              <label for="deploy_lead_name">اسم كبير المسعفين</label>
+              <input type="text" id="deploy_lead_name" readonly>
+            </div>
 
             <div class="field">
               <label for="deploy_assistant_name">اسم مساعد كبير المسعفين</label>
@@ -1265,7 +1267,10 @@
               </select>
             </div>
 
-            <div class="field"><label for="deploy_current_lead">اسم كبير المسعفين المناوب</label><input type="text" id="deploy_current_lead" readonly></div>
+            <div class="field">
+              <label for="deploy_current_lead">اسم كبير المسعفين المناوب</label>
+              <input type="text" id="deploy_current_lead" readonly>
+            </div>
 
             <div class="field"><label for="deploy_assistant1_auto">مساعد 1</label><input type="text" id="deploy_assistant1_auto" readonly></div>
             <div class="field"><label for="deploy_assistant2_auto">مساعد 2</label><input type="text" id="deploy_assistant2_auto" readonly></div>
@@ -1292,8 +1297,10 @@
                     <th>Latitude</th>
                     <th>Longitude</th>
                     <th>الخريطة</th>
-                    <th class="reason-col">سبب الاختلاف</th>
-                    <th class="admin-only">إجراء</th>
+                    <th>نوع التدعيم</th>
+                    <th>جهة التدعيم</th>
+                    <th>ملاحظات السجل</th>
+                    <th>إجراء</th>
                   </tr>
                 </thead>
                 <tbody id="deploymentTableBody"></tbody>
@@ -1301,7 +1308,7 @@
             </div>
 
             <div class="actions">
-              <button class="btn btn-outline" onclick="addManualDeploymentRow()"><i class="fas fa-plus"></i> إضافة صف تدعيم يدوي</button>
+              <button class="btn btn-outline" onclick="addManualDeploymentRow()"><i class="fas fa-plus"></i> إضافة صف جديد</button>
             </div>
 
             <div class="bullets-box">
@@ -2000,16 +2007,15 @@ ${supportLines}
     function fillDeploymentPeople(){
       const sector = document.getElementById('deploy_sector').value;
       const shift = document.getElementById('deploy_shift').value;
-      const role = document.getElementById('deploy_role').value;
-      const normalizedShift = shift === 'الصباحية' ? 'الصباحية' : shift === 'المسائية' ? 'المسائية' : 'الصباحية';
-      const team = teamsData?.[sector]?.[normalizedShift];
+      const teamShift = shift === 'المسائية' ? 'المسائية' : 'الصباحية';
+      const team = teamsData?.[sector]?.[teamShift];
 
       document.getElementById('deploy_lead_name').value = team?.lead || '';
       document.getElementById('deploy_current_lead').value = team?.lead || '';
-      document.getElementById('deploy_assistant1_auto').value = (role === 'كبير مسعفين') ? (team?.assistants?.[0] || '') : '';
-      document.getElementById('deploy_assistant2_auto').value = (role === 'كبير مسعفين') ? (team?.assistants?.[1] || '') : '';
-      document.getElementById('deploy_assistant3_auto').value = (role === 'كبير مسعفين') ? (team?.assistants?.[2] || '') : '';
-      document.getElementById('deploy_assistant4_auto').value = (role === 'كبير مسعفين') ? (team?.assistants?.[3] || '') : '';
+      document.getElementById('deploy_assistant1_auto').value = team?.assistants?.[0] || '';
+      document.getElementById('deploy_assistant2_auto').value = team?.assistants?.[1] || '';
+      document.getElementById('deploy_assistant3_auto').value = team?.assistants?.[2] || '';
+      document.getElementById('deploy_assistant4_auto').value = team?.assistants?.[3] || '';
 
       const select = document.getElementById('deploy_assistant_name');
       select.innerHTML = '<option value="" disabled selected>اختر اسم المساعد</option>';
@@ -2026,62 +2032,58 @@ ${supportLines}
     function createDeploymentRowHTML(rowData = {}, isManual = false){
       const code = rowData.code || '';
       const type = rowData.type || 'مركبة اسعافية';
-      const shift = rowData.shift || 'نوبة صباحية';
+      const shift = rowData.shift || 'الصباحية';
       const count = rowData.count || 1;
       const lat = rowData.lat || '';
       const lng = rowData.lng || '';
-
-      const isLead = document.getElementById('deploy_role')?.value === 'كبير مسعفين';
-      const editableAttr = isLead ? '' : 'disabled';
+      const note = rowData.note || '';
 
       return `
         <tr>
-          <td><input type="text" class="dep-code" value="${code}" ${editableAttr}></td>
+          <td><input type="text" class="dep-code" value="${code}"></td>
           <td>
-            <select class="dep-type" ${editableAttr}>
+            <select class="dep-type">
               <option value="مركبة اسعافية" ${type==='مركبة اسعافية'?'selected':''}>مركبة إسعافية</option>
               <option value="قولف" ${type==='قولف'?'selected':''}>قولف</option>
+              <option value="استجابة نوعية" ${type==='استجابة نوعية'?'selected':''}>استجابة نوعية</option>
               <option value="راجلة" ${type==='راجلة'?'selected':''}>راجلة</option>
               <option value="دراجة نارية" ${type==='دراجة نارية'?'selected':''}>دراجة نارية</option>
               <option value="أخرى" ${type==='أخرى'?'selected':''}>أخرى</option>
             </select>
           </td>
           <td>
-            <select class="dep-shift" ${editableAttr}>
-              <option value="نوبة صباحية" ${shift==='نوبة صباحية'?'selected':''}>نوبة صباحية</option>
-              <option value="نوبة مسائية" ${shift==='نوبة مسائية'?'selected':''}>نوبة مسائية</option>
-              <option value="نوبة تكميلية" ${shift==='نوبة تكميلية'?'selected':''}>نوبة تكميلية</option>
+            <select class="dep-shift">
+              <option value="الصباحية" ${shift==='الصباحية'?'selected':''}>صباحية</option>
+              <option value="المسائية" ${shift==='المسائية'?'selected':''}>مسائية</option>
+              <option value="اوفرلاب" ${shift==='اوفرلاب'?'selected':''}>اوفرلاب</option>
             </select>
           </td>
           <td>
-            <select class="dep-status" onchange="toggleReasonColumn(this)" ${editableAttr}>
+            <select class="dep-status">
               <option value="جاهز">جاهز</option>
               <option value="خارج الخدمة">خارج الخدمة</option>
-              <option value="نوبة تكميلية">نوبة تكميلية</option>
-              <option value="إضافي 1">إضافي 1</option>
-              <option value="إضافي 2">إضافي 2</option>
+              <option value="مدعم">مدعم</option>
+              <option value="منقول">منقول</option>
+              <option value="موقوف">موقوف</option>
             </select>
           </td>
-          <td><input type="number" class="dep-count compact-number" min="0" value="${count}" ${editableAttr}></td>
-          <td><input type="text" class="dep-lat" value="${lat}" placeholder="Latitude" ${editableAttr}></td>
-          <td><input type="text" class="dep-lng" value="${lng}" placeholder="Longitude" ${editableAttr}></td>
+          <td><input type="number" class="dep-count compact-number" min="0" value="${count}"></td>
+          <td><input type="text" class="dep-lat" value="${lat}" placeholder="Latitude"></td>
+          <td><input type="text" class="dep-lng" value="${lng}" placeholder="Longitude"></td>
           <td><button type="button" class="btn btn-blue" onclick="openRowOnMap(this)">عرض</button></td>
-          <td class="reason-col-cell hidden">
-            <select class="dep-reason" ${editableAttr}>
-              <option value="">اختر السبب</option>
-              <option value="نوبة تكميلية">نوبة تكميلية</option>
-              <option value="تدعيم لحرم">تدعيم لحرم</option>
-              <option value="تدعيم للعاصمة">تدعيم للعاصمة</option>
-              <option value="تدعيم لعرفات">تدعيم لعرفات</option>
-              <option value="تدعيم لمزدلفة">تدعيم لمزدلفة</option>
-              <option value="تدعيم لطريق الحاج">تدعيم لطريق الحاج</option>
-              <option value="راحة مقابل نوبة">راحة مقابل نوبة</option>
-              <option value="اخرى">اخرى</option>
+          <td>
+            <select class="dep-support-type">
+              <option value="">بدون</option>
+              <option value="داخل النطاق">داخل النطاق</option>
+              <option value="إلى قطاع آخر داخل نطاق منى">إلى قطاع آخر داخل نطاق منى</option>
+              <option value="إلى خارج النطاق">إلى خارج النطاق</option>
+              <option value="من قطاع آخر داخل نطاق منى">من قطاع آخر داخل نطاق منى</option>
+              <option value="من خارج النطاق">من خارج النطاق</option>
             </select>
           </td>
-          <td class="admin-only ${isLead ? '' : 'hidden-role'}">
-            <button type="button" class="btn btn-danger" onclick="deleteDeploymentRow(this)">حذف</button>
-          </td>
+          <td><input type="text" class="dep-support-target" placeholder="مثال: الجمرات / العاصمة / عرفات"></td>
+          <td><input type="text" class="dep-note" value="${note}" placeholder="ملاحظات"></td>
+          <td><button type="button" class="btn btn-danger" onclick="deleteDeploymentRow(this)">حذف</button></td>
         </tr>
       `;
     }
@@ -2100,42 +2102,25 @@ ${supportLines}
     }
 
     function deleteDeploymentRow(button){
-      const isLead = document.getElementById('deploy_role')?.value === 'كبير مسعفين';
-      if(!isLead){
-        alert('الحذف متاح فقط لكبير المسعفين');
-        return;
-      }
       button.closest('tr').remove();
-      updateReasonHeaderVisibility();
     }
 
     function refreshDeploymentAdminMode(){
-      const isLead = document.getElementById('deploy_role')?.value === 'كبير مسعفين';
+      const role = document.getElementById('deploy_role')?.value;
+      const canEdit = role === 'كبير مسعفين' || role === 'مساعد كبير مسعفين';
 
       document.querySelectorAll('#deploymentTableBody tr').forEach(row => {
-        row.querySelectorAll('input, select').forEach(el => {
-          if (
-            el.classList.contains('dep-code') ||
-            el.classList.contains('dep-type') ||
-            el.classList.contains('dep-shift') ||
-            el.classList.contains('dep-status') ||
-            el.classList.contains('dep-count') ||
-            el.classList.contains('dep-lat') ||
-            el.classList.contains('dep-lng') ||
-            el.classList.contains('dep-reason')
-          ) {
-            el.disabled = !isLead;
+        row.querySelectorAll('input, select, button').forEach(el => {
+          if (!el.classList.contains('btn-blue')) {
+            el.disabled = !canEdit;
           }
         });
-
-        const adminCell = row.querySelector('.admin-only');
-        if (adminCell) adminCell.classList.toggle('hidden-role', !isLead);
       });
     }
 
     function loadDeploymentTemplate(){
       const sector = document.getElementById('deploy_sector').value;
-      const shift = document.getElementById('deploy_shift').value;
+      const defaultShift = document.getElementById('deploy_shift').value || 'الصباحية';
       const body = document.getElementById('deploymentTableBody');
       body.innerHTML = '';
 
@@ -2150,23 +2135,19 @@ ${supportLines}
             }
 
             const items = res.sectors[sector] || [];
-            const displayShift =
-              shift === 'الصباحية' ? 'نوبة صباحية' :
-              shift === 'المسائية' ? 'نوبة مسائية' :
-              'نوبة تكميلية';
 
             items.forEach(item => {
               body.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
                 code: item.code,
                 type: item.type,
-                shift: displayShift,
+                shift: defaultShift,
                 count: item.count || 1,
                 lat: item.lat || '',
-                lng: item.lng || ''
+                lng: item.lng || '',
+                note: item.note || ''
               }, false));
             });
 
-            updateReasonHeaderVisibility();
             refreshDeploymentAdminMode();
           })
           .withFailureHandler(function(){
@@ -2179,41 +2160,27 @@ ${supportLines}
     }
 
     function addManualDeploymentRow(){
-      const isLead = document.getElementById('deploy_role')?.value === 'كبير مسعفين';
-      if(!isLead){
-        alert('الإضافة متاحة فقط لكبير المسعفين');
+      const role = document.getElementById('deploy_role')?.value;
+      const canEdit = role === 'كبير مسعفين' || role === 'مساعد كبير مسعفين';
+
+      if(!canEdit){
+        alert('الإضافة متاحة فقط لكبير المسعفين أو مساعده');
         return;
       }
 
+      const defaultShift = document.getElementById('deploy_shift').value || 'الصباحية';
       const tbody = document.getElementById('deploymentTableBody');
       tbody.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
         code: '',
         type: 'مركبة اسعافية',
-        shift: 'نوبة تكميلية',
+        shift: defaultShift,
         count: 1,
         lat: '',
-        lng: ''
+        lng: '',
+        note: ''
       }, true));
-      updateReasonHeaderVisibility();
+
       refreshDeploymentAdminMode();
-    }
-
-    function toggleReasonColumn(selectEl){
-      const row = selectEl.closest('tr');
-      const reasonCell = row.querySelector('.reason-col-cell');
-      const value = selectEl.value;
-      if(value === 'جاهز'){
-        reasonCell.classList.add('hidden');
-        reasonCell.querySelector('.dep-reason').value = '';
-      }else{
-        reasonCell.classList.remove('hidden');
-      }
-      updateReasonHeaderVisibility();
-    }
-
-    function updateReasonHeaderVisibility(){
-      const anyVisible = [...document.querySelectorAll('.reason-col-cell')].some(cell => !cell.classList.contains('hidden'));
-      document.querySelectorAll('.reason-col').forEach(h => h.classList.toggle('hidden', !anyVisible));
     }
 
     async function sendDeploymentPlanSmart(){
@@ -2228,6 +2195,13 @@ ${supportLines}
         : (document.getElementById('deploy_assistant_name').value || '');
       const notes = document.getElementById('deployment_notes').value.trim();
 
+      const canEdit = role === 'كبير مسعفين' || role === 'مساعد كبير مسعفين';
+
+      if(!canEdit){
+        showAlert('deploymentAlert','error','التعديل والحفظ متاح فقط لكبير المسعفين أو مساعده');
+        return;
+      }
+
       if(!sector || !shift || !role || !date || !time || !entryName){
         showAlert('deploymentAlert','error','يرجى تعبئة البيانات الأساسية لخطة الانتشار');
         return;
@@ -2240,32 +2214,33 @@ ${supportLines}
         document.getElementById('deploy_assistant4_auto').value || '-'
       ].join(' | ');
 
-      const rows = [...document.querySelectorAll('#deploymentTableBody tr')].map(row => ({
-        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
-        "التاريخ": date,
-        "الوقت": time,
-        "القطاع": sector,
-        "الفترة": shift,
-        "صفة مدخل البيانات": role,
-        "اسم مدخل البيانات": entryName,
-        "اسم كبير المسعفين المناوب": lead,
-        "أسماء المساعدين": autoAssistants,
-        "الرمز": row.querySelector('.dep-code')?.value || '-',
-        "نوع الآلية": row.querySelector('.dep-type')?.value || '-',
-        "مناوبة النقطة": row.querySelector('.dep-shift')?.value || '-',
-        "الحالة": row.querySelector('.dep-status')?.value || '-',
-        "عدد الفرق الفعلي": row.querySelector('.dep-count')?.value || 0,
-        "Latitude": row.querySelector('.dep-lat')?.value || '',
-        "Longitude": row.querySelector('.dep-lng')?.value || '',
-        "توضيح سبب الاختلاف": row.querySelector('.dep-reason')?.value || '-',
-        "ملاحظات": notes || '-',
-        "رابط النقطة": row.querySelector('.dep-lat')?.value && row.querySelector('.dep-lng')?.value
-          ? `https://www.google.com/maps?q=${row.querySelector('.dep-lat')?.value},${row.querySelector('.dep-lng')?.value}`
-          : '-',
-        "التصنيف": '-',
-        "عدد الفرق بالنقطة": row.querySelector('.dep-count')?.value || 1,
-        "ملاحظة النظام": '-'
-      }));
+      const rows = [...document.querySelectorAll('#deploymentTableBody tr')].map(row => {
+        const lat = row.querySelector('.dep-lat')?.value || '';
+        const lng = row.querySelector('.dep-lng')?.value || '';
+        return {
+          "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+          "التاريخ": date,
+          "الوقت": time,
+          "القطاع": sector,
+          "المناوبة الافتراضية": shift,
+          "صفة مدخل البيانات": role,
+          "اسم مدخل البيانات": entryName,
+          "اسم كبير المسعفين المناوب": lead,
+          "أسماء المساعدين": autoAssistants,
+          "الرمز": row.querySelector('.dep-code')?.value || '-',
+          "نوع الآلية": row.querySelector('.dep-type')?.value || '-',
+          "مناوبة النقطة": row.querySelector('.dep-shift')?.value || '-',
+          "الحالة": row.querySelector('.dep-status')?.value || '-',
+          "عدد الفرق الفعلي": row.querySelector('.dep-count')?.value || 0,
+          "Latitude": lat,
+          "Longitude": lng,
+          "رابط النقطة": lat && lng ? `https://www.google.com/maps?q=${lat},${lng}` : '-',
+          "نوع التدعيم": row.querySelector('.dep-support-type')?.value || '-',
+          "جهة التدعيم": row.querySelector('.dep-support-target')?.value || '-',
+          "ملاحظة السجل": row.querySelector('.dep-note')?.value || '-',
+          "ملاحظات عامة": notes || '-'
+        };
+      });
 
       try{
         const save = await saveToGoogleSheets('خطة الانتشار', rows);
@@ -2273,16 +2248,18 @@ ${supportLines}
           showAlert('deploymentAlert','error','تعذر حفظ خطة الانتشار');
           return;
         }
+
         showAlert('deploymentAlert','success','تم حفظ خطة الانتشار بنجاح');
 
         let msg = `📍 خطة الانتشار - نطاق منى\n\n`;
         msg += `📍 القطاع: ${sector}\n`;
-        msg += `🕘 المناوبة: ${shift}\n`;
+        msg += `🕘 المناوبة الافتراضية: ${shift}\n`;
         msg += `👤 مدخل البيانات: ${entryName}\n`;
         msg += `👨‍⚕️ كبير المسعفين المناوب: ${lead}\n`;
         msg += `📋 عدد السجلات: ${rows.length}\n`;
         if(notes) msg += `\n📝 ملاحظات:\n${notes}`;
         openWhatsApp(msg);
+
       } catch {
         showAlert('deploymentAlert','error','حدث خطأ أثناء الاتصال بالخادم');
       }

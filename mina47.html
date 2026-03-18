@@ -7,7 +7,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
   <style>
@@ -15,59 +15,71 @@
       --primary:#c1121f;
       --primary-dark:#8f0d16;
       --secondary:#0b5ed7;
+      --secondary-2:#1d7df2;
       --success:#00b894;
       --warning:#fdcb6e;
       --danger:#d63031;
-      --dark:#1f2937;
+      --dark:#0f172a;
+      --dark-2:#111827;
       --muted:#6b7280;
-      --bg:#f4f7fa;
+      --bg:#eef3f8;
       --card:#ffffff;
       --line:#e5e7eb;
       --soft:#f8fafc;
-      --shadow:0 10px 25px rgba(15,23,42,.08);
-      --radius:18px;
+      --shadow:0 12px 30px rgba(15,23,42,.08);
+      --shadow-2:0 20px 40px rgba(2,6,23,.16);
+      --radius:20px;
     }
 
     *{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
+
     body{
       font-family:'Cairo',sans-serif;
-      background:var(--bg);
+      background:
+        radial-gradient(circle at top right, rgba(11,94,215,.08), transparent 28%),
+        radial-gradient(circle at top left, rgba(193,18,31,.07), transparent 22%),
+        var(--bg);
       color:var(--dark);
       overflow-x:hidden;
     }
 
     .layout{
       display:grid;
-      grid-template-columns:310px 1fr;
+      grid-template-columns:320px 1fr;
       min-height:100vh;
     }
 
     .sidebar{
-      background:linear-gradient(180deg,#17202d 0%, #101827 100%);
+      background:
+        linear-gradient(180deg,rgba(10,16,28,.98) 0%, rgba(14,24,40,.98) 100%),
+        url('https://images.unsplash.com/photo-1516321165247-4aa89a48be28?auto=format&fit=crop&w=1200&q=80') center/cover;
       color:#fff;
       padding:22px 16px;
       height:100vh;
       position:sticky;
       top:0;
       overflow-y:auto;
-      box-shadow:var(--shadow);
+      box-shadow:var(--shadow-2);
       z-index:20;
+      border-left:1px solid rgba(255,255,255,.06);
     }
 
     .brand{
       background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.05));
       border:1px solid rgba(255,255,255,.12);
-      border-radius:24px;
+      border-radius:26px;
       padding:18px;
       margin-bottom:18px;
+      backdrop-filter:blur(8px);
     }
 
     .brand h1{
-      font-size:23px;
-      font-weight:800;
+      font-size:24px;
+      font-weight:900;
       line-height:1.7;
       margin-bottom:6px;
+      letter-spacing:.2px;
     }
 
     .brand p{
@@ -79,7 +91,7 @@
     .side-title{
       color:#9ca3af;
       font-size:12px;
-      font-weight:800;
+      font-weight:900;
       margin:14px 8px 10px;
     }
 
@@ -95,7 +107,7 @@
       align-items:center;
       gap:12px;
       padding:13px 14px;
-      border-radius:14px;
+      border-radius:15px;
       cursor:pointer;
       transition:.25s ease;
       font-weight:800;
@@ -105,6 +117,7 @@
     .nav li i{
       width:22px;
       text-align:center;
+      font-size:15px;
     }
 
     .nav li:hover,
@@ -143,9 +156,10 @@
     }
 
     .title-wrap h2{
-      font-size:28px;
-      font-weight:800;
+      font-size:30px;
+      font-weight:900;
       color:var(--dark);
+      line-height:1.4;
     }
 
     .title-wrap p{
@@ -157,30 +171,49 @@
     .hero{
       position:relative;
       overflow:hidden;
-      border-radius:24px;
-      padding:28px;
+      border-radius:28px;
+      padding:30px;
       margin-bottom:18px;
       color:#fff;
       background:
-        linear-gradient(135deg,rgba(193,18,31,.95),rgba(11,94,215,.88)),
-        url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?q=80&w=1600&auto=format&fit=crop') center/cover;
-      box-shadow:var(--shadow);
+        linear-gradient(135deg,rgba(3,12,24,.74),rgba(9,35,81,.60)),
+        linear-gradient(135deg,rgba(193,18,31,.85),rgba(11,94,215,.72)),
+        url('https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=1600&q=80') center/cover;
+      box-shadow:var(--shadow-2);
+      min-height:240px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,.18), transparent 18%),
+        radial-gradient(circle at 12% 80%, rgba(255,255,255,.10), transparent 20%);
+      pointer-events:none;
     }
 
     .hero h3{
-      font-size:31px;
-      font-weight:800;
+      position:relative;
+      font-size:34px;
+      font-weight:900;
       margin-bottom:10px;
+      line-height:1.4;
     }
 
     .hero p{
-      max-width:900px;
+      position:relative;
+      max-width:950px;
       line-height:2;
       font-size:15px;
       color:#f9fafb;
     }
 
     .hero-actions{
+      position:relative;
       display:flex;
       gap:10px;
       flex-wrap:wrap;
@@ -189,9 +222,10 @@
 
     .quick-links{
       display:none;
-      margin-top:14px;
+      margin-top:16px;
       grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
       gap:10px;
+      position:relative;
     }
 
     .quick-links.show{display:grid}
@@ -200,14 +234,18 @@
       background:rgba(255,255,255,.12);
       border:1px solid rgba(255,255,255,.18);
       padding:12px;
-      border-radius:14px;
-      font-weight:700;
+      border-radius:15px;
+      font-weight:800;
       cursor:pointer;
       transition:.2s ease;
       text-align:center;
+      backdrop-filter:blur(8px);
     }
 
-    .quick-card:hover{background:rgba(255,255,255,.18)}
+    .quick-card:hover{
+      background:rgba(255,255,255,.18);
+      transform:translateY(-1px);
+    }
 
     .btn{
       display:inline-flex;
@@ -218,10 +256,11 @@
       border-radius:14px;
       padding:12px 16px;
       font-size:14px;
-      font-weight:800;
+      font-weight:900;
       cursor:pointer;
       text-decoration:none;
       transition:.2s ease;
+      font-family:'Cairo',sans-serif;
     }
 
     .btn:hover{transform:translateY(-1px)}
@@ -241,24 +280,41 @@
     }
 
     .kpi{
-      background:var(--card);
+      background:linear-gradient(180deg,#ffffff,#f8fbff);
       border:1px solid var(--line);
-      border-radius:18px;
+      border-radius:20px;
       padding:16px;
       box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .kpi::after{
+      content:"";
+      position:absolute;
+      top:0;
+      right:0;
+      width:56px;
+      height:56px;
+      border-radius:0 0 0 20px;
+      background:linear-gradient(135deg,rgba(11,94,215,.10),rgba(193,18,31,.10));
     }
 
     .kpi .label{
       color:var(--muted);
       font-size:13px;
-      font-weight:700;
+      font-weight:800;
       margin-bottom:8px;
+      position:relative;
+      z-index:1;
     }
 
     .kpi .value{
       font-size:30px;
-      font-weight:800;
+      font-weight:900;
       line-height:1.1;
+      position:relative;
+      z-index:1;
     }
 
     .kpi .sub{
@@ -266,13 +322,15 @@
       font-size:12px;
       margin-top:8px;
       line-height:1.7;
+      position:relative;
+      z-index:1;
     }
 
     .panel{
       display:none;
       background:var(--card);
       border:1px solid var(--line);
-      border-radius:22px;
+      border-radius:24px;
       box-shadow:var(--shadow);
       padding:20px;
       margin-bottom:18px;
@@ -290,8 +348,8 @@
     }
 
     .panel-head h3{
-      font-size:22px;
-      font-weight:800;
+      font-size:23px;
+      font-weight:900;
     }
 
     .panel-head p{
@@ -310,9 +368,10 @@
     .section-title{
       background:linear-gradient(135deg,var(--secondary),#3080ff);
       color:#fff;
-      padding:12px 16px;
+      padding:13px 16px;
       font-size:17px;
-      font-weight:800;
+      font-weight:900;
+      letter-spacing:.2px;
     }
 
     .section-body{
@@ -377,7 +436,7 @@
       display:none;
       padding:14px 16px;
       border-radius:16px;
-      font-weight:800;
+      font-weight:900;
       margin-bottom:14px;
     }
 
@@ -402,16 +461,16 @@
     }
 
     .card{
-      background:#fff;
+      background:linear-gradient(180deg,#fff,#fbfdff);
       border:1px solid var(--line);
-      border-radius:18px;
+      border-radius:20px;
       padding:16px;
       box-shadow:var(--shadow);
     }
 
     .card h4{
       font-size:18px;
-      font-weight:800;
+      font-weight:900;
       margin-bottom:8px;
     }
 
@@ -426,12 +485,13 @@
       border:1px solid var(--line);
       border-radius:16px;
       max-width:100%;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);
     }
 
     table{
       width:100%;
       border-collapse:collapse;
-      min-width:860px;
+      min-width:980px;
       background:#fff;
     }
 
@@ -444,9 +504,9 @@
     }
 
     th{
-      background:var(--secondary);
+      background:linear-gradient(135deg,var(--secondary),var(--secondary-2));
       color:#fff;
-      font-weight:800;
+      font-weight:900;
       position:sticky;
       top:0;
       z-index:1;
@@ -489,24 +549,26 @@
       color:var(--muted);
       font-size:13px;
       padding:8px 0 18px;
+      font-weight:700;
     }
 
     .leader-sign{
       text-align:center;
       margin-top:14px;
       font-size:16px;
-      font-weight:700;
+      font-weight:800;
       color:#374151;
     }
 
     .hidden{display:none!important}
+    .admin-only.hidden-role{display:none!important}
 
     @media (max-width:1180px){
       .layout{grid-template-columns:1fr}
       .sidebar{
         position:fixed;
-        right:-330px;
-        width:310px;
+        right:-340px;
+        width:320px;
         transition:.25s ease;
       }
       .sidebar.active{right:0}
@@ -523,7 +585,7 @@
     <aside class="sidebar" id="sidebar">
       <div class="brand">
         <h1>منصة نطاق منى</h1>
-        <p>واجهة تشغيلية موحدة للتحضير اليومي، تسليم المناوبات، التشييك، الخزن الاستراتيجي، وخطة الانتشار.</p>
+        <p>واجهة رقمية موحدة لنطاق منى لموسم الحج، لرفع التقارير ومتابعة النطاق وتسليم المناوبات وخطة الانتشار.</p>
       </div>
 
       <div class="side-title">القائمة الرئيسية</div>
@@ -542,19 +604,19 @@
       <div class="topbar">
         <div class="title-wrap">
           <h2>منصة نطاق منى لموسم حج 1447هـ</h2>
-          <p>نظام تشغيلي متكامل لرفع التقارير ومتابعة الموقف العام لقائد النطاق والمسؤولين.</p>
+          <p>غرفة عمليات رقمية موحدة لمتابعة التقارير الميدانية ورفع النماذج التشغيلية من شاشة واحدة.</p>
         </div>
       </div>
 
       <section class="hero">
-        <h3>نطاق منى حج 1447هـ</h3>
+        <h3>غرفة عمليات رقمية لنطاق منى</h3>
         <p>
-          هذه الواجهة مصممة لتكون منصة تشغيل موحدة
-          ﴿رَبِّ اجْعَلْ هَذَا بَلَدًا آمِنًا﴾
+          منصة تشغيل موحدة لرفع تقارير التحضير اليومي، تسليم المناوبة، تشييك الوحدات، الخزن الاستراتيجي، وخطة الانتشار
+          مع صلاحيات تشغيلية وربط مباشر بلوحة القائد والخريطة الميدانية.
         </p>
         <div class="hero-actions">
           <button class="btn btn-primary" onclick="toggleQuickLinks()"><i class="fas fa-paper-plane"></i> ابدأ رفع التقارير</button>
-          <a class="btn btn-secondary" href="?page=dashboard" target="_blank"><i class="fas fa-tv"></i> فتح لوحة القائد</a>
+          <a class="btn btn-secondary" id="dashboardLinkTop" href="#" target="_blank"><i class="fas fa-tv"></i> فتح لوحة القائد</a>
         </div>
 
         <div class="quick-links" id="quickLinks">
@@ -595,12 +657,11 @@
         </div>
       </section>
 
-      <!-- الرئيسية -->
       <section class="panel active" id="homePanel">
         <div class="panel-head">
           <div>
             <h3>الواجهة الرئيسية</h3>
-            <p>الوصول السريع للنماذج واللوحات التشغيلية.</p>
+            <p>الوصول السريع لجميع النماذج واللوحات التشغيلية.</p>
           </div>
         </div>
 
@@ -612,7 +673,7 @@
           </div>
           <div class="card">
             <h4>تسليم المناوبة</h4>
-            <p>توثيق التسليم بين المناوبات مع ملخص الوضع الراهن والتشييك التشغيلي والأجهزة التقنية.</p>
+            <p>توثيق تسليم المناوبة بين كبار المسعفين مع الرسالة التشغيلية الكاملة وإرسالها عبر الواتساب.</p>
             <div class="actions"><button class="btn btn-blue" onclick="activatePanel('handoverPanel')">فتح النموذج</button></div>
           </div>
           <div class="card">
@@ -622,18 +683,18 @@
           </div>
           <div class="card">
             <h4>الخزن الاستراتيجي</h4>
-            <p>تسجيل حالة الأصناف وإظهار النقص مع الملاحظات التشغيلية.</p>
+            <p>تسجيل حالة الأصناف الطبية والمستهلكات مع التنبيه عند وجود نقص.</p>
             <div class="actions"><button class="btn btn-blue" onclick="activatePanel('stockPanel')">فتح النموذج</button></div>
           </div>
           <div class="card">
             <h4>خطة الانتشار</h4>
-            <p>تسجيل حالة نقاط الانتشار تلقائيًا حسب القطاع والمناوبة مع إمكانية الإدخال اليدوي.</p>
+            <p>تحميل الفرق من الملف الرئيسي حسب القطاع مع الإحداثيات وصلاحيات التعديل لكبير المسعفين فقط.</p>
             <div class="actions"><button class="btn btn-blue" onclick="activatePanel('deploymentPanel')">فتح النموذج</button></div>
           </div>
           <div class="card">
             <h4>لوحة القائد</h4>
-            <p>تفتح في نافذة مستقلة وتتضمن الإجماليات والتفاصيل والخريطة والتنبيهات التشغيلية.</p>
-            <div class="actions"><a class="btn btn-dark" href="?page=dashboard" target="_blank">فتح اللوحة</a></div>
+            <p>لوحة معلومات تنفيذية تعرض ملخص النماذج والملاحظات وآخر التقارير والخريطة التشغيلية.</p>
+            <div class="actions"><a class="btn btn-dark" id="dashboardLinkCard" href="#" target="_blank">فتح اللوحة</a></div>
           </div>
         </div>
       </section>
@@ -755,7 +816,7 @@
         <div class="panel-head">
           <div>
             <h3>نموذج تسليم المناوبة</h3>
-            <p>تم تعديل النموذج بالنسخة الكاملة حسب الرسالة التي أرسلتها.</p>
+            <p>النسخة الكاملة مع إدخال عدد الوحدات التشغيلية بدل علامة الصح.</p>
           </div>
         </div>
 
@@ -824,11 +885,20 @@
         </div>
 
         <div class="section">
-          <div class="section-title">التشييك على الوحدات التشغيلية</div>
+          <div class="section-title">الوحدات التشغيلية</div>
           <div class="section-body grid-3">
-            <div class="field"><label><input type="checkbox" id="check_ambulance"> مركبات إسعافية</label></div>
-            <div class="field"><label><input type="checkbox" id="check_golf"> قولف</label></div>
-            <div class="field"><label><input type="checkbox" id="check_special_response"> استجابة نوعية</label></div>
+            <div class="field">
+              <label for="handover_ambulance_count">عدد مركبات الإسعاف</label>
+              <input type="number" id="handover_ambulance_count" min="0" value="0">
+            </div>
+            <div class="field">
+              <label for="handover_golf_count">عدد القولف</label>
+              <input type="number" id="handover_golf_count" min="0" value="0">
+            </div>
+            <div class="field">
+              <label for="handover_special_response_count">عدد الاستجابة النوعية</label>
+              <input type="number" id="handover_special_response_count" min="0" value="0">
+            </div>
           </div>
         </div>
 
@@ -969,7 +1039,7 @@
                 <option value="" disabled selected>اختر الفترة</option>
                 <option value="الصباحية">الصباحية</option>
                 <option value="المسائية">المسائية</option>
-                <option value="تكميلية">تكميلية</option>
+                <option value="تداخلية(اوفرلاب)">تداخلية(اوفرلاب)</option>
               </select>
             </div>
 
@@ -1144,7 +1214,7 @@
         <div class="panel-head">
           <div>
             <h3>خطة الانتشار</h3>
-            <p>تسجيل حالة نقاط الانتشار تلقائيًا حسب القطاع والمناوبة مع إمكانية التدعيم اليدوي.</p>
+            <p>تحميل الفرق من الملف الرئيسي حسب القطاع، مع صلاحية التعديل والحذف والإضافة فقط لكبير المسعفين.</p>
           </div>
         </div>
 
@@ -1173,7 +1243,7 @@
                 <option value="" disabled selected>اختر المناوبة</option>
                 <option value="الصباحية">نوبة صباحية</option>
                 <option value="المسائية">نوبة مسائية</option>
-                <option value="تكميلية">نوبة تكميلية</option>
+                <option value="تداخلية(اوفرلاب)">نوبة تداخلية (اوفرلاب)</option>
               </select>
             </div>
 
@@ -1219,7 +1289,11 @@
                     <th>المناوبة</th>
                     <th>الحالة</th>
                     <th>عدد الفرق</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>الخريطة</th>
                     <th class="reason-col">سبب الاختلاف</th>
+                    <th class="admin-only">إجراء</th>
                   </tr>
                 </thead>
                 <tbody id="deploymentTableBody"></tbody>
@@ -1264,22 +1338,22 @@
             <p>يمكنك فتح الخريطة مباشرة أو الانتقال إلى لوحة القائد الشاملة.</p>
             <div class="actions">
               <a class="btn btn-blue" href="https://www.google.com/maps/d/viewer?mid=15jPyMtPR5xmD0hZpE7g2-B1J0rSosvM&ll=21.416799550046317%2C39.873667103872805&z=15" target="_blank"><i class="fas fa-map"></i> فتح الخريطة</a>
-              <a class="btn btn-dark" href="?page=dashboard" target="_blank"><i class="fas fa-tv"></i> فتح لوحة القائد</a>
+              <a class="btn btn-dark" id="dashboardLinkMap" href="#" target="_blank"><i class="fas fa-tv"></i> فتح لوحة القائد</a>
             </div>
             <div class="note" style="margin-top:14px">
-              لوحة القائد تفتح في نافذة مستقلة وتعرض الإجماليات، التفاصيل، التنبيهات، والخريطة الحية.
+              لوحة القائد تفتح في نافذة مستقلة من رابط الـ Web App وتعرض الإجماليات، التفاصيل، التنبيهات، والخريطة الحية.
             </div>
           </div>
         </div>
       </section>
 
       <div class="leader-sign">قائد نطاق منى / فهد أحمد الشمري</div>
-      <div class="footer">منصة نطاق منى - نسخة تشغيلية محدثة تطوير :Ali102459</div>
+      <div class="footer">منصة نطاق منى - نسخة تشغيلية مطورة</div>
     </main>
   </div>
 
   <script>
-    const SCRIPT_URL = "PUT_YOUR_WEBAPP_URL_HERE";
+    const SCRIPT_URL = window.location.href.split('?')[0];
 
     const teamsData = {
       "الجمرات": {
@@ -1347,93 +1421,6 @@
       { category:'السلامة الشخصية', item:'صندوق خاص بالأبر' }
     ];
 
-    const deploymentTemplates = {
-      "الجمرات": {
-        "الصباحية": [
-          {code:"VMH1",type:"مركبة اسعافية",shift:"نوبة صباحية"},
-          {code:"VMH2",type:"مركبة اسعافية",shift:"نوبة صباحية"},
-          {code:"VMH3",type:"مركبة اسعافية",shift:"نوبة صباحية"},
-          {code:"VMH26",type:"قولف",shift:"نوبة صباحية"},
-          {code:"VMH28",type:"راجلة",shift:"نوبة صباحية"}
-        ],
-        "المسائية": [
-          {code:"VMH1",type:"مركبة اسعافية",shift:"نوبة مسائية"},
-          {code:"VMH2",type:"مركبة اسعافية",shift:"نوبة مسائية"},
-          {code:"VMH26",type:"قولف",shift:"نوبة مسائية"},
-          {code:"VMH28",type:"راجلة",shift:"نوبة مسائية"}
-        ],
-        "تكميلية": []
-      },
-      "القطارات": {
-        "الصباحية": [
-          {code:"VMH55",type:"مركبة اسعافية",shift:"نوبة صباحية"},
-          {code:"VMH56",type:"مركبة اسعافية",shift:"نوبة صباحية"},
-          {code:"MH57",type:"مركبة اسعافية",shift:"نوبة صباحية"}
-        ],
-        "المسائية": [
-          {code:"VMH55",type:"مركبة اسعافية",shift:"نوبة مسائية"},
-          {code:"VMH56",type:"مركبة اسعافية",shift:"نوبة مسائية"}
-        ],
-        "تكميلية": []
-      },
-      "بطن منى الجنوبي": {
-        "الصباحية": [
-          {code:"VMH78",type:"قولف",shift:"نوبة صباحية"},
-          {code:"VMH79",type:"قولف",shift:"نوبة صباحية"},
-          {code:"MH80",type:"مركبة اسعافية",shift:"نوبة صباحية"}
-        ],
-        "المسائية": [
-          {code:"VMH78",type:"قولف",shift:"نوبة مسائية"},
-          {code:"VMH79",type:"قولف",shift:"نوبة مسائية"}
-        ],
-        "تكميلية": []
-      },
-      "بطن منى الشمالي": {
-        "الصباحية": [
-          {code:"VMH94",type:"مركبة اسعافية",shift:"نوبة صباحية"},
-          {code:"VMH95",type:"قولف",shift:"نوبة صباحية"},
-          {code:"VMH96",type:"مركبة اسعافية",shift:"نوبة صباحية"}
-        ],
-        "المسائية": [
-          {code:"VMH94",type:"مركبة اسعافية",shift:"نوبة مسائية"},
-          {code:"VMH95",type:"قولف",shift:"نوبة مسائية"}
-        ],
-        "تكميلية": []
-      },
-      "منى الجديد 1": {
-        "الصباحية": [
-          {code:"VMH139",type:"مركبة اسعافية",shift:"نوبة صباحية"},
-          {code:"VMH140",type:"مركبة اسعافية",shift:"نوبة صباحية"}
-        ],
-        "المسائية": [
-          {code:"VMH139",type:"مركبة اسعافية",shift:"نوبة مسائية"}
-        ],
-        "تكميلية": []
-      },
-      "منى الجديد 2": {
-        "الصباحية": [
-          {code:"VMH156",type:"قولف",shift:"نوبة صباحية"},
-          {code:"VMH157",type:"مركبة اسعافية",shift:"نوبة صباحية"},
-          {code:"VMH158",type:"قولف",shift:"نوبة صباحية"}
-        ],
-        "المسائية": [
-          {code:"VMH157",type:"مركبة اسعافية",shift:"نوبة مسائية"},
-          {code:"VMH159",type:"مركبة اسعافية",shift:"نوبة مسائية"}
-        ],
-        "تكميلية": []
-      },
-      "الشعيبين": {
-        "الصباحية": [
-          {code:"VMH117",type:"مركبة اسعافية",shift:"نوبة صباحية"},
-          {code:"VMH118",type:"مركبة اسعافية",shift:"نوبة صباحية"}
-        ],
-        "المسائية": [
-          {code:"VMH117",type:"مركبة اسعافية",shift:"نوبة مسائية"}
-        ],
-        "تكميلية": []
-      }
-    };
-
     const mobileBtn = document.getElementById('mobileBtn');
     const sidebar = document.getElementById('sidebar');
 
@@ -1468,6 +1455,14 @@
       setTimeout(() => box.style.display = 'none', 5000);
     }
 
+    function setDashboardLinks(){
+      const dashboardUrl = `${SCRIPT_URL}?page=dashboard`;
+      ['dashboardLinkTop','dashboardLinkCard','dashboardLinkMap'].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.href = dashboardUrl;
+      });
+    }
+
     async function saveToGoogleSheets(sheetName, rows){
       const response = await fetch(SCRIPT_URL, {
         method: 'POST',
@@ -1485,7 +1480,6 @@
       window.open(url, '_blank');
     }
 
-    // التحضير اليومي
     const sectorSelect = document.getElementById('sector');
     const shiftTimeSelect = document.getElementById('shift_time');
 
@@ -1574,7 +1568,6 @@
       }
     }
 
-    // تسليم المناوبة
     document.getElementById('handover_sector').addEventListener('change', fillHandoverTeamData);
     document.getElementById('handover_shift').addEventListener('change', fillHandoverTeamData);
 
@@ -1633,10 +1626,6 @@
         .filter(Boolean)
         .join('\n\n') || '• لايوجد';
 
-      const checkAmb = row["تشييك مركبات إسعافية"] === 'نعم' ? 'نعم' : 'لا';
-      const checkGolf = row["تشييك قولف"] === 'نعم' ? 'نعم' : 'لا';
-      const checkSpecial = row["تشييك استجابة نوعية"] === 'نعم' ? 'نعم' : 'لا';
-
       return `📋 نموذج تسليم مناوبة كبير المسعفين
 
 📍 القطاع: ${row["القطاع"] || '-'}
@@ -1665,10 +1654,10 @@
 • DELTA: ${row["DELTA"] || '0'}
 • ECHO: ${row["ECHO"] || '0'}
 
-✅ التشييك على الوحدات التشغيلية
-• مركبات إسعافية: ${checkAmb}
-• قولف: ${checkGolf}
-• استجابة نوعية: ${checkSpecial}
+🚑 الوحدات التشغيلية
+• مركبات إسعافية: ${row["عدد مركبات الإسعاف"] || '0'}
+• قولف: ${row["عدد القولف"] || '0'}
+• استجابة نوعية: ${row["عدد الاستجابة النوعية"] || '0'}
 
 🚑 المركبات والدعم اللوجستي
 • العاملة: ${row["العاملة"] || '0'}
@@ -1744,9 +1733,9 @@ ${supportLines}
         "DELTA": document.getElementById('case_delta').value || '0',
         "ECHO": document.getElementById('case_echo').value || '0',
 
-        "تشييك مركبات إسعافية": document.getElementById('check_ambulance').checked ? 'نعم' : 'لا',
-        "تشييك قولف": document.getElementById('check_golf').checked ? 'نعم' : 'لا',
-        "تشييك استجابة نوعية": document.getElementById('check_special_response').checked ? 'نعم' : 'لا',
+        "عدد مركبات الإسعاف": document.getElementById('handover_ambulance_count').value || '0',
+        "عدد القولف": document.getElementById('handover_golf_count').value || '0',
+        "عدد الاستجابة النوعية": document.getElementById('handover_special_response_count').value || '0',
 
         "العاملة": document.getElementById('working_vehicles').value || '0',
         "الاحتياط": document.getElementById('reserve_vehicles').value || '0',
@@ -1806,7 +1795,6 @@ ${supportLines}
       }
     }
 
-    // تشييك الوحدة
     document.getElementById('checker_has_third_party').addEventListener('change', toggleThirdCrewField);
     document.getElementById('unit_type').addEventListener('change', toggleUnitTypeFields);
 
@@ -1919,7 +1907,6 @@ ${supportLines}
       }
     }
 
-    // الخزن
     function buildStrategicTable(){
       const body = document.getElementById('strategicTableBody');
       body.innerHTML = '';
@@ -1996,7 +1983,6 @@ ${supportLines}
       }
     }
 
-    // خطة الانتشار
     document.getElementById('deploy_sector').addEventListener('change', handleDeploymentContextChange);
     document.getElementById('deploy_shift').addEventListener('change', handleDeploymentContextChange);
     document.getElementById('deploy_role').addEventListener('change', handleDeploymentRoleChange);
@@ -2008,6 +1994,7 @@ ${supportLines}
 
     function handleDeploymentRoleChange(){
       fillDeploymentPeople();
+      refreshDeploymentAdminMode();
     }
 
     function fillDeploymentPeople(){
@@ -2041,12 +2028,17 @@ ${supportLines}
       const type = rowData.type || 'مركبة اسعافية';
       const shift = rowData.shift || 'نوبة صباحية';
       const count = rowData.count || 1;
+      const lat = rowData.lat || '';
+      const lng = rowData.lng || '';
+
+      const isLead = document.getElementById('deploy_role')?.value === 'كبير مسعفين';
+      const editableAttr = isLead ? '' : 'disabled';
 
       return `
         <tr>
-          <td><input type="text" class="dep-code" value="${code}" ${isManual ? '' : 'readonly'}></td>
+          <td><input type="text" class="dep-code" value="${code}" ${editableAttr}></td>
           <td>
-            <select class="dep-type">
+            <select class="dep-type" ${editableAttr}>
               <option value="مركبة اسعافية" ${type==='مركبة اسعافية'?'selected':''}>مركبة إسعافية</option>
               <option value="قولف" ${type==='قولف'?'selected':''}>قولف</option>
               <option value="راجلة" ${type==='راجلة'?'selected':''}>راجلة</option>
@@ -2055,26 +2047,29 @@ ${supportLines}
             </select>
           </td>
           <td>
-            <select class="dep-shift">
+            <select class="dep-shift" ${editableAttr}>
               <option value="نوبة صباحية" ${shift==='نوبة صباحية'?'selected':''}>نوبة صباحية</option>
               <option value="نوبة مسائية" ${shift==='نوبة مسائية'?'selected':''}>نوبة مسائية</option>
-              <option value="نوبة تكميلية" ${shift==='نوبة تكميلية'?'selected':''}>نوبة تكميلية</option>
+              <option value="نوبة تداخلية(اوفرلاب)" ${shift==='نوبة تداخلية (اوفرلاب)'?'selected':''}>نوبة تداخلية(اوفرلاب)</option>
             </select>
           </td>
           <td>
-            <select class="dep-status" onchange="toggleReasonColumn(this)">
+            <select class="dep-status" onchange="toggleReasonColumn(this)" ${editableAttr}>
               <option value="جاهز">جاهز</option>
               <option value="خارج الخدمة">خارج الخدمة</option>
-              <option value="نوبة تكميلية">نوبة تكميلية</option>
+              <option value="نوبة تداخلية(اوفرلاب)">نوبة تداخلية(اوفرلاب)</option>
               <option value="إضافي 1">إضافي 1</option>
               <option value="إضافي 2">إضافي 2</option>
             </select>
           </td>
-          <td><input type="number" class="dep-count compact-number" min="0" value="${count}"></td>
+          <td><input type="number" class="dep-count compact-number" min="0" value="${count}" ${editableAttr}></td>
+          <td><input type="text" class="dep-lat" value="${lat}" placeholder="Latitude" ${editableAttr}></td>
+          <td><input type="text" class="dep-lng" value="${lng}" placeholder="Longitude" ${editableAttr}></td>
+          <td><button type="button" class="btn btn-blue" onclick="openRowOnMap(this)">عرض</button></td>
           <td class="reason-col-cell hidden">
-            <select class="dep-reason">
+            <select class="dep-reason" ${editableAttr}>
               <option value="">اختر السبب</option>
-              <option value="نوبة تكميلية">نوبة تكميلية</option>
+              <option value="نوبة تداخلية(اوفرلاب)">نوبة تداخلية(اوفرلاب)</option>
               <option value="تدعيم لحرم">تدعيم لحرم</option>
               <option value="تدعيم للعاصمة">تدعيم للعاصمة</option>
               <option value="تدعيم لعرفات">تدعيم لعرفات</option>
@@ -2084,8 +2079,58 @@ ${supportLines}
               <option value="اخرى">اخرى</option>
             </select>
           </td>
+          <td class="admin-only ${isLead ? '' : 'hidden-role'}">
+            <button type="button" class="btn btn-danger" onclick="deleteDeploymentRow(this)">حذف</button>
+          </td>
         </tr>
       `;
+    }
+
+    function openRowOnMap(button){
+      const row = button.closest('tr');
+      const lat = row.querySelector('.dep-lat')?.value?.trim();
+      const lng = row.querySelector('.dep-lng')?.value?.trim();
+
+      if(!lat || !lng){
+        alert('لا توجد إحداثيات لهذه النقطة');
+        return;
+      }
+
+      window.open(`https://www.google.com/maps?q=${lat},${lng}`, '_blank');
+    }
+
+    function deleteDeploymentRow(button){
+      const isLead = document.getElementById('deploy_role')?.value === 'كبير مسعفين';
+      if(!isLead){
+        alert('الحذف متاح فقط لكبير المسعفين');
+        return;
+      }
+      button.closest('tr').remove();
+      updateReasonHeaderVisibility();
+    }
+
+    function refreshDeploymentAdminMode(){
+      const isLead = document.getElementById('deploy_role')?.value === 'كبير مسعفين';
+
+      document.querySelectorAll('#deploymentTableBody tr').forEach(row => {
+        row.querySelectorAll('input, select').forEach(el => {
+          if (
+            el.classList.contains('dep-code') ||
+            el.classList.contains('dep-type') ||
+            el.classList.contains('dep-shift') ||
+            el.classList.contains('dep-status') ||
+            el.classList.contains('dep-count') ||
+            el.classList.contains('dep-lat') ||
+            el.classList.contains('dep-lng') ||
+            el.classList.contains('dep-reason')
+          ) {
+            el.disabled = !isLead;
+          }
+        });
+
+        const adminCell = row.querySelector('.admin-only');
+        if (adminCell) adminCell.classList.toggle('hidden-role', !isLead);
+      });
     }
 
     function loadDeploymentTemplate(){
@@ -2094,33 +2139,63 @@ ${supportLines}
       const body = document.getElementById('deploymentTableBody');
       body.innerHTML = '';
 
-      if(!sector || !shift) return;
+      if(!sector) return;
 
-      const shiftKey = shift === 'الصباحية' ? 'الصباحية' : shift === 'المسائية' ? 'المسائية' : 'تكميلية';
-      const displayShift = shift === 'الصباحية' ? 'نوبة صباحية' : shift === 'المسائية' ? 'نوبة مسائية' : 'نوبة تكميلية';
-      const rows = deploymentTemplates?.[sector]?.[shiftKey] || [];
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler(function(res){
+            if(!res.success){
+              showAlert('deploymentAlert','error','تعذر تحميل خطة الانتشار من الملف الرئيسي');
+              return;
+            }
 
-      rows.forEach(item => {
-        body.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
-          code: item.code,
-          type: item.type,
-          shift: displayShift,
-          count: 1
-        }, false));
-      });
+            const items = res.sectors[sector] || [];
+            const displayShift =
+              shift === 'الصباحية' ? 'نوبة صباحية' :
+              shift === 'المسائية' ? 'نوبة مسائية' :
+              'نوبة تداخلية (اوفرلاب)';
 
-      updateReasonHeaderVisibility();
+            items.forEach(item => {
+              body.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
+                code: item.code,
+                type: item.type,
+                shift: displayShift,
+                count: item.count || 1,
+                lat: item.lat || '',
+                lng: item.lng || ''
+              }, false));
+            });
+
+            updateReasonHeaderVisibility();
+            refreshDeploymentAdminMode();
+          })
+          .withFailureHandler(function(){
+            showAlert('deploymentAlert','error','حدث خطأ أثناء تحميل بيانات خطة الانتشار');
+          })
+          .getDeploymentMasterData();
+      } else {
+        showAlert('deploymentAlert','error','يجب فتح هذه الصفحة من داخل Apps Script Web App');
+      }
     }
 
     function addManualDeploymentRow(){
+      const isLead = document.getElementById('deploy_role')?.value === 'كبير مسعفين';
+      if(!isLead){
+        alert('الإضافة متاحة فقط لكبير المسعفين');
+        return;
+      }
+
       const tbody = document.getElementById('deploymentTableBody');
       tbody.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
         code: '',
         type: 'مركبة اسعافية',
-        shift: 'نوبة تكميلية',
-        count: 1
+        shift: 'نوبة تداخلية (اوفرلاب)',
+        count: 1,
+        lat: '',
+        lng: ''
       }, true));
       updateReasonHeaderVisibility();
+      refreshDeploymentAdminMode();
     }
 
     function toggleReasonColumn(selectEl){
@@ -2139,13 +2214,6 @@ ${supportLines}
     function updateReasonHeaderVisibility(){
       const anyVisible = [...document.querySelectorAll('.reason-col-cell')].some(cell => !cell.classList.contains('hidden'));
       document.querySelectorAll('.reason-col').forEach(h => h.classList.toggle('hidden', !anyVisible));
-      document.querySelectorAll('.reason-col-cell').forEach(cell => {
-        if(anyVisible){
-          if(cell.querySelector('.dep-reason').closest('tr').querySelector('.dep-status').value === 'جاهز'){
-            cell.classList.add('hidden');
-          }
-        }
-      });
     }
 
     async function sendDeploymentPlanSmart(){
@@ -2187,11 +2255,15 @@ ${supportLines}
         "مناوبة النقطة": row.querySelector('.dep-shift')?.value || '-',
         "الحالة": row.querySelector('.dep-status')?.value || '-',
         "عدد الفرق الفعلي": row.querySelector('.dep-count')?.value || 0,
+        "Latitude": row.querySelector('.dep-lat')?.value || '',
+        "Longitude": row.querySelector('.dep-lng')?.value || '',
         "توضيح سبب الاختلاف": row.querySelector('.dep-reason')?.value || '-',
         "ملاحظات": notes || '-',
-        "رابط النقطة": '-',
+        "رابط النقطة": row.querySelector('.dep-lat')?.value && row.querySelector('.dep-lng')?.value
+          ? `https://www.google.com/maps?q=${row.querySelector('.dep-lat')?.value},${row.querySelector('.dep-lng')?.value}`
+          : '-',
         "التصنيف": '-',
-        "عدد الفرق بالنقطة": 1,
+        "عدد الفرق بالنقطة": row.querySelector('.dep-count')?.value || 1,
         "ملاحظة النظام": '-'
       }));
 
@@ -2216,9 +2288,9 @@ ${supportLines}
       }
     }
 
-    // تشغيل أولي
     buildMedicalCheckTable();
     buildStrategicTable();
+    setDashboardLinks();
   </script>
 </body>
 </html>

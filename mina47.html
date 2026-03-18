@@ -585,7 +585,7 @@
     <aside class="sidebar" id="sidebar">
       <div class="brand">
         <h1>منصة نطاق منى</h1>
-        <p>واجهة رقمية موحدة لنطاق منى لموسم الحج، لرفع التقارير ومتابعة النطاق وتسليم المناوبات وخطة الانتشار.</p>
+        <p>واجهة عمليات رقمية موحدة لموسم الحج، لرفع التقارير ومتابعة النطاق وتسليم المناوبات وخطة الانتشار.</p>
       </div>
 
       <div class="side-title">القائمة الرئيسية</div>
@@ -1039,7 +1039,7 @@
                 <option value="" disabled selected>اختر الفترة</option>
                 <option value="الصباحية">الصباحية</option>
                 <option value="المسائية">المسائية</option>
-                <option value="تداخلية(اوفرلاب)">تداخلية(اوفرلاب)</option>
+                <option value="تكميلية">تكميلية</option>
               </select>
             </div>
 
@@ -1243,7 +1243,7 @@
                 <option value="" disabled selected>اختر المناوبة</option>
                 <option value="الصباحية">نوبة صباحية</option>
                 <option value="المسائية">نوبة مسائية</option>
-                <option value="تداخلية(اوفرلاب)">نوبة تداخلية (اوفرلاب)</option>
+                <option value="تكميلية">نوبة تكميلية</option>
               </select>
             </div>
 
@@ -2050,14 +2050,14 @@ ${supportLines}
             <select class="dep-shift" ${editableAttr}>
               <option value="نوبة صباحية" ${shift==='نوبة صباحية'?'selected':''}>نوبة صباحية</option>
               <option value="نوبة مسائية" ${shift==='نوبة مسائية'?'selected':''}>نوبة مسائية</option>
-              <option value="نوبة تداخلية(اوفرلاب)" ${shift==='نوبة تداخلية (اوفرلاب)'?'selected':''}>نوبة تداخلية(اوفرلاب)</option>
+              <option value="نوبة تكميلية" ${shift==='نوبة تكميلية'?'selected':''}>نوبة تكميلية</option>
             </select>
           </td>
           <td>
             <select class="dep-status" onchange="toggleReasonColumn(this)" ${editableAttr}>
               <option value="جاهز">جاهز</option>
               <option value="خارج الخدمة">خارج الخدمة</option>
-              <option value="نوبة تداخلية(اوفرلاب)">نوبة تداخلية(اوفرلاب)</option>
+              <option value="نوبة تكميلية">نوبة تكميلية</option>
               <option value="إضافي 1">إضافي 1</option>
               <option value="إضافي 2">إضافي 2</option>
             </select>
@@ -2069,7 +2069,7 @@ ${supportLines}
           <td class="reason-col-cell hidden">
             <select class="dep-reason" ${editableAttr}>
               <option value="">اختر السبب</option>
-              <option value="نوبة تداخلية(اوفرلاب)">نوبة تداخلية(اوفرلاب)</option>
+              <option value="نوبة تكميلية">نوبة تكميلية</option>
               <option value="تدعيم لحرم">تدعيم لحرم</option>
               <option value="تدعيم للعاصمة">تدعيم للعاصمة</option>
               <option value="تدعيم لعرفات">تدعيم لعرفات</option>
@@ -2153,7 +2153,7 @@ ${supportLines}
             const displayShift =
               shift === 'الصباحية' ? 'نوبة صباحية' :
               shift === 'المسائية' ? 'نوبة مسائية' :
-              'نوبة تداخلية (اوفرلاب)';
+              'نوبة تكميلية';
 
             items.forEach(item => {
               body.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
@@ -2189,7 +2189,7 @@ ${supportLines}
       tbody.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
         code: '',
         type: 'مركبة اسعافية',
-        shift: 'نوبة تداخلية (اوفرلاب)',
+        shift: 'نوبة تكميلية',
         count: 1,
         lat: '',
         lng: ''

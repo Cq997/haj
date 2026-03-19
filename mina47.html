@@ -28,7 +28,6 @@
       --soft:#f8fafc;
       --shadow:0 12px 30px rgba(15,23,42,.08);
       --shadow-2:0 20px 40px rgba(2,6,23,.16);
-      --radius:20px;
     }
 
     *{box-sizing:border-box;margin:0;padding:0}
@@ -79,7 +78,6 @@
       font-weight:900;
       line-height:1.7;
       margin-bottom:6px;
-      letter-spacing:.2px;
     }
 
     .brand p{
@@ -186,16 +184,6 @@
       justify-content:center;
     }
 
-    .hero::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        radial-gradient(circle at 80% 20%, rgba(255,255,255,.18), transparent 18%),
-        radial-gradient(circle at 12% 80%, rgba(255,255,255,.10), transparent 20%);
-      pointer-events:none;
-    }
-
     .hero h3{
       position:relative;
       font-size:34px;
@@ -289,32 +277,17 @@
       overflow:hidden;
     }
 
-    .kpi::after{
-      content:"";
-      position:absolute;
-      top:0;
-      right:0;
-      width:56px;
-      height:56px;
-      border-radius:0 0 0 20px;
-      background:linear-gradient(135deg,rgba(11,94,215,.10),rgba(193,18,31,.10));
-    }
-
     .kpi .label{
       color:var(--muted);
       font-size:13px;
       font-weight:800;
       margin-bottom:8px;
-      position:relative;
-      z-index:1;
     }
 
     .kpi .value{
       font-size:30px;
       font-weight:900;
       line-height:1.1;
-      position:relative;
-      z-index:1;
     }
 
     .kpi .sub{
@@ -322,8 +295,6 @@
       font-size:12px;
       margin-top:8px;
       line-height:1.7;
-      position:relative;
-      z-index:1;
     }
 
     .panel{
@@ -371,7 +342,6 @@
       padding:13px 16px;
       font-size:17px;
       font-weight:900;
-      letter-spacing:.2px;
     }
 
     .section-body{
@@ -485,13 +455,12 @@
       border:1px solid var(--line);
       border-radius:16px;
       max-width:100%;
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);
     }
 
     table{
       width:100%;
       border-collapse:collapse;
-      min-width:980px;
+      min-width:1100px;
       background:#fff;
     }
 
@@ -1213,7 +1182,7 @@
         <div class="panel-head">
           <div>
             <h3>خطة الانتشار</h3>
-            <p>جميع نقاط القطاع متاحة في كل الأوقات، مع صلاحية التعديل والإضافة والحذف والتدعيم لكبير المسعفين أو مساعده.</p>
+            <p>جميع نقاط القطاع تظهر حسب الملف، وتبقى ظاهرة سواء اخترت صباحية أو مسائية أو اوفرلاب، مع إمكانية تعديل النوع والوقت والحذف والإضافة وقبول التدعيم.</p>
           </div>
         </div>
 
@@ -1237,9 +1206,9 @@
             </div>
 
             <div class="field">
-              <label for="deploy_shift">المناوبة الافتراضية</label>
+              <label for="deploy_shift">العرض الزمني</label>
               <select id="deploy_shift">
-                <option value="" disabled selected>اختر المناوبة</option>
+                <option value="" disabled selected>اختر</option>
                 <option value="الصباحية">صباحية</option>
                 <option value="المسائية">مسائية</option>
                 <option value="اوفرلاب">اوفرلاب</option>
@@ -1292,6 +1261,8 @@
                     <th>الرمز</th>
                     <th>نوع الوحدة</th>
                     <th>المناوبة</th>
+                    <th>وقت البداية</th>
+                    <th>وقت النهاية</th>
                     <th>الحالة</th>
                     <th>عدد الفرق</th>
                     <th>Latitude</th>
@@ -1360,7 +1331,7 @@
   </div>
 
   <script>
-    const SCRIPT_URL = window.location.href.split('?')[0];
+    const SCRIPT_URL = 'ضع_هنا_رابط_الويب_آب_المنشور_من_Apps_Script';
 
     const teamsData = {
       "الجمرات": {
@@ -1487,6 +1458,7 @@
       window.open(url, '_blank');
     }
 
+    // التحضير اليومي
     const sectorSelect = document.getElementById('sector');
     const shiftTimeSelect = document.getElementById('shift_time');
 
@@ -1575,6 +1547,7 @@
       }
     }
 
+    // تسليم المناوبة
     document.getElementById('handover_sector').addEventListener('change', fillHandoverTeamData);
     document.getElementById('handover_shift').addEventListener('change', fillHandoverTeamData);
 
@@ -1789,7 +1762,6 @@ ${supportLines}
 
       try{
         const save = await saveToGoogleSheets('تسليم المناوبة', [row]);
-
         if(!save.success){
           showAlert('handoverAlert','error','تعذر حفظ بيانات تسليم المناوبة');
           return;
@@ -1802,6 +1774,7 @@ ${supportLines}
       }
     }
 
+    // تشييك الوحدة
     document.getElementById('checker_has_third_party').addEventListener('change', toggleThirdCrewField);
     document.getElementById('unit_type').addEventListener('change', toggleUnitTypeFields);
 
@@ -1914,6 +1887,7 @@ ${supportLines}
       }
     }
 
+    // الخزن
     function buildStrategicTable(){
       const body = document.getElementById('strategicTableBody');
       body.innerHTML = '';
@@ -1990,6 +1964,7 @@ ${supportLines}
       }
     }
 
+    // خطة الانتشار
     document.getElementById('deploy_sector').addEventListener('change', handleDeploymentContextChange);
     document.getElementById('deploy_shift').addEventListener('change', handleDeploymentContextChange);
     document.getElementById('deploy_role').addEventListener('change', handleDeploymentRoleChange);
@@ -2029,7 +2004,13 @@ ${supportLines}
       });
     }
 
-    function createDeploymentRowHTML(rowData = {}, isManual = false){
+    function getDefaultTimes(shift){
+      if (shift === 'الصباحية') return { start:'06:00', end:'18:00' };
+      if (shift === 'المسائية') return { start:'18:00', end:'06:00' };
+      return { start:'12:00', end:'18:00' };
+    }
+
+    function createDeploymentRowHTML(rowData = {}){
       const code = rowData.code || '';
       const type = rowData.type || 'مركبة اسعافية';
       const shift = rowData.shift || 'الصباحية';
@@ -2037,6 +2018,9 @@ ${supportLines}
       const lat = rowData.lat || '';
       const lng = rowData.lng || '';
       const note = rowData.note || '';
+      const defaults = getDefaultTimes(shift);
+      const startTime = rowData.startTime || defaults.start;
+      const endTime = rowData.endTime || defaults.end;
 
       return `
         <tr>
@@ -2052,12 +2036,14 @@ ${supportLines}
             </select>
           </td>
           <td>
-            <select class="dep-shift">
+            <select class="dep-shift" onchange="updateShiftTimes(this)">
               <option value="الصباحية" ${shift==='الصباحية'?'selected':''}>صباحية</option>
               <option value="المسائية" ${shift==='المسائية'?'selected':''}>مسائية</option>
               <option value="اوفرلاب" ${shift==='اوفرلاب'?'selected':''}>اوفرلاب</option>
             </select>
           </td>
+          <td><input type="time" class="dep-start-time" value="${startTime}"></td>
+          <td><input type="time" class="dep-end-time" value="${endTime}"></td>
           <td>
             <select class="dep-status">
               <option value="جاهز">جاهز</option>
@@ -2065,6 +2051,7 @@ ${supportLines}
               <option value="مدعم">مدعم</option>
               <option value="منقول">منقول</option>
               <option value="موقوف">موقوف</option>
+              <option value="يقبل تدعيم">يقبل تدعيم</option>
             </select>
           </td>
           <td><input type="number" class="dep-count compact-number" min="0" value="${count}"></td>
@@ -2079,6 +2066,7 @@ ${supportLines}
               <option value="إلى خارج النطاق">إلى خارج النطاق</option>
               <option value="من قطاع آخر داخل نطاق منى">من قطاع آخر داخل نطاق منى</option>
               <option value="من خارج النطاق">من خارج النطاق</option>
+              <option value="قبول تدعيم">قبول تدعيم</option>
             </select>
           </td>
           <td><input type="text" class="dep-support-target" placeholder="مثال: الجمرات / العاصمة / عرفات"></td>
@@ -2086,6 +2074,14 @@ ${supportLines}
           <td><button type="button" class="btn btn-danger" onclick="deleteDeploymentRow(this)">حذف</button></td>
         </tr>
       `;
+    }
+
+    function updateShiftTimes(selectEl){
+      const row = selectEl.closest('tr');
+      const shift = selectEl.value;
+      const defaults = getDefaultTimes(shift);
+      row.querySelector('.dep-start-time').value = defaults.start;
+      row.querySelector('.dep-end-time').value = defaults.end;
     }
 
     function openRowOnMap(button){
@@ -2102,6 +2098,12 @@ ${supportLines}
     }
 
     function deleteDeploymentRow(button){
+      const role = document.getElementById('deploy_role')?.value;
+      const canEdit = role === 'كبير مسعفين' || role === 'مساعد كبير مسعفين';
+      if(!canEdit){
+        alert('الحذف متاح فقط لكبير المسعفين أو مساعده');
+        return;
+      }
       button.closest('tr').remove();
     }
 
@@ -2118,7 +2120,7 @@ ${supportLines}
       });
     }
 
-    function loadDeploymentTemplate(){
+    async function loadDeploymentTemplate(){
       const sector = document.getElementById('deploy_sector').value;
       const defaultShift = document.getElementById('deploy_shift').value || 'الصباحية';
       const body = document.getElementById('deploymentTableBody');
@@ -2126,36 +2128,32 @@ ${supportLines}
 
       if(!sector) return;
 
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        google.script.run
-          .withSuccessHandler(function(res){
-            if(!res.success){
-              showAlert('deploymentAlert','error','تعذر تحميل خطة الانتشار من الملف الرئيسي');
-              return;
-            }
+      try{
+        const response = await fetch(`${SCRIPT_URL}?action=deploymentMaster`);
+        const res = await response.json();
 
-            const items = res.sectors[sector] || [];
+        if(!res.success){
+          showAlert('deploymentAlert','error','تعذر تحميل خطة الانتشار من الملف الرئيسي');
+          return;
+        }
 
-            items.forEach(item => {
-              body.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
-                code: item.code,
-                type: item.type,
-                shift: defaultShift,
-                count: item.count || 1,
-                lat: item.lat || '',
-                lng: item.lng || '',
-                note: item.note || ''
-              }, false));
-            });
+        const items = res.sectors[sector] || [];
 
-            refreshDeploymentAdminMode();
-          })
-          .withFailureHandler(function(){
-            showAlert('deploymentAlert','error','حدث خطأ أثناء تحميل بيانات خطة الانتشار');
-          })
-          .getDeploymentMasterData();
-      } else {
-        showAlert('deploymentAlert','error','يجب فتح هذه الصفحة من داخل Apps Script Web App');
+        items.forEach(item => {
+          body.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
+            code: item.code,
+            type: item.type,
+            shift: defaultShift,
+            count: item.count || 1,
+            lat: item.lat || '',
+            lng: item.lng || '',
+            note: item.note || ''
+          }));
+        });
+
+        refreshDeploymentAdminMode();
+      } catch (error){
+        showAlert('deploymentAlert','error','تعذر الاتصال بخدمة خطة الانتشار');
       }
     }
 
@@ -2178,7 +2176,7 @@ ${supportLines}
         lat: '',
         lng: '',
         note: ''
-      }, true));
+      }));
 
       refreshDeploymentAdminMode();
     }
@@ -2222,7 +2220,7 @@ ${supportLines}
           "التاريخ": date,
           "الوقت": time,
           "القطاع": sector,
-          "المناوبة الافتراضية": shift,
+          "العرض الزمني": shift,
           "صفة مدخل البيانات": role,
           "اسم مدخل البيانات": entryName,
           "اسم كبير المسعفين المناوب": lead,
@@ -2230,6 +2228,8 @@ ${supportLines}
           "الرمز": row.querySelector('.dep-code')?.value || '-',
           "نوع الآلية": row.querySelector('.dep-type')?.value || '-',
           "مناوبة النقطة": row.querySelector('.dep-shift')?.value || '-',
+          "وقت البداية": row.querySelector('.dep-start-time')?.value || '-',
+          "وقت النهاية": row.querySelector('.dep-end-time')?.value || '-',
           "الحالة": row.querySelector('.dep-status')?.value || '-',
           "عدد الفرق الفعلي": row.querySelector('.dep-count')?.value || 0,
           "Latitude": lat,
@@ -2253,18 +2253,18 @@ ${supportLines}
 
         let msg = `📍 خطة الانتشار - نطاق منى\n\n`;
         msg += `📍 القطاع: ${sector}\n`;
-        msg += `🕘 المناوبة الافتراضية: ${shift}\n`;
+        msg += `🕘 العرض الزمني: ${shift}\n`;
         msg += `👤 مدخل البيانات: ${entryName}\n`;
         msg += `👨‍⚕️ كبير المسعفين المناوب: ${lead}\n`;
         msg += `📋 عدد السجلات: ${rows.length}\n`;
         if(notes) msg += `\n📝 ملاحظات:\n${notes}`;
         openWhatsApp(msg);
-
       } catch {
         showAlert('deploymentAlert','error','حدث خطأ أثناء الاتصال بالخادم');
       }
     }
 
+    // تشغيل أولي
     buildMedicalCheckTable();
     buildStrategicTable();
     setDashboardLinks();

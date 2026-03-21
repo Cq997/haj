@@ -2120,7 +2120,6 @@ ${supportLines}
       });
     }
 
-    async function loadDeploymentTemplate(){
       const sector = document.getElementById('deploy_sector').value;
       const defaultShift = document.getElementById('deploy_shift').value || 'الصباحية';
       const body = document.getElementById('deploymentTableBody');
@@ -2129,7 +2128,6 @@ ${supportLines}
       if(!sector) return;
 
       try{
-        const response = await fetch(`${SCRIPT_URL}?action=deploymentMaster`);
         const res = await response.json();
 
         if(!res.success){
@@ -2269,5 +2267,51 @@ ${supportLines}
     buildStrategicTable();
     setDashboardLinks();
   </script>
+  const deploymentMasterData = {
+  "الجمرات": [
+    {code:"G-01", type:"مركبة اسعافية"},
+    {code:"G-02", type:"قولف"},
+    {code:"G-03", type:"راجلة"}
+  ],
+  "القطارات": [
+    {code:"T-01", type:"مركبة اسعافية"},
+    {code:"T-02", type:"قولف"}
+  ],
+  "بطن منى الجنوبي": [
+    {code:"S-01", type:"مركبة اسعافية"}
+  ],
+  "بطن منى الشمالي": [
+    {code:"N-01", type:"مركبة اسعافية"}
+  ],
+  "منى الجديد 1": [
+    {code:"M1-01", type:"مركبة اسعافية"}
+  ],
+  "منى الجديد 2": [
+    {code:"M2-01", type:"مركبة اسعافية"}
+  ],
+  "الشعيبين": [
+    {code:"SH-01", type:"مركبة اسعافية"}
+  ]
+};
+function loadDeploymentTemplate(){
+  const sector = document.getElementById('deploy_sector').value;
+  const shift = document.getElementById('deploy_shift').value || 'الصباحية';
+  const body = document.getElementById('deploymentTableBody');
+
+  body.innerHTML = '';
+
+  if(!sector || !deploymentMasterData[sector]) return;
+
+  deploymentMasterData[sector].forEach(item => {
+    body.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
+      code: item.code,
+      type: item.type,
+      shift: shift,
+      count: 1
+    }));
+  });
+
+  refreshDeploymentAdminMode();
+}
 </body>
 </html>

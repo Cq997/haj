@@ -1298,7 +1298,6 @@
 
       
       <!-- خطة الانتشار - القسم المدمج -->
-      <section class="panel" id="deploymentPanel">
         <div class="panel-head">
           <div>
             <h3><i class="fas fa-map-marked-alt"></i> خطة الانتشار</h3>
@@ -2858,6 +2857,33 @@ ${supportLines}
       });
     } else {
       initDeploymentSelectors();
+    }
+
+    // دالة فتح/إغلاق الأقسام (Panels)
+    function switchPanel(panelId) {
+      // إخفاء جميع الأقسام
+      const allPanels = document.querySelectorAll('.panel');
+      allPanels.forEach(panel => {
+        panel.classList.remove('active');
+        panel.style.display = 'none';
+      });
+      
+      // إظهار القسم المختار
+      const selectedPanel = document.getElementById(panelId);
+      if(selectedPanel) {
+        selectedPanel.classList.add('active');
+        selectedPanel.style.display = 'block';
+      }
+      
+      // تحديث القائمة الجانبية
+      const navItems = document.querySelectorAll('nav li');
+      navItems.forEach(item => item.classList.remove('active'));
+      
+      // تحديد العنصر النشط في القائمة
+      const activeNav = document.querySelector(`nav li[onclick*="${panelId}"]`);
+      if(activeNav) {
+        activeNav.classList.add('active');
+      }
     }
 </script>
 </body>

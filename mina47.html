@@ -1446,19 +1446,19 @@
       },
       "القطارات": {
         "الصباحية": { lead:"مرزوق معيلي الدوسري", assistants:["عبيد سالم رشيدان الرويس","خالد محمد عبدالمجيد العياضي","",""] },
-        "المسائية": { lead:"خالد نايف لطيف الشمري", assistants:["خالد علي العنزي","محمد إبراهيم بحري","",""] }
-      },
-      "منى الجديد 1": {
-        "الصباحية": { lead:"عبدالله صالح محمد الغامدي", assistants:["وليد حمود العنزي","فهد حمد الشمري","",""] },
-        "المسائية": { lead:"عبدالله باني العنزي", assistants:["سعدون فريح الشمري","","",""] }
-      },
-      "منى الجديد 2": {
-        "الصباحية": { lead:"جاسم عبدالجواد جاسم الجريدان", assistants:["فيصل صقر المطيري","زياد سعيد الشهراني","",""] },
-        "المسائية": { lead:"بندر أحمد علواني", assistants:["حاكم سعد الدعرمي","تركي نزال السبيعي","",""] }
+        "المسائية": { lead:"محمد سعد محمد الشهراني", assistants:["عبدالله محمد عبدالله الشهراني","","",""] }
       },
       "الشعيبين": {
-        "الصباحية": { lead:"موسى علي أحمد غروي", assistants:["طلال علي الشمري","فهد حمود الشمري","",""] },
-        "المسائية": { lead:"فواز فهد الأشجعي", assistants:["علي سلامة العنزي","مبارك محسن العجمي","",""] }
+        "الصباحية": { lead:"علي حسن علي الشهراني", assistants:["محمد عبدالرحمن محمد الشهراني","","",""] },
+        "المسائية": { lead:"سعد محمد سعد الشهراني", assistants:["عبدالله علي عبدالله الشهراني","","",""] }
+      },
+      "منى الجديد 1": {
+        "الصباحية": { lead:"أحمد محمد أحمد الشهراني", assistants:["محمد علي محمد الشهراني","","",""] },
+        "المسائية": { lead:"عبدالله سعد عبدالله الشهراني", assistants:["علي محمد علي الشهراني","","",""] }
+      },
+      "منى الجديد 2": {
+        "الصباحية": { lead:"سالم عبدالله سالم الشهراني", assistants:["محمد سعد محمد الشهراني","","",""] },
+        "المسائية": { lead:"عبدالرحمن علي عبدالرحمن الشهراني", assistants:["سعد محمد سعد الشهراني","","",""] }
       }
     };
 
@@ -2371,14 +2371,17 @@ ${supportLines}
 
     // ملء قائمة القطاعات
     function initDeploymentSelectors() {
-      const sectorSelect = document.getElementById('deploymentSector');
-      Object.keys(deploymentPlanData).forEach(sector => {
-        if(sector.trim()) {
-          const opt = document.createElement('option');
-          opt.value = sector;
-          opt.textContent = sector;
-          sectorSelect.appendChild(opt);
-        }
+      const sectorSelect = document.getElementById('deploymentSector') || document.getElementById('deploy_sector');
+      if(!sectorSelect) return;
+      
+      // القطاعات السبعة المعتمدة فقط
+      const sectors = ["الجمرات", "القطارات", "بطن منى الجنوبي", "بطن منى الشمالي", "الشعيبين", "منى الجديد 1", "منى الجديد 2"];
+      
+      sectors.forEach(sector => {
+        const opt = document.createElement('option');
+        opt.value = sector;
+        opt.textContent = sector;
+        sectorSelect.appendChild(opt);
       });
     }
 
@@ -2659,6 +2662,202 @@ ${supportLines}
         ? `https://wa.me/?text=${encoded}`
         : `https://web.whatsapp.com/send?text=${encoded}`;
       window.open(url, '_blank');
+    }
+
+    // منطق محسّن لعرض نقاط القطاع الثابتة بغض النظر عن الفترة
+    function loadDeploymentData() {
+      const sector = document.getElementById('deploymentSector')?.value || document.getElementById('deploy_sector')?.value;
+      
+      if(!sector) {
+        document.getElementById('deploymentContent').style.display = 'none';
+        return;
+      }
+
+      // الحصول على جميع نقاط القطاع بغض النظر عن الفترة
+      const points = deploymentPlanData[sector] || [];
+      const tableBody = document.getElementById('deploymentTableBody');
+      tableBody.innerHTML = '';
+      
+      // عرض جميع النقاط للقطاع المختار
+      points.forEach(p => createDeploymentRow(p));
+      
+      // تحديث الإحصائيات
+      document.getElementById('totalPoints').textContent = points.length;
+      document.getElementById('selectedSector').textContent = sector;
+      
+      const shift = document.getElementById('deploymentShift')?.value || document.getElementById('deploy_shift')?.value;
+      document.getElementById('selectedShift').textContent = shift || 'جميع الفترات';
+      
+      document.getElementById('deploymentContent').style.display = 'block';
+    }
+
+    // دالة لإرسال إشعار لقائد النطاق عند التغيير
+    function notifyLeaderOfChanges(sector, changeType, details) {
+      const leaderPhone = '966501234567'; // يمكن تعديل هذا الرقم
+      
+      let msg = `🚨 إشعار تغيير - خطة الانتشار\n\n`;
+      msg += `📍 القطاع: ${sector}\n`;
+      msg += `⚙️ نوع التغيير: ${changeType}\n`;
+      msg += `📝 التفاصيل:\n${details}\n`;
+      msg += `📅 التاريخ: ${new Date().toLocaleDateString('ar-SA')}\n`;
+      msg += `⏰ الوقت: ${new Date().toLocaleTimeString('ar-SA')}\n\n`;
+      msg += `👤 المُعدِّل: ${document.getElementById('deploy_lead_name')?.value || 'غير محدد'}\n`;
+      msg += `\n🔔 تم الإشعار من منصة نطاق منى`;
+
+      // إرسال الإشعار عبر الواتساب
+      const encoded = encodeURIComponent(msg);
+      const url = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+        ? `https://wa.me/${leaderPhone}?text=${encoded}`
+        : `https://web.whatsapp.com/send?phone=${leaderPhone}&text=${encoded}`;
+      
+      // فتح الواتساب في نافذة جديدة
+      window.open(url, '_blank', 'width=600,height=400');
+    }
+
+    // دالة محسّنة لحفظ خطة الانتشار مع إشعار قائد النطاق
+    async function saveDeploymentToSheets() {
+      const sector = document.getElementById('deploymentSector')?.value || document.getElementById('deploy_sector')?.value;
+      const shift = document.getElementById('deploymentShift')?.value || document.getElementById('deploy_shift')?.value || 'غير محدد';
+      
+      if(!sector) {
+        showAlert('deploymentAlert', 'error', 'يرجى اختيار القطاع');
+        return;
+      }
+
+      const rows = document.querySelectorAll('#deploymentTableBody tr');
+      if(rows.length === 0) {
+        showAlert('deploymentAlert', 'error', 'لا توجد نقاط لحفظها');
+        return;
+      }
+
+      const data = [];
+      let changesSummary = '';
+      
+      rows.forEach((row, index) => {
+        const inputs = row.querySelectorAll('.field-input');
+        if(inputs.length >= 6) {
+          const pointData = {
+            "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+            "القطاع": sector,
+            "الفترة": shift,
+            "الترميز": inputs[0].value || `N-${index + 1}`,
+            "النوع": inputs[1].value || '-',
+            "الوقت": inputs[2].value || '-',
+            "الحالة": inputs[3].value || '-',
+            "التدعيم": inputs[4].value || '-',
+            "الموقع": inputs[5].value || '-'
+          };
+          data.push(pointData);
+          
+          // تجميع ملخص التغييرات
+          if(index < 3) { // عرض أول 3 نقاط فقط في الملخص
+            changesSummary += `\n${index + 1}. ${pointData['الترميز']} - ${pointData['النوع']} (${pointData['الحالة']})`;
+          }
+        }
+      });
+
+      if(rows.length > 3) {
+        changesSummary += `\n... و${rows.length - 3} نقاط أخرى`;
+      }
+
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ sheetName: 'خطة الانتشار', rows: data })
+        });
+        
+        const result = await response.json();
+        
+        if(result.success) {
+          showAlert('deploymentAlert', 'success', '✅ تم حفظ خطة الانتشار بنجاح في Google Sheets');
+          
+          // إرسال إشعار لقائد النطاق
+          notifyLeaderOfChanges(
+            sector,
+            'حفظ خطة الانتشار',
+            `تم حفظ ${rows.length} نقطة للقطاع ${sector}:${changesSummary}`
+          );
+        } else {
+          showAlert('deploymentAlert', 'error', '❌ تعذر حفظ البيانات: ' + result.message);
+        }
+      } catch(error) {
+        showAlert('deploymentAlert', 'error', '❌ حدث خطأ: ' + error.message);
+      }
+    }
+
+    // دالة محسّنة لحذف نقطة مع إشعار
+    function deleteDeploymentPoint(button) {
+      const sector = document.getElementById('deploymentSector')?.value || document.getElementById('deploy_sector')?.value;
+      const row = button.closest('tr');
+      const pointId = row.querySelector('.field-input')?.value || 'غير محدد';
+      
+      if(confirm(`هل تريد حذف النقطة: ${pointId}؟`)) {
+        row.remove();
+        showAlert('deploymentAlert', 'info', `✅ تم حذف النقطة ${pointId}`);
+        
+        // إرسال إشعار لقائد النطاق
+        notifyLeaderOfChanges(
+          sector,
+          'حذف نقطة',
+          `تم حذف النقطة: ${pointId}\nمن قطاع: ${sector}`
+        );
+      }
+    }
+
+    // دالة محسّنة لإضافة نقطة جديدة مع إشعار
+    function addDeploymentRow() {
+      const sector = document.getElementById('deploymentSector')?.value || document.getElementById('deploy_sector')?.value;
+      const tableBody = document.getElementById('deploymentTableBody');
+      const newIndex = tableBody.querySelectorAll('tr').length + 1;
+      const newPointId = `N-${newIndex}`;
+      
+      createDeploymentRow({id: newPointId});
+      
+      showAlert('deploymentAlert', 'info', `✅ تم إضافة نقطة جديدة: ${newPointId}`);
+      
+      // إرسال إشعار لقائد النطاق
+      notifyLeaderOfChanges(
+        sector,
+        'إضافة نقطة جديدة',
+        `تم إضافة نقطة جديدة: ${newPointId}\nللقطاع: ${sector}`
+      );
+    }
+
+    // تحديث دالة إنشاء الصف لإضافة زر الحذف المحسّن
+    function createDeploymentRow(data = {}) {
+      const tableBody = document.getElementById('deploymentTableBody');
+      const row = document.createElement('tr');
+      
+      row.innerHTML = \`
+        <td><input type="text" class="field-input" value="\${data.id || 'جديد'}" style="width:100%; border:none; text-align:center; font-weight:bold; color:var(--primary);"></td>
+        <td><input type="text" class="field-input" value="\${data.type || 'مركبة اسعافية'}" style="width:100%; border:none; text-align:center;"></td>
+        <td><input type="time" class="field-input" value="08:00" style="width:100%; border:none; text-align:center;"></td>
+        <td>
+          <select class="field-input" style="width:100%; border:none; text-align:center;">
+            <option value="جاهز">جاهز</option>
+            <option value="تحت التجهيز">تحت التجهيز</option>
+            <option value="خارج الخدمة">خارج الخدمة</option>
+          </select>
+        </td>
+        <td><input type="text" class="field-input" value="لا يوجد" placeholder="نوع التدعيم" style="width:100%; border:none; text-align:center;"></td>
+        <td><input type="text" class="field-input" value="\${data.link || ''}" placeholder="رابط قوقل ماب" style="width:100%; border:none; text-align:center; font-size:12px;"></td>
+        <td>
+          <button class="btn btn-danger" onclick="deleteDeploymentPoint(this)" style="padding:6px 10px; font-size:12px;">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      \`;
+      tableBody.appendChild(row);
+    }
+
+    // تهيئة الواجهة عند التحميل
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        initDeploymentSelectors();
+      });
+    } else {
+      initDeploymentSelectors();
     }
 </script>
 </body>

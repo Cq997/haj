@@ -565,7 +565,8 @@
         <li data-target="stockPanel"><i class="fas fa-boxes-stacked"></i><span>الخزن الاستراتيجي</span></li>
         <li data-target="deploymentPanel"><i class="fas fa-network-wired"></i><span>خطة الانتشار</span></li>
         <li data-target="mapsPanel"><i class="fas fa-map-location-dot"></i><span>خرائط نطاق منى</span></li>
-      </ul>
+                <li data-target="methanePanel"><a href="#"><i class="fas fa-exclamation-triangle"></i> رسالة ميثان</a></li>
+        </ul>
     </aside>
 
     <main class="main">
@@ -1327,6 +1328,75 @@
 
       <div class="leader-sign">قائد نطاق منى / فهد أحمد الشمري</div>
       <div class="footer">منصة نطاق منى - نسخة تشغيلية مطورة</div>
+          <section class="panel" id="methanePanel">
+        <div class="panel-header">
+          <h2><i class="fas fa-exclamation-triangle"></i> رسالة ميثان (METHANE Report)</h2>
+          <p>نموذج التبليغ السريع عن الحوادث الجسيمة</p>
+        </div>
+
+        <div class="alert" id="methaneAlert" style="display:none;"></div>
+
+        <div class="form-group">
+          <label>M - هل هو حادث جسيم؟</label>
+          <select id="methane_major" class="form-control">
+            <option value="">-- اختر --</option>
+            <option value="نعم - حادث جسيم جداً">نعم - حادث جسيم جداً</option>
+            <option value="نعم - حادث جسيم">نعم - حادث جسيم</option>
+            <option value="لا - حادث عادي">لا - حادث عادي</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>E - الموقع الدقيق</label>
+          <input type="text" id="methane_location" class="form-control" placeholder="اكتب الموقع الدقيق للحادث">
+        </div>
+
+        <div class="form-group">
+          <label>T - نوع الحادث</label>
+          <select id="methane_type" class="form-control">
+            <option value="">-- اختر نوع الحادث --</option>
+            <option value="حادث مروري">حادث مروري</option>
+            <option value="إصابة طبية">إصابة طبية</option>
+            <option value="حريق">حريق</option>
+            <option value="غرق">غرق</option>
+            <option value="حادث سقوط">حادث سقوط</option>
+            <option value="اختناق">اختناق</option>
+            <option value="تسمم">تسمم</option>
+            <option value="صدمة كهربائية">صدمة كهربائية</option>
+            <option value="أخرى">أخرى</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>H - المخاطر الموجودة</label>
+          <textarea id="methane_hazards" class="form-control" rows="3" placeholder="اكتب المخاطر الموجودة في موقع الحادث"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>A - طرق الوصول والمغادرة</label>
+          <textarea id="methane_access" class="form-control" rows="3" placeholder="اكتب طرق الوصول والمغادرة من موقع الحادث"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>N - عدد الإصابات ونوعها</label>
+          <textarea id="methane_casualties" class="form-control" rows="3" placeholder="اكتب عدد الإصابات ودرجة خطورتها"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>E - الخدمات الإسعافية المطلوبة</label>
+          <textarea id="methane_services" class="form-control" rows="3" placeholder="اكتب الخدمات الإسعافية المطلوبة"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>ملاحظات إضافية</label>
+          <textarea id="methane_notes" class="form-control" rows="3" placeholder="أي معلومات إضافية مهمة"></textarea>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-success" onclick="sendMethaneReport()"><i class="fas fa-paper-plane"></i> حفظ وإرسال</button>
+          <button class="btn btn-outline" onclick="clearMethaneForm()"><i class="fas fa-eraser"></i> مسح الحقول</button>
+        </div>
+      </section>
     </main>
   </div>
 
@@ -2154,32 +2224,24 @@ ${supportLines}
 
       if(!sector) return;
 
-      try{
-        const response = await fetch(`${SCRIPT_URL}?action=deploymentMaster`);
-        const res = await response.json();
-
-        if(!res.success){
-          showAlert('deploymentAlert','error','تعذر تحميل خطة الانتشار من الملف الرئيسي');
-          return;
-        }
-
-        const items = res.sectors[sector] || [];
-
-        items.forEach(item => {
+      try {
+        const items = deploymentPlanData[sector] || [];
+        
+        items.forEach((item, index) => {
           body.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
-            code: item.code,
-            type: item.type,
+            code: item.id || `${sector}-${index + 1}`,
+            type: item.type || 'مركبة إسعافية',
             shift: defaultShift,
-            count: item.count || 1,
+            count: 1,
             lat: item.lat || '',
             lng: item.lng || '',
-            note: item.note || ''
+            note: item.support || ''
           }));
         });
 
         refreshDeploymentAdminMode();
-      } catch (error){
-        showAlert('deploymentAlert','error','تعذر الاتصال بخدمة خطة الانتشار');
+      } catch(error) {
+        showAlert('deploymentAlert','error','خطأ في تحميل البيانات');
       }
     }
 
@@ -2417,6 +2479,92 @@ ${supportLines}
       document.addEventListener('DOMContentLoaded', initDeploymentSelectors);
     } else {
       initDeploymentSelectors();
+    }
+
+    // دالة إرسال رسالة ميثان
+    async function sendMethaneReport() {
+      const major = document.getElementById('methane_major').value;
+      const location = document.getElementById('methane_location').value;
+      const type = document.getElementById('methane_type').value;
+      const hazards = document.getElementById('methane_hazards').value;
+      const access = document.getElementById('methane_access').value;
+      const casualties = document.getElementById('methane_casualties').value;
+      const services = document.getElementById('methane_services').value;
+      const notes = document.getElementById('methane_notes').value;
+
+      if(!major || !location || !type) {
+        showAlert('methaneAlert', 'error', 'يرجى ملء الحقول المطلوبة (M, E, T)');
+        return;
+      }
+
+      // إرسال البيانات إلى Google Sheets
+      try {
+        const data = [{
+          "وقت التبليغ": new Date().toLocaleString('ar-SA'),
+          "M - حادث جسيم": major,
+          "E - الموقع": location,
+          "T - نوع الحادث": type,
+          "H - المخاطر": hazards,
+          "A - الوصول": access,
+          "N - الإصابات": casualties,
+          "E - الخدمات": services,
+          "ملاحظات": notes
+        }];
+
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ sheetName: 'رسائل ميثان', rows: data })
+        });
+
+        const result = await response.json();
+        if(result.success) {
+          showAlert('methaneAlert', 'success', '✅ تم إرسال رسالة ميثان بنجاح');
+          
+          // إرسال عبر الواتساب
+          sendMethaneViaWhatsApp(major, location, type, hazards, access, casualties, services);
+          
+          // مسح الحقول
+          clearMethaneForm();
+        } else {
+          showAlert('methaneAlert', 'error', '❌ خطأ: ' + result.message);
+        }
+      } catch(error) {
+        showAlert('methaneAlert', 'error', '❌ خطأ في الإرسال: ' + error.message);
+      }
+    }
+
+    // دالة إرسال رسالة ميثان عبر الواتساب
+    function sendMethaneViaWhatsApp(major, location, type, hazards, access, casualties, services) {
+      let msg = `🚨 رسالة ميثان - تبليغ حادث جسيم\n\n`;
+      msg += `⚠️ M - حادث جسيم: ${major}\n`;
+      msg += `📍 E - الموقع: ${location}\n`;
+      msg += `🔴 T - النوع: ${type}\n`;
+      msg += `⚡ H - المخاطر: ${hazards || 'لا توجد'}\n`;
+      msg += `🚪 A - الوصول: ${access || 'غير محدد'}\n`;
+      msg += `👥 N - الإصابات: ${casualties || 'لا توجد'}\n`;
+      msg += `🚑 E - الخدمات: ${services || 'قيد التقييم'}\n`;
+      msg += `\n📅 ${new Date().toLocaleString('ar-SA')}\n`;
+      msg += `\n🔔 من منصة نطاق منى`;
+
+      const encoded = encodeURIComponent(msg);
+      const url = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+        ? `https://wa.me/?text=${encoded}`
+        : `https://web.whatsapp.com/send?text=${encoded}`;
+      window.open(url, '_blank');
+    }
+
+    // دالة مسح نموذج ميثان
+    function clearMethaneForm() {
+      document.getElementById('methane_major').value = '';
+      document.getElementById('methane_location').value = '';
+      document.getElementById('methane_type').value = '';
+      document.getElementById('methane_hazards').value = '';
+      document.getElementById('methane_access').value = '';
+      document.getElementById('methane_casualties').value = '';
+      document.getElementById('methane_services').value = '';
+      document.getElementById('methane_notes').value = '';
+      document.getElementById('methaneAlert').style.display = 'none';
     }
 </script>
 </body>

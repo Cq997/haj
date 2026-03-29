@@ -1582,10 +1582,14 @@
     async function saveToGoogleSheets(sheetName, rows){
       try{
         const response = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ sheetName, rows })
-        });
+  method: 'POST',
+  headers: {'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    sheetName: 'التحضير اليومي',
+    rows: [row]
+  })
+});
         return await response.json();
       }catch(error){
         console.error(error);

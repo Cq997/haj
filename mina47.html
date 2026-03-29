@@ -20,7 +20,6 @@
       --warning:#fdcb6e;
       --danger:#d63031;
       --dark:#0f172a;
-      --dark-2:#111827;
       --muted:#6b7280;
       --bg:#eef3f8;
       --card:#ffffff;
@@ -565,8 +564,8 @@
         <li data-target="stockPanel"><i class="fas fa-boxes-stacked"></i><span>الخزن الاستراتيجي</span></li>
         <li data-target="deploymentPanel"><i class="fas fa-network-wired"></i><span>خطة الانتشار</span></li>
         <li data-target="mapsPanel"><i class="fas fa-map-location-dot"></i><span>خرائط نطاق منى</span></li>
-                <li data-target="methanePanel"><a href="#"><i class="fas fa-exclamation-triangle"></i> رسالة ميثان</a></li>
-        </ul>
+        <li data-target="methanePanel"><i class="fas fa-exclamation-triangle"></i><span>رسالة ميثان</span></li>
+      </ul>
     </aside>
 
     <main class="main">
@@ -595,6 +594,7 @@
           <div class="quick-card" onclick="activatePanel('stockPanel')">الخزن الاستراتيجي</div>
           <div class="quick-card" onclick="activatePanel('deploymentPanel')">خطة الانتشار</div>
           <div class="quick-card" onclick="activatePanel('mapsPanel')">خرائط نطاق منى</div>
+          <div class="quick-card" onclick="activatePanel('methanePanel')">رسالة ميثان</div>
         </div>
       </section>
 
@@ -661,6 +661,11 @@
             <div class="actions"><button class="btn btn-blue" onclick="activatePanel('deploymentPanel')">فتح النموذج</button></div>
           </div>
           <div class="card">
+            <h4>رسالة ميثان</h4>
+            <p>رفع التبليغ السريع للحوادث الجسيمة وإرسال نسخة مباشرة عبر الواتساب مع الحفظ في الشيت ولوحة القائد.</p>
+            <div class="actions"><button class="btn btn-blue" onclick="activatePanel('methanePanel')">فتح النموذج</button></div>
+          </div>
+          <div class="card">
             <h4>لوحة القائد</h4>
             <p>لوحة معلومات تنفيذية تعرض ملخص النماذج والملاحظات وآخر التقارير والخريطة التشغيلية.</p>
             <div class="actions"><a class="btn btn-dark" id="dashboardLinkCard" href="#" target="_blank">فتح اللوحة</a></div>
@@ -668,7 +673,6 @@
         </div>
       </section>
 
-      <!-- التحضير اليومي -->
       <section class="panel" id="groundEMS">
         <div class="panel-head">
           <div>
@@ -780,7 +784,6 @@
         </div>
       </section>
 
-      <!-- تسليم المناوبة -->
       <section class="panel" id="handoverPanel">
         <div class="panel-head">
           <div>
@@ -971,7 +974,6 @@
         </div>
       </section>
 
-      <!-- تشييك الوحدة -->
       <section class="panel" id="unitsCheckPanel">
         <div class="panel-head">
           <div>
@@ -1018,7 +1020,7 @@
               <label for="unit_type">نوع الوحدة التشغيلية</label>
               <select id="unit_type">
                 <option value="" disabled selected>اختر النوع</option>
-                <option value="مركبة اسعافية">مركبة إسعافية</option>
+                <option value="مركبة إسعافية">مركبة إسعافية</option>
                 <option value="قولف">قولف</option>
                 <option value="راجلة">راجلة</option>
                 <option value="دراجة نارية">دراجة نارية</option>
@@ -1126,7 +1128,6 @@
         </div>
       </section>
 
-      <!-- الخزن -->
       <section class="panel" id="stockPanel">
         <div class="panel-head">
           <div>
@@ -1178,7 +1179,6 @@
         </div>
       </section>
 
-      <!-- خطة الانتشار -->
       <section class="panel" id="deploymentPanel">
         <div class="panel-head">
           <div>
@@ -1297,7 +1297,6 @@
         </div>
       </section>
 
-      <!-- الخرائط -->
       <section class="panel" id="mapsPanel">
         <div class="panel-head">
           <div>
@@ -1326,108 +1325,149 @@
         </div>
       </section>
 
-      <div class="leader-sign">قائد نطاق منى / فهد أحمد الشمري</div>
-      <div class="footer">منصة نطاق منى - نسخة تشغيلية مطورة</div>
-          <section class="panel" id="methanePanel">
-        <div class="panel-header">
-          <h2><i class="fas fa-exclamation-triangle"></i> رسالة ميثان (METHANE Report)</h2>
-          <p>نموذج التبليغ السريع عن الحوادث الجسيمة</p>
+      <section class="panel" id="methanePanel">
+        <div class="panel-head">
+          <div>
+            <h3>رسالة ميثان (METHANE Report)</h3>
+            <p>نموذج التبليغ السريع عن الحوادث الجسيمة مع الحفظ في Google Sheets وربطه بلوحة القائد.</p>
+          </div>
         </div>
 
-        <div class="alert" id="methaneAlert" style="display:none;"></div>
+        <div id="methaneAlert" class="alert"></div>
 
-        <div class="form-group">
-          <label>M - هل هو حادث جسيم؟</label>
-          <select id="methane_major" class="form-control">
-            <option value="">-- اختر --</option>
-            <option value="نعم - حادث جسيم جداً">نعم - حادث جسيم جداً</option>
-            <option value="نعم - حادث جسيم">نعم - حادث جسيم</option>
-            <option value="لا - حادث عادي">لا - حادث عادي</option>
-          </select>
+        <div class="section">
+          <div class="section-title">البيانات الأساسية</div>
+          <div class="section-body grid-3">
+            <div class="field">
+              <label for="methane_sector">القطاع</label>
+              <select id="methane_sector">
+                <option value="" disabled selected>اختر القطاع</option>
+                <option value="الجمرات">الجمرات</option>
+                <option value="القطارات">القطارات</option>
+                <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
+                <option value="بطن منى الشمالي">بطن منى الشمالي</option>
+                <option value="منى الجديد 1">منى الجديد 1</option>
+                <option value="منى الجديد 2">منى الجديد 2</option>
+                <option value="الشعيبين">الشعيبين</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="methane_reporter">اسم المبلغ</label>
+              <input type="text" id="methane_reporter" placeholder="اسم القائم بالبلاغ">
+            </div>
+
+            <div class="field">
+              <label for="methane_contact">رقم التواصل</label>
+              <input type="text" id="methane_contact" placeholder="05XXXXXXXX">
+            </div>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label>E - الموقع الدقيق</label>
-          <input type="text" id="methane_location" class="form-control" placeholder="اكتب الموقع الدقيق للحادث">
-        </div>
+        <div class="section">
+          <div class="section-title">تفاصيل رسالة ميثان</div>
+          <div class="section-body grid-2">
+            <div class="field">
+              <label for="methane_major">M - هل هو حادث جسيم؟</label>
+              <select id="methane_major">
+                <option value="" disabled selected>-- اختر --</option>
+                <option value="نعم - حادث جسيم جداً">نعم - حادث جسيم جداً</option>
+                <option value="نعم - حادث جسيم">نعم - حادث جسيم</option>
+                <option value="لا - حادث عادي">لا - حادث عادي</option>
+              </select>
+            </div>
 
-        <div class="form-group">
-          <label>T - نوع الحادث</label>
-          <select id="methane_type" class="form-control">
-            <option value="">-- اختر نوع الحادث --</option>
-            <option value="حادث مروري">حادث مروري</option>
-            <option value="إصابة طبية">إصابة طبية</option>
-            <option value="حريق">حريق</option>
-            <option value="غرق">غرق</option>
-            <option value="حادث سقوط">حادث سقوط</option>
-            <option value="اختناق">اختناق</option>
-            <option value="تسمم">تسمم</option>
-            <option value="صدمة كهربائية">صدمة كهربائية</option>
-            <option value="أخرى">أخرى</option>
-          </select>
-        </div>
+            <div class="field">
+              <label for="methane_location">E - الموقع الدقيق</label>
+              <input type="text" id="methane_location" placeholder="اكتب الموقع الدقيق للحادث">
+            </div>
 
-        <div class="form-group">
-          <label>H - المخاطر الموجودة</label>
-          <textarea id="methane_hazards" class="form-control" rows="3" placeholder="اكتب المخاطر الموجودة في موقع الحادث"></textarea>
-        </div>
+            <div class="field">
+              <label for="methane_type">T - نوع الحادث</label>
+              <select id="methane_type">
+                <option value="" disabled selected>-- اختر نوع الحادث --</option>
+                <option value="حادث مروري">حادث مروري</option>
+                <option value="إصابة طبية">إصابة طبية</option>
+                <option value="حريق">حريق</option>
+                <option value="غرق">غرق</option>
+                <option value="حادث سقوط">حادث سقوط</option>
+                <option value="اختناق">اختناق</option>
+                <option value="تسمم">تسمم</option>
+                <option value="صدمة كهربائية">صدمة كهربائية</option>
+                <option value="أخرى">أخرى</option>
+              </select>
+            </div>
 
-        <div class="form-group">
-          <label>A - طرق الوصول والمغادرة</label>
-          <textarea id="methane_access" class="form-control" rows="3" placeholder="اكتب طرق الوصول والمغادرة من موقع الحادث"></textarea>
-        </div>
+            <div class="field">
+              <label for="methane_hazards">H - المخاطر الموجودة</label>
+              <textarea id="methane_hazards" placeholder="اكتب المخاطر الموجودة في موقع الحادث"></textarea>
+            </div>
 
-        <div class="form-group">
-          <label>N - عدد الإصابات ونوعها</label>
-          <textarea id="methane_casualties" class="form-control" rows="3" placeholder="اكتب عدد الإصابات ودرجة خطورتها"></textarea>
-        </div>
+            <div class="field">
+              <label for="methane_access">A - طرق الوصول والمغادرة</label>
+              <textarea id="methane_access" placeholder="اكتب طرق الوصول والمغادرة من موقع الحادث"></textarea>
+            </div>
 
-        <div class="form-group">
-          <label>E - الخدمات الإسعافية المطلوبة</label>
-          <textarea id="methane_services" class="form-control" rows="3" placeholder="اكتب الخدمات الإسعافية المطلوبة"></textarea>
-        </div>
+            <div class="field">
+              <label for="methane_casualties">N - عدد الإصابات ونوعها</label>
+              <textarea id="methane_casualties" placeholder="اكتب عدد الإصابات ودرجة خطورتها"></textarea>
+            </div>
 
-        <div class="form-group">
-          <label>ملاحظات إضافية</label>
-          <textarea id="methane_notes" class="form-control" rows="3" placeholder="أي معلومات إضافية مهمة"></textarea>
+            <div class="field">
+              <label for="methane_services">E - الخدمات الإسعافية المطلوبة</label>
+              <textarea id="methane_services" placeholder="اكتب الخدمات الإسعافية المطلوبة"></textarea>
+            </div>
+
+            <div class="field">
+              <label for="methane_notes">ملاحظات إضافية</label>
+              <textarea id="methane_notes" placeholder="أي معلومات إضافية مهمة"></textarea>
+            </div>
+          </div>
         </div>
 
         <div class="actions">
-          <button class="btn btn-success" onclick="sendMethaneReport()"><i class="fas fa-paper-plane"></i> حفظ وإرسال</button>
-          <button class="btn btn-outline" onclick="clearMethaneForm()"><i class="fas fa-eraser"></i> مسح الحقول</button>
+          <button class="btn btn-success" onclick="sendMethaneReport()">
+            <i class="fas fa-paper-plane"></i> حفظ وإرسال
+          </button>
+          <button class="btn btn-outline" onclick="clearMethaneForm()">
+            <i class="fas fa-eraser"></i> مسح الحقول
+          </button>
         </div>
       </section>
+
+      <div class="leader-sign">قائد نطاق منى / فهد أحمد الشمري</div>
+      <div class="footer">منصة نطاق منى - نسخة تشغيلية مطورة</div>
     </main>
   </div>
 
   <script>
-        const deploymentPlanData = {
+    const SCRIPT_URL = 'ضع هنا رابط Web App النهائي من Apps Script';
+
+    const deploymentPlanData = {
       "الجمرات": [
-        {id: "J-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", link: ""},
-        {id: "J-2", type: "فريق طبي", time: "08:30", status: "جاهز", support: "لا يوجد", link: ""}
+        {id: "J-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", lat:"21.4220", lng:"39.8760"},
+        {id: "J-2", type: "فريق طبي", time: "08:30", status: "جاهز", support: "لا يوجد", lat:"21.4230", lng:"39.8770"}
       ],
       "القطارات": [
-        {id: "T-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", link: ""},
-        {id: "T-2", type: "فريق طبي", time: "08:30", status: "جاهز", support: "لا يوجد", link: ""}
+        {id: "T-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", lat:"21.4200", lng:"39.8800"},
+        {id: "T-2", type: "فريق طبي", time: "08:30", status: "جاهز", support: "لا يوجد", lat:"21.4210", lng:"39.8810"}
       ],
       "بطن منى الجنوبي": [
-        {id: "S-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", link: ""}
+        {id: "S-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", lat:"21.4160", lng:"39.8750"}
       ],
       "بطن منى الشمالي": [
-        {id: "N-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", link: ""}
+        {id: "N-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", lat:"21.4270", lng:"39.8740"}
       ],
       "الشعيبين": [
-        {id: "SH-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", link: ""}
+        {id: "SH-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", lat:"21.4300", lng:"39.8700"}
       ],
       "منى الجديد 1": [
-        {id: "ND1-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", link: ""}
+        {id: "ND1-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", lat:"21.4180", lng:"39.8850"}
       ],
       "منى الجديد 2": [
-        {id: "ND2-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", link: ""}
+        {id: "ND2-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", lat:"21.4190", lng:"39.8860"}
       ]
     };
-
-    const SCRIPT_URL = 'ضع_هنا_رابط_الويب_آب_المنشور_من_Apps_Script';
 
     const teamsData = {
       "الجمرات": {
@@ -1461,7 +1501,10 @@
     };
 
     const medicalItemsData = [
-      "جهاز لوكس","جهاز صدمات خارجي AED","جهاز تنفس صناعي","جهاز لايف باك","جهاز ميندري","جهاز قياس العلامات الحيوية","جهاز قياس النبض ونسبة الأكسجين بالدم","جهاز قياس السكر بالدم","جهاز الشفط المتنقل الكهربائي","جهاز الدريل العظمي","جهاز قياس الحرارة","سماعة طبية","مقص جراحي","ثاقب زجاج","كشاف ضوء","لوح بورد بلاستيكي طويل","نقالة طي","سكوب","سرير","كرسي الدرج","جبائر شد للفخذ","قاطع خواتم","حقيبة إسعافية بكامل ملحقاتها"
+      "جهاز لوكس","جهاز صدمات خارجي AED","جهاز تنفس صناعي","جهاز لايف باك","جهاز ميندري","جهاز قياس العلامات الحيوية",
+      "جهاز قياس النبض ونسبة الأكسجين بالدم","جهاز قياس السكر بالدم","جهاز الشفط المتنقل الكهربائي","جهاز الدريل العظمي",
+      "جهاز قياس الحرارة","سماعة طبية","مقص جراحي","ثاقب زجاج","كشاف ضوء","لوح بورد بلاستيكي طويل",
+      "نقالة طي","سكوب","سرير","كرسي الدرج","جبائر شد للفخذ","قاطع خواتم","حقيبة إسعافية بكامل ملحقاتها"
     ];
 
     const stockItems = [
@@ -1498,9 +1541,7 @@
     const mobileBtn = document.getElementById('mobileBtn');
     const sidebar = document.getElementById('sidebar');
 
-    mobileBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('active');
-    });
+    mobileBtn.addEventListener('click', () => sidebar.classList.toggle('active'));
 
     document.querySelectorAll('.nav li').forEach(item => {
       item.addEventListener('click', () => {
@@ -1523,6 +1564,7 @@
 
     function showAlert(elId, type, message){
       const box = document.getElementById(elId);
+      if(!box) return;
       box.className = `alert ${type}`;
       box.textContent = message;
       box.style.display = 'block';
@@ -1538,12 +1580,17 @@
     }
 
     async function saveToGoogleSheets(sheetName, rows){
-      const response = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ sheetName, rows })
-      });
-      return await response.json();
+      try{
+        const response = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ sheetName, rows })
+        });
+        return await response.json();
+      }catch(error){
+        console.error(error);
+        return { success:false, message:'Fetch error' };
+      }
     }
 
     function openWhatsApp(text){
@@ -1554,7 +1601,6 @@
       window.open(url, '_blank');
     }
 
-    // التحضير اليومي
     const sectorSelect = document.getElementById('sector');
     const shiftTimeSelect = document.getElementById('shift_time');
 
@@ -1575,7 +1621,7 @@
     function clearDailyForm(){
       ['scope','sector','shift_time','shift_datetime','notes'].forEach(id => {
         const el = document.getElementById(id);
-        if(el) {
+        if(el){
           if(el.tagName === 'SELECT') el.selectedIndex = 0;
           else el.value = '';
         }
@@ -1620,30 +1666,25 @@
         "الملاحظات": document.getElementById('notes').value.trim() || 'لا توجد ملاحظات'
       };
 
-      try{
-        const save = await saveToGoogleSheets('التحضير اليومي', [row]);
-        if(!save.success){
-          showAlert('dailyAlert','error','تعذر حفظ البيانات');
-          return;
-        }
-
-        showAlert('dailyAlert','success','تم حفظ تقرير التحضير اليومي بنجاح');
-
-        let msg = `🚑 منصة نطاق منى – التحضير اليومي\n\n`;
-        msg += `📍 القطاع: ${row["القطاع"]}\n`;
-        msg += `🕘 الفترة: ${row["الفترة"]}\n`;
-        msg += `🕒 التاريخ والوقت: ${row["التاريخ والوقت"]}\n\n`;
-        msg += `👨‍⚕️ كبير المسعفين: ${row["كبير المسعفين"]}\n`;
-        msg += `📊 الوحدات: ${row["الوحدات التشغيلية"]} | مقدمو الخدمة: ${row["مقدمي الخدمة"]}\n`;
-        msg += `🚑 المركبات: ${row["المركبات"]} | القولف: ${row["القولف"]} | الراجلة: ${row["الراجلة"]}\n\n`;
-        msg += `📝 الملاحظات:\n${row["الملاحظات"]}`;
-        openWhatsApp(msg);
-      } catch {
-        showAlert('dailyAlert','error','حدث خطأ أثناء الاتصال بالخادم');
+      const save = await saveToGoogleSheets('التحضير اليومي', [row]);
+      if(!save.success){
+        showAlert('dailyAlert','error','تعذر حفظ البيانات');
+        return;
       }
+
+      showAlert('dailyAlert','success','تم حفظ تقرير التحضير اليومي بنجاح');
+
+      let msg = `🚑 منصة نطاق منى – التحضير اليومي\n\n`;
+      msg += `📍 القطاع: ${row["القطاع"]}\n`;
+      msg += `🕘 الفترة: ${row["الفترة"]}\n`;
+      msg += `🕒 التاريخ والوقت: ${row["التاريخ والوقت"]}\n\n`;
+      msg += `👨‍⚕️ كبير المسعفين: ${row["كبير المسعفين"]}\n`;
+      msg += `📊 الوحدات: ${row["الوحدات التشغيلية"]} | مقدمو الخدمة: ${row["مقدمي الخدمة"]}\n`;
+      msg += `🚑 المركبات: ${row["المركبات"]} | القولف: ${row["القولف"]} | الراجلة: ${row["الراجلة"]}\n\n`;
+      msg += `📝 الملاحظات:\n${row["الملاحظات"]}`;
+      openWhatsApp(msg);
     }
 
-    // تسليم المناوبة
     document.getElementById('handover_sector').addEventListener('change', fillHandoverTeamData);
     document.getElementById('handover_shift').addEventListener('change', fillHandoverTeamData);
 
@@ -1681,26 +1722,22 @@
         .map(s => `• ${s}`)
         .join('\n') || '• لايوجد';
 
-      const supportLines = [1,2,3]
-        .map(i => {
-          const call = row[`نداء الفرقة ${i}`];
-          const time = row[`توقيت العطل ${i}`];
-          const type = row[`نوع العطل ${i}`];
-          const action = row[`الإجراء المتبع ${i}`];
-          const back = row[`العودة للخدمة ${i}`];
-          const plate = row[`لوحة المركبة ${i}`];
-
-          if (!call && !time && !type && !action && !back && !plate) return '';
-          return `• بند ${i}
-  - نداء الفرقة: ${call || '-'}
-  - توقيت العطل: ${time || '-'}
-  - نوع العطل: ${type || '-'}
-  - الإجراء المتبع: ${action || '-'}
-  - العودة للخدمة: ${back || '-'}
-  - لوحة المركبة: ${plate || '-'}`;
-        })
-        .filter(Boolean)
-        .join('\n\n') || '• لايوجد';
+      const supportLines = [1,2,3].map(i => {
+        const call = row[`نداء الفرقة ${i}`];
+        const time = row[`توقيت العطل ${i}`];
+        const type = row[`نوع العطل ${i}`];
+        const action = row[`الإجراء المتبع ${i}`];
+        const back = row[`العودة للخدمة ${i}`];
+        const plate = row[`لوحة المركبة ${i}`];
+        if (!call && !time && !type && !action && !back && !plate) return '';
+        return `• بند ${i}
+- نداء الفرقة: ${call || '-'}
+- توقيت العطل: ${time || '-'}
+- نوع العطل: ${type || '-'}
+- الإجراء المتبع: ${action || '-'}
+- العودة للخدمة: ${back || '-'}
+- لوحة المركبة: ${plate || '-'}`;
+      }).filter(Boolean).join('\n\n') || '• لايوجد';
 
       return `📋 نموذج تسليم مناوبة كبير المسعفين
 
@@ -1795,60 +1832,50 @@ ${supportLines}
         "مساعد 2": document.getElementById('handover_assistant2').value || '-',
         "مساعد 3": document.getElementById('handover_assistant3').value || '-',
         "مساعد 4": document.getElementById('handover_assistant4').value || '-',
-
         "متوسط زمن الاستجابة": document.getElementById('avg_response').value || '0',
         "متوسط زمن استجابة ECHO": document.getElementById('echo_response').value || '0',
         "إجمالي البلاغات": document.getElementById('total_cases').value || '0',
         "عدد الفرق الفعالة": document.getElementById('active_teams').value || '0',
         "عدد الفرق المعتمدة": document.getElementById('planned_teams').value || '0',
-
         "OMEGA": document.getElementById('case_omega').value || '0',
         "ALPHA": document.getElementById('case_alpha').value || '0',
         "BRAVO": document.getElementById('case_bravo').value || '0',
         "CHARLY": document.getElementById('case_charly').value || '0',
         "DELTA": document.getElementById('case_delta').value || '0',
         "ECHO": document.getElementById('case_echo').value || '0',
-
         "عدد مركبات الإسعاف": document.getElementById('handover_ambulance_count').value || '0',
         "عدد القولف": document.getElementById('handover_golf_count').value || '0',
         "عدد الاستجابة النوعية": document.getElementById('handover_special_response_count').value || '0',
-
         "العاملة": document.getElementById('working_vehicles').value || '0',
         "الاحتياط": document.getElementById('reserve_vehicles').value || '0',
         "الخارج عن الخدمة": document.getElementById('out_of_service').value || '0',
         "بلاغات الدعم اللوجستي": document.getElementById('logistic_reports').value || '0',
         "البلاغات المفتوحة": document.getElementById('open_logistic_reports').value || '0',
-
         "مواقع الانتشار": document.getElementById('deployment_sites').value.trim() || 'لايوجد',
         "الوحدات المتعطلة ومواقعها": document.getElementById('faulty_units').value.trim() || 'لايوجد',
-
         "نداء الفرقة 1": s1.call || '',
         "توقيت العطل 1": s1.time || '',
         "نوع العطل 1": s1.type || '',
         "الإجراء المتبع 1": s1.action || '',
         "العودة للخدمة 1": s1.back || '',
         "لوحة المركبة 1": s1.plate || '',
-
         "نداء الفرقة 2": s2.call || '',
         "توقيت العطل 2": s2.time || '',
         "نوع العطل 2": s2.type || '',
         "الإجراء المتبع 2": s2.action || '',
         "العودة للخدمة 2": s2.back || '',
         "لوحة المركبة 2": s2.plate || '',
-
         "نداء الفرقة 3": s3.call || '',
         "توقيت العطل 3": s3.time || '',
         "نوع العطل 3": s3.type || '',
         "الإجراء المتبع 3": s3.action || '',
         "العودة للخدمة 3": s3.back || '',
         "لوحة المركبة 3": s3.plate || '',
-
         "التحذيرات الجوية": document.getElementById('weather_warning').value.trim() || 'لايوجد',
         "التحذيرات الأمنية": document.getElementById('security_warning').value.trim() || 'لايوجد',
         "مواقع خطرة": document.getElementById('dangerous_sites').value.trim() || 'لايوجد',
         "إصابات العاملين": document.getElementById('worker_injuries').value.trim() || 'لايوجد',
         "إحاطات أخرى": document.getElementById('other_briefings').value.trim() || 'لايوجد',
-
         "ملخص الأحداث": document.getElementById('events_summary').value.trim() || 'لايوجد',
         "ملخص الموارد المطلوبة وتوزيعها": document.getElementById('resources_summary').value.trim() || 'لايوجد',
         "ملاحظات عامة عن المناوبة": document.getElementById('handover_notes').value.trim() || 'لايوجد'
@@ -1856,21 +1883,16 @@ ${supportLines}
 
       row["الرسالة النهائية"] = buildHandoverMessage(row);
 
-      try{
-        const save = await saveToGoogleSheets('تسليم المناوبة', [row]);
-        if(!save.success){
-          showAlert('handoverAlert','error','تعذر حفظ بيانات تسليم المناوبة');
-          return;
-        }
-
-        showAlert('handoverAlert','success','تم حفظ نموذج تسليم المناوبة بنجاح');
-        openWhatsApp(row["الرسالة النهائية"]);
-      } catch {
-        showAlert('handoverAlert','error','حدث خطأ أثناء الاتصال بالخادم');
+      const save = await saveToGoogleSheets('تسليم المناوبة', [row]);
+      if(!save.success){
+        showAlert('handoverAlert','error','تعذر حفظ بيانات تسليم المناوبة');
+        return;
       }
+
+      showAlert('handoverAlert','success','تم حفظ نموذج تسليم المناوبة بنجاح');
+      openWhatsApp(row["الرسالة النهائية"]);
     }
 
-    // تشييك الوحدة
     document.getElementById('checker_has_third_party').addEventListener('change', toggleThirdCrewField);
     document.getElementById('unit_type').addEventListener('change', toggleUnitTypeFields);
 
@@ -1878,7 +1900,7 @@ ${supportLines}
       const hasThird = document.getElementById('checker_has_third_party').value;
       const wrap = document.getElementById('thirdCrewWrap');
       if(hasThird === 'نعم') wrap.classList.remove('hidden');
-      else {
+      else{
         wrap.classList.add('hidden');
         document.getElementById('crew3_name').value = '';
       }
@@ -1889,7 +1911,7 @@ ${supportLines}
       document.getElementById('ambulanceMechanicalWrap').classList.add('hidden');
       document.getElementById('golfWrap').classList.add('hidden');
 
-      if(unitType === 'مركبة اسعافية') document.getElementById('ambulanceMechanicalWrap').classList.remove('hidden');
+      if(unitType === 'مركبة إسعافية') document.getElementById('ambulanceMechanicalWrap').classList.remove('hidden');
       if(unitType === 'قولف') document.getElementById('golfWrap').classList.remove('hidden');
     }
 
@@ -1932,7 +1954,7 @@ ${supportLines}
       const unitType = document.getElementById('unit_type').value;
       let specificCheck = '';
 
-      if(unitType === 'مركبة اسعافية'){
+      if(unitType === 'مركبة إسعافية'){
         specificCheck = `رقم اللوحة=${document.getElementById('vehicle_plate_number').value.trim() || '-'} | مستوى الوقود=${document.getElementById('vehicle_fuel_level').value || '-'} | التكييف=${document.getElementById('vehicle_ac_status').value || '-'} | الأضواء والأصوات=${document.getElementById('vehicle_lights_status').value || '-'}`;
       } else if(unitType === 'قولف'){
         specificCheck = `مستوى الشحن=${document.getElementById('golf_charge_level').value || '-'} | ملاحظات القولف=${document.getElementById('golf_notes').value.trim() || '-'}`;
@@ -1964,26 +1986,22 @@ ${supportLines}
         "ملاحظات عامة": document.getElementById('units_check_notes').value.trim() || 'لا توجد ملاحظات'
       };
 
-      try{
-        const save = await saveToGoogleSheets('تشييك الوحدات التشغيلية', [row]);
-        if(!save.success){
-          showAlert('unitCheckAlert','error','تعذر حفظ بيانات التشييك');
-          return;
-        }
-        showAlert('unitCheckAlert','success','تم حفظ نموذج التشييك بنجاح');
-
-        let msg = `🩺 نموذج تشييك الوحدة التشغيلية\n\n`;
-        msg += `📍 القطاع: ${row["القطاع"]}\n`;
-        msg += `🕘 الفترة: ${row["الفترة"]}\n`;
-        msg += `🚑 النداء: ${row["رمز/نداء الوحدة"]}\n`;
-        msg += `🔧 النوع: ${row["نوع الوحدة التشغيلية"]}\n`;
-        openWhatsApp(msg);
-      } catch {
-        showAlert('unitCheckAlert','error','حدث خطأ أثناء الاتصال بالخادم');
+      const save = await saveToGoogleSheets('تشييك الوحدات التشغيلية', [row]);
+      if(!save.success){
+        showAlert('unitCheckAlert','error','تعذر حفظ بيانات التشييك');
+        return;
       }
+
+      showAlert('unitCheckAlert','success','تم حفظ نموذج التشييك بنجاح');
+
+      let msg = `🩺 نموذج تشييك الوحدة التشغيلية\n\n`;
+      msg += `📍 القطاع: ${row["القطاع"]}\n`;
+      msg += `🕘 الفترة: ${row["الفترة"]}\n`;
+      msg += `🚑 النداء: ${row["رمز/نداء الوحدة"]}\n`;
+      msg += `🔧 النوع: ${row["نوع الوحدة التشغيلية"]}\n`;
+      openWhatsApp(msg);
     }
 
-    // الخزن
     function buildStrategicTable(){
       const body = document.getElementById('strategicTableBody');
       body.innerHTML = '';
@@ -2038,29 +2056,21 @@ ${supportLines}
         };
       });
 
-      try{
-        const save = await saveToGoogleSheets('الخزن الاستراتيجي', rows);
-        if(!save.success){
-          showAlert('stockAlert','error','تعذر حفظ بيانات الخزن');
-          return;
-        }
-
-        if(shortageFound){
-          showAlert('stockAlert','error','تم الحفظ مع تنبيه: يوجد نقص في بعض الأصناف');
-        }else{
-          showAlert('stockAlert','success','تم حفظ نموذج الخزن الاستراتيجي بنجاح');
-        }
-
-        let msg = `📦 تقرير الخزن الاستراتيجي\n\n`;
-        msg += `📅 ${date}\n⏰ ${time}\n👤 ${checker}\n📍 ${location}\n`;
-        if(shortageFound) msg += `\n⚠ يوجد نقص في بعض الأصناف`;
-        openWhatsApp(msg);
-      } catch {
-        showAlert('stockAlert','error','حدث خطأ أثناء الاتصال بالخادم');
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', rows);
+      if(!save.success){
+        showAlert('stockAlert','error','تعذر حفظ بيانات الخزن');
+        return;
       }
+
+      if(shortageFound) showAlert('stockAlert','error','تم الحفظ مع تنبيه: يوجد نقص في بعض الأصناف');
+      else showAlert('stockAlert','success','تم حفظ نموذج الخزن الاستراتيجي بنجاح');
+
+      let msg = `📦 تقرير الخزن الاستراتيجي\n\n`;
+      msg += `📅 ${date}\n⏰ ${time}\n👤 ${checker}\n📍 ${location}\n`;
+      if(shortageFound) msg += `\n⚠ يوجد نقص في بعض الأصناف`;
+      openWhatsApp(msg);
     }
 
-    // خطة الانتشار
     document.getElementById('deploy_sector').addEventListener('change', handleDeploymentContextChange);
     document.getElementById('deploy_shift').addEventListener('change', handleDeploymentContextChange);
     document.getElementById('deploy_role').addEventListener('change', handleDeploymentRoleChange);
@@ -2108,7 +2118,7 @@ ${supportLines}
 
     function createDeploymentRowHTML(rowData = {}){
       const code = rowData.code || '';
-      const type = rowData.type || 'مركبة اسعافية';
+      const type = rowData.type || 'مركبة إسعافية';
       const shift = rowData.shift || 'الصباحية';
       const count = rowData.count || 1;
       const lat = rowData.lat || '';
@@ -2123,7 +2133,7 @@ ${supportLines}
           <td><input type="text" class="dep-code" value="${code}"></td>
           <td>
             <select class="dep-type">
-              <option value="مركبة اسعافية" ${type==='مركبة اسعافية'?'selected':''}>مركبة إسعافية</option>
+              <option value="مركبة إسعافية" ${type==='مركبة إسعافية'?'selected':''}>مركبة إسعافية</option>
               <option value="قولف" ${type==='قولف'?'selected':''}>قولف</option>
               <option value="استجابة نوعية" ${type==='استجابة نوعية'?'selected':''}>استجابة نوعية</option>
               <option value="راجلة" ${type==='راجلة'?'selected':''}>راجلة</option>
@@ -2224,25 +2234,20 @@ ${supportLines}
 
       if(!sector) return;
 
-      try {
-        const items = deploymentPlanData[sector] || [];
-        
-        items.forEach((item, index) => {
-          body.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
-            code: item.id || `${sector}-${index + 1}`,
-            type: item.type || 'مركبة إسعافية',
-            shift: defaultShift,
-            count: 1,
-            lat: item.lat || '',
-            lng: item.lng || '',
-            note: item.support || ''
-          }));
-        });
+      const items = deploymentPlanData[sector] || [];
+      items.forEach((item, index) => {
+        body.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
+          code: item.id || `${sector}-${index + 1}`,
+          type: item.type || 'مركبة إسعافية',
+          shift: defaultShift,
+          count: 1,
+          lat: item.lat || '',
+          lng: item.lng || '',
+          note: item.support || ''
+        }));
+      });
 
-        refreshDeploymentAdminMode();
-      } catch(error) {
-        showAlert('deploymentAlert','error','خطأ في تحميل البيانات');
-      }
+      refreshDeploymentAdminMode();
     }
 
     function addManualDeploymentRow(){
@@ -2258,7 +2263,7 @@ ${supportLines}
       const tbody = document.getElementById('deploymentTableBody');
       tbody.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
         code: '',
-        type: 'مركبة اسعافية',
+        type: 'مركبة إسعافية',
         shift: defaultShift,
         count: 1,
         lat: '',
@@ -2330,242 +2335,119 @@ ${supportLines}
         };
       });
 
-      try{
-        const save = await saveToGoogleSheets('خطة الانتشار', rows);
-        if(!save.success){
-          showAlert('deploymentAlert','error','تعذر حفظ خطة الانتشار');
-          return;
-        }
-
-        showAlert('deploymentAlert','success','تم حفظ خطة الانتشار بنجاح');
-
-        let msg = `📍 خطة الانتشار - نطاق منى\n\n`;
-        msg += `📍 القطاع: ${sector}\n`;
-        msg += `🕘 العرض الزمني: ${shift}\n`;
-        msg += `👤 مدخل البيانات: ${entryName}\n`;
-        msg += `👨‍⚕️ كبير المسعفين المناوب: ${lead}\n`;
-        msg += `📋 عدد السجلات: ${rows.length}\n`;
-        if(notes) msg += `\n📝 ملاحظات:\n${notes}`;
-        openWhatsApp(msg);
-      } catch {
-        showAlert('deploymentAlert','error','حدث خطأ أثناء الاتصال بالخادم');
+      const save = await saveToGoogleSheets('خطة الانتشار', rows);
+      if(!save.success){
+        showAlert('deploymentAlert','error','تعذر حفظ خطة الانتشار');
+        return;
       }
+
+      showAlert('deploymentAlert','success','تم حفظ خطة الانتشار بنجاح');
+
+      let msg = `📍 خطة الانتشار - نطاق منى\n\n`;
+      msg += `📍 القطاع: ${sector}\n`;
+      msg += `🕘 العرض الزمني: ${shift}\n`;
+      msg += `👤 مدخل البيانات: ${entryName}\n`;
+      msg += `👨‍⚕️ كبير المسعفين المناوب: ${lead}\n`;
+      msg += `📋 عدد السجلات: ${rows.length}\n`;
+      if(notes) msg += `\n📝 ملاحظات:\n${notes}`;
+      openWhatsApp(msg);
     }
 
-    // تشغيل أولي
+    async function sendMethaneReport() {
+      const sector = document.getElementById('methane_sector')?.value?.trim() || '';
+      const reporter = document.getElementById('methane_reporter')?.value?.trim() || '';
+      const contact = document.getElementById('methane_contact')?.value?.trim() || '';
+      const major = document.getElementById('methane_major')?.value?.trim() || '';
+      const location = document.getElementById('methane_location')?.value?.trim() || '';
+      const type = document.getElementById('methane_type')?.value?.trim() || '';
+      const hazards = document.getElementById('methane_hazards')?.value?.trim() || '';
+      const access = document.getElementById('methane_access')?.value?.trim() || '';
+      const casualties = document.getElementById('methane_casualties')?.value?.trim() || '';
+      const services = document.getElementById('methane_services')?.value?.trim() || '';
+      const notes = document.getElementById('methane_notes')?.value?.trim() || '';
+
+      if (!sector || !reporter || !major || !location || !type) {
+        showAlert('methaneAlert', 'error', 'يرجى تعبئة: القطاع، اسم المبلغ، M، E، T');
+        return;
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "القطاع": sector,
+        "اسم المبلغ": reporter,
+        "رقم التواصل": contact || '-',
+        "M - حادث جسيم": major,
+        "E - الموقع": location,
+        "T - نوع الحادث": type,
+        "H - المخاطر": hazards || 'لا توجد',
+        "A - الوصول والمغادرة": access || 'غير محدد',
+        "N - الإصابات": casualties || 'غير محدد',
+        "E - الخدمات الإسعافية المطلوبة": services || 'غير محدد',
+        "ملاحظات إضافية": notes || '-'
+      };
+
+      row["الرسالة النهائية"] = buildMethaneMessage(row);
+
+      const save = await saveToGoogleSheets('رسائل ميثان', [row]);
+      if (!save.success) {
+        showAlert('methaneAlert', 'error', 'تعذر حفظ رسالة ميثان');
+        return;
+      }
+
+      showAlert('methaneAlert', 'success', 'تم حفظ رسالة ميثان بنجاح');
+      openWhatsApp(row["الرسالة النهائية"]);
+      clearMethaneForm();
+    }
+
+    function buildMethaneMessage(row) {
+      return `🚨 رسالة ميثان - تبليغ حادث جسيم
+
+📍 القطاع: ${row["القطاع"]}
+👤 المبلغ: ${row["اسم المبلغ"]}
+📞 التواصل: ${row["رقم التواصل"]}
+
+⚠️ M - حادث جسيم: ${row["M - حادث جسيم"]}
+📍 E - الموقع: ${row["E - الموقع"]}
+🔴 T - نوع الحادث: ${row["T - نوع الحادث"]}
+⚡ H - المخاطر: ${row["H - المخاطر"]}
+🚪 A - الوصول والمغادرة: ${row["A - الوصول والمغادرة"]}
+👥 N - الإصابات: ${row["N - الإصابات"]}
+🚑 E - الخدمات الإسعافية المطلوبة: ${row["E - الخدمات الإسعافية المطلوبة"]}
+
+📝 ملاحظات إضافية:
+${row["ملاحظات إضافية"]}
+
+🕒 وقت البلاغ: ${row["وقت الحفظ"]}
+🔔 من منصة نطاق منى`;
+    }
+
+    function clearMethaneForm() {
+      [
+        'methane_sector',
+        'methane_reporter',
+        'methane_contact',
+        'methane_major',
+        'methane_location',
+        'methane_type',
+        'methane_hazards',
+        'methane_access',
+        'methane_casualties',
+        'methane_services',
+        'methane_notes'
+      ].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (el.tagName === 'SELECT') el.selectedIndex = 0;
+        else el.value = '';
+      });
+
+      const alertBox = document.getElementById('methaneAlert');
+      if (alertBox) alertBox.style.display = 'none';
+    }
+
     buildMedicalCheckTable();
     buildStrategicTable();
     setDashboardLinks();
-  
-    // دالة محسّنة لتحميل بيانات خطة الانتشار
-    function loadDeploymentData() {
-      const sector = document.getElementById('deploymentSector')?.value;
-      if(!sector) return;
-      
-      const points = deploymentPlanData[sector] || [];
-      const tableBody = document.getElementById('deploymentTableBody');
-      tableBody.innerHTML = '';
-      
-      points.forEach(p => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td><input type="text" class="field-input" value="${p.id}" style="width:100%; border:none; text-align:center; font-weight:bold;"></td>
-          <td><input type="text" class="field-input" value="${p.type}" style="width:100%; border:none; text-align:center;"></td>
-          <td><input type="time" class="field-input" value="${p.time}" style="width:100%; border:none; text-align:center;"></td>
-          <td><select class="field-input" style="width:100%; border:none; text-align:center;">
-            <option value="جاهز" ${p.status === 'جاهز' ? 'selected' : ''}>جاهز</option>
-            <option value="تحت التجهيز" ${p.status === 'تحت التجهيز' ? 'selected' : ''}>تحت التجهيز</option>
-            <option value="خارج الخدمة" ${p.status === 'خارج الخدمة' ? 'selected' : ''}>خارج الخدمة</option>
-          </select></td>
-          <td><input type="text" class="field-input" value="${p.support}" style="width:100%; border:none; text-align:center;"></td>
-          <td><input type="text" class="field-input" value="${p.link}" style="width:100%; border:none; text-align:center; font-size:12px;"></td>
-          <td><button class="btn btn-danger" onclick="this.closest('tr').remove()" style="padding:6px 10px; font-size:12px;"><i class="fas fa-trash"></i></button></td>
-        `;
-        tableBody.appendChild(row);
-      });
-    }
-
-    // دالة حفظ خطة الانتشار
-    async function saveDeploymentToSheets() {
-      const sector = document.getElementById('deploymentSector')?.value;
-      const shift = document.getElementById('deploymentShift')?.value || 'غير محدد';
-      
-      if(!sector) {
-        showAlert('deploymentAlert', 'error', 'يرجى اختيار القطاع');
-        return;
-      }
-
-      const rows = document.querySelectorAll('#deploymentTableBody tr');
-      const data = [];
-      
-      rows.forEach((row, index) => {
-        const inputs = row.querySelectorAll('.field-input');
-        if(inputs.length >= 6) {
-          data.push({
-            "وقت الحفظ": new Date().toLocaleString('ar-SA'),
-            "القطاع": sector,
-            "الفترة": shift,
-            "الترميز": inputs[0].value,
-            "النوع": inputs[1].value,
-            "الوقت": inputs[2].value,
-            "الحالة": inputs[3].value,
-            "التدعيم": inputs[4].value,
-            "الموقع": inputs[5].value
-          });
-        }
-      });
-
-      try {
-        const response = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ sheetName: 'خطة الانتشار', rows: data })
-        });
-        
-        const result = await response.json();
-        if(result.success) {
-          showAlert('deploymentAlert', 'success', '✅ تم حفظ خطة الانتشار بنجاح');
-        } else {
-          showAlert('deploymentAlert', 'error', '❌ خطأ: ' + result.message);
-        }
-      } catch(error) {
-        showAlert('deploymentAlert', 'error', '❌ خطأ: ' + error.message);
-      }
-    }
-
-    // دالة إرسال عبر الواتساب
-    function sendDeploymentViaWhatsApp() {
-      const sector = document.getElementById('deploymentSector')?.value;
-      const shift = document.getElementById('deploymentShift')?.value || 'غير محدد';
-      
-      if(!sector) {
-        showAlert('deploymentAlert', 'error', 'يرجى اختيار القطاع');
-        return;
-      }
-
-      const rows = document.querySelectorAll('#deploymentTableBody tr');
-      let msg = `📍 خطة الانتشار\n🏘️ القطاع: ${sector}\n🕘 الفترة: ${shift}\n\n📋 النقاط:\n`;
-      
-      rows.forEach((row, index) => {
-        const inputs = row.querySelectorAll('.field-input');
-        if(inputs.length >= 6) {
-          msg += `${index + 1}. ${inputs[0].value} - ${inputs[1].value} (${inputs[3].value})\n`;
-        }
-      });
-
-      const encoded = encodeURIComponent(msg);
-      const url = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
-        ? `https://wa.me/?text=${encoded}`
-        : `https://web.whatsapp.com/send?text=${encoded}`;
-      window.open(url, '_blank');
-    }
-
-    // تهيئة قائمة القطاعات
-    function initDeploymentSelectors() {
-      const sectorSelect = document.getElementById('deploymentSector');
-      if(!sectorSelect) return;
-      
-      const sectors = ["الجمرات", "القطارات", "بطن منى الجنوبي", "بطن منى الشمالي", "الشعيبين", "منى الجديد 1", "منى الجديد 2"];
-      sectors.forEach(sector => {
-        const opt = document.createElement('option');
-        opt.value = sector;
-        opt.textContent = sector;
-        sectorSelect.appendChild(opt);
-      });
-    }
-
-    // تهيئة عند تحميل الصفحة
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initDeploymentSelectors);
-    } else {
-      initDeploymentSelectors();
-    }
-
-    // دالة إرسال رسالة ميثان
-    async function sendMethaneReport() {
-      const major = document.getElementById('methane_major').value;
-      const location = document.getElementById('methane_location').value;
-      const type = document.getElementById('methane_type').value;
-      const hazards = document.getElementById('methane_hazards').value;
-      const access = document.getElementById('methane_access').value;
-      const casualties = document.getElementById('methane_casualties').value;
-      const services = document.getElementById('methane_services').value;
-      const notes = document.getElementById('methane_notes').value;
-
-      if(!major || !location || !type) {
-        showAlert('methaneAlert', 'error', 'يرجى ملء الحقول المطلوبة (M, E, T)');
-        return;
-      }
-
-      // إرسال البيانات إلى Google Sheets
-      try {
-        const data = [{
-          "وقت التبليغ": new Date().toLocaleString('ar-SA'),
-          "M - حادث جسيم": major,
-          "E - الموقع": location,
-          "T - نوع الحادث": type,
-          "H - المخاطر": hazards,
-          "A - الوصول": access,
-          "N - الإصابات": casualties,
-          "E - الخدمات": services,
-          "ملاحظات": notes
-        }];
-
-        const response = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ sheetName: 'رسائل ميثان', rows: data })
-        });
-
-        const result = await response.json();
-        if(result.success) {
-          showAlert('methaneAlert', 'success', '✅ تم إرسال رسالة ميثان بنجاح');
-          
-          // إرسال عبر الواتساب
-          sendMethaneViaWhatsApp(major, location, type, hazards, access, casualties, services);
-          
-          // مسح الحقول
-          clearMethaneForm();
-        } else {
-          showAlert('methaneAlert', 'error', '❌ خطأ: ' + result.message);
-        }
-      } catch(error) {
-        showAlert('methaneAlert', 'error', '❌ خطأ في الإرسال: ' + error.message);
-      }
-    }
-
-    // دالة إرسال رسالة ميثان عبر الواتساب
-    function sendMethaneViaWhatsApp(major, location, type, hazards, access, casualties, services) {
-      let msg = `🚨 رسالة ميثان - تبليغ حادث جسيم\n\n`;
-      msg += `⚠️ M - حادث جسيم: ${major}\n`;
-      msg += `📍 E - الموقع: ${location}\n`;
-      msg += `🔴 T - النوع: ${type}\n`;
-      msg += `⚡ H - المخاطر: ${hazards || 'لا توجد'}\n`;
-      msg += `🚪 A - الوصول: ${access || 'غير محدد'}\n`;
-      msg += `👥 N - الإصابات: ${casualties || 'لا توجد'}\n`;
-      msg += `🚑 E - الخدمات: ${services || 'قيد التقييم'}\n`;
-      msg += `\n📅 ${new Date().toLocaleString('ar-SA')}\n`;
-      msg += `\n🔔 من منصة نطاق منى`;
-
-      const encoded = encodeURIComponent(msg);
-      const url = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
-        ? `https://wa.me/?text=${encoded}`
-        : `https://web.whatsapp.com/send?text=${encoded}`;
-      window.open(url, '_blank');
-    }
-
-    // دالة مسح نموذج ميثان
-    function clearMethaneForm() {
-      document.getElementById('methane_major').value = '';
-      document.getElementById('methane_location').value = '';
-      document.getElementById('methane_type').value = '';
-      document.getElementById('methane_hazards').value = '';
-      document.getElementById('methane_access').value = '';
-      document.getElementById('methane_casualties').value = '';
-      document.getElementById('methane_services').value = '';
-      document.getElementById('methane_notes').value = '';
-      document.getElementById('methaneAlert').style.display = 'none';
-    }
-</script>
+  </script>
 </body>
 </html>

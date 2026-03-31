@@ -1441,7 +1441,7 @@
   </div>
 
   <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzjV42DfEfXOeUhXCx7bk3N61mL4Xr9dhAxVJ5W540VcyM8r1LUQJSxf5LvzIo7baYb/exec?action=getDeployment';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzjV42DfEfXOeUhXCx7bk3N61mL4Xr9dhAxVJ5W540VcyM8r1LUQJSxf5LvzIo7baYb/exec';
 
     const deploymentPlanData = {
       "الجمرات": [
@@ -1571,14 +1571,22 @@
       setTimeout(() => box.style.display = 'none', 5000);
     }
 
-    function setDashboardLinks(){
-      const dashboardUrl = `${SCRIPT_URL}?page=dashboard`;
-      ['dashboardLinkTop','dashboardLinkCard','dashboardLinkMap'].forEach(id => {
-        const el = document.getElementById(id);
-        if(el) el.href = dashboardUrl;
-      });
-    }
+   /***********************
+🔗 ربط لوحة القائد
+***********************/
+function setDashboardLinks(){
+  const dashboardUrl = `${SCRIPT_URL}?page=dashboard`;
 
+  ['dashboardLinkTop','dashboardLinkCard','dashboardLinkMap'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.href = dashboardUrl;
+  });
+}
+
+
+/***********************
+📤 إرسال البيانات للشيت
+***********************/
 async function saveToGoogleSheets(sheetName, rows){
 
   try{
@@ -1594,12 +1602,46 @@ async function saveToGoogleSheets(sheetName, rows){
     const text = await response.text();
 
     let result;
+
     try {
       result = JSON.parse(text);
     } catch {
       result = { success:false, message:"رد غير صالح من السيرفر" };
     }
 
+    return result;
+
+  } catch (error) {
+
+    return {
+      success:false,
+      message:"خطأ في الاتصال بالسيرفر"
+    };
+  }
+}
+
+
+/***********************
+📥 جلب نقاط الانتشار من الشيت
+***********************/
+async function fetchDeploymentFromSheet(){
+
+  try{
+
+    const res = await fetch(`${SCRIPT_URL}?action=getDeployment`);
+    const data = await res.json();
+
+    console.log("📍 نقاط الانتشار:", data);
+
+    return data;
+
+  } catch (error){
+
+    console.error("❌ خطأ في جلب البيانات:", error);
+
+    return [];
+  }
+}
     return result;
 
   } catch (error) {

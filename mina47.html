@@ -2289,7 +2289,9 @@ ${supportLines}
 
   const data = await fetchDeploymentFromSheet();
 
-  const items = data.filter(d => d["القطاع"] === sector);
+const items = data.filter(d => 
+  String(d["القطاع"]).trim() === String(sector).trim()
+);
 
   items.forEach((item, index) => {
     body.insertAdjacentHTML('beforeend', createDeploymentRowHTML({

@@ -2241,29 +2241,35 @@ ${supportLines}
       });
     }
 
-    async function loadDeploymentTemplate(){
-      const sector = document.getElementById('deploy_sector').value;
-      const defaultShift = document.getElementById('deploy_shift').value || 'الصباحية';
-      const body = document.getElementById('deploymentTableBody');
-      body.innerHTML = '';
+   async function loadDeploymentTemplate(){
 
-      if(!sector) return;
+  const sector = document.getElementById('deploy_sector').value;
+  const defaultShift = document.getElementById('deploy_shift').value || 'الصباحية';
+  const body = document.getElementById('deploymentTableBody');
 
-      const items = deploymentPlanData[sector] || [];
-      items.forEach((item, index) => {
-        body.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
-          code: item.id || `${sector}-${index + 1}`,
-          type: item.type || 'مركبة إسعافية',
-          shift: defaultShift,
-          count: 1,
-          lat: item.lat || '',
-          lng: item.lng || '',
-          note: item.support || ''
-        }));
-      });
+  body.innerHTML = '';
 
-      refreshDeploymentAdminMode();
-    }
+  if(!sector) return;
+
+  const data = await fetchDeploymentFromSheet();
+
+  const items = data.filter(d => d["القطاع"] === sector);
+
+  items.forEach((item, index) => {
+    body.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
+      code: item["الرمز"] || `${sector}-${index + 1}`,
+      type: item["نوع الآلية"] || 'مركبة إسعافية',
+      shift: item["مناوبة النقطة"] || defaultShift,
+      count: item["عدد الفرق الفعلي"] || 1,
+      lat: item["Latitude"] || '',
+      lng: item["Longitude"] || '',
+      note: item["ملاحظة السجل"] || ''
+    }));
+  });
+
+  refreshDeploymentAdminMode();
+}
+    
 
     function addManualDeploymentRow(){
       const role = document.getElementById('deploy_role')?.value;

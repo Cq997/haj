@@ -1583,6 +1583,11 @@ function setDashboardLinks(){
   });
 }
 
+function setMapLink(){
+  const mapUrl = `${SCRIPT_URL}?page=map`;
+  const mapFrame = document.getElementById('mapFrame');
+  if(mapFrame) mapFrame.src = mapUrl;
+}
 
 /***********************
 📤 إرسال البيانات للشيت

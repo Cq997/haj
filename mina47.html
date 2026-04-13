@@ -1634,20 +1634,25 @@ async function fetchDeploymentFromSheet(){
   try{
 
     const res = await fetch(`${SCRIPT_URL}?action=getDeployment`);
+
+    if(!res.ok) throw new Error("فشل الاتصال");
+
     const data = await res.json();
 
-    console.log("📍 نقاط الانتشار:", data);
+    if(!Array.isArray(data)){
+      console.error("⚠️ البيانات غير صحيحة:", data);
+      return [];
+    }
 
     return data;
 
   } catch (error){
 
-    console.error("❌ خطأ في جلب البيانات:", error);
+    console.error("❌ خطأ:", error);
 
     return [];
   }
 }
-
 
     function openWhatsApp(text){
       const encoded = encodeURIComponent(text);

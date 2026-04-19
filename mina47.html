@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
   <style>
     :root{
@@ -48,630 +49,525 @@
       min-height:100vh;
     }
 
+    /* ─── Sidebar ─── */
     .sidebar{
-      background:
-        linear-gradient(180deg,rgba(10,16,28,.98) 0%, rgba(14,24,40,.98) 100%),
-        url('https://images.unsplash.com/photo-1516321165247-4aa89a48be28?auto=format&fit=crop&w=1200&q=80') center/cover;
+      background:linear-gradient(180deg,var(--dark) 0%,#1a2744 100%);
       color:#fff;
-      padding:22px 16px;
-      height:100vh;
-      position:sticky;
-      top:0;
+      padding:28px 18px;
+      display:flex;flex-direction:column;gap:10px;
+      position:sticky;top:0;height:100vh;
       overflow-y:auto;
-      box-shadow:var(--shadow-2);
-      z-index:20;
-      border-left:1px solid rgba(255,255,255,.06);
+      z-index:100;
     }
 
-    .brand{
-      background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.05));
-      border:1px solid rgba(255,255,255,.12);
-      border-radius:26px;
-      padding:18px;
-      margin-bottom:18px;
-      backdrop-filter:blur(8px);
-    }
-
-    .brand h1{
-      font-size:24px;
-      font-weight:900;
-      line-height:1.7;
-      margin-bottom:6px;
-    }
-
-    .brand p{
-      color:#d1d5db;
-      font-size:13px;
-      line-height:1.9;
-    }
-
-    .side-title{
-      color:#9ca3af;
-      font-size:12px;
-      font-weight:900;
-      margin:14px 8px 10px;
-    }
-
-    .nav{
-      list-style:none;
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-
-    .nav li{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      padding:13px 14px;
-      border-radius:15px;
-      cursor:pointer;
-      transition:.25s ease;
-      font-weight:800;
-      border:1px solid transparent;
-    }
-
-    .nav li i{
-      width:22px;
-      text-align:center;
-      font-size:15px;
-    }
-
-    .nav li:hover,
-    .nav li.active{
-      background:rgba(255,255,255,.10);
-      border-color:rgba(255,255,255,.12);
-      transform:translateX(-2px);
-    }
-
-    .mobile-btn{
-      display:none;
-      position:fixed;
-      top:16px;
-      left:16px;
-      z-index:40;
-      background:var(--dark);
-      color:#fff;
-      border:none;
-      border-radius:12px;
-      padding:12px 14px;
-      box-shadow:var(--shadow);
-      cursor:pointer;
-    }
-
-    .main{
-      padding:22px;
-    }
-
-    .topbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-bottom:18px;
-    }
-
-    .title-wrap h2{
-      font-size:30px;
-      font-weight:900;
-      color:var(--dark);
-      line-height:1.4;
-    }
-
-    .title-wrap p{
-      color:var(--muted);
-      margin-top:4px;
-      font-size:14px;
-    }
-
-    .hero{
-      position:relative;
-      overflow:hidden;
-      border-radius:28px;
-      padding:30px;
-      margin-bottom:18px;
-      color:#fff;
-      background:
-        linear-gradient(135deg,rgba(3,12,24,.74),rgba(9,35,81,.60)),
-        linear-gradient(135deg,rgba(193,18,31,.85),rgba(11,94,215,.72)),
-        url('https://images.unsplash.com/photo-1521295121783-8a321d551ad2?auto=format&fit=crop&w=1600&q=80') center/cover;
-      box-shadow:var(--shadow-2);
-      min-height:240px;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-    }
-
-    .hero h3{
-      position:relative;
-      font-size:34px;
-      font-weight:900;
-      margin-bottom:10px;
-      line-height:1.4;
-    }
-
-    .hero p{
-      position:relative;
-      max-width:950px;
-      line-height:2;
-      font-size:15px;
-      color:#f9fafb;
-    }
-
-    .hero-actions{
-      position:relative;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:18px;
-    }
-
-    .quick-links{
-      display:none;
-      margin-top:16px;
-      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-      gap:10px;
-      position:relative;
-    }
-
-    .quick-links.show{display:grid}
-
-    .quick-card{
-      background:rgba(255,255,255,.12);
-      border:1px solid rgba(255,255,255,.18);
-      padding:12px;
-      border-radius:15px;
-      font-weight:800;
-      cursor:pointer;
-      transition:.2s ease;
-      text-align:center;
-      backdrop-filter:blur(8px);
-    }
-
-    .quick-card:hover{
-      background:rgba(255,255,255,.18);
-      transform:translateY(-1px);
-    }
-
-    .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      border:none;
-      border-radius:14px;
-      padding:12px 16px;
-      font-size:14px;
-      font-weight:900;
-      cursor:pointer;
-      text-decoration:none;
-      transition:.2s ease;
-      font-family:'Cairo',sans-serif;
-    }
-
-    .btn:hover{transform:translateY(-1px)}
-    .btn-primary{background:#fff;color:var(--primary)}
-    .btn-secondary{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.18)}
-    .btn-success{background:var(--success);color:#fff}
-    .btn-danger{background:var(--danger);color:#fff}
-    .btn-blue{background:var(--secondary);color:#fff}
-    .btn-dark{background:var(--dark);color:#fff}
-    .btn-outline{background:#fff;border:1px solid var(--line);color:var(--dark)}
-
-    .kpis{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-      gap:14px;
-      margin-bottom:18px;
-    }
-
-    .kpi{
-      background:linear-gradient(180deg,#ffffff,#f8fbff);
-      border:1px solid var(--line);
-      border-radius:20px;
-      padding:16px;
-      box-shadow:var(--shadow);
-      position:relative;
-      overflow:hidden;
-    }
-
-    .kpi .label{
-      color:var(--muted);
-      font-size:13px;
-      font-weight:800;
+    .sidebar .brand{
+      text-align:center;padding-bottom:16px;
+      border-bottom:1px solid rgba(255,255,255,.12);
       margin-bottom:8px;
     }
+    .sidebar .brand img{width:64px;margin-bottom:6px}
+    .sidebar .brand h2{font-size:1.1rem;font-weight:800;letter-spacing:.5px}
+    .sidebar .brand p{font-size:.72rem;opacity:.55;margin-top:2px}
 
-    .kpi .value{
-      font-size:30px;
-      font-weight:900;
-      line-height:1.1;
+    .nav{list-style:none}
+    .nav li{
+      display:flex;align-items:center;gap:10px;
+      padding:11px 14px;border-radius:10px;
+      cursor:pointer;font-size:.88rem;font-weight:600;
+      transition:all .2s;margin-bottom:4px;
+    }
+    .nav li:hover{background:rgba(255,255,255,.08)}
+    .nav li.active{background:var(--primary);color:#fff}
+    .nav li i{width:22px;text-align:center;font-size:.95rem}
+
+    .quick-toggle{
+      margin-top:auto;padding:10px 14px;
+      background:rgba(255,255,255,.06);border-radius:10px;
+      cursor:pointer;font-size:.8rem;text-align:center;
+      transition:background .2s;
+    }
+    .quick-toggle:hover{background:rgba(255,255,255,.12)}
+
+    .quick-links{
+      display:none;flex-direction:column;gap:6px;
+      margin-top:6px;
+    }
+    .quick-links.show{display:flex}
+    .quick-links a{
+      display:flex;align-items:center;gap:8px;
+      color:#cbd5e1;font-size:.78rem;text-decoration:none;
+      padding:8px 12px;border-radius:8px;
+      transition:all .2s;
+    }
+    .quick-links a:hover{background:rgba(255,255,255,.08);color:#fff}
+
+    /* ─── Mobile ─── */
+    .mobile-btn{
+      display:none;position:fixed;top:14px;right:14px;z-index:200;
+      width:44px;height:44px;border-radius:12px;
+      background:var(--primary);color:#fff;border:none;
+      font-size:1.2rem;cursor:pointer;
+      box-shadow:0 4px 12px rgba(193,18,31,.35);
     }
 
-    .kpi .sub{
-      color:var(--muted);
-      font-size:12px;
-      margin-top:8px;
-      line-height:1.7;
+    @media(max-width:1180px){
+      .layout{grid-template-columns:1fr}
+      .sidebar{
+        position:fixed;top:0;right:-340px;
+        width:300px;height:100vh;
+        transition:right .3s;z-index:300;
+      }
+      .sidebar.active{right:0}
+      .mobile-btn{display:flex;align-items:center;justify-content:center}
     }
 
-    .panel{
-      display:none;
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:24px;
+    /* ─── Main ─── */
+    main{
+      padding:28px 32px 60px;
+      max-width:1400px;
+      margin:0 auto;
+      width:100%;
+    }
+
+    @media(max-width:768px){
+      main{padding:18px 10px 40px}
+    }
+
+    /* ─── Hero ─── */
+    .hero{
+      background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);
+      color:#fff;border-radius:18px;
+      padding:32px 36px;
+      margin-bottom:24px;
+      position:relative;overflow:hidden;
+    }
+    .hero::after{
+      content:'';position:absolute;top:-30%;right:-10%;
+      width:300px;height:300px;border-radius:50%;
+      background:rgba(255,255,255,.06);
+    }
+    .hero h1{font-size:1.6rem;font-weight:900;margin-bottom:4px;position:relative;z-index:1}
+    .hero p{font-size:.88rem;opacity:.85;position:relative;z-index:1}
+    .hero .badge{
+      display:inline-block;background:rgba(255,255,255,.18);
+      padding:4px 14px;border-radius:20px;font-size:.75rem;
+      margin-top:10px;position:relative;z-index:1;
+    }
+
+    /* ─── KPI Row ─── */
+    .kpi-row{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+      gap:14px;margin-bottom:24px;
+    }
+    .kpi-card{
+      background:var(--card);border-radius:14px;
+      padding:18px 16px;text-align:center;
       box-shadow:var(--shadow);
-      padding:20px;
+      border-top:3px solid var(--primary);
+      transition:transform .2s;
+    }
+    .kpi-card:hover{transform:translateY(-3px)}
+    .kpi-card .kpi-val{font-size:1.8rem;font-weight:900;color:var(--primary)}
+    .kpi-card .kpi-label{font-size:.78rem;color:var(--muted);margin-top:2px}
+
+    /* ─── Tabs ─── */
+    .main-tabs{
+      display:flex;gap:8px;margin-bottom:20px;
+      flex-wrap:wrap;
+    }
+    .main-tabs .tab-btn{
+      padding:10px 22px;border-radius:10px;
+      border:2px solid var(--line);
+      background:var(--card);color:var(--dark);
+      font-weight:700;font-size:.88rem;
+      cursor:pointer;transition:all .2s;
+      font-family:'Cairo',sans-serif;
+    }
+    .main-tabs .tab-btn.active{
+      background:var(--primary);color:#fff;border-color:var(--primary);
+    }
+    .main-tabs .tab-btn:hover:not(.active){
+      border-color:var(--primary);color:var(--primary);
+    }
+    .tab-content{display:none}
+    .tab-content.active{display:block}
+
+    /* ─── Dashboard ─── */
+    .dash-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+      gap:18px;margin-bottom:24px;
+    }
+    .dash-card{
+      background:var(--card);border-radius:14px;
+      padding:20px;box-shadow:var(--shadow);
+    }
+    .dash-card h4{
+      font-size:.95rem;font-weight:800;
+      margin-bottom:12px;color:var(--dark);
+      border-bottom:2px solid var(--line);
+      padding-bottom:8px;
+    }
+    .dash-card h4 i{margin-left:6px;color:var(--primary)}
+
+    .dash-table{width:100%;border-collapse:collapse;font-size:.82rem}
+    .dash-table th{
+      background:var(--soft);padding:8px 10px;
+      text-align:right;font-weight:700;
+      border-bottom:2px solid var(--line);
+    }
+    .dash-table td{
+      padding:8px 10px;border-bottom:1px solid var(--line);
+    }
+    .dash-table tr:hover td{background:rgba(11,94,215,.04)}
+
+    .status-badge{
+      display:inline-block;padding:2px 10px;
+      border-radius:20px;font-size:.72rem;font-weight:700;
+    }
+    .status-badge.ready{background:#d4edda;color:#155724}
+    .status-badge.supported{background:#cce5ff;color:#004085}
+    .status-badge.overlap{background:#fff3cd;color:#856404}
+    .status-badge.oos{background:#f8d7da;color:#721c24}
+    .status-badge.broken{background:#e2e3e5;color:#383d41}
+
+    /* ─── Map ─── */
+    #deploymentMap{
+      height:550px;border-radius:14px;
+      box-shadow:var(--shadow);
       margin-bottom:18px;
+      z-index:1;
+    }
+    .map-filters{
+      background:var(--card);border-radius:14px;
+      padding:16px 20px;box-shadow:var(--shadow);
+      margin-bottom:18px;
+      display:flex;flex-wrap:wrap;gap:10px;
+      align-items:center;
+    }
+    .map-filters label{font-size:.8rem;font-weight:700;color:var(--muted)}
+    .map-filters select{
+      padding:6px 12px;border-radius:8px;
+      border:1px solid var(--line);
+      font-family:'Cairo',sans-serif;
+      font-size:.82rem;font-weight:600;
+      background:var(--soft);
+    }
+    .map-legend{
+      display:flex;flex-wrap:wrap;gap:12px;
+      margin-bottom:14px;
+    }
+    .map-legend .leg-item{
+      display:flex;align-items:center;gap:5px;
+      font-size:.76rem;font-weight:600;
+    }
+    .map-legend .leg-dot{
+      width:14px;height:14px;border-radius:50%;
+      border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2);
     }
 
+    /* ─── Panels / Forms ─── */
+    .panel{display:none}
     .panel.active{display:block}
 
     .panel-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-bottom:16px;
+      display:flex;align-items:center;justify-content:space-between;
+      margin-bottom:20px;padding-bottom:14px;
+      border-bottom:2px solid var(--line);
     }
-
-    .panel-head h3{
-      font-size:23px;
-      font-weight:900;
-    }
-
-    .panel-head p{
-      color:var(--muted);
-      font-size:14px;
-    }
+    .panel-head h3{font-size:1.15rem;font-weight:800}
+    .panel-head p{font-size:.82rem;color:var(--muted);margin-top:2px}
 
     .section{
-      margin-bottom:20px;
-      border:1px solid var(--line);
-      border-radius:18px;
+      background:var(--card);border-radius:14px;
+      box-shadow:var(--shadow);margin-bottom:18px;
       overflow:hidden;
-      background:#fff;
     }
-
     .section-title{
-      background:linear-gradient(135deg,var(--secondary),#3080ff);
-      color:#fff;
-      padding:13px 16px;
-      font-size:17px;
-      font-weight:900;
+      background:var(--soft);padding:12px 18px;
+      font-weight:800;font-size:.9rem;
+      border-bottom:1px solid var(--line);
     }
+    .section-body{padding:18px}
 
-    .section-body{
-      padding:16px;
-    }
+    .grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+    .grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+    .grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
 
-    .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-    .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-    .grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-    .split{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
-
-    .field label{
-      display:block;
-      margin-bottom:6px;
-      font-size:14px;
-      font-weight:800;
-      color:var(--dark);
-    }
-
-    .field input,
-    .field select,
-    .field textarea{
-      width:100%;
-      padding:11px 12px;
-      border:1px solid #cbd5e1;
-      border-radius:14px;
-      background:var(--soft);
+    .field{display:flex;flex-direction:column;gap:4px}
+    .field label{font-size:.82rem;font-weight:700;color:var(--muted)}
+    .field input,.field select,.field textarea{
+      padding:10px 14px;border-radius:10px;
+      border:1px solid var(--line);
       font-family:'Cairo',sans-serif;
-      font-size:14px;
-      transition:.2s ease;
+      font-size:.88rem;transition:border .2s;
+      background:var(--soft);
     }
-
-    .field input:focus,
-    .field select:focus,
-    .field textarea:focus{
-      outline:none;
-      border-color:var(--secondary);
-      background:#fff;
-      box-shadow:0 0 0 3px rgba(11,94,215,.10);
+    .field input:focus,.field select:focus,.field textarea:focus{
+      outline:none;border-color:var(--secondary);
+      box-shadow:0 0 0 3px rgba(11,94,215,.1);
     }
-
-    .field textarea{
-      min-height:110px;
-      resize:vertical;
-      line-height:1.9;
-    }
-
-    .helper{
-      margin-top:4px;
-      font-size:12px;
-      color:var(--muted);
-    }
-
-    .actions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:14px;
-    }
-
-    .alert{
-      display:none;
-      padding:14px 16px;
-      border-radius:16px;
-      font-weight:900;
-      margin-bottom:14px;
-    }
-
-    .alert.success{
-      display:block;
-      background:#dcfce7;
-      border:1px solid #86efac;
-      color:#166534;
-    }
-
-    .alert.error{
-      display:block;
-      background:#fee2e2;
-      border:1px solid #fca5a5;
-      color:#991b1b;
-    }
-
-    .cards{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-      gap:14px;
-    }
-
-    .card{
-      background:linear-gradient(180deg,#fff,#fbfdff);
-      border:1px solid var(--line);
-      border-radius:20px;
-      padding:16px;
-      box-shadow:var(--shadow);
-    }
-
-    .card h4{
-      font-size:18px;
-      font-weight:900;
-      margin-bottom:8px;
-    }
-
-    .card p{
-      color:var(--muted);
-      line-height:1.9;
-      font-size:14px;
-    }
-
-    .table-wrap{
-      overflow:auto;
-      border:1px solid var(--line);
-      border-radius:16px;
-      max-width:100%;
-    }
-
-    table{
-      width:100%;
-      border-collapse:collapse;
-      min-width:1100px;
-      background:#fff;
-    }
-
-    th,td{
-      border:1px solid #e5e7eb;
-      padding:10px 8px;
-      text-align:center;
-      font-size:13px;
-      vertical-align:middle;
-    }
-
-    th{
-      background:linear-gradient(135deg,var(--secondary),var(--secondary-2));
-      color:#fff;
-      font-weight:900;
-      position:sticky;
-      top:0;
-      z-index:1;
-    }
-
-    .compact-number{
-      width:90px !important;
-      min-width:90px;
-      text-align:center;
-    }
-
-    .map-frame{
-      width:100%;
-      border:none;
-      border-radius:18px;
-      background:#eef2ff;
-      height:520px;
-    }
-
-    .note{
-      background:#fff7ed;
-      border:1px solid #fed7aa;
-      color:#9a3412;
-      border-radius:16px;
-      padding:14px 16px;
-      line-height:1.9;
-      font-size:14px;
-    }
-
-    .bullets-box{
-      margin-top:14px;
-    }
-
-    .bullets-box textarea{
-      min-height:120px;
-    }
-
-    .footer{
-      text-align:center;
-      color:var(--muted);
-      font-size:13px;
-      padding:8px 0 18px;
-      font-weight:700;
-    }
-
-    .leader-sign{
-      text-align:center;
-      margin-top:14px;
-      font-size:16px;
-      font-weight:800;
-      color:#374151;
-    }
+    .field textarea{min-height:80px;resize:vertical}
+    .field .helper{font-size:.72rem;color:var(--muted)}
 
     .hidden{display:none!important}
 
-    @media (max-width:1180px){
-      .layout{grid-template-columns:1fr}
-      .sidebar{
-        position:fixed;
-        right:-340px;
-        width:320px;
-        transition:.25s ease;
-      }
-      .sidebar.active{right:0}
-      .mobile-btn{display:block}
-      .main{padding:84px 14px 20px}
-      .grid-4,.grid-3,.grid-2,.split{grid-template-columns:1fr}
+    .table-wrap{overflow-x:auto}
+    .table-wrap table{
+      width:100%;border-collapse:collapse;
+      font-size:.82rem;white-space:nowrap;
+    }
+    .table-wrap th{
+      background:var(--soft);padding:10px 12px;
+      text-align:right;font-weight:700;
+      border-bottom:2px solid var(--line);
+      position:sticky;top:0;
+    }
+    .table-wrap td{
+      padding:8px 12px;border-bottom:1px solid var(--line);
+    }
+    .table-wrap input,.table-wrap select{
+      padding:6px 8px;border-radius:6px;
+      border:1px solid var(--line);font-family:'Cairo',sans-serif;
+      font-size:.8rem;background:var(--soft);
+    }
+    .compact-number{width:70px;text-align:center}
+
+    .actions{
+      display:flex;flex-wrap:wrap;gap:10px;
+      padding:18px;
+    }
+
+    .btn{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:10px 22px;border-radius:10px;
+      font-family:'Cairo',sans-serif;font-weight:700;
+      font-size:.88rem;border:none;cursor:pointer;
+      transition:all .2s;text-decoration:none;
+    }
+    .btn-success{background:var(--success);color:#fff}
+    .btn-success:hover{background:#00a884}
+    .btn-outline{background:transparent;border:2px solid var(--line);color:var(--dark)}
+    .btn-outline:hover{border-color:var(--primary);color:var(--primary)}
+    .btn-blue{background:var(--secondary);color:#fff}
+    .btn-blue:hover{background:var(--secondary-2)}
+    .btn-dark{background:var(--dark);color:#fff}
+    .btn-dark:hover{background:#1e293b}
+    .btn-danger{background:var(--danger);color:#fff;font-size:.78rem;padding:6px 14px}
+    .btn-danger:hover{background:#c0392b}
+
+    .alert{
+      padding:12px 18px;border-radius:10px;
+      font-size:.85rem;font-weight:600;
+      display:none;margin-bottom:14px;
+    }
+    .alert.success{background:#d4edda;color:#155724;display:block}
+    .alert.error{background:#f8d7da;color:#721c24;display:block}
+
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .split .card{
+      background:var(--card);border-radius:14px;
+      padding:20px;box-shadow:var(--shadow);
+    }
+    .split .card h4{font-size:.95rem;font-weight:800;margin-bottom:10px}
+    .map-frame{width:100%;height:350px;border:none;border-radius:10px}
+    .note{font-size:.78rem;color:var(--muted);line-height:1.7}
+
+    .bullets-box{padding:14px 18px}
+
+    .leader-sign{
+      text-align:center;font-weight:800;
+      font-size:.95rem;color:var(--primary);
+      margin:30px 0 10px;
+    }
+    .footer{
+      text-align:center;font-size:.72rem;
+      color:var(--muted);padding-bottom:20px;
+    }
+
+    @media(max-width:768px){
+      .kpi-row{grid-template-columns:repeat(2,1fr)}
+      .dash-grid{grid-template-columns:1fr}
+      .split{grid-template-columns:1fr}
+      #deploymentMap{height:350px}
+      .map-filters{flex-direction:column}
     }
   </style>
 </head>
 <body>
-  <button class="mobile-btn" id="mobileBtn"><i class="fas fa-bars"></i></button>
 
-  <div class="layout">
-    <aside class="sidebar" id="sidebar">
-      <div class="brand">
-        <h1>منصة نطاق منى</h1>
-        <p>واجهة  رقمية موحدة لموسم الحج 1447 لنطاق منى، لرفع التقارير ومتابعة كافة قطاعات النطاق وتسليم المناوبات وخطة الانتشار.</p>
+<button class="mobile-btn" id="mobileBtn"><i class="fas fa-bars"></i></button>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <img src="https://upload.wikimedia.org/wikipedia/ar/thumb/3/30/Saudi_Red_Crescent_Authority_Logo.svg/1200px-Saudi_Red_Crescent_Authority_Logo.svg.png" alt="logo">
+      <h2>منصة نطاق منى</h2>
+      <p>حج 1447هـ - نسخة مطورة</p>
+    </div>
+
+    <ul class="nav">
+      <li class="active" data-target="homePanel"><i class="fas fa-home"></i> الرئيسية</li>
+      <li data-target="groundEMS"><i class="fas fa-clipboard-list"></i> التحضير اليومي</li>
+      <li data-target="handoverPanel"><i class="fas fa-exchange-alt"></i> تسليم المناوبة</li>
+      <li data-target="unitsCheckPanel"><i class="fas fa-stethoscope"></i> تشييك الوحدات</li>
+      <li data-target="stockPanel"><i class="fas fa-boxes-stacked"></i> الخزن الاستراتيجي</li>
+      <li data-target="deploymentPanel"><i class="fas fa-map-marked-alt"></i> خطة الانتشار</li>
+      <li data-target="mapsPanel"><i class="fas fa-map"></i> خرائط النطاق</li>
+      <li data-target="methanePanel"><i class="fas fa-triangle-exclamation"></i> رسالة ميثان</li>
+    </ul>
+
+    <div class="quick-toggle" onclick="toggleQuickLinks()">
+      <i class="fas fa-bolt"></i> روابط سريعة
+    </div>
+    <div class="quick-links" id="quickLinks">
+      <a id="dashboardLinkTop" href="#" target="_blank"><i class="fas fa-tv"></i> لوحة القائد</a>
+      <a href="https://www.google.com/maps/d/viewer?mid=15jPyMtPR5xmD0hZpE7g2-B1J0rSosvM&ll=21.416799550046317%2C39.873667103872805&z=15" target="_blank"><i class="fas fa-map"></i> خريطة Google</a>
+    </div>
+  </aside>
+
+  <main>
+    <!-- ═══════ Hero ═══════ -->
+    <div class="hero">
+      <h1><i class="fas fa-hospital-alt"></i> منصة نطاق منى</h1>
+      <p>نظام إدارة العمليات الإسعافية الميدانية لموسم حج 1447هـ</p>
+      <span class="badge"><i class="fas fa-shield-halved"></i> الهيئة السعودية للهلال الأحمر</span>
+    </div>
+
+    <!-- ═══════ KPI Row ═══════ -->
+    <div class="kpi-row">
+      <div class="kpi-card"><div class="kpi-val" id="kpi_total">0</div><div class="kpi-label">إجمالي النقاط</div></div>
+      <div class="kpi-card"><div class="kpi-val" id="kpi_ready" style="color:var(--success)">0</div><div class="kpi-label">جاهزة</div></div>
+      <div class="kpi-card"><div class="kpi-val" id="kpi_supported" style="color:var(--secondary)">0</div><div class="kpi-label">مدعمة</div></div>
+      <div class="kpi-card"><div class="kpi-val" id="kpi_oos" style="color:var(--danger)">0</div><div class="kpi-label">خارج الخدمة</div></div>
+      <div class="kpi-card"><div class="kpi-val" id="kpi_broken" style="color:var(--muted)">0</div><div class="kpi-label">متعطلة</div></div>
+      <div class="kpi-card"><div class="kpi-val" id="kpi_sectors">7</div><div class="kpi-label">القطاعات</div></div>
+    </div>
+
+    <!-- ═══════ Home Panel ═══════ -->
+    <section class="panel active" id="homePanel">
+
+      <!-- Main Tabs: Dashboard / Map -->
+      <div class="main-tabs">
+        <button class="tab-btn active" onclick="switchMainTab('tabDashboard',this)"><i class="fas fa-chart-pie"></i> الداشبورد</button>
+        <button class="tab-btn" onclick="switchMainTab('tabMap',this)"><i class="fas fa-map-location-dot"></i> الخريطة التفاعلية</button>
       </div>
 
-      <div class="side-title">القائمة الرئيسية</div>
-      <ul class="nav">
-        <li class="active" data-target="homePanel"><i class="fas fa-house"></i><span>الرئيسية</span></li>
-        <li data-target="groundEMS"><i class="fas fa-ambulance"></i><span>التحضير اليومي</span></li>
-        <li data-target="handoverPanel"><i class="fas fa-dolly"></i><span>تسليم المناوبة</span></li>
-        <li data-target="unitsCheckPanel"><i class="fas fa-truck-medical"></i><span>تشييك الوحدة التشغيلية</span></li>
-        <li data-target="stockPanel"><i class="fas fa-boxes-stacked"></i><span>الخزن الاستراتيجي</span></li>
-        <li data-target="deploymentPanel"><i class="fas fa-network-wired"></i><span>خطة الانتشار</span></li>
-        <li data-target="mapsPanel"><i class="fas fa-map-location-dot"></i><span>خرائط نطاق منى</span></li>
-        <li data-target="methanePanel"><i class="fas fa-exclamation-triangle"></i><span>رسالة ميثان</span></li>
-      </ul>
-    </aside>
+      <!-- ── Tab: Dashboard ── -->
+      <div class="tab-content active" id="tabDashboard">
+        <div class="dash-grid">
 
-    <main class="main">
-      <div class="topbar">
-        <div class="title-wrap">
-          <h2>منصة نطاق منى لموسم حج 1447هـ</h2>
-          <p>غرفة عمليات رقمية موحدة لمتابعة التقارير الميدانية ورفع النماذج التشغيلية من شاشة واحدة.</p>
+          <!-- Sector Summary -->
+          <div class="dash-card">
+            <h4><i class="fas fa-layer-group"></i> ملخص القطاعات</h4>
+            <table class="dash-table" id="dashSectorTable">
+              <thead>
+                <tr><th>القطاع</th><th>إجمالي</th><th>جاهزة</th><th>مدعمة</th><th>خارج</th><th>متعطلة</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <!-- Type Summary -->
+          <div class="dash-card">
+            <h4><i class="fas fa-truck-medical"></i> ملخص أنواع الوحدات</h4>
+            <table class="dash-table" id="dashTypeTable">
+              <thead>
+                <tr><th>نوع الوحدة</th><th>العدد</th><th>النسبة</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <!-- Status Overview -->
+          <div class="dash-card">
+            <h4><i class="fas fa-signal"></i> نظرة عامة على الحالات</h4>
+            <div id="dashStatusChart" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding:10px 0">
+            </div>
+          </div>
+
+          <!-- Latest Activity -->
+          <div class="dash-card">
+            <h4><i class="fas fa-clock-rotate-left"></i> آخر تحديث</h4>
+            <div id="dashLastUpdate" style="text-align:center;padding:20px;font-size:.9rem;color:var(--muted)">
+              <i class="fas fa-spinner fa-spin"></i> جاري تحميل البيانات...
+            </div>
+          </div>
+
         </div>
       </div>
 
-      <section class="hero">
-        <h3>غرفة عمليات رقمية لنطاق منى</h3>
-        <p>
-          منصة تشغيل موحدة لرفع تقارير التحضير اليومي، تسليم المناوبة، تشييك الوحدات، الخزن الاستراتيجي، وخطة الانتشار
-          مع صلاحيات تشغيلية وربط مباشر بلوحة القائد والخريطة الميدانية.
-        </p>
-        <div class="hero-actions">
-          <button class="btn btn-primary" onclick="toggleQuickLinks()"><i class="fas fa-paper-plane"></i> ابدأ رفع التقارير</button>
-          <a class="btn btn-secondary" id="dashboardLinkTop" href="#" target="_blank"><i class="fas fa-tv"></i> فتح لوحة القائد</a>
+      <!-- ── Tab: Map ── -->
+      <div class="tab-content" id="tabMap">
+
+        <!-- Map Legend -->
+        <div class="map-legend">
+          <div class="leg-item"><div class="leg-dot" style="background:#00b894"></div> جاهز</div>
+          <div class="leg-item"><div class="leg-dot" style="background:#0b5ed7"></div> مدعم</div>
+          <div class="leg-item"><div class="leg-dot" style="background:#fdcb6e"></div> اوفرلاب</div>
+          <div class="leg-item"><div class="leg-dot" style="background:#d63031"></div> خارج الخدمة</div>
+          <div class="leg-item"><div class="leg-dot" style="background:#636e72"></div> متعطلة</div>
+          <div class="leg-item"><div class="leg-dot" style="background:#6c5ce7"></div> تدخل سريع</div>
         </div>
 
-        <div class="quick-links" id="quickLinks">
-          <div class="quick-card" onclick="activatePanel('groundEMS')">التحضير اليومي</div>
-          <div class="quick-card" onclick="activatePanel('handoverPanel')">تسليم المناوبة</div>
-          <div class="quick-card" onclick="activatePanel('unitsCheckPanel')">تشييك الوحدة</div>
-          <div class="quick-card" onclick="activatePanel('stockPanel')">الخزن الاستراتيجي</div>
-          <div class="quick-card" onclick="activatePanel('deploymentPanel')">خطة الانتشار</div>
-          <div class="quick-card" onclick="activatePanel('mapsPanel')">خرائط نطاق منى</div>
-          <div class="quick-card" onclick="activatePanel('methanePanel')">رسالة ميثان</div>
-        </div>
-      </section>
-
-      <section class="kpis">
-        <div class="kpi">
-          <div class="label">عدد القطاعات</div>
-          <div class="value">7</div>
-          <div class="sub">قطاعات نطاق منى</div>
-        </div>
-        <div class="kpi">
-          <div class="label">إجمالي الفرق المتاحة</div>
-          <div class="value">185</div>
-          <div class="sub">جميع الفرق المعتمدة في القطاعات</div>
-        </div>
-        <div class="kpi">
-          <div class="label">المركبات الإسعافية</div>
-          <div class="value">119</div>
-          <div class="sub">الإجمالي المعتمد في النطاق</div>
-        </div>
-        <div class="kpi">
-          <div class="label">عربات القولف</div>
-          <div class="value">47</div>
-          <div class="sub">الإجمالي المعتمد في النطاق</div>
-        </div>
-        <div class="kpi">
-          <div class="label">الفرق الراجلة</div>
-          <div class="value">19</div>
-          <div class="sub">الإجمالي المعتمد في النطاق</div>
-        </div>
-      </section>
-
-      <section class="panel active" id="homePanel">
-        <div class="panel-head">
+        <!-- Map Filters -->
+        <div class="map-filters">
           <div>
-            <h3>الواجهة الرئيسية</h3>
-            <p>الوصول السريع لجميع النماذج واللوحات التشغيلية.</p>
+            <label>القطاع</label>
+            <select id="mapFilterSector" onchange="applyMapFilters()">
+              <option value="الكل">الكل</option>
+              <option value="الجمرات">الجمرات</option>
+              <option value="القطارات">القطارات</option>
+              <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
+              <option value="بطن منى الشمالي">بطن منى الشمالي</option>
+              <option value="الشعيبين">الشعيبين</option>
+              <option value="منى الجديد 1">منى الجديد 1</option>
+              <option value="منى الجديد 2">منى الجديد 2</option>
+            </select>
           </div>
+          <div>
+            <label>الحالة</label>
+            <select id="mapFilterStatus" onchange="applyMapFilters()">
+              <option value="الكل">الكل</option>
+              <option value="جاهز">جاهز</option>
+              <option value="مدعم">مدعم</option>
+              <option value="اوفرلاب">اوفرلاب</option>
+              <option value="خارج الخدمة">خارج الخدمة</option>
+              <option value="متعطلة">متعطلة</option>
+            </select>
+          </div>
+          <div>
+            <label>نوع الوحدة</label>
+            <select id="mapFilterType" onchange="applyMapFilters()">
+              <option value="الكل">الكل</option>
+              <option value="مركبة اسعافية">مركبة إسعافية</option>
+              <option value="قولف">قولف</option>
+              <option value="راجلة">راجلة</option>
+              <option value="تدخل سريع">تدخل سريع</option>
+            </select>
+          </div>
+          <div>
+            <label>المناوبة</label>
+            <select id="mapFilterShift" onchange="applyMapFilters()">
+              <option value="الكل">الكل</option>
+              <option value="الصباحية">الصباحية</option>
+              <option value="المسائية">المسائية</option>
+              <option value="اوفرلاب">اوفرلاب</option>
+            </select>
+          </div>
+          <button class="btn btn-outline" onclick="resetMapFilters()" style="padding:6px 16px;font-size:.8rem"><i class="fas fa-rotate-left"></i> إعادة تعيين</button>
         </div>
 
-        <div class="cards">
-          <div class="card">
-            <h4>التحضير اليومي</h4>
-            <p>رفع الحالة التشغيلية لكل قطاع مع أسماء كبار المسعفين والمساعدين والطاقة التشغيلية.</p>
-            <div class="actions"><button class="btn btn-blue" onclick="activatePanel('groundEMS')">فتح النموذج</button></div>
-          </div>
-          <div class="card">
-            <h4>تسليم المناوبة</h4>
-            <p>توثيق تسليم المناوبة بين كبار المسعفين مع الرسالة التشغيلية الكاملة وإرسالها عبر الواتساب.</p>
-            <div class="actions"><button class="btn btn-blue" onclick="activatePanel('handoverPanel')">فتح النموذج</button></div>
-          </div>
-          <div class="card">
-            <h4>تشييك الوحدة التشغيلية</h4>
-            <p>فحص الوحدة حسب نوعها، أسماء الطاقم، والتشييك الطبي والميكانيكي عند الحاجة.</p>
-            <div class="actions"><button class="btn btn-blue" onclick="activatePanel('unitsCheckPanel')">فتح النموذج</button></div>
-          </div>
-          <div class="card">
-            <h4>الخزن الاستراتيجي</h4>
-            <p>تسجيل حالة الأصناف الطبية والمستهلكات مع التنبيه عند وجود نقص.</p>
-            <div class="actions"><button class="btn btn-blue" onclick="activatePanel('stockPanel')">فتح النموذج</button></div>
-          </div>
-          <div class="card">
-            <h4>خطة الانتشار</h4>
-            <p>تحميل الفرق من الملف الرئيسي حسب القطاع مع الإحداثيات وصلاحيات التعديل لكبير المسعفين أو مساعده.</p>
-            <div class="actions"><button class="btn btn-blue" onclick="activatePanel('deploymentPanel')">فتح النموذج</button></div>
-          </div>
-          <div class="card">
-            <h4>رسالة ميثان</h4>
-            <p>رفع التبليغ السريع للحوادث الجسيمة وإرسال نسخة مباشرة عبر الواتساب مع الحفظ في الشيت ولوحة القائد.</p>
-            <div class="actions"><button class="btn btn-blue" onclick="activatePanel('methanePanel')">فتح النموذج</button></div>
-          </div>
-          <div class="card">
-            <h4>لوحة القائد</h4>
-            <p>لوحة معلومات تنفيذية تعرض ملخص النماذج والملاحظات وآخر التقارير والخريطة التشغيلية.</p>
-            <div class="actions"><a class="btn btn-dark" id="dashboardLinkCard" href="#" target="_blank">فتح اللوحة</a></div>
-          </div>
+        <!-- Map Container -->
+        <div id="deploymentMap"></div>
+
+        <div style="text-align:center;margin-top:10px">
+          <span id="mapPointCount" style="font-size:.85rem;font-weight:700;color:var(--muted)">النقاط المعروضة: 0</span>
         </div>
-      </section>
+      </div>
+
+     </section>
 
       <section class="panel" id="groundEMS">
         <div class="panel-head">
@@ -1437,10 +1333,11 @@
 
       <div class="leader-sign">قائد نطاق منى / فهد أحمد الشمري</div>
       <div class="footer">منصة نطاق منى حج 1447 نسخة مطورة - علي 102459@srca</div>
-    </main>
-  </div>
+  </main>
+</div>
 
-  <script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwnKEWH6W8qkIv0X1ckTYqukt1BOw8ZA5DGkv7TdA1nmCopG0VJrn_JjnHPZK2jk3eoNg/exec';
 
     const deploymentPlanData = {
@@ -2518,6 +2415,393 @@ buildMedicalCheckTable();
 buildStrategicTable();
 setDashboardLinks();
 setMapLink();
+
+/* ═══════════════════════════════════════════
+   بيانات نقاط الانتشار الثابتة (148 نقطة)
+   ═══════════════════════════════════════════ */
+const staticDeploymentPoints = [
+  {id:"MH1",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.425546,lng:39.86387,status:"جاهز",shift:"الصباحية"},
+  {id:"MH2",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.424468,lng:39.863626,status:"جاهز",shift:"الصباحية"},
+  {id:"MH3",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.425116,lng:39.865597,status:"جاهز",shift:"الصباحية"},
+  {id:"MH4",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.4250659,lng:39.8659837,status:"جاهز",shift:"الصباحية"},
+  {id:"MH5",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.425314,lng:39.867029,status:"جاهز",shift:"الصباحية"},
+  {id:"MH6",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.425174,lng:39.86701,status:"جاهز",shift:"الصباحية"},
+  {id:"MH7",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.423748,lng:39.865322,status:"جاهز",shift:"الصباحية"},
+  {id:"MH8",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.424757,lng:39.86711,status:"جاهز",shift:"الصباحية"},
+  {id:"MH9",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.425946,lng:39.870235,status:"جاهز",shift:"الصباحية"},
+  {id:"MH10",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.424427,lng:39.868784,status:"جاهز",shift:"الصباحية"},
+  {id:"MH11",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.4226793,lng:39.8764637,status:"جاهز",shift:"الصباحية"},
+  {id:"MH12",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.4245944,lng:39.872963,status:"جاهز",shift:"الصباحية"},
+  {id:"MH13",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.4225412,lng:39.8764999,status:"جاهز",shift:"الصباحية"},
+  {id:"MH14",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.42235,lng:39.868068,status:"جاهز",shift:"الصباحية"},
+  {id:"MH15",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.421914,lng:39.869211,status:"جاهز",shift:"الصباحية"},
+  {id:"MH16",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.4236195,lng:39.8730425,status:"جاهز",shift:"الصباحية"},
+  {id:"MH17",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.419938,lng:39.872258,status:"جاهز",shift:"الصباحية"},
+  {id:"MH18",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.4192968,lng:39.8737655,status:"جاهز",shift:"الصباحية"},
+  {id:"MH19",sector:"الجمرات",type:"راجلة",teams:1,lat:21.4228831,lng:39.8712326,status:"جاهز",shift:"الصباحية"},
+  {id:"MH20",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.4207064,lng:39.8766112,status:"جاهز",shift:"الصباحية"},
+  {id:"MH21",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.4201379,lng:39.8767965,status:"جاهز",shift:"الصباحية"},
+  {id:"MH22",sector:"الجمرات",type:"راجلة",teams:1,lat:21.4253017,lng:39.8670914,status:"جاهز",shift:"الصباحية"},
+  {id:"MH23",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.420791,lng:39.8768115,status:"جاهز",shift:"الصباحية"},
+  {id:"MH24",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.4203237,lng:39.8712934,status:"جاهز",shift:"الصباحية"},
+  {id:"MH25",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.4200672,lng:39.8776463,status:"جاهز",shift:"الصباحية"},
+  {id:"MH26",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.416968,lng:39.8770642,status:"جاهز",shift:"الصباحية"},
+  {id:"MH27",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.4234574,lng:39.8713077,status:"جاهز",shift:"الصباحية"},
+  {id:"MH28",sector:"الجمرات",type:"راجلة",teams:1,lat:21.4187865,lng:39.877496,status:"جاهز",shift:"الصباحية"},
+  {id:"MH29",sector:"الجمرات",type:"راجلة",teams:1,lat:21.4179375,lng:39.8771044,status:"جاهز",shift:"الصباحية"},
+  {id:"MH30",sector:"الجمرات",type:"راجلة",teams:1,lat:21.4213962,lng:39.8708725,status:"جاهز",shift:"الصباحية"},
+  {id:"MH31",sector:"الجمرات",type:"راجلة",teams:1,lat:21.4223201,lng:39.8713338,status:"جاهز",shift:"الصباحية"},
+  {id:"MH32",sector:"الجمرات",type:"راجلة",teams:1,lat:21.4206621,lng:39.8727285,status:"جاهز",shift:"الصباحية"},
+  {id:"MH33",sector:"الجمرات",type:"راجلة",teams:1,lat:21.4214612,lng:39.8732703,status:"جاهز",shift:"الصباحية"},
+  {id:"MH34",sector:"الجمرات",type:"راجلة",teams:1,lat:21.419973,lng:39.8737746,status:"جاهز",shift:"الصباحية"},
+  {id:"MH35",sector:"الجمرات",type:"راجلة",teams:1,lat:21.4205972,lng:39.8744827,status:"جاهز",shift:"الصباحية"},
+  {id:"MH36",sector:"القطارات",type:"قولف",teams:1,lat:21.414271,lng:39.8782808,status:"جاهز",shift:"الصباحية"},
+  {id:"MH37",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4160506,lng:39.8770301,status:"جاهز",shift:"الصباحية"},
+  {id:"MH38",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4153602,lng:39.8767243,status:"جاهز",shift:"الصباحية"},
+  {id:"MH39",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.413141,lng:39.881431,status:"جاهز",shift:"الصباحية"},
+  {id:"MH40",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4136279,lng:39.8809927,status:"جاهز",shift:"الصباحية"},
+  {id:"MH41",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4123168,lng:39.8824058,status:"جاهز",shift:"الصباحية"},
+  {id:"MH42",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4085071,lng:39.8861372,status:"جاهز",shift:"الصباحية"},
+  {id:"MH43",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.407028,lng:39.887845,status:"جاهز",shift:"الصباحية"},
+  {id:"MH44",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4152823,lng:39.8769795,status:"جاهز",shift:"الصباحية"},
+  {id:"MH45",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.42343,lng:39.861696,status:"جاهز",shift:"الصباحية"},
+  {id:"MH46",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.412738,lng:39.882661,status:"جاهز",shift:"الصباحية"},
+  {id:"MH47",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4121327,lng:39.88039,status:"جاهز",shift:"الصباحية"},
+  {id:"MH48",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4114845,lng:39.8840906,status:"جاهز",shift:"الصباحية"},
+  {id:"MH49",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4125658,lng:39.8819877,status:"جاهز",shift:"الصباحية"},
+  {id:"MH50",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4229275,lng:39.8654266,status:"جاهز",shift:"الصباحية"},
+  {id:"MH51",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4208641,lng:39.8683662,status:"جاهز",shift:"الصباحية"},
+  {id:"MH52",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4201062,lng:39.8691237,status:"جاهز",shift:"الصباحية"},
+  {id:"MH53",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.419427,lng:39.870766,status:"جاهز",shift:"الصباحية"},
+  {id:"MH54",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.419418,lng:39.87085,status:"جاهز",shift:"الصباحية"},
+  {id:"MH55",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4202552,lng:39.8694404,status:"جاهز",shift:"الصباحية"},
+  {id:"MH56",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4233439,lng:39.8631645,status:"جاهز",shift:"الصباحية"},
+  {id:"MH57",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.419053,lng:39.871377,status:"جاهز",shift:"الصباحية"},
+  {id:"MH58",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4173595,lng:39.8736606,status:"جاهز",shift:"الصباحية"},
+  {id:"MH59",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4124092,lng:39.8796805,status:"جاهز",shift:"الصباحية"},
+  {id:"MH60",sector:"القطارات",type:"قولف",teams:1,lat:21.4138865,lng:39.8773178,status:"جاهز",shift:"الصباحية"},
+  {id:"MH61",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4192661,lng:39.8708881,status:"جاهز",shift:"الصباحية"},
+  {id:"MH62",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4157995,lng:39.8752371,status:"جاهز",shift:"الصباحية"},
+  {id:"MH63",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4099329,lng:39.8851583,status:"جاهز",shift:"الصباحية"},
+  {id:"MH64",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4066742,lng:39.8890287,status:"جاهز",shift:"الصباحية"},
+  {id:"MH65",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4101968,lng:39.8894904,status:"جاهز",shift:"الصباحية"},
+  {id:"MH66",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4098272,lng:39.8886697,status:"جاهز",shift:"الصباحية"},
+  {id:"MH67",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4145719,lng:39.8849757,status:"جاهز",shift:"الصباحية"},
+  {id:"MH68",sector:"بطن منى الجنوبي",type:"راجلة",teams:1,lat:21.4125191,lng:39.8856227,status:"جاهز",shift:"الصباحية"},
+  {id:"MH69",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4086113,lng:39.8874781,status:"جاهز",shift:"الصباحية"},
+  {id:"MH70",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4140273,lng:39.8836217,status:"جاهز",shift:"الصباحية"},
+  {id:"MH71",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4144967,lng:39.8813124,status:"جاهز",shift:"الصباحية"},
+  {id:"MH72",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4162396,lng:39.8806847,status:"جاهز",shift:"الصباحية"},
+  {id:"MH73",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4178627,lng:39.8799981,status:"جاهز",shift:"الصباحية"},
+  {id:"MH74",sector:"بطن منى الجنوبي",type:"راجلة",teams:1,lat:21.4112106,lng:39.8857311,status:"جاهز",shift:"الصباحية"},
+  {id:"MH75",sector:"بطن منى الجنوبي",type:"راجلة",teams:1,lat:21.4076471,lng:39.8899628,status:"جاهز",shift:"الصباحية"},
+  {id:"MH76",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4093845,lng:39.8907603,status:"جاهز",shift:"الصباحية"},
+  {id:"MH77",sector:"بطن منى الجنوبي",type:"مركبة اسعافية",teams:1,lat:21.4133375,lng:39.8826844,status:"جاهز",shift:"الصباحية"},
+  {id:"MH78",sector:"بطن منى الجنوبي",type:"راجلة",teams:1,lat:21.4163028,lng:39.883399,status:"جاهز",shift:"الصباحية"},
+  {id:"MH79",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4078273,lng:39.8901072,status:"جاهز",shift:"الصباحية"},
+  {id:"MH80",sector:"بطن منى الجنوبي",type:"راجلة",teams:1,lat:21.4166004,lng:39.8789371,status:"جاهز",shift:"الصباحية"},
+  {id:"MH81",sector:"بطن منى الجنوبي",type:"مركبة اسعافية",teams:1,lat:21.4138466,lng:39.88183,status:"جاهز",shift:"الصباحية"},
+  {id:"MH82",sector:"بطن منى الجنوبي",type:"مركبة اسعافية",teams:1,lat:21.4136918,lng:39.8820177,status:"جاهز",shift:"الصباحية"},
+  {id:"MH83",sector:"بطن منى الجنوبي",type:"مركبة اسعافية",teams:1,lat:21.4134848,lng:39.8824484,status:"جاهز",shift:"الصباحية"},
+  {id:"MH84",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4122543,lng:39.8875193,status:"جاهز",shift:"الصباحية"},
+  {id:"MH85",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4093626,lng:39.8880329,status:"جاهز",shift:"الصباحية"},
+  {id:"MH86",sector:"بطن منى الشمالي",type:"مركبة اسعافية",teams:1,lat:21.4193403,lng:39.8812049,status:"جاهز",shift:"الصباحية"},
+  {id:"MH87",sector:"بطن منى الشمالي",type:"مركبة اسعافية",teams:1,lat:21.4142091,lng:39.892582,status:"جاهز",shift:"الصباحية"},
+  {id:"MH88",sector:"بطن منى الشمالي",type:"تدخل سريع",teams:1,lat:21.4165745,lng:39.8846857,status:"جاهز",shift:"الصباحية"},
+  {id:"MH89",sector:"بطن منى الشمالي",type:"مركبة اسعافية",teams:1,lat:21.4203267,lng:39.8812256,status:"جاهز",shift:"الصباحية"},
+  {id:"MH90",sector:"بطن منى الشمالي",type:"مركبة اسعافية",teams:1,lat:21.4203141,lng:39.8811459,status:"جاهز",shift:"الصباحية"},
+  {id:"MH91",sector:"بطن منى الشمالي",type:"مركبة اسعافية",teams:1,lat:21.4197049,lng:39.8839032,status:"جاهز",shift:"الصباحية"},
+  {id:"MH92",sector:"بطن منى الشمالي",type:"قولف",teams:1,lat:21.4106591,lng:39.8919189,status:"جاهز",shift:"الصباحية"},
+  {id:"MH93",sector:"بطن منى الشمالي",type:"قولف",teams:1,lat:21.4128478,lng:39.8925071,status:"جاهز",shift:"الصباحية"},
+  {id:"MH94",sector:"بطن منى الشمالي",type:"مركبة اسعافية",teams:1,lat:21.4154277,lng:39.8905918,status:"جاهز",shift:"الصباحية"},
+  {id:"MH95",sector:"بطن منى الشمالي",type:"قولف",teams:1,lat:21.4137018,lng:39.888756,status:"جاهز",shift:"الصباحية"},
+  {id:"MH96",sector:"بطن منى الشمالي",type:"مركبة اسعافية",teams:1,lat:21.418529,lng:39.8845792,status:"جاهز",shift:"الصباحية"},
+  {id:"MH97",sector:"بطن منى الشمالي",type:"مركبة اسعافية",teams:1,lat:21.4161219,lng:39.8882369,status:"جاهز",shift:"الصباحية"},
+  {id:"MH98",sector:"بطن منى الشمالي",type:"مركبة اسعافية",teams:1,lat:21.4193403,lng:39.8812049,status:"جاهز",shift:"الصباحية"},
+  {id:"MH99",sector:"بطن منى الشمالي",type:"راجلة",teams:1,lat:21.4178668,lng:39.885717,status:"جاهز",shift:"الصباحية"},
+  {id:"MH100",sector:"بطن منى الشمالي",type:"راجلة",teams:1,lat:21.4171427,lng:39.8836652,status:"جاهز",shift:"الصباحية"},
+  {id:"MH101",sector:"بطن منى الشمالي",type:"راجلة",teams:1,lat:21.4155846,lng:39.8878333,status:"جاهز",shift:"الصباحية"},
+  {id:"MH102",sector:"بطن منى الشمالي",type:"قولف",teams:1,lat:21.4182014,lng:39.8809615,status:"جاهز",shift:"الصباحية"},
+  {id:"MH103",sector:"بطن منى الشمالي",type:"قولف",teams:1,lat:21.4176508,lng:39.8823898,status:"جاهز",shift:"الصباحية"},
+  {id:"MH104",sector:"بطن منى الشمالي",type:"قولف",teams:1,lat:21.4138279,lng:39.8904369,status:"جاهز",shift:"الصباحية"},
+  {id:"MH105",sector:"بطن منى الشمالي",type:"قولف",teams:1,lat:21.412497,lng:39.8903364,status:"جاهز",shift:"الصباحية"},
+  {id:"MH106",sector:"بطن منى الشمالي",type:"قولف",teams:1,lat:21.4153377,lng:39.8861448,status:"جاهز",shift:"الصباحية"},
+  {id:"MH107",sector:"بطن منى الشمالي",type:"قولف",teams:1,lat:21.4183002,lng:39.8834344,status:"جاهز",shift:"الصباحية"},
+  {id:"MH108",sector:"بطن منى الشمالي",type:"تدخل سريع",teams:1,lat:21.4148416,lng:39.8871924,status:"جاهز",shift:"الصباحية"},
+  {id:"MH109",sector:"بطن منى الشمالي",type:"راجلة",teams:1,lat:21.4168485,lng:39.8862187,status:"جاهز",shift:"الصباحية"},
+  {id:"MH110",sector:"بطن منى الشمالي",type:"تدخل سريع",teams:1,lat:21.4131959,lng:39.8883795,status:"جاهز",shift:"الصباحية"},
+  {id:"MH111",sector:"بطن منى الشمالي",type:"راجلة",teams:1,lat:21.4103555,lng:39.8914814,status:"جاهز",shift:"الصباحية"},
+  {id:"MH112",sector:"الشعيبين",type:"مركبة اسعافية",teams:1,lat:21.4131758,lng:39.9008867,status:"جاهز",shift:"الصباحية"},
+  {id:"MH113",sector:"الشعيبين",type:"مركبة اسعافية",teams:1,lat:21.4185277,lng:39.895871,status:"جاهز",shift:"الصباحية"},
+  {id:"MH114",sector:"الشعيبين",type:"مركبة اسعافية",teams:1,lat:21.419911,lng:39.8925505,status:"جاهز",shift:"الصباحية"},
+  {id:"MH115",sector:"الشعيبين",type:"مركبة اسعافية",teams:1,lat:21.4294735,lng:39.9054542,status:"جاهز",shift:"الصباحية"},
+  {id:"MH116",sector:"الشعيبين",type:"مركبة اسعافية",teams:1,lat:21.4244071,lng:39.8998937,status:"جاهز",shift:"الصباحية"},
+  {id:"MH117",sector:"الشعيبين",type:"مركبة اسعافية",teams:1,lat:21.4205294,lng:39.8923298,status:"جاهز",shift:"الصباحية"},
+  {id:"MH118",sector:"الشعيبين",type:"مركبة اسعافية",teams:1,lat:21.4240413,lng:39.8951289,status:"جاهز",shift:"الصباحية"},
+  {id:"MH119",sector:"الشعيبين",type:"مركبة اسعافية",teams:1,lat:21.4116982,lng:39.9093006,status:"جاهز",shift:"الصباحية"},
+  {id:"MH120",sector:"الشعيبين",type:"مركبة اسعافية",teams:1,lat:21.4114686,lng:39.9094944,status:"جاهز",shift:"الصباحية"},
+  {id:"MH121",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.4125453,lng:39.8959471,status:"جاهز",shift:"الصباحية"},
+  {id:"MH122",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.4030243,lng:39.8948683,status:"جاهز",shift:"الصباحية"},
+  {id:"MH123",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.4031416,lng:39.8940651,status:"جاهز",shift:"الصباحية"},
+  {id:"MH124",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.405504,lng:39.8891763,status:"جاهز",shift:"الصباحية"},
+  {id:"MH125",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.4110131,lng:39.8987977,status:"جاهز",shift:"الصباحية"},
+  {id:"MH126",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.4070409,lng:39.8974509,status:"جاهز",shift:"الصباحية"},
+  {id:"MH127",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.4122599,lng:39.8960615,status:"جاهز",shift:"الصباحية"},
+  {id:"MH128",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.4092911,lng:39.8915339,status:"جاهز",shift:"الصباحية"},
+  {id:"MH129",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.4116284,lng:39.8929019,status:"جاهز",shift:"الصباحية"},
+  {id:"MH130",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.4054508,lng:39.8901446,status:"جاهز",shift:"الصباحية"},
+  {id:"MH131",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.4028988,lng:39.8948493,status:"جاهز",shift:"الصباحية"},
+  {id:"MH132",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.4037029,lng:39.893358,status:"جاهز",shift:"الصباحية"},
+  {id:"MH133",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.4013019,lng:39.8964704,status:"جاهز",shift:"الصباحية"},
+  {id:"MH134",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.397855,lng:39.8995292,status:"جاهز",shift:"الصباحية"},
+  {id:"MH135",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.3952977,lng:39.90072,status:"جاهز",shift:"الصباحية"},
+  {id:"MH136",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.4017411,lng:39.905956,status:"جاهز",shift:"الصباحية"},
+  {id:"MH137",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.3995185,lng:39.8998245,status:"جاهز",shift:"الصباحية"},
+  {id:"MH138",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.4029697,lng:39.8979496,status:"جاهز",shift:"الصباحية"},
+  {id:"MH139",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.4030097,lng:39.8979496,status:"جاهز",shift:"الصباحية"},
+  {id:"MH140",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.4058664,lng:39.9019533,status:"جاهز",shift:"الصباحية"},
+  {id:"MH141",sector:"منى الجديد 2",type:"قولف",teams:1,lat:21.4104178,lng:39.9018903,status:"جاهز",shift:"الصباحية"},
+  {id:"MH142",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.4028911,lng:39.8980762,status:"جاهز",shift:"الصباحية"},
+  {id:"MH143",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.4028661,lng:39.8981352,status:"جاهز",shift:"الصباحية"},
+  {id:"MH144",sector:"منى الجديد 2",type:"قولف",teams:1,lat:21.4059077,lng:39.8978724,status:"جاهز",shift:"الصباحية"},
+  {id:"MH145",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.4011816,lng:39.9003908,status:"جاهز",shift:"الصباحية"},
+  {id:"MH146",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.3959698,lng:39.9073243,status:"جاهز",shift:"الصباحية"},
+  {id:"MH147",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.3958074,lng:39.9038401,status:"جاهز",shift:"الصباحية"},
+  {id:"MH148",sector:"منى الجديد 2",type:"قولف",teams:1,lat:21.3935148,lng:39.905436,status:"جاهز",shift:"الصباحية"}
+];
+
+/* ═══════════════════════════════════════════
+   بيانات الخريطة والداشبورد المباشرة
+   ═══════════════════════════════════════════ */
+let liveDeploymentData = [...staticDeploymentPoints];
+let mapInstance = null;
+let mapMarkers = [];
+
+/* ─── تبديل التابات الرئيسية ─── */
+function switchMainTab(tabId, btn){
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.main-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabId)?.classList.add('active');
+  btn?.classList.add('active');
+  if(tabId === 'tabMap') initMap();
+}
+
+/* ─── ألوان حسب الحالة ─── */
+function getStatusColor(status){
+  const s = (status || '').trim();
+  if(s === 'جاهز') return '#00b894';
+  if(s === 'مدعم') return '#0b5ed7';
+  if(s === 'اوفرلاب') return '#fdcb6e';
+  if(s === 'خارج الخدمة') return '#d63031';
+  if(s === 'متعطلة' || s === 'موقوف') return '#636e72';
+  if(s === 'منقول') return '#e17055';
+  return '#6c5ce7';
+}
+
+/* ─── أيقونات حسب نوع الوحدة ─── */
+function getTypeIcon(type){
+  const t = (type || '').trim();
+  if(t.includes('مركبة') || t.includes('إسعاف') || t.includes('اسعاف')) return '🚑';
+  if(t.includes('قولف')) return '🏎️';
+  if(t.includes('راجلة')) return '🚶';
+  if(t.includes('تدخل سريع')) return '⚡';
+  return '📍';
+}
+
+/* ─── تهيئة الخريطة ─── */
+function initMap(){
+  if(mapInstance) {
+    mapInstance.invalidateSize();
+    return;
+  }
+  mapInstance = L.map('deploymentMap').setView([21.4150, 39.8850], 14);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap',
+    maxZoom: 19
+  }).addTo(mapInstance);
+  renderMapMarkers(liveDeploymentData);
+}
+
+/* ─── عرض النقاط على الخريطة ─── */
+function renderMapMarkers(data){
+  mapMarkers.forEach(m => mapInstance.removeLayer(m));
+  mapMarkers = [];
+  data.forEach(pt => {
+    if(!pt.lat || !pt.lng) return;
+    const color = getStatusColor(pt.status);
+    const icon = L.divIcon({
+      className: 'custom-marker',
+      html: `<div style="background:${color};width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.3);cursor:pointer">${getTypeIcon(pt.type)}</div>`,
+      iconSize: [28, 28],
+      iconAnchor: [14, 14]
+    });
+    const marker = L.marker([pt.lat, pt.lng], {icon}).addTo(mapInstance);
+    marker.bindPopup(`
+      <div style="font-family:Cairo,sans-serif;direction:rtl;min-width:200px">
+        <div style="font-weight:800;font-size:1rem;color:#c1121f;margin-bottom:6px">${pt.id}</div>
+        <table style="font-size:.82rem;width:100%">
+          <tr><td style="font-weight:700;padding:2px 8px">القطاع</td><td>${pt.sector}</td></tr>
+          <tr><td style="font-weight:700;padding:2px 8px">النوع</td><td>${pt.type}</td></tr>
+          <tr><td style="font-weight:700;padding:2px 8px">الحالة</td><td><span style="background:${color};color:#fff;padding:2px 8px;border-radius:10px;font-size:.75rem">${pt.status}</span></td></tr>
+          <tr><td style="font-weight:700;padding:2px 8px">الفرق</td><td>${pt.teams}</td></tr>
+          <tr><td style="font-weight:700;padding:2px 8px">المناوبة</td><td>${pt.shift || '-'}</td></tr>
+        </table>
+        <div style="margin-top:8px;text-align:center">
+          <a href="https://www.google.com/maps?q=${pt.lat},${pt.lng}" target="_blank" style="color:#0b5ed7;font-size:.8rem">فتح في Google Maps</a>
+        </div>
+      </div>
+    `);
+    mapMarkers.push(marker);
+  });
+  document.getElementById('mapPointCount').textContent = `النقاط المعروضة: ${data.length} من ${liveDeploymentData.length}`;
+}
+
+/* ─── فلترة الخريطة ─── */
+function applyMapFilters(){
+  const sector = document.getElementById('mapFilterSector').value;
+  const status = document.getElementById('mapFilterStatus').value;
+  const type = document.getElementById('mapFilterType').value;
+  const shift = document.getElementById('mapFilterShift').value;
+
+  let filtered = liveDeploymentData.filter(pt => {
+    if(sector !== 'الكل' && pt.sector !== sector) return false;
+    if(status !== 'الكل' && pt.status !== status) return false;
+    if(type !== 'الكل'){
+      const t = (pt.type || '').trim();
+      if(type === 'مركبة اسعافية' && !t.includes('مركبة')) return false;
+      if(type === 'قولف' && !t.includes('قولف')) return false;
+      if(type === 'راجلة' && !t.includes('راجلة')) return false;
+      if(type === 'تدخل سريع' && !t.includes('تدخل')) return false;
+    }
+    if(shift !== 'الكل' && pt.shift !== shift) return false;
+    return true;
+  });
+  renderMapMarkers(filtered);
+}
+
+function resetMapFilters(){
+  document.getElementById('mapFilterSector').value = 'الكل';
+  document.getElementById('mapFilterStatus').value = 'الكل';
+  document.getElementById('mapFilterType').value = 'الكل';
+  document.getElementById('mapFilterShift').value = 'الكل';
+  renderMapMarkers(liveDeploymentData);
+}
+
+/* ─── تحديث الداشبورد ─── */
+function updateDashboard(data){
+  // KPIs
+  const total = data.length;
+  const ready = data.filter(d => d.status === 'جاهز').length;
+  const supported = data.filter(d => d.status === 'مدعم').length;
+  const oos = data.filter(d => d.status === 'خارج الخدمة').length;
+  const broken = data.filter(d => d.status === 'متعطلة' || d.status === 'موقوف').length;
+
+  document.getElementById('kpi_total').textContent = total;
+  document.getElementById('kpi_ready').textContent = ready;
+  document.getElementById('kpi_supported').textContent = supported;
+  document.getElementById('kpi_oos').textContent = oos;
+  document.getElementById('kpi_broken').textContent = broken;
+
+  // Sector Table
+  const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
+  const sectorBody = document.querySelector('#dashSectorTable tbody');
+  sectorBody.innerHTML = '';
+  sectors.forEach(sec => {
+    const pts = data.filter(d => d.sector === sec);
+    const r = pts.filter(d => d.status === 'جاهز').length;
+    const s = pts.filter(d => d.status === 'مدعم').length;
+    const o = pts.filter(d => d.status === 'خارج الخدمة').length;
+    const b = pts.filter(d => d.status === 'متعطلة' || d.status === 'موقوف').length;
+    sectorBody.innerHTML += `<tr>
+      <td style="font-weight:700">${sec}</td>
+      <td>${pts.length}</td>
+      <td><span class="status-badge ready">${r}</span></td>
+      <td><span class="status-badge supported">${s}</span></td>
+      <td><span class="status-badge oos">${o}</span></td>
+      <td><span class="status-badge broken">${b}</span></td>
+    </tr>`;
+  });
+
+  // Type Table
+  const types = {};
+  data.forEach(d => {
+    let t = (d.type || 'أخرى').trim();
+    if(t.includes('مركبة') || t.includes('إسعاف') || t.includes('اسعاف')) t = 'مركبة إسعافية';
+    types[t] = (types[t] || 0) + 1;
+  });
+  const typeBody = document.querySelector('#dashTypeTable tbody');
+  typeBody.innerHTML = '';
+  Object.entries(types).sort((a,b) => b[1]-a[1]).forEach(([t,c]) => {
+    typeBody.innerHTML += `<tr>
+      <td style="font-weight:700">${getTypeIcon(t)} ${t}</td>
+      <td>${c}</td>
+      <td>${total ? Math.round(c/total*100) : 0}%</td>
+    </tr>`;
+  });
+
+  // Status Chart (simple visual bars)
+  const statuses = [
+    {name:'جاهز',count:ready,color:'#00b894'},
+    {name:'مدعم',count:supported,color:'#0b5ed7'},
+    {name:'خارج الخدمة',count:oos,color:'#d63031'},
+    {name:'متعطلة',count:broken,color:'#636e72'}
+  ];
+  const chartEl = document.getElementById('dashStatusChart');
+  chartEl.innerHTML = '';
+  statuses.forEach(s => {
+    const pct = total ? Math.round(s.count/total*100) : 0;
+    chartEl.innerHTML += `
+      <div style="text-align:center;min-width:80px">
+        <div style="font-size:1.6rem;font-weight:900;color:${s.color}">${s.count}</div>
+        <div style="font-size:.72rem;color:var(--muted);margin-bottom:4px">${s.name}</div>
+        <div style="background:var(--line);border-radius:6px;height:8px;overflow:hidden">
+          <div style="background:${s.color};height:100%;width:${pct}%;border-radius:6px;transition:width .5s"></div>
+        </div>
+        <div style="font-size:.7rem;color:var(--muted);margin-top:2px">${pct}%</div>
+      </div>
+    `;
+  });
+
+  // Last Update
+  document.getElementById('dashLastUpdate').innerHTML = `
+    <div style="font-size:.85rem;color:var(--success);font-weight:700">
+      <i class="fas fa-check-circle"></i> تم تحديث البيانات
+    </div>
+    <div style="font-size:.78rem;color:var(--muted);margin-top:4px">
+      ${new Date().toLocaleString('ar-SA')} | إجمالي ${total} نقطة
+    </div>
+  `;
+}
+
+/* ─── جلب البيانات من Google Sheets وتحديث الخريطة والداشبورد ─── */
+async function loadLiveDeploymentData(){
+  try {
+    const data = await fetchDeploymentFromSheet();
+    if(data && data.length > 0){
+      liveDeploymentData = data.map(d => ({
+        id: d["الرمز"] || d["اسم النقطة"] || '',
+        sector: d["القطاع"] || '',
+        type: d["نوع الآلية"] || d["الالية المشغلة بالنقطة"] || '',
+        teams: parseInt(d["عدد الفرق الفعلي"] || d["عدد الفرق بالنقطة"] || 1),
+        lat: parseFloat(d["Latitude"] || 0),
+        lng: parseFloat(d["Longitude"] || 0),
+        status: d["الحالة"] || 'جاهز',
+        shift: d["مناوبة النقطة"] || d["العرض الزمني"] || 'الصباحية'
+      })).filter(d => d.lat && d.lng);
+    }
+  } catch(e) {
+    console.log('استخدام البيانات الثابتة:', e);
+  }
+  updateDashboard(liveDeploymentData);
+  if(mapInstance) renderMapMarkers(liveDeploymentData);
+}
+
+// تحميل البيانات عند بدء التشغيل
+loadLiveDeploymentData();
+
+// تحديث تلقائي كل 3 دقائق
+setInterval(loadLiveDeploymentData, 180000);
+
   </script>
 </body>
 </html>

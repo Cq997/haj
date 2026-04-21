@@ -1541,10 +1541,23 @@
     });
 
     function activatePanel(targetId){
+      console.log('Activating panel:', targetId);
       document.querySelectorAll('.nav li').forEach(i => i.classList.remove('active'));
       document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
-      document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
-      document.getElementById(targetId)?.classList.add('active');
+      
+      document.querySelectorAll('.panel').forEach(panel => {
+        panel.classList.remove('active');
+        panel.style.display = 'none'; // Force hide
+      });
+      
+      const target = document.getElementById(targetId);
+      if(target) {
+        target.classList.add('active');
+        target.style.display = 'block'; // Force show
+        console.log('Panel activated successfully');
+      } else {
+        console.error('Panel not found:', targetId);
+      }
       window.scrollTo({top:0,behavior:'smooth'});
     }
 
@@ -4037,11 +4050,25 @@ let mapMarkers = [];
 
 /* ─── تبديل التابات الرئيسية ─── */
 function switchMainTab(tabId, btn){
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  console.log('Switching tab to:', tabId);
+  document.querySelectorAll('.tab-content').forEach(t => {
+    t.classList.remove('active');
+    t.style.display = 'none';
+  });
   document.querySelectorAll('.main-tabs .tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(tabId)?.classList.add('active');
+  
+  const target = document.getElementById(tabId);
+  if(target) {
+    target.classList.add('active');
+    target.style.display = 'block';
+  }
   btn?.classList.add('active');
-  if(tabId === 'tabMap') initMap();
+  if(tabId === 'tabMap') {
+    setTimeout(() => {
+      initMap();
+      if(mapInstance) mapInstance.invalidateSize();
+    }, 100);
+  }
 }
 
 /* ─── ألوان حسب الحالة ─── */
@@ -4072,6 +4099,9 @@ function initMap(){
     mapInstance.invalidateSize();
     return;
   }
+  const mapContainer = document.getElementById('deploymentMap');
+  if(!mapContainer) return;
+  
   mapInstance = L.map('deploymentMap').setView([21.4150, 39.8850], 14);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap',
@@ -4082,6 +4112,7 @@ function initMap(){
 
 /* ─── عرض النقاط على الخريطة ─── */
 function renderMapMarkers(data){
+  if(!mapInstance) return;
   mapMarkers.forEach(m => mapInstance.removeLayer(m));
   mapMarkers = [];
   data.forEach(pt => {
@@ -4101,7 +4132,6 @@ function renderMapMarkers(data){
           <tr><td style="font-weight:700;padding:2px 8px">القطاع</td><td>${pt.sector}</td></tr>
           <tr><td style="font-weight:700;padding:2px 8px">النوع</td><td>${pt.type}</td></tr>
           <tr><td style="font-weight:700;padding:2px 8px">الحالة</td><td><span style="background:${color};color:#fff;padding:2px 8px;border-radius:10px;font-size:.75rem">${pt.status}</span></td></tr>
-          <tr><td style="font-weight:700;padding:2px 8px">الفرق</td><td>${pt.teams}</td></tr>
           <tr><td style="font-weight:700;padding:2px 8px">المناوبة</td><td>${pt.shift || '-'}</td></tr>
         </table>
         <div style="margin-top:8px;text-align:center">
@@ -4111,7 +4141,8 @@ function renderMapMarkers(data){
     `);
     mapMarkers.push(marker);
   });
-  document.getElementById('mapPointCount').textContent = `النقاط المعروضة: ${data.length} من ${liveDeploymentData.length}`;
+  const countEl = document.getElementById('mapPointCount');
+  if(countEl) countEl.textContent = `النقاط المعروضة: ${data.length} من ${liveDeploymentData.length}`;
 }
 
 /* ─── فلترة الخريطة ─── */
@@ -4147,40 +4178,39 @@ function resetMapFilters(){
 
 /* ─── تحديث الداشبورد ─── */
 function updateDashboard(data){
-  // KPIs
   const total = data.length;
   const ready = data.filter(d => d.status === 'جاهز').length;
   const supported = data.filter(d => d.status === 'مدعم').length;
   const oos = data.filter(d => d.status === 'خارج الخدمة').length;
   const broken = data.filter(d => d.status === 'متعطلة' || d.status === 'موقوف').length;
 
-  document.getElementById('kpi_total').textContent = total;
-  document.getElementById('kpi_ready').textContent = ready;
-  document.getElementById('kpi_supported').textContent = supported;
-  document.getElementById('kpi_oos').textContent = oos;
-  document.getElementById('kpi_broken').textContent = broken;
+  if(document.getElementById('kpi_total')) document.getElementById('kpi_total').textContent = total;
+  if(document.getElementById('kpi_ready')) document.getElementById('kpi_ready').textContent = ready;
+  if(document.getElementById('kpi_supported')) document.getElementById('kpi_supported').textContent = supported;
+  if(document.getElementById('kpi_oos')) document.getElementById('kpi_oos').textContent = oos;
+  if(document.getElementById('kpi_broken')) document.getElementById('kpi_broken').textContent = broken;
 
-  // Sector Table
   const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
   const sectorBody = document.querySelector('#dashSectorTable tbody');
-  sectorBody.innerHTML = '';
-  sectors.forEach(sec => {
-    const pts = data.filter(d => d.sector === sec);
-    const r = pts.filter(d => d.status === 'جاهز').length;
-    const s = pts.filter(d => d.status === 'مدعم').length;
-    const o = pts.filter(d => d.status === 'خارج الخدمة').length;
-    const b = pts.filter(d => d.status === 'متعطلة' || d.status === 'موقوف').length;
-    sectorBody.innerHTML += `<tr>
-      <td style="font-weight:700">${sec}</td>
-      <td>${pts.length}</td>
-      <td><span class="status-badge ready">${r}</span></td>
-      <td><span class="status-badge supported">${s}</span></td>
-      <td><span class="status-badge oos">${o}</span></td>
-      <td><span class="status-badge broken">${b}</span></td>
-    </tr>`;
-  });
+  if(sectorBody){
+    sectorBody.innerHTML = '';
+    sectors.forEach(sec => {
+      const pts = data.filter(d => d.sector === sec);
+      const r = pts.filter(d => d.status === 'جاهز').length;
+      const s = pts.filter(d => d.status === 'مدعم').length;
+      const o = pts.filter(d => d.status === 'خارج الخدمة').length;
+      const b = pts.filter(d => d.status === 'متعطلة' || d.status === 'موقوف').length;
+      sectorBody.innerHTML += `<tr>
+        <td style="font-weight:700">${sec}</td>
+        <td>${pts.length}</td>
+        <td><span class="status-badge ready">${r}</span></td>
+        <td><span class="status-badge supported">${s}</span></td>
+        <td><span class="status-badge oos">${o}</span></td>
+        <td><span class="status-badge broken">${b}</span></td>
+      </tr>`;
+    });
+  }
 
-  // Type Table
   const types = {};
   data.forEach(d => {
     let t = (d.type || 'أخرى').trim();
@@ -4188,68 +4218,30 @@ function updateDashboard(data){
     types[t] = (types[t] || 0) + 1;
   });
   const typeBody = document.querySelector('#dashTypeTable tbody');
-  typeBody.innerHTML = '';
-  Object.entries(types).sort((a,b) => b[1]-a[1]).forEach(([t,c]) => {
-    typeBody.innerHTML += `<tr>
-      <td style="font-weight:700">${getTypeIcon(t)} ${t}</td>
-      <td>${c}</td>
-      <td>${total ? Math.round(c/total*100) : 0}%</td>
-    </tr>`;
-  });
-
-  // Status Chart (simple visual bars)
-  const statuses = [
-    {name:'جاهز',count:ready,color:'#00b894'},
-    {name:'مدعم',count:supported,color:'#0b5ed7'},
-    {name:'خارج الخدمة',count:oos,color:'#d63031'},
-    {name:'متعطلة',count:broken,color:'#636e72'}
-  ];
-  const chartEl = document.getElementById('dashStatusChart');
-  chartEl.innerHTML = '';
-  statuses.forEach(s => {
-    const pct = total ? Math.round(s.count/total*100) : 0;
-    chartEl.innerHTML += `
-      <div style="text-align:center;min-width:80px">
-        <div style="font-size:1.6rem;font-weight:900;color:${s.color}">${s.count}</div>
-        <div style="font-size:.72rem;color:var(--muted);margin-bottom:4px">${s.name}</div>
-        <div style="background:var(--line);border-radius:6px;height:8px;overflow:hidden">
-          <div style="background:${s.color};height:100%;width:${pct}%;border-radius:6px;transition:width .5s"></div>
-        </div>
-        <div style="font-size:.7rem;color:var(--muted);margin-top:2px">${pct}%</div>
-      </div>
-    `;
-  });
-
-  // Support Summary
-  updateSupportSummary();
-
-  // Last Update
-  document.getElementById('dashLastUpdate').innerHTML = `
-    <div style="font-size:.85rem;color:var(--success);font-weight:700">
-      <i class="fas fa-check-circle"></i> تم تحديث البيانات
-    </div>
-    <div style="font-size:.78rem;color:var(--muted);margin-top:4px">
-      ${new Date().toLocaleString('ar-SA')} | إجمالي ${total} نقطة
-    </div>
-  `;
+  if(typeBody){
+    typeBody.innerHTML = '';
+    Object.entries(types).sort((a,b) => b[1]-a[1]).forEach(([t,c]) => {
+      typeBody.innerHTML += `<tr>
+        <td style="font-weight:700">${getTypeIcon(t)} ${t}</td>
+        <td>${c}</td>
+        <td>${total ? Math.round(c/total*100) : 0}%</td>
+      </tr>`;
+    });
+  }
 }
 
-/* ═══════════════════════════════════════════
-   تحديث ملخص عمليات الدعم في الداشبورد
-   ═══════════════════════════════════════════ */
+/* ─── جلب ملخص الدعم ─── */
 async function updateSupportSummary() {
   try {
     const response = await fetch(SCRIPT_URL + '?action=getSupportData');
-    let data = [];
+    if (!response.ok) throw new Error('Network response was not ok');
+    const data = await response.json();
     
-    if (response.ok) {
-      data = await response.json();
-    } else {
-      data = window.supportPlanData || [];
-    }
-    
+    const tbody = document.querySelector('#dashSupportTable tbody');
+    if(!tbody) return;
+
     if (!data || data.length === 0) {
-      document.querySelector('#dashSupportTable tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم -</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم -</td></tr>';
       return;
     }
 
@@ -4257,70 +4249,17 @@ async function updateSupportSummary() {
     data.forEach(row => {
       const type = row['القطاع المدعم له'] || row['النطاق المدعم له'] || row['إلى'] || 'غير محدد';
       const date = row['التاريخ'] || '-';
-      const teams = parseInt(row['عدد الفرق'] || 1);
-      const key = `${type}|${date}`;
+      const teams = parseInt(row['عدد الفرق'] || row['عدد الفرق المدعمة'] || 1);
+      const period = row['الفترة'] || '-';
+      const key = `${type}|${date}|${period}`;
       
       if (!supportMap[key]) {
-        supportMap[key] = { type, date, count: 0, teams: 0 };
+        supportMap[key] = { type, date, period, count: 0, teams: 0 };
       }
       supportMap[key].count++;
       supportMap[key].teams += teams;
     });
 
-    const tbody = document.querySelector('#dashSupportTable tbody');
-    tbody.innerHTML = '';
-    Object.values(supportMap).slice(0, 10).forEach(item => {
-      tbody.innerHTML += `<tr>
-        <td style="font-weight:700">${item.type}</td>
-        <td>${item.count}</td>
-        <td>${item.teams}</td>
-        <td>${item.date}</td>
-        <td>-</td>
-      </tr>`;
-    });
-  } catch (err) {
-    console.error('Support Summary Error:', err);
-    document.querySelector('#dashSupportTable tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--danger)">- خطأ في تحميل البيانات -</td></tr>';
-  }
-};
-    
-    try {
-      result = await response.json();
-    } catch (e) {
-      console.log('لم يتم جلب البيانات من Google Sheets، سيتم استخدام البيانات المحلية');
-      result.data = window.supportPlanData || [];
-    }
-    
-    if (!result.data || result.data.length === 0) {
-      document.querySelector('#dashSupportTable tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم -</td></tr>';
-      return;
-    }
-
-    // تجميع البيانات حسب القطاع/النطاق والتاريخ والفترة
-    const supportMap = {};
-    result.data.forEach(row => {
-      const type = row['النوع'] || (row['نوع التدعيم'] === 'داخل_النطاق' ? 
-        (row['القطاع المدعم له'] || 'بين القطاعات') : 
-        (row['النطاق المدعم له'] || 'بين النطاقات'));
-      const date = row['التاريخ'] || '-';
-      const period = row['الفترة'] || '-';
-      const key = `${type}|${date}|${period}`;
-      
-      if (!supportMap[key]) {
-        supportMap[key] = {
-          type,
-          date,
-          period,
-          count: 0,
-          teams: 0
-        };
-      }
-      supportMap[key].count++;
-      supportMap[key].teams += parseInt(row['عدد الفرق'] || row['عدد الفرق المدعمة'] || 1);
-    });
-
-    // عرض البيانات في الجدول
-    const tbody = document.querySelector('#dashSupportTable tbody');
     tbody.innerHTML = '';
     Object.values(supportMap).slice(0, 10).forEach(item => {
       tbody.innerHTML += `<tr>
@@ -4332,12 +4271,13 @@ async function updateSupportSummary() {
       </tr>`;
     });
   } catch (err) {
-    console.error('خطأ في جلب بيانات الدعم:', err);
-    document.querySelector('#dashSupportTable tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--danger)">- خطأ في تحميل البيانات -</td></tr>';
+    console.error('Support Summary Error:', err);
+    const tbody = document.querySelector('#dashSupportTable tbody');
+    if(tbody) tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--danger)">- خطأ في تحميل البيانات -</td></tr>';
   }
 }
 
-/* ─── جلب البيانات من Google Sheets وتحديث الخريطة والداشبورد ─── */
+/* ─── جلب البيانات المباشرة ─── */
 async function loadLiveDeploymentData(){
   try {
     // 1. Reset statuses to default
@@ -4347,13 +4287,11 @@ async function loadLiveDeploymentData(){
     const deploymentRes = await fetch(`${SCRIPT_URL}?action=getDeployment`);
     if(deploymentRes.ok){
       const planData = await deploymentRes.json();
-      
       planData.forEach(row => {
         const code = (row['الرمز'] || row['اسم النقطة'] || '').trim().toUpperCase();
         const status = row['الحالة'] || 'جاهز';
         const shift = row['المناوبة'] || 'الصباحية';
         
-        // Match point by code
         const pt = liveDeploymentData.find(p => p.id.toUpperCase() === code);
         if(pt) {
           pt.status = status;
@@ -4374,103 +4312,27 @@ async function loadLiveDeploymentData(){
       });
     }
 
-  } catch(e) {
-    console.log('Error loading live data:', e);
-  }
-  updateDashboard(liveDeploymentData);
-  if(mapInstance) renderMapMarkers(liveDeploymentData);
-}));
-    
-    // 2. Fetch deployment plan (readiness)
-    const deploymentRes = await fetch(`${SCRIPT_URL}?action=getDeployment`);
-    if(deploymentRes.ok){
-      const planData = await deploymentRes.json();
-      
-      planData.forEach(row => {
-        const code = (row['الرمز'] || row['اسم النقطة'] || '').trim().toUpperCase();
-        const status = row['الحالة'] || 'جاهز';
-        const shift = row['المناوبة'] || 'الصباحية';
-        
-        // Match point by code
-        const pt = liveDeploymentData.find(p => p.id.toUpperCase() === code);
-        if(pt) {
-          pt.status = status;
-          pt.shift = shift;
-        }
-      });
-    }
-
-    // 3. Fetch logistics (breakdowns)
-    const logisticsRes = await fetch(`${SCRIPT_URL}?action=getLogistics`);
-    if(logisticsRes.ok){
-      const logData = await logisticsRes.json();
-      logData.forEach(row => {
-        const code = (row['الوحدة المتعطلة'] || '').trim().toUpperCase();
-        const status = row['الحالة'] || 'متعطلة';
-        const pt = liveDeploymentData.find(p => p.id.toUpperCase() === code);
-        if(pt) pt.status = status;
-      });
-    }
+    updateSupportSummary();
 
   } catch(e) {
     console.log('Error loading live data:', e);
-  }
-  updateDashboard(liveDeploymentData);
-  if(mapInstance) renderMapMarkers(liveDeploymentData);
-}));
-    
-    // 2. Fetch deployment plan (readiness)
-    const deploymentRes = await fetch();
-    if(deploymentRes.ok){
-      const planData = await deploymentRes.json();
-      const currentShift = document.getElementById('mapFilterShift')?.value || 'الكل';
-      
-      planData.forEach(row => {
-        const code = (row['الرمز'] || row['اسم النقطة'] || '').trim().toUpperCase();
-        const status = row['الحالة'] || 'جاهز';
-        const shift = row['المناوبة'] || 'الصباحية';
-        
-        // Match point by code
-        const pt = liveDeploymentData.find(p => p.id.toUpperCase() === code);
-        if(pt) {
-          pt.status = status;
-          pt.shift = shift;
-        }
-      });
-    }
-
-    // 3. Fetch logistics (breakdowns)
-    const logisticsRes = await fetch();
-    if(logisticsRes.ok){
-      const logData = await logisticsRes.json();
-      logData.forEach(row => {
-        const code = (row['الوحدة المتعطلة'] || '').trim().toUpperCase();
-        const status = row['الحالة'] || 'متعطلة';
-        const pt = liveDeploymentData.find(p => p.id.toUpperCase() === code);
-        if(pt) pt.status = status;
-      });
-    }
-
-  } catch(e) {
-    console.log('Error loading live data:', e);
-  }
-  updateDashboard(liveDeploymentData);
-  if(mapInstance) renderMapMarkers(liveDeploymentData);
-})).filter(d => d.lat && d.lng);
-    }
-  } catch(e) {
-    console.log('استخدام البيانات الثابتة:', e);
   }
   updateDashboard(liveDeploymentData);
   if(mapInstance) renderMapMarkers(liveDeploymentData);
 }
 
 // تحميل البيانات عند بدء التشغيل
-loadLiveDeploymentData();
+window.onload = () => {
+  console.log('Page loaded, initializing...');
+  buildMedicalCheckTable();
+  buildStrategicTable();
+  setDashboardLinks();
+  setMapLink();
+  loadLiveDeploymentData();
+};
 
 // تحديث تلقائي كل 3 دقائق
 setInterval(loadLiveDeploymentData, 180000);
-
   </script>
 </body>
 </html>

@@ -2625,9 +2625,16 @@ ${row["ملاحظات إضافية"]}
         return;
       }
 
-      showAlert('supportPlanAlert', 'success', 'تم حفظ خطة الدعم بنجاح');
+        showAlert('supportPlanAlert','success','تم حفظ خطة الدعم بنجاح');
       
-      let msg = `📋 خطة الدعم - نطاق منى\n\n`;
+      // تخزين البيانات محلياً لتحديث الداشبورد
+      if (!window.supportPlanData) window.supportPlanData = [];
+      window.supportPlanData.push(row);
+      
+      // تحديث الداشبورد بالبيانات الجديدة
+      updateSupportSummary();
+      
+      let msg = `📝 خطة الدعم - نطاق منى\n\n`;
       msg += `📅 التاريخ: ${date}\n`;
       msg += `🕘 الوقت: ${time}\n`;
       msg += `👥 عدد الفرق: ${teamsCount}\n`;
@@ -3049,7 +3056,14 @@ async function updateSupportSummary() {
   try {
     // جلب بيانات الدعم من Google Sheets
     const response = await fetch(SCRIPT_URL + '?action=getSupportData');
-    const result = await response.json();
+    let result = { data: [] };
+    
+    try {
+      result = await response.json();
+    } catch (e) {
+      console.log('لم يتم جلب البيانات من Google Sheets، سيتم استخدام البيانات المحلية');
+      result.data = window.supportPlanData || [];
+    }
     
     if (!result.data || result.data.length === 0) {
       document.querySelector('#dashSupportTable tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم -</td></tr>';

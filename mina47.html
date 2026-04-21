@@ -269,8 +269,9 @@
     }
 
     /* ─── Panels / Forms ─── */
-    .panel{display:none}
-    .panel.active{display:block}
+    .panel{display:none;width:100%;min-height:calc(100vh - 100px)}
+    .panel.active{display:block!important}
+    .panel.active.hidden{display:block!important}
 
     .panel-head{
       display:flex;align-items:center;justify-content:space-between;

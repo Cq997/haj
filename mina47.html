@@ -65,7 +65,7 @@
       border-bottom:1px solid rgba(255,255,255,.12);
       margin-bottom:8px;
     }
-    .sidebar .brand img{width:64px;margin-bottom:6px}
+    .sidebar .brand img{width:100%;max-width:180px;margin-bottom:10px;border-radius:8px}
     .sidebar .brand h2{font-size:1.1rem;font-weight:800;letter-spacing:.5px}
     .sidebar .brand p{font-size:.72rem;opacity:.55;margin-top:2px}
 
@@ -146,6 +146,7 @@
       width:300px;height:300px;border-radius:50%;
       background:rgba(255,255,255,.06);
     }
+    .hero img{width:100%;max-width:320px;margin-bottom:15px;filter:drop-shadow(0 8px 20px rgba(0,0,0,.3));position:relative;z-index:1}
     .hero h1{font-size:1.6rem;font-weight:900;margin-bottom:4px;position:relative;z-index:1}
     .hero p{font-size:.88rem;opacity:.85;position:relative;z-index:1}
     .hero .badge{
@@ -402,7 +403,7 @@
 <div class="layout">
   <aside class="sidebar" id="sidebar">
     <div class="brand">
-      <img src="https://drive.google.com/uc?export=view&id=1S1QgxC1lFN2owv31R5md2k-QAtpda80y">
+      <img src="logo.png" alt="شعار نطاق منى">
       <h2>منصة نطاق منى</h2>
       <p>حج 1447هـ - نسخة مطورة</p>
     </div>
@@ -416,6 +417,7 @@
       <li data-target="deploymentPanel"><i class="fas fa-map-marked-alt"></i> خطة الانتشار</li>
       <li data-target="mapsPanel"><i class="fas fa-map"></i> خرائط النطاق</li>
       <li data-target="methanePanel"><i class="fas fa-triangle-exclamation"></i> رسالة ميثان</li>
+      <li data-target="supportPlanPanel"><i class="fas fa-handshake"></i> خطة الدعم</li>
     </ul>
 
     <div class="quick-toggle" onclick="toggleQuickLinks()">
@@ -430,8 +432,8 @@
   <main>
     <!-- ═══════ Hero ═══════ -->
     <div class="hero">
-      <img src="https://drive.google.com/uc?export=view&id=1wFx_LKNnQgHgS836XBAxWdpkQaP0_Lq7">
-      <h1><i class="fas fa-hospital-alt"></i> منصة نطاق منى</h1>
+      <img src="logo.png" alt="شعار نطاق منى">
+      <h1>منصة نطاق منى</h1>
       <p>نظام إدارة العمليات الإسعافية الميدانية لموسم حج 1447هـ</p>
       <span class="badge"><i class="fas fa-shield-halved"></i> حياكم الله</span>
     </div>
@@ -486,6 +488,17 @@
             <h4><i class="fas fa-signal"></i> نظرة عامة على الحالات</h4>
             <div id="dashStatusChart" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding:10px 0">
             </div>
+          </div>
+
+          <!-- Support Summary -->
+          <div class="dash-card">
+            <h4><i class="fas fa-handshake"></i> ملخص عمليات الدعم</h4>
+            <table class="dash-table" id="dashSupportTable">
+              <thead>
+                <tr><th>النوع</th><th>العدد</th><th>عدد الفرق</th><th>التاريخ</th><th>الفترة</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
           </div>
 
           <!-- Latest Activity -->
@@ -742,14 +755,72 @@
         </div>
 
         <div class="section">
-          <div class="section-title">تصنيف البلاغات الطبية</div>
-          <div class="section-body grid-3">
-            <div class="field"><label for="case_omega">OMEGA</label><input type="number" id="case_omega" min="0" value="0"></div>
-            <div class="field"><label for="case_alpha">ALPHA</label><input type="number" id="case_alpha" min="0" value="0"></div>
-            <div class="field"><label for="case_bravo">BRAVO</label><input type="number" id="case_bravo" min="0" value="0"></div>
-            <div class="field"><label for="case_charly">CHARLY</label><input type="number" id="case_charly" min="0" value="0"></div>
-            <div class="field"><label for="case_delta">DELTA</label><input type="number" id="case_delta" min="0" value="0"></div>
-            <div class="field"><label for="case_echo">ECHO</label><input type="number" id="case_echo" min="0" value="0"></div>
+          <div class="section-title">ملخص بلاغات الأحداث الطارئة</div>
+          <div class="section-body">
+            <div class="field">
+              <label for="has_major_events">هل توجد أحداث طارئة خلال المناوبة؟</label>
+              <select id="has_major_events" onchange="toggleHandoverMethane()">
+                <option value="لا">لا</option>
+                <option value="نعم">نعم</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- METHANE Integrated Section -->
+        <div id="handoverMethaneWrap" class="hidden">
+          <div class="section">
+            <div class="section-title">تفاصيل رسالة ميثان (METHANE)</div>
+            <div class="section-body grid-2">
+              <div class="field">
+                <label for="h_methane_major">M - هل هو حادث جسيم؟</label>
+                <select id="h_methane_major">
+                  <option value="" disabled selected>-- اختر --</option>
+                  <option value="نعم - حادث جسيم جداً">نعم - حادث جسيم جداً</option>
+                  <option value="نعم - حادث جسيم">نعم - حادث جسيم</option>
+                  <option value="لا - حادث عادي">لا - حادث عادي</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="h_methane_location">E - الموقع الدقيق</label>
+                <input type="text" id="h_methane_location" placeholder="اكتب الموقع الدقيق للحادث">
+              </div>
+              <div class="field">
+                <label for="h_methane_type">T - نوع الحادث</label>
+                <select id="h_methane_type">
+                  <option value="" disabled selected>-- اختر نوع الحادث --</option>
+                  <option value="حادث مروري">حادث مروري</option>
+                  <option value="إصابة طبية">إصابة طبية</option>
+                  <option value="حريق">حريق</option>
+                  <option value="غرق">غرق</option>
+                  <option value="حادث سقوط">حادث سقوط</option>
+                  <option value="اختناق">اختناق</option>
+                  <option value="تسمم">تسمم</option>
+                  <option value="صدمة كهربائية">صدمة كهربائية</option>
+                  <option value="أخرى">أخرى</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="h_methane_hazards">H - المخاطر الموجودة</label>
+                <textarea id="h_methane_hazards" placeholder="اكتب المخاطر الموجودة في موقع الحادث"></textarea>
+              </div>
+              <div class="field">
+                <label for="h_methane_access">A - طرق الوصول والخروج</label>
+                <textarea id="h_methane_access" placeholder="اكتب أفضل طرق الوصول للموقع"></textarea>
+              </div>
+              <div class="field">
+                <label for="h_methane_casualties">N - عدد الإصابات ونوعها</label>
+                <textarea id="h_methane_casualties" placeholder="اكتب عدد الإصابات التقريبي وحالتها"></textarea>
+              </div>
+              <div class="field">
+                <label for="h_methane_services">E - الخدمات المطلوبة والموجودة</label>
+                <textarea id="h_methane_services" placeholder="اكتب الخدمات المتواجدة والمطلوبة (دفاع مدني، مرور، إلخ)"></textarea>
+              </div>
+              <div class="field">
+                <label for="h_methane_notes">ملاحظات إضافية للبلاغ</label>
+                <textarea id="h_methane_notes"></textarea>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1332,6 +1403,136 @@
         </div>
       </section>
 
+      <!-- Support Plan Panel -->
+      <section id="supportPlanPanel" class="panel hidden">
+        <div class="panel-head">
+          <div>
+            <h3>خطة الدعم</h3>
+            <p>تسجيل عمليات الدعم والتدعيم بين النطاقات المختلفة أو داخل نطاق منى</p>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">بيانات الدعم الأساسية</div>
+          <div class="section-body grid-2">
+            <div class="field">
+              <label for="support_date">التاريخ</label>
+              <input type="date" id="support_date">
+            </div>
+            <div class="field">
+              <label for="support_time">الوقت</label>
+              <input type="time" id="support_time">
+            </div>
+            <div class="field">
+              <label for="support_teams_count">عدد الفرق المدعمة</label>
+              <input type="number" id="support_teams_count" min="1" value="1">
+            </div>
+            <div class="field">
+              <label for="support_type">نوع التدعيم</label>
+              <select id="support_type" onchange="toggleSupportTypeFields()">
+                <option value="" disabled selected>-- اختر نوع التدعيم --</option>
+                <option value="داخل_النطاق">داخل النطاق (بين قطاعات منى)</option>
+                <option value="خارج_النطاق">خارج النطاق (بين النطاقات الأخرى)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- داخل النطاق -->
+        <div id="internalSupportWrap" class="hidden">
+          <div class="section">
+            <div class="section-title">تفاصيل التدعيم داخل النطاق</div>
+            <div class="section-body grid-2">
+              <div class="field">
+                <label for="support_from_sector">القطاع المدعم منه</label>
+                <select id="support_from_sector">
+                  <option value="" disabled selected>-- اختر القطاع --</option>
+                  <option value="الجمرات">الجمرات</option>
+                  <option value="القطارات">القطارات</option>
+                  <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
+                  <option value="بطن منى الشمالي">بطن منى الشمالي</option>
+                  <option value="الشعيبين">الشعيبين</option>
+                  <option value="منى الجديد 1">منى الجديد 1</option>
+                  <option value="منى الجديد 2">منى الجديد 2</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="support_to_sector">القطاع المدعم له</label>
+                <select id="support_to_sector">
+                  <option value="" disabled selected>-- اختر القطاع --</option>
+                  <option value="الجمرات">الجمرات</option>
+                  <option value="القطارات">القطارات</option>
+                  <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
+                  <option value="بطن منى الشمالي">بطن منى الشمالي</option>
+                  <option value="الشعيبين">الشعيبين</option>
+                  <option value="منى الجديد 1">منى الجديد 1</option>
+                  <option value="منى الجديد 2">منى الجديد 2</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- خارج النطاق -->
+        <div id="externalSupportWrap" class="hidden">
+          <div class="section">
+            <div class="section-title">تفاصيل التدعيم خارج النطاق</div>
+            <div class="section-body grid-2">
+              <div class="field">
+                <label for="support_from_zone">النطاق المدعم منه</label>
+                <select id="support_from_zone">
+                  <option value="" disabled selected>-- اختر النطاق --</option>
+                  <option value="الحرم المكي">الحرم المكي</option>
+                  <option value="العاصمة المقدسة">العاصمة المقدسة</option>
+                  <option value="عرفات">عرفات</option>
+                  <option value="مزدلفة">مزدلفة</option>
+                  <option value="منى">منى</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="support_to_zone">النطاق المدعم له</label>
+                <select id="support_to_zone">
+                  <option value="" disabled selected>-- اختر النطاق --</option>
+                  <option value="الحرم المكي">الحرم المكي</option>
+                  <option value="العاصمة المقدسة">العاصمة المقدسة</option>
+                  <option value="عرفات">عرفات</option>
+                  <option value="مزدلفة">مزدلفة</option>
+                  <option value="منى">منى</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- معلومات إضافية -->
+        <div class="section">
+          <div class="section-title">معلومات إضافية</div>
+          <div class="section-body grid-2">
+            <div class="field">
+              <label for="support_arrival_time">وقت حضور الفرق المدعمة</label>
+              <input type="time" id="support_arrival_time">
+            </div>
+            <div class="field">
+              <label for="support_entry_name">اسم مدخل البيانات</label>
+              <input type="text" id="support_entry_name" placeholder="أدخل اسمك">
+            </div>
+            <div class="field full-width">
+              <label for="support_notes">الملاحظات</label>
+              <textarea id="support_notes" placeholder="أي ملاحظات إضافية عن الدعم المقدم"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-success" onclick="sendSupportPlan()">
+            <i class="fas fa-paper-plane"></i> حفظ وإرسال
+          </button>
+          <button class="btn btn-outline" onclick="clearSupportPlanForm()">
+            <i class="fas fa-eraser"></i> مسح الحقول
+          </button>
+        </div>
+      </section>
+
       <div class="leader-sign">قائد نطاق منى / فهد أحمد الشمري</div>
       <div class="footer">منصة نطاق منى حج 1447 نسخة مطورة - علي 102459@srca</div>
   </main>
@@ -1673,6 +1874,13 @@ async function fetchDeploymentFromSheet(){
       };
     }
 
+    function toggleHandoverMethane(){
+      const val = document.getElementById('has_major_events').value;
+      const wrap = document.getElementById('handoverMethaneWrap');
+      if(val === 'نعم') wrap.classList.remove('hidden');
+      else wrap.classList.add('hidden');
+    }
+
     function buildHandoverMessage(row){
       const sites = (row["مواقع الانتشار"] || 'لايوجد')
         .split('\n')
@@ -1698,6 +1906,21 @@ async function fetchDeploymentFromSheet(){
 - لوحة المركبة: ${plate || '-'}`;
       }).filter(Boolean).join('\n\n') || '• لايوجد';
 
+      let methaneSection = '';
+      if(row["أحداث طارئة"] === 'نعم'){
+        methaneSection = `
+🚨 بلاغ ميثان (METHANE) مدمج:
+• الحالة: ${row["M-حادث جسيم"] || '-'}
+• الموقع: ${row["E-الموقع"] || '-'}
+• النوع: ${row["T-نوع الحادث"] || '-'}
+• المخاطر: ${row["H-المخاطر"] || '-'}
+• الوصول: ${row["A-الوصول"] || '-'}
+• الإصابات: ${row["N-الإصابات"] || '-'}
+• الخدمات: ${row["E-الخدمات"] || '-'}
+• ملاحظات ميثان: ${row["ملاحظات ميثان"] || '-'}
+`;
+      }
+
       return `📋 نموذج تسليم مناوبة كبير المسعفين
 
 📍 القطاع: ${row["القطاع"] || '-'}
@@ -1717,15 +1940,7 @@ async function fetchDeploymentFromSheet(){
 • متوسط زمن استجابة ECHO: ${row["متوسط زمن استجابة ECHO"] || '0'}
 • إجمالي البلاغات: ${row["إجمالي البلاغات"] || '0'}
 • عدد الفرق الفعالة: ${row["عدد الفرق الفعالة"] || '0'} من أصل ${row["عدد الفرق المعتمدة"] || '0'}
-
-🚨 تصنيف البلاغات الطبية
-• OMEGA: ${row["OMEGA"] || '0'}
-• ALPHA: ${row["ALPHA"] || '0'}
-• BRAVO: ${row["BRAVO"] || '0'}
-• CHARLY: ${row["CHARLY"] || '0'}
-• DELTA: ${row["DELTA"] || '0'}
-• ECHO: ${row["ECHO"] || '0'}
-
+${methaneSection}
 🚑 الوحدات التشغيلية
 • مركبات إسعافية: ${row["عدد مركبات الإسعاف"] || '0'}
 • قولف: ${row["عدد القولف"] || '0'}
@@ -1778,6 +1993,18 @@ ${supportLines}
       const s2 = getSupportRow(2);
       const s3 = getSupportRow(3);
 
+      const hasMethane = document.getElementById('has_major_events').value;
+      if(hasMethane === 'نعم'){
+        const methaneReq = ['h_methane_major','h_methane_location','h_methane_type'];
+        for(const id of methaneReq){
+          const el = document.getElementById(id);
+          if(!el || !String(el.value).trim()){
+            showAlert('handoverAlert','error','يرجى تعبئة بيانات رسالة ميثان الأساسية');
+            return;
+          }
+        }
+      }
+
       const row = {
         "وقت الحفظ": new Date().toLocaleString('ar-SA'),
         "القطاع": document.getElementById('handover_sector').value,
@@ -1796,12 +2023,15 @@ ${supportLines}
         "إجمالي البلاغات": document.getElementById('total_cases').value || '0',
         "عدد الفرق الفعالة": document.getElementById('active_teams').value || '0',
         "عدد الفرق المعتمدة": document.getElementById('planned_teams').value || '0',
-        "OMEGA": document.getElementById('case_omega').value || '0',
-        "ALPHA": document.getElementById('case_alpha').value || '0',
-        "BRAVO": document.getElementById('case_bravo').value || '0',
-        "CHARLY": document.getElementById('case_charly').value || '0',
-        "DELTA": document.getElementById('case_delta').value || '0',
-        "ECHO": document.getElementById('case_echo').value || '0',
+        "أحداث طارئة": hasMethane,
+        "M-حادث جسيم": document.getElementById('h_methane_major').value || '-',
+        "E-الموقع": document.getElementById('h_methane_location').value || '-',
+        "T-نوع الحادث": document.getElementById('h_methane_type').value || '-',
+        "H-المخاطر": document.getElementById('h_methane_hazards').value || '-',
+        "A-الوصول": document.getElementById('h_methane_access').value || '-',
+        "N-الإصابات": document.getElementById('h_methane_casualties').value || '-',
+        "E-الخدمات": document.getElementById('h_methane_services').value || '-',
+        "ملاحظات ميثان": document.getElementById('h_methane_notes').value || '-',
         "عدد مركبات الإسعاف": document.getElementById('handover_ambulance_count').value || '0',
         "عدد القولف": document.getElementById('handover_golf_count').value || '0',
         "عدد الاستجابة النوعية": document.getElementById('handover_special_response_count').value || '0',
@@ -2412,6 +2642,133 @@ ${row["ملاحظات إضافية"]}
       if (alertBox) alertBox.style.display = 'none';
     }
 
+    // ═══════════════════════════════════════════
+    // دوال نموذج خطة الدعم
+    // ═══════════════════════════════════════════
+
+    function toggleSupportTypeFields() {
+      const type = document.getElementById('support_type').value;
+      const internalWrap = document.getElementById('internalSupportWrap');
+      const externalWrap = document.getElementById('externalSupportWrap');
+      
+      if (type === 'داخل_النطاق') {
+        internalWrap.classList.remove('hidden');
+        externalWrap.classList.add('hidden');
+      } else if (type === 'خارج_النطاق') {
+        internalWrap.classList.add('hidden');
+        externalWrap.classList.remove('hidden');
+      } else {
+        internalWrap.classList.add('hidden');
+        externalWrap.classList.add('hidden');
+      }
+    }
+
+    async function sendSupportPlan() {
+      const date = document.getElementById('support_date').value;
+      const time = document.getElementById('support_time').value;
+      const teamsCount = document.getElementById('support_teams_count').value;
+      const type = document.getElementById('support_type').value;
+      const arrivalTime = document.getElementById('support_arrival_time').value;
+      const entryName = document.getElementById('support_entry_name').value;
+      const notes = document.getElementById('support_notes').value;
+
+      if (!date || !time || !type || !arrivalTime || !entryName) {
+        showAlert('supportPlanAlert', 'error', 'يرجى تعبئة البيانات الأساسية');
+        return;
+      }
+
+      let row = {
+        'التاريخ': date,
+        'الوقت': time,
+        'عدد الفرق': teamsCount,
+        'نوع التدعيم': type,
+        'وقت الحضور': arrivalTime,
+        'اسم مدخل البيانات': entryName,
+        'الملاحظات': notes
+      };
+
+      if (type === 'داخل_النطاق') {
+        const fromSector = document.getElementById('support_from_sector').value;
+        const toSector = document.getElementById('support_to_sector').value;
+        
+        if (!fromSector || !toSector) {
+          showAlert('supportPlanAlert', 'error', 'يرجى اختيار القطاعات');
+          return;
+        }
+        
+        row['القطاع المدعم منه'] = fromSector;
+        row['القطاع المدعم له'] = toSector;
+      } else {
+        const fromZone = document.getElementById('support_from_zone').value;
+        const toZone = document.getElementById('support_to_zone').value;
+        
+        if (!fromZone || !toZone) {
+          showAlert('supportPlanAlert', 'error', 'يرجى اختيار النطاقات');
+          return;
+        }
+        
+        row['النطاق المدعم منه'] = fromZone;
+        row['النطاق المدعم له'] = toZone;
+      }
+
+      const save = await saveToGoogleSheets('خطة الدعم', [row]);
+      if (!save.success) {
+        showAlert('supportPlanAlert', 'error', 'تعذر حفظ خطة الدعم');
+        return;
+      }
+
+      showAlert('supportPlanAlert', 'success', 'تم حفظ خطة الدعم بنجاح');
+      
+      let msg = `📋 خطة الدعم - نطاق منى\n\n`;
+      msg += `📅 التاريخ: ${date}\n`;
+      msg += `🕘 الوقت: ${time}\n`;
+      msg += `👥 عدد الفرق: ${teamsCount}\n`;
+      msg += `🔄 نوع التدعيم: ${type === 'داخل_النطاق' ? 'داخل النطاق' : 'خارج النطاق'}\n`;
+      
+      if (type === 'داخل_النطاق') {
+        msg += `📍 من القطاع: ${document.getElementById('support_from_sector').value}\n`;
+        msg += `📍 إلى القطاع: ${document.getElementById('support_to_sector').value}\n`;
+      } else {
+        msg += `🌍 من النطاق: ${document.getElementById('support_from_zone').value}\n`;
+        msg += `🌍 إلى النطاق: ${document.getElementById('support_to_zone').value}\n`;
+      }
+      
+      msg += `⏰ وقت الحضور: ${arrivalTime}\n`;
+      msg += `👤 مدخل البيانات: ${entryName}\n`;
+      if (notes) msg += `📝 ملاحظات: ${notes}\n`;
+      
+      openWhatsApp(msg);
+      clearSupportPlanForm();
+    }
+
+    function clearSupportPlanForm() {
+      [
+        'support_date',
+        'support_time',
+        'support_teams_count',
+        'support_type',
+        'support_from_sector',
+        'support_to_sector',
+        'support_from_zone',
+        'support_to_zone',
+        'support_arrival_time',
+        'support_entry_name',
+        'support_notes'
+      ].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (el.tagName === 'SELECT') el.selectedIndex = 0;
+        else if (el.type === 'number') el.value = '1';
+        else el.value = '';
+      });
+
+      document.getElementById('internalSupportWrap').classList.add('hidden');
+      document.getElementById('externalSupportWrap').classList.add('hidden');
+      
+      const alertBox = document.getElementById('supportPlanAlert');
+      if (alertBox) alertBox.style.display = 'none';
+    }
+
 buildMedicalCheckTable();
 buildStrategicTable();
 setDashboardLinks();
@@ -2763,6 +3120,9 @@ function updateDashboard(data){
     `;
   });
 
+  // Support Summary
+  updateSupportSummary();
+
   // Last Update
   document.getElementById('dashLastUpdate').innerHTML = `
     <div style="font-size:.85rem;color:var(--success);font-weight:700">
@@ -2772,6 +3132,61 @@ function updateDashboard(data){
       ${new Date().toLocaleString('ar-SA')} | إجمالي ${total} نقطة
     </div>
   `;
+}
+
+/* ═══════════════════════════════════════════
+   تحديث ملخص عمليات الدعم في الداشبورد
+   ═══════════════════════════════════════════ */
+async function updateSupportSummary() {
+  try {
+    // جلب بيانات الدعم من Google Sheets
+    const response = await fetch(SCRIPT_URL + '?action=getSupportData');
+    const result = await response.json();
+    
+    if (!result.data || result.data.length === 0) {
+      document.querySelector('#dashSupportTable tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم -</td></tr>';
+      return;
+    }
+
+    // تجميع البيانات حسب القطاع/النطاق والتاريخ والفترة
+    const supportMap = {};
+    result.data.forEach(row => {
+      const type = row['النوع'] || (row['نوع التدعيم'] === 'داخل_النطاق' ? 
+        (row['القطاع المدعم له'] || 'بين القطاعات') : 
+        (row['النطاق المدعم له'] || 'بين النطاقات'));
+      const date = row['التاريخ'] || '-';
+      const period = row['الفترة'] || '-';
+      const key = `${type}|${date}|${period}`;
+      
+      if (!supportMap[key]) {
+        supportMap[key] = {
+          type,
+          date,
+          period,
+          count: 0,
+          teams: 0
+        };
+      }
+      supportMap[key].count++;
+      supportMap[key].teams += parseInt(row['عدد الفرق'] || row['عدد الفرق المدعمة'] || 1);
+    });
+
+    // عرض البيانات في الجدول
+    const tbody = document.querySelector('#dashSupportTable tbody');
+    tbody.innerHTML = '';
+    Object.values(supportMap).slice(0, 10).forEach(item => {
+      tbody.innerHTML += `<tr>
+        <td style="font-weight:700">${item.type}</td>
+        <td>${item.count}</td>
+        <td>${item.teams}</td>
+        <td>${item.date}</td>
+        <td>${item.period}</td>
+      </tr>`;
+    });
+  } catch (err) {
+    console.error('خطأ في جلب بيانات الدعم:', err);
+    document.querySelector('#dashSupportTable tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--danger)">- خطأ في تحميل البيانات -</td></tr>';
+  }
 }
 
 /* ─── جلب البيانات من Google Sheets وتحديث الخريطة والداشبورد ─── */

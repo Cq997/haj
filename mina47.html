@@ -1431,7 +1431,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwnKEWH6W8qkIv0X1ckTYqukt1BOw8ZA5DGkv7TdA1nmCopG0VJrn_JjnHPZK2jk3eoNg/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxzkS1GrOC4IBKYQCD2APoK-6iIcGngUikW7zXseLK6JgnQd_pBxA_gX8LgYyoNBS-n2w/exec';
 
     const deploymentPlanData = {
       "الجمرات": [
@@ -2221,6 +2221,7 @@ ${supportLines}
       return { start:'12:00', end:'18:00' };
     }
 
+    
     function createDeploymentRowHTML(rowData = {}){
       const code = rowData.code || '';
       const type = rowData.type || 'مركبة إسعافية';
@@ -2228,6 +2229,7 @@ ${supportLines}
       const count = rowData.count || 1;
       const lat = rowData.lat || '';
       const lng = rowData.lng || '';
+      const status = rowData.status || 'جاهز';
       const note = rowData.note || '';
       const defaults = getDefaultTimes(shift);
       const startTime = rowData.startTime || defaults.start;
@@ -2257,12 +2259,12 @@ ${supportLines}
           <td><input type="time" class="dep-end-time" value="${endTime}"></td>
           <td>
             <select class="dep-status">
-              <option value="جاهز">جاهز</option>
-              <option value="خارج الخدمة">خارج الخدمة</option>
-              <option value="مدعم">مدعم</option>
-              <option value="منقول">منقول</option>
-              <option value="موقوف">موقوف</option>
-              <option value="يقبل تدعيم">يقبل تدعيم</option>
+              <option value="جاهز" ${status==='جاهز'?'selected':''}>جاهز</option>
+              <option value="خارج الخدمة" ${status==='خارج الخدمة'?'selected':''}>خارج الخدمة</option>
+              <option value="مدعم" ${status==='مدعم'?'selected':''}>مدعم</option>
+              <option value="منقول" ${status==='منقول'?'selected':''}>منقول</option>
+              <option value="موقوف" ${status==='موقوف'?'selected':''}>موقوف</option>
+              <option value="يقبل تدعيم" ${status==='يقبل تدعيم'?'selected':''}>يقبل تدعيم</option>
             </select>
           </td>
           <td><input type="number" class="dep-count compact-number" min="0" value="${count}"></td>
@@ -2287,81 +2289,111 @@ ${supportLines}
       `;
     }
 
-    function updateShiftTimes(selectEl){
-      const row = selectEl.closest('tr');
-      const shift = selectEl.value;
-      const defaults = getDefaultTimes(shift);
-      row.querySelector('.dep-start-time').value = defaults.start;
-      row.querySelector('.dep-end-time').value = defaults.end;
+
+    async function loadDeploymentTemplate(){
+      const sector = document.getElementById('deploy_sector').value;
+      const defaultShift = document.getElementById('deploy_shift').value || 'الصباحية';
+      const body = document.getElementById('deploymentTableBody');
+
+      body.innerHTML = '';
+      if(!sector) return;
+
+      // 1. Get static points for this sector
+      const sectorPoints = staticDeploymentPoints.filter(p => p.sector === sector);
+      
+      // 2. Try to get live data to pre-fill statuses if available
+      let liveDataMap = {};
+      try {
+        const liveData = await fetchDeploymentFromSheet();
+        liveData.forEach(d => {
+          const code = (d["الرمز"] || "").trim().toUpperCase();
+          if(code) liveDataMap[code] = d;
+        });
+      } catch(e) { console.log("No live data yet"); }
+
+      // 3. Render rows
+      sectorPoints.forEach(pt => {
+        const live = liveDataMap[pt.id.toUpperCase()] || {};
+        body.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
+          code: pt.id,
+          type: live["نوع الوحدة"] || pt.type || 'مركبة إسعافية',
+          shift: live["المناوبة"] || defaultShift,
+          count: live["عدد الفرق"] || 1,
+          lat: pt.lat,
+          lng: pt.lng,
+          status: live["الحالة"] || 'جاهز',
+          note: live["ملاحظات"] || ''
+        }));
+      });
+
+      refreshDeploymentAdminMode();
     }
 
-    function openRowOnMap(button){
-      const row = button.closest('tr');
-      const lat = row.querySelector('.dep-lat')?.value?.trim();
-      const lng = row.querySelector('.dep-lng')?.value?.trim();
 
-      if(!lat || !lng){
-        alert('لا توجد إحداثيات لهذه النقطة');
+    async function sendDeploymentPlanSmart(){
+      const sector = document.getElementById('deploy_sector').value;
+      const shift = document.getElementById('deploy_shift').value;
+      const role = document.getElementById('deploy_role').value;
+      const date = document.getElementById('deployment_date').value;
+      const time = document.getElementById('deployment_time').value;
+      const lead = document.getElementById('deploy_current_lead').value || '-';
+      const entryName = role === 'كبير مسعفين'
+        ? (document.getElementById('deploy_lead_name').value || '')
+        : (document.getElementById('deploy_assistant_name').value || '');
+      const notes = document.getElementById('deployment_notes').value.trim();
+
+      if(!sector || !shift || !date || !time || !entryName){
+        showAlert('deploymentAlert','error','يرجى تعبئة البيانات الأساسية للخطة');
         return;
       }
 
-      window.open(`https://www.google.com/maps?q=${lat},${lng}`, '_blank');
-    }
+      const rows = [];
+      document.querySelectorAll('#deploymentTableBody tr').forEach(tr => {
+        const code = tr.querySelector('.dep-code').value.trim();
+        if(!code) return;
 
-    function deleteDeploymentRow(button){
-      const role = document.getElementById('deploy_role')?.value;
-      const canEdit = role === 'كبير مسعفين' || role === 'مساعد كبير مسعفين';
-      if(!canEdit){
-        alert('الحذف متاح فقط لكبير المسعفين أو مساعده');
-        return;
-      }
-      button.closest('tr').remove();
-    }
-
-    function refreshDeploymentAdminMode(){
-      const role = document.getElementById('deploy_role')?.value;
-      const canEdit = role === 'كبير مسعفين' || role === 'مساعد كبير مسعفين';
-
-      document.querySelectorAll('#deploymentTableBody tr').forEach(row => {
-        row.querySelectorAll('input, select, button').forEach(el => {
-          if (!el.classList.contains('btn-blue')) {
-            el.disabled = !canEdit;
-          }
+        rows.push({
+          "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+          "الرمز": code,
+          "القطاع": sector,
+          "الحالة": tr.querySelector('.dep-status').value,
+          "المناوبة": tr.querySelector('.dep-shift').value,
+          "نوع الوحدة": tr.querySelector('.dep-type').value,
+          "عدد الفرق": tr.querySelector('.dep-count').value,
+          "وقت البداية": tr.querySelector('.dep-start-time').value,
+          "وقت النهاية": tr.querySelector('.dep-end-time').value,
+          "Latitude": tr.querySelector('.dep-lat').value,
+          "Longitude": tr.querySelector('.dep-lng').value,
+          "نوع التدعيم": tr.querySelector('.dep-support-type').value,
+          "جهة التدعيم": tr.querySelector('.dep-support-target').value,
+          "ملاحظات": tr.querySelector('.dep-note').value,
+          "مدخل البيانات": entryName,
+          "كبير المسعفين": lead,
+          "التاريخ والوقت": `${date} ${time}`
         });
       });
+
+      if(rows.length === 0){
+        showAlert('deploymentAlert','error','لا توجد نقاط لإرسالها');
+        return;
+      }
+
+      const save = await saveToGoogleSheets('خطة الانتشار', rows);
+      if(!save.success){
+        showAlert('deploymentAlert','error','تعذر حفظ خطة الانتشار');
+        return;
+      }
+
+      showAlert('deploymentAlert','success','تم حفظ خطة الانتشار بنجاح');
+      loadLiveDeploymentData(); // Refresh dashboard/map
+      
+      let msg = `📋 خطة الانتشار - قطاع ${sector}\n`;
+      msg += `🕘 الفترة: ${shift}\n`;
+      msg += `👤 مدخل البيانات: ${entryName}\n`;
+      msg += `✅ تم تحديث ${rows.length} نقطة`;
+      openWhatsApp(msg);
     }
 
-   async function loadDeploymentTemplate(){
-
-  const sector = document.getElementById('deploy_sector').value;
-  const defaultShift = document.getElementById('deploy_shift').value || 'الصباحية';
-  const body = document.getElementById('deploymentTableBody');
-
-  body.innerHTML = '';
-
-  if(!sector) return;
-
-  const data = await fetchDeploymentFromSheet();
-
-const items = data.filter(d => 
-  String(d["القطاع"]).trim() === String(sector).trim()
-);
-
-  items.forEach((item, index) => {
-    body.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
-      code: item["الرمز"] || `${sector}-${index + 1}`,
-      type: item["نوع الآلية"] || 'مركبة إسعافية',
-      shift: item["مناوبة النقطة"] || defaultShift,
-      count: item["عدد الفرق الفعلي"] || 1,
-      lat: item["Latitude"] || '',
-      lng: item["Longitude"] || '',
-      note: item["ملاحظة السجل"] || ''
-    }));
-  });
-
-  refreshDeploymentAdminMode();
-}
-    
 
     function addManualDeploymentRow(){
       const role = document.getElementById('deploy_role')?.value;
@@ -2399,12 +2431,60 @@ const items = data.filter(d =>
         : (document.getElementById('deploy_assistant_name').value || '');
       const notes = document.getElementById('deployment_notes').value.trim();
 
-      const canEdit = role === 'كبير مسعفين' || role === 'مساعد كبير مسعفين';
-
-      if(!canEdit){
-        showAlert('deploymentAlert','error','التعديل والحفظ متاح فقط لكبير المسعفين أو مساعده');
+      if(!sector || !shift || !date || !time || !entryName){
+        showAlert('deploymentAlert','error','يرجى تعبئة البيانات الأساسية للخطة');
         return;
       }
+
+      const rows = [];
+      document.querySelectorAll('#deploymentTableBody tr').forEach(tr => {
+        const code = tr.querySelector('.dep-code').value.trim();
+        if(!code) return;
+
+        rows.push({
+          "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+          "الرمز": code,
+          "القطاع": sector,
+          "الحالة": tr.querySelector('.dep-status').value,
+          "المناوبة": tr.querySelector('.dep-shift').value,
+          "نوع الوحدة": tr.querySelector('.dep-type').value,
+          "عدد الفرق": tr.querySelector('.dep-count').value,
+          "وقت البداية": tr.querySelector('.dep-start-time').value,
+          "وقت النهاية": tr.querySelector('.dep-end-time').value,
+          "Latitude": tr.querySelector('.dep-lat').value,
+          "Longitude": tr.querySelector('.dep-lng').value,
+          "نوع التدعيم": tr.querySelector('.dep-support-type').value,
+          "جهة التدعيم": tr.querySelector('.dep-support-target').value,
+          "ملاحظات": tr.querySelector('.dep-note').value,
+          "مدخل البيانات": entryName,
+          "كبير المسعفين": lead,
+          "التاريخ والوقت": `${date} ${time}`
+        });
+      });
+
+      if(rows.length === 0){
+        showAlert('deploymentAlert','error','لا توجد نقاط لإرسالها');
+        return;
+      }
+
+      const save = await saveToGoogleSheets('خطة الانتشار', rows);
+      if(!save.success){
+        showAlert('deploymentAlert','error','تعذر حفظ خطة الانتشار');
+        return;
+      }
+
+      showAlert('deploymentAlert','success','تم حفظ خطة الانتشار بنجاح');
+      loadLiveDeploymentData(); // Refresh dashboard/map
+      
+      let msg = `📋 خطة الانتشار - قطاع ${{sector}}
+`;
+      msg += `🕘 الفترة: ${{shift}}
+`;
+      msg += `👤 مدخل البيانات: ${{entryName}}
+`;
+      msg += `✅ تم تحديث ${{rows.length}} نقطة`;
+      openWhatsApp(msg);
+    }
 
       if(!sector || !shift || !role || !date || !time || !entryName){
         showAlert('deploymentAlert','error','يرجى تعبئة البيانات الأساسية لخطة الانتشار');

@@ -2958,36 +2958,55 @@ ${supportLines}
       });
     }
 
+   
    async function loadDeploymentTemplate(){
+      const sector = document.getElementById('deploy_sector').value;
+      const defaultShift = document.getElementById('deploy_shift').value || 'الصباحية';
+      const body = document.getElementById('deploymentTableBody');
 
-  const sector = document.getElementById('deploy_sector').value;
-  const defaultShift = document.getElementById('deploy_shift').value || 'الصباحية';
-  const body = document.getElementById('deploymentTableBody');
+      body.innerHTML = '';
+      if(!sector) return;
 
-  body.innerHTML = '';
+      let data = [];
+      try {
+          data = await fetchDeploymentFromSheet();
+      } catch(e) {
+          console.log('Error fetching from sheet, using static points');
+      }
 
-  if(!sector) return;
+      let items = data.filter(d => 
+          String(d["القطاع"]).trim() === String(sector).trim()
+      );
 
-  const data = await fetchDeploymentFromSheet();
+      // If no data in sheet for this sector, use static points
+      if (items.length === 0) {
+          console.log('No data in sheet for sector ' + sector + ', using static points');
+          items = staticDeploymentPoints.filter(p => p.sector === sector).map(p => ({
+              "الرمز": p.id,
+              "نوع الآلية": p.type,
+              "مناوبة النقطة": p.shift,
+              "عدد الفرق الفعلي": 1,
+              "Latitude": p.lat,
+              "Longitude": p.lng,
+              "ملاحظة السجل": ""
+          }));
+      }
 
-const items = data.filter(d => 
-  String(d["القطاع"]).trim() === String(sector).trim()
-);
+      items.forEach((item, index) => {
+        body.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
+          code: item["الرمز"] || `${sector}-${index + 1}`,
+          type: item["نوع الآلية"] || 'مركبة إسعافية',
+          shift: item["مناوبة النقطة"] || defaultShift,
+          count: item["عدد الفرق الفعلي"] || 1,
+          lat: item["Latitude"] || '',
+          lng: item["Longitude"] || '',
+          note: item["ملاحظة السجل"] || ''
+        }));
+      });
 
-  items.forEach((item, index) => {
-    body.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
-      code: item["الرمز"] || `${sector}-${index + 1}`,
-      type: item["نوع الآلية"] || 'مركبة إسعافية',
-      shift: item["مناوبة النقطة"] || defaultShift,
-      count: item["عدد الفرق الفعلي"] || 1,
-      lat: item["Latitude"] || '',
-      lng: item["Longitude"] || '',
-      note: item["ملاحظة السجل"] || ''
-    }));
-  });
+      refreshDeploymentAdminMode();
+    }
 
-  refreshDeploymentAdminMode();
-}
     
 
     function addManualDeploymentRow(){
@@ -4877,11 +4896,58 @@ function updateDashboard(data){
 /* ═══════════════════════════════════════════
    تحديث ملخص عمليات الدعم في الداشبورد
    ═══════════════════════════════════════════ */
+
 async function updateSupportSummary() {
   try {
-    // جلب بيانات الدعم من Google Sheets
     const response = await fetch(SCRIPT_URL + '?action=getSupport');
     let result = { data: [] };
+    
+    try {
+      const text = await response.text();
+      result = JSON.parse(text);
+    } catch (e) {
+      console.log('Error parsing support data, using local data');
+      result.data = window.supportPlanData || [];
+    }
+    
+    const dataArray = Array.isArray(result) ? result : (result.data || []);
+    
+    if (!dataArray || dataArray.length === 0) {
+      document.querySelector('#dashSupportTable tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم -</td></tr>';
+      return;
+    }
+
+    const supportMap = {};
+    dataArray.forEach(row => {
+      const type = row['النوع'] || row['نوع التدعيم'] || (row['القطاع المدعم له'] || row['النطاق المدعم له'] || 'غير محدد');
+      const date = row['التاريخ'] || '-';
+      const period = row['الفترة'] || row['الوقت'] || '-';
+      const key = `${type}|${date}|${period}`;
+      
+      if (!supportMap[key]) {
+        supportMap[key] = { type, date, period, count: 0, teams: 0 };
+      }
+      supportMap[key].count++;
+      supportMap[key].teams += parseInt(row['عدد الفرق'] || row['عدد الفرق المدعمة'] || 1) || 0;
+    });
+
+    const tbody = document.querySelector('#dashSupportTable tbody');
+    tbody.innerHTML = '';
+    Object.values(supportMap).slice(0, 10).forEach(item => {
+      tbody.innerHTML += `<tr>
+        <td style="font-weight:700">${item.type}</td>
+        <td>${item.count}</td>
+        <td>${item.teams}</td>
+        <td>${item.date}</td>
+        <td>${item.period}</td>
+      </tr>`;
+    });
+  } catch (err) {
+    console.error('Error in updateSupportSummary:', err);
+    document.querySelector('#dashSupportTable tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--danger)">- خطأ في تحميل البيانات -</td></tr>';
+  }
+}
+;
     
     try {
       result = await response.json();
@@ -4937,20 +5003,43 @@ async function updateSupportSummary() {
 }
 
 /* ─── جلب البيانات من Google Sheets وتحديث الخريطة والداشبورد ─── */
+
 async function loadLiveDeploymentData(){
+  let liveData = [];
   try {
-    const data = await fetchDeploymentFromSheet();
-    if(data && data.length > 0){
-      liveDeploymentData = data.map(d => ({
-        id: d["الرمز"] || d["اسم النقطة"] || '',
-        sector: d["القطاع"] || '',
-        type: d["نوع الآلية"] || d["الالية المشغلة بالنقطة"] || '',
-        teams: parseInt(d["عدد الفرق الفعلي"] || d["عدد الفرق بالنقطة"] || 1),
-        lat: parseFloat(d["Latitude"] || 0),
-        lng: parseFloat(d["Longitude"] || 0),
-        status: d["الحالة"] || 'جاهز',
-        shift: d["مناوبة النقطة"] || d["العرض الزمني"] || 'الصباحية'
-      })).filter(d => d.lat && d.lng);
+    const sheetData = await fetchDeploymentFromSheet();
+    const statusMap = {};
+    
+    if(Array.isArray(sheetData)){
+      sheetData.forEach(d => {
+        const code = d["الرمز"] || d["اسم النقطة"];
+        if(code) statusMap[code] = d;
+      });
+    }
+
+    liveData = staticDeploymentPoints.map(p => {
+      const live = statusMap[p.id] || {};
+      return {
+        id: p.id,
+        sector: p.sector,
+        type: live["نوع الآلية"] || p.type,
+        teams: parseInt(live["عدد الفرق الفعلي"] || 1),
+        lat: p.lat,
+        lng: p.lng,
+        status: live["الحالة"] || "جاهز",
+        shift: live["مناوبة النقطة"] || p.shift
+      };
+    });
+  } catch(e) {
+    console.log('Error loading live data, using static defaults:', e);
+    liveData = staticDeploymentPoints.map(p => ({...p, teams: 1}));
+  }
+  
+  updateDashboard(liveData);
+  if(window.mapInstance) renderMapMarkers(liveData);
+  window.liveDeploymentData = liveData;
+}
+)).filter(d => d.lat && d.lng);
     }
   } catch(e) {
     console.log('استخدام البيانات الثابتة:', e);

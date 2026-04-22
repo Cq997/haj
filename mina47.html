@@ -5194,10 +5194,46 @@ function setDashboardLinks(){
 }
 
 function setMapLink(){
-  const mapUrl = `${SCRIPT_URL}?page=map`;
-  const mapFrame = document.getElementById('mapFrame');
-  if(mapFrame) mapFrame.src = mapUrl;
-}
+	  const mapUrl = `${SCRIPT_URL}?page=map`;
+	  const mapFrame = document.getElementById(\'mapFrame\');
+	  if(mapFrame) mapFrame.src = mapUrl;
+	}
+
+	async function updateSupportSummary() {
+	  try {
+	    const res = await fetch(`${SCRIPT_URL}?action=getSupport`);
+	    if (!res.ok) throw new Error(\"فشل الاتصال\");
+	    const data = await res.json();
+	
+	    const supportData = data.data || []; // Ensure it's an array
+	
+	    const supportSummary = {};
+	    supportData.forEach(item => {
+	      const key = `${item['نوع التدعيم']} - ${item['التاريخ']} - ${item['وقت الحضور']}`;
+	      if (!supportSummary[key]) {
+	        supportSummary[key] = { ...item, count: 0 };
+	      }
+	      supportSummary[key].count += parseInt(item['عدد الفرق']) || 0;
+	    });
+	
+	    const dashSupportTable = document.getElementById('dashSupportTable');
+	    if (dashSupportTable) {
+	      dashSupportTable.innerHTML = ''; // Clear existing data
+	      for (const key in supportSummary) {
+	        const item = supportSummary[key];
+	        const row = dashSupportTable.insertRow();
+	        row.insertCell().textContent = item['نوع التدعيم'];
+	        row.insertCell().textContent = item['عدد الفرق'];
+	        row.insertCell().textContent = item['من'];
+	        row.insertCell().textContent = item['إلى'];
+	        row.insertCell().textContent = item['وقت الحضور'];
+	        row.insertCell().textContent = item['الحالة'];
+	      }
+	    }
+	  } catch (error) {
+	    console.error("❌ خطأ في تحديث ملخص الدعم:", error);
+	  }
+	}
 
 /***********************
 📤 إرسال البيانات للشيت
@@ -7880,39 +7916,31 @@ async function updateSupportSummary() {
     
     const dataArray = Array.isArray(result) ? result : (result.data || []);
     
+    const tbody = document.querySelector('#dashSupportTable tbody');
+    if (!tbody) return;
+    tbody.innerHTML = ''; // Clear existing data
+
     if (!dataArray || dataArray.length === 0) {
-      document.querySelector('#dashSupportTable tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم -</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم -</td></tr>';
       return;
     }
 
-    const supportMap = {};
-    dataArray.forEach(row => {
-      const type = row['النوع'] || row['نوع التدعيم'] || (row['القطاع المدعم له'] || row['النطاق المدعم له'] || 'غير محدد');
-      const date = row['التاريخ'] || '-';
-      const period = row['الفترة'] || row['الوقت'] || '-';
-      const key = `${type}|${date}|${period}`;
-      
-      if (!supportMap[key]) {
-        supportMap[key] = { type, date, period, count: 0, teams: 0 };
-      }
-      supportMap[key].count++;
-      supportMap[key].teams += parseInt(row['عدد الفرق'] || row['عدد الفرق المدعمة'] || 1) || 0;
+    dataArray.forEach(item => {
+      const row = tbody.insertRow();
+      row.insertCell().textContent = item['نوع التدعيم'] || '';
+      row.insertCell().textContent = item['عدد الفرق'] || '';
+      row.insertCell().textContent = item['من'] || '';
+      row.insertCell().textContent = item['إلى'] || '';
+      row.insertCell().textContent = item['وقت الحضور'] || '';
+      row.insertCell().textContent = item['الحالة'] || '';
     });
 
-    const tbody = document.querySelector('#dashSupportTable tbody');
-    tbody.innerHTML = '';
-    Object.values(supportMap).slice(0, 10).forEach(item => {
-      tbody.innerHTML += `<tr>
-        <td style="font-weight:700">${item.type}</td>
-        <td>${item.count}</td>
-        <td>${item.teams}</td>
-        <td>${item.date}</td>
-        <td>${item.period}</td>
-      </tr>`;
-    });
   } catch (err) {
-    console.error('Error in updateSupportSummary:', err);
-    document.querySelector('#dashSupportTable tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--danger)">- خطأ في تحميل البيانات -</td></tr>';
+    console.error('خطأ في جلب بيانات الدعم:', err);
+    const tbody = document.querySelector('#dashSupportTable tbody');
+    if (tbody) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--danger)">- خطأ في تحميل البيانات -</td></tr>';
+    }
   }
 }
 ;

@@ -3153,12 +3153,19 @@ setInterval(loadLiveDeploymentData, 180000);
 /* لتحميل النقاط الافتراضية للقطاع المختار */
 function loadDefaultDeploymentPoints(){
   const sector = document.getElementById('deploy_sector').value;
-  if(!sector){
+  const shift = document.getElementById('deploy_shift').value || 'الصباحية';
+  
+  if(!sector || sector === 'اختر القطاع'){
     showAlert('deploymentAlert','error','يرجى اختيار قطاع أولاً');
     return;
   }
   
   const tbody = document.getElementById('deploymentTableBody');
+  if (!tbody) {
+    console.error('Table body not found');
+    return;
+  }
+  
   tbody.innerHTML = '';
   
   // البحث عن النقاط التابعة للقطاع المختار
@@ -3174,7 +3181,7 @@ function loadDefaultDeploymentPoints(){
     const rowData = {
       code: code,
       type: point.unit_type || 'مركبة إسعافية',
-      shift: 'الصباحية',
+      shift: shift,
       count: 1,
       lat: point.lat || '',
       lng: point.lng || '',
@@ -3183,7 +3190,7 @@ function loadDefaultDeploymentPoints(){
     tbody.insertAdjacentHTML('beforeend', createDeploymentRowHTML(rowData));
   });
   
-  showAlert('deploymentAlert','success',`تم تحميل ${sectorPoints.length} نقطة بنجاح`);
+  showAlert('deploymentAlert','success',`تم تحميل ${sectorPoints.length} نقطة بنجاح لقطاع ${sector}`);
 }
 
   </script>

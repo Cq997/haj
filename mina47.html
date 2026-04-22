@@ -1240,6 +1240,7 @@
             </div>
 
             <div class="actions">
+              <button class="btn btn-primary" onclick="loadDefaultDeploymentPoints()" style="margin-left:10px;"><i class="fas fa-download"></i> تحميل النقاط الافتراضية للقطاع</button>
               <button class="btn btn-outline" onclick="addManualDeploymentRow()"><i class="fas fa-plus"></i> إضافة صف جديد</button>
             </div>
 
@@ -3125,6 +3126,42 @@ loadLiveDeploymentData();
 
 // تحديث تلقائي كل 3 دقائق
 setInterval(loadLiveDeploymentData, 180000);
+
+/* لتحميل النقاط الافتراضية للقطاع المختار */
+function loadDefaultDeploymentPoints(){
+  const sector = document.getElementById('deploy_sector').value;
+  if(!sector){
+    showAlert('deploymentAlert','error','يرجى اختيار قطاع أولاً');
+    return;
+  }
+  
+  const tbody = document.getElementById('deploymentTableBody');
+  tbody.innerHTML = '';
+  
+  // البحث عن النقاط التابعة للقطاع المختار
+  const sectorPoints = Object.entries(DEPLOYMENT_POINTS).filter(([code, point]) => point.sector === sector);
+  
+  if(sectorPoints.length === 0){
+    showAlert('deploymentAlert','warning','لا توجد نقاط افتراضية لهذا القطاع');
+    return;
+  }
+  
+  // إضافة كل نقطة إلى الجدول
+  sectorPoints.forEach(([code, point]) => {
+    const rowData = {
+      code: code,
+      type: point.unit_type || 'مركبة إسعافية',
+      shift: 'الصباحية',
+      count: 1,
+      lat: point.lat || '',
+      lng: point.lng || '',
+      note: ''
+    };
+    tbody.insertAdjacentHTML('beforeend', createDeploymentRowHTML(rowData));
+  });
+  
+  showAlert('deploymentAlert','success',`تم تحميل ${sectorPoints.length} نقطة بنجاح`);
+}
 
   </script>
 <script>

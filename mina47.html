@@ -1067,7 +1067,7 @@
           statusCounts[status]++;
 
         } else {
-          marker.setOpacity(0); // Hide marker if it doesn't match filters
+          marker.setOpacity(0); // Hide marker if it doesn\'t match filters
         }
       });
 
@@ -1200,7 +1200,7 @@
         rowData[key] = value;
       }
 
-      // Special handling for 'خطة الانتشار' to include lat/lng if available
+      // Special handling for \'خطة الانتشار\' to include lat/lng if available
       if (sheetName === \'خطة الانتشار\') {
         const pointCode = rowData[\'رمز النقطة\'];
         const point = deploymentPoints.find(p => p.code === pointCode);

@@ -458,6 +458,35 @@
 
       <!-- ── Tab: Dashboard ── -->
       <div class="tab-content active" id="tabDashboard">
+        
+        <!-- Dashboard Filters -->
+        <div class="map-filters" style="margin-bottom: 20px; background: var(--card); padding: 15px; border-radius: 12px; box-shadow: var(--shadow);">
+          <div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center; width: 100%;">
+            <div class="field" style="flex: 1; min-width: 150px;">
+              <label><i class="fas fa-calendar-day"></i> التاريخ</label>
+              <input type="date" id="dashFilterDate" onchange="applyDashboardFilters()">
+            </div>
+            <div class="field" style="flex: 1; min-width: 120px;">
+              <label><i class="fas fa-clock"></i> الوقت</label>
+              <input type="time" id="dashFilterTime" onchange="applyDashboardFilters()">
+            </div>
+            <div class="field" style="flex: 1; min-width: 150px;">
+              <label><i class="fas fa-map-location-dot"></i> النطاق</label>
+              <select id="dashFilterScope" onchange="applyDashboardFilters()">
+                <option value="الكل">الكل</option>
+                <option value="نطاق منى">نطاق منى</option>
+                <option value="نطاق عرفات">نطاق عرفات</option>
+                <option value="نطاق مزدلفة">نطاق مزدلفة</option>
+              </select>
+            </div>
+            <div style="display: flex; align-items: flex-end; padding-bottom: 4px;">
+              <button class="btn btn-outline" onclick="resetDashboardFilters()" style="padding: 8px 15px; font-size: 0.8rem;">
+                <i class="fas fa-undo"></i> إعادة ضبط
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div class="dash-grid">
 
           <!-- Sector Summary -->
@@ -2244,12 +2273,10 @@ ${supportLines}
           <td><input type="time" class="dep-end-time" value="${endTime}"></td>
           <td>
             <select class="dep-status">
-              <option value="جاهز">جاهز</option>
+              <option value="جاهزة">جاهزة</option>
               <option value="خارج الخدمة">خارج الخدمة</option>
-              <option value="مدعم">مدعم</option>
-              <option value="منقول">منقول</option>
-              <option value="موقوف">موقوف</option>
-              <option value="يقبل تدعيم">يقبل تدعيم</option>
+              <option value="مدعمة">مدعمة</option>
+              <option value="متعطلة">متعطلة</option>
             </select>
           </td>
           <td><input type="number" class="dep-count compact-number" min="0" value="${count}"></td>
@@ -2877,12 +2904,10 @@ function switchMainTab(tabId, btn){
 /* ─── ألوان حسب الحالة ─── */
 function getStatusColor(status){
   const s = (status || '').trim();
-  if(s === 'جاهز') return '#00b894';
-  if(s === 'مدعم') return '#0b5ed7';
-  if(s === 'اوفرلاب') return '#fdcb6e';
+  if(s === 'جاهزة' || s === 'جاهز') return '#00b894';
+  if(s === 'مدعمة' || s === 'مدعم') return '#0b5ed7';
   if(s === 'خارج الخدمة') return '#d63031';
   if(s === 'متعطلة' || s === 'موقوف') return '#636e72';
-  if(s === 'منقول') return '#e17055';
   return '#6c5ce7';
 }
 
@@ -2976,11 +3001,49 @@ function resetMapFilters(){
 }
 
 /* ─── تحديث الداشبورد ─── */
+function applyDashboardFilters(){
+  const date = document.getElementById('dashFilterDate').value;
+  const time = document.getElementById('dashFilterTime').value;
+  const scope = document.getElementById('dashFilterScope').value;
+
+  let filtered = liveDeploymentData;
+
+  if(date){
+    filtered = filtered.filter(d => d["التاريخ"] === date);
+  }
+  if(time){
+    // فلترة تقريبية للوقت (نفس الساعة)
+    const filterHour = time.split(':')[0];
+    filtered = filtered.filter(d => {
+      const dTime = d["الوقت"] || "";
+      return dTime.startsWith(filterHour + ":");
+    });
+  }
+  if(scope !== 'الكل'){
+    // ربط القطاعات بالنطاقات
+    const scopeMap = {
+      "نطاق منى": ["الجمرات", "القطارات", "بطن منى الجنوبي", "بطن منى الشمالي", "الشعيبين", "منى الجديد 1", "منى الجديد 2"],
+      "نطاق عرفات": [],
+      "نطاق مزدلفة": []
+    };
+    filtered = filtered.filter(d => scopeMap[scope]?.includes(d.sector));
+  }
+
+  updateDashboard(filtered);
+}
+
+function resetDashboardFilters(){
+  document.getElementById('dashFilterDate').value = '';
+  document.getElementById('dashFilterTime').value = '';
+  document.getElementById('dashFilterScope').value = 'الكل';
+  updateDashboard(liveDeploymentData);
+}
+
 function updateDashboard(data){
   // KPIs
   const total = data.length;
-  const ready = data.filter(d => d.status === 'جاهز').length;
-  const supported = data.filter(d => d.status === 'مدعم').length;
+  const ready = data.filter(d => d.status === 'جاهزة' || d.status === 'جاهز').length;
+  const supported = data.filter(d => d.status === 'مدعمة' || d.status === 'مدعم').length;
   const oos = data.filter(d => d.status === 'خارج الخدمة').length;
   const broken = data.filter(d => d.status === 'متعطلة' || d.status === 'موقوف').length;
 
@@ -2996,8 +3059,8 @@ function updateDashboard(data){
   sectorBody.innerHTML = '';
   sectors.forEach(sec => {
     const pts = data.filter(d => d.sector === sec);
-    const r = pts.filter(d => d.status === 'جاهز').length;
-    const s = pts.filter(d => d.status === 'مدعم').length;
+    const r = pts.filter(d => d.status === 'جاهزة' || d.status === 'جاهز').length;
+    const s = pts.filter(d => d.status === 'مدعمة' || d.status === 'مدعم').length;
     const o = pts.filter(d => d.status === 'خارج الخدمة').length;
     const b = pts.filter(d => d.status === 'متعطلة' || d.status === 'موقوف').length;
     sectorBody.innerHTML += `<tr>
@@ -3029,8 +3092,8 @@ function updateDashboard(data){
 
   // Status Chart (simple visual bars)
   const statuses = [
-    {name:'جاهز',count:ready,color:'#00b894'},
-    {name:'مدعم',count:supported,color:'#0b5ed7'},
+    {name:'جاهزة',count:ready,color:'#00b894'},
+    {name:'مدعمة',count:supported,color:'#0b5ed7'},
     {name:'خارج الخدمة',count:oos,color:'#d63031'},
     {name:'متعطلة',count:broken,color:'#636e72'}
   ];

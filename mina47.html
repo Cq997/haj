@@ -5199,41 +5199,7 @@ function setMapLink(){
 	  if(mapFrame) mapFrame.src = mapUrl;
 	}
 
-	async function updateSupportSummary() {
-	  try {
-	    const res = await fetch(`${SCRIPT_URL}?action=getSupport`);
-	    if (!res.ok) throw new Error(\"فشل الاتصال\");
-	    const data = await res.json();
-	
-	    const supportData = data.data || []; // Ensure it's an array
-	
-	    const supportSummary = {};
-	    supportData.forEach(item => {
-	      const key = `${item['نوع التدعيم']} - ${item['التاريخ']} - ${item['وقت الحضور']}`;
-	      if (!supportSummary[key]) {
-	        supportSummary[key] = { ...item, count: 0 };
-	      }
-	      supportSummary[key].count += parseInt(item['عدد الفرق']) || 0;
-	    });
-	
-	    const dashSupportTable = document.getElementById('dashSupportTable');
-	    if (dashSupportTable) {
-	      dashSupportTable.innerHTML = ''; // Clear existing data
-	      for (const key in supportSummary) {
-	        const item = supportSummary[key];
-	        const row = dashSupportTable.insertRow();
-	        row.insertCell().textContent = item['نوع التدعيم'];
-	        row.insertCell().textContent = item['عدد الفرق'];
-	        row.insertCell().textContent = item['من'];
-	        row.insertCell().textContent = item['إلى'];
-	        row.insertCell().textContent = item['وقت الحضور'];
-	        row.insertCell().textContent = item['الحالة'];
-	      }
-	    }
-	  } catch (error) {
-	    console.error("❌ خطأ في تحديث ملخص الدعم:", error);
-	  }
-	}
+
 
 /***********************
 📤 إرسال البيانات للشيت

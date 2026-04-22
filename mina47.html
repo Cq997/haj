@@ -1,1 +1,1327 @@
-محتوى الملف /home/ubuntu/haj/mina47.html
+<!DOCTYPE html><html lang="ar" dir="rtl"><head manus-helper-ready="true">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>منصة نطاق منى لموسم حج 1447هـ</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+  <style>
+    :root{
+      --primary:#c1121f;
+      --primary-dark:#8f0d16;
+      --secondary:#0b5ed7;
+      --secondary-2:#1d7df2;
+      --success:#00b894;
+      --warning:#fdcb6e;
+      --danger:#d63031;
+      --dark:#0f172a;
+      --muted:#6b7280;
+      --bg:#eef3f8;
+      --card:#ffffff;
+      --line:#e5e7eb;
+      --soft:#f8fafc;
+      --shadow:0 12px 30px rgba(15,23,42,.08);
+      --shadow-2:0 20px 40px rgba(2,6,23,.16);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+
+    body{
+      font-family:\'Cairo\',sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(11,94,215,.08), transparent 28%),
+        radial-gradient(circle at top left, rgba(193,18,31,.07), transparent 22%),
+        var(--bg);
+      color:var(--dark);
+      overflow-x:hidden;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:320px 1fr;
+      min-height:100vh;
+    }
+
+    /* ─── Sidebar ─── */
+    .sidebar{
+      background:linear-gradient(180deg,var(--dark) 0%,#1a2744 100%);
+      color:#fff;
+      padding:28px 18px;
+      display:flex;flex-direction:column;gap:10px;
+      position:sticky;top:0;height:100vh;
+      overflow-y:auto;
+      z-index:100;
+    }
+
+    .sidebar .brand{
+      text-align:center;padding-bottom:16px;
+      border-bottom:1px solid rgba(255,255,255,.12);
+      margin-bottom:8px;
+    }
+    .sidebar .brand img{width:100%;max-width:180px;margin-bottom:10px;border-radius:8px}
+    .sidebar .brand h2{font-size:1.1rem;font-weight:800;letter-spacing:.5px}
+    .sidebar .brand p{font-size:.72rem;opacity:.55;margin-top:2px}
+
+    .nav{list-style:none}
+    .nav li{
+      display:flex;align-items:center;gap:10px;
+      padding:11px 14px;border-radius:10px;
+      cursor:pointer;font-size:.88rem;font-weight:600;
+      transition:all .2s;margin-bottom:4px;
+    }
+    .nav li:hover{background:rgba(255,255,255,.08)}
+    .nav li.active{background:var(--primary);color:#fff}
+    .nav li i{width:22px;text-align:center;font-size:.95rem}
+
+    .quick-toggle{
+      margin-top:auto;padding:10px 14px;
+      background:rgba(255,255,255,.06);border-radius:10px;
+      cursor:pointer;font-size:.8rem;text-align:center;
+      transition:background .2s;
+    }
+    .quick-toggle:hover{background:rgba(255,255,255,.12)}
+
+    .quick-links{
+      display:none;flex-direction:column;gap:6px;
+      margin-top:6px;
+    }
+    .quick-links.show{display:flex}
+    .quick-links a{
+      display:flex;align-items:center;gap:8px;
+      color:#cbd5e1;font-size:.78rem;text-decoration:none;
+      padding:8px 12px;border-radius:8px;
+      transition:all .2s;
+    }
+    .quick-links a:hover{background:rgba(255,255,255,.08);color:#fff}
+
+    /* ─── Mobile ─── */
+    .mobile-btn{
+      display:none;position:fixed;top:14px;right:14px;z-index:200;
+      width:44px;height:44px;border-radius:12px;
+      background:var(--primary);color:#fff;border:none;
+      font-size:1.2rem;cursor:pointer;
+      box-shadow:0 4px 12px rgba(193,18,31,.35);
+    }
+
+    @media(max-width:1180px){
+      .layout{grid-template-columns:1fr}
+      .sidebar{
+        position:fixed;top:0;right:-340px;
+        width:300px;height:100vh;
+        transition:right .3s;z-index:300;
+      }
+      .sidebar.active{right:0}
+      .mobile-btn{display:flex;align-items:center;justify-content:center}
+    }
+
+    /* ─── Main ─── */
+    main{
+      padding:28px 32px 60px;
+      max-width:1400px;
+      margin:0 auto;
+      width:100%;
+    }
+
+    @media(max-width:768px){
+      main{padding:18px 10px 40px}
+    }
+
+    /* ─── Hero ─── */
+    .hero{
+      background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);
+      color:#fff;border-radius:18px;
+      padding:32px 36px;
+      margin-bottom:24px;
+      position:relative;overflow:hidden;
+    }
+    .hero::after{
+      content:\'\';position:absolute;top:-30%;right:-10%;
+      width:300px;height:300px;border-radius:50%;
+      background:rgba(255,255,255,.06);
+    }
+    .hero img{width:100%;max-width:320px;margin-bottom:15px;filter:drop-shadow(0 8px 20px rgba(0,0,0,.3));position:relative;z-index:1}
+    .hero h1{font-size:1.6rem;font-weight:900;margin-bottom:4px;position:relative;z-index:1}
+    .hero p{font-size:.88rem;opacity:.85;position:relative;z-index:1}
+    .hero .badge{
+      display:inline-block;background:rgba(255,255,255,.18);
+      padding:4px 14px;border-radius:20px;font-size:.75rem;
+      margin-top:10px;position:relative;z-index:1;
+    }
+
+    /* ─── KPI Row ─── */
+    .kpi-row{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+      gap:14px;margin-bottom:24px;
+    }
+    .kpi-card{
+      background:var(--card);border-radius:14px;
+      padding:18px 16px;text-align:center;
+      box-shadow:var(--shadow);
+      border-top:3px solid var(--primary);
+      transition:transform .2s;
+    }
+    .kpi-card:hover{transform:translateY(-3px)}
+    .kpi-card .kpi-val{font-size:1.8rem;font-weight:900;color:var(--primary)}
+    .kpi-card .kpi-label{font-size:.78rem;color:var(--muted);margin-top:2px}
+
+    /* ─── Tabs ─── */
+    .main-tabs{
+      display:flex;gap:8px;margin-bottom:20px;
+      flex-wrap:wrap;
+    }
+    .main-tabs .tab-btn{
+      padding:10px 22px;border-radius:10px;
+      border:2px solid var(--line);
+      background:var(--card);color:var(--dark);
+      font-weight:700;font-size:.88rem;
+      cursor:pointer;transition:all .2s;
+      font-family:\'Cairo\',sans-serif;
+    }
+    .main-tabs .tab-btn.active{
+      background:var(--primary);color:#fff;border-color:var(--primary);
+    }
+    .main-tabs .tab-btn:hover:not(.active){
+      border-color:var(--primary);color:var(--primary);
+    }
+    .tab-content{display:none}
+    .tab-content.active{display:block}
+
+    /* ─── Dashboard ─── */
+    .dash-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+      gap:18px;margin-bottom:24px;
+    }
+    .dash-card{
+      background:var(--card);border-radius:14px;
+      padding:20px;box-shadow:var(--shadow);
+    }
+    .dash-card h4{
+      font-size:.95rem;font-weight:800;
+      margin-bottom:12px;color:var(--dark);
+      border-bottom:2px solid var(--line);
+      padding-bottom:8px;
+    }
+    .dash-card h4 i{margin-left:6px;color:var(--primary)}
+
+    .dash-table{width:100%;border-collapse:collapse;font-size:.82rem}
+    .dash-table th{
+      background:var(--soft);padding:8px 10px;
+      text-align:right;font-weight:700;
+      border-bottom:2px solid var(--line);
+    }
+    .dash-table td{
+      padding:8px 10px;border-bottom:1px solid var(--line);
+    }
+    .dash-table tr:hover td{background:rgba(11,94,215,.04)}
+
+    .status-badge{
+      display:inline-block;padding:2px 10px;
+      border-radius:20px;font-size:.72rem;font-weight:700;
+    }
+    .status-badge.ready{background:#d4edda;color:#155724}
+    .status-badge.supported{background:#cce5ff;color:#004085}
+    .status-badge.overlap{background:#fff3cd;color:#856404}
+    .status-badge.oos{background:#f8d7da;color:#721c24}
+    .status-badge.broken{background:#e2e3e5;color:#383d41}
+
+    /* ─── Map ─── */
+    #deploymentMap{
+      height:550px;border-radius:14px;
+      box-shadow:var(--shadow);
+      margin-bottom:18px;
+      z-index:1;
+    }
+    .map-filters{
+      background:var(--card);border-radius:14px;
+      padding:16px 20px;box-shadow:var(--shadow);
+      margin-bottom:18px;
+      display:flex;flex-wrap:wrap;gap:10px;
+      align-items:center;
+    }
+    .map-filters label{font-size:.8rem;font-weight:700;color:var(--muted)}
+    .map-filters select{
+      padding:6px 12px;border-radius:8px;
+      border:1px solid var(--line);
+      font-family:\'Cairo\',sans-serif;
+      font-size:.82rem;font-weight:600;
+      background:var(--soft);
+    }
+    .map-legend{
+      display:flex;flex-wrap:wrap;gap:12px;
+      margin-bottom:14px;
+    }
+    .map-legend .leg-item{
+      display:flex;align-items:center;gap:5px;
+      font-size:.76rem;font-weight:600;
+    }
+    .map-legend .leg-dot{
+      width:14px;height:14px;border-radius:50%;
+      border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2);
+    }
+
+    /* ─── Panels / Forms ─── */
+    .panel{display:none}
+    .panel.active{display:block}
+
+    .panel-head{
+      display:flex;align-items:center;justify-content:space-between;
+      margin-bottom:20px;padding-bottom:14px;
+      border-bottom:2px solid var(--line);
+    }
+    .panel-head h3{font-size:1.15rem;font-weight:800}
+    .panel-head p{font-size:.82rem;color:var(--muted);margin-top:2px}
+
+    .section{
+      background:var(--card);border-radius:14px;
+      box-shadow:var(--shadow);margin-bottom:18px;
+      overflow:hidden;
+    }
+    .section-title{
+      background:var(--soft);padding:12px 18px;
+      font-weight:800;font-size:.9rem;
+      border-bottom:1px solid var(--line);
+    }
+    .section-body{padding:18px}
+
+    .grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+    .grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+    .grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+
+    .field{display:flex;flex-direction:column;gap:4px}
+    .field label{font-size:.82rem;font-weight:700;color:var(--muted)}
+    .field input,.field select,.field textarea{
+      padding:10px 14px;border-radius:10px;
+      border:1px solid var(--line);
+      font-family:\'Cairo\',sans-serif;
+      font-size:.88rem;transition:border .2s;
+      background:var(--soft);
+    }
+    .field input:focus,.field select:focus,.field textarea:focus{
+      border-color:var(--primary);outline:none;
+    }
+    .field input[type="radio"],.field input[type="checkbox"]{
+      width:auto;height:auto;margin-right:8px;
+    }
+    .field input[type="color"]{
+      height:40px;padding:4px;
+    }
+
+    .btn{
+      padding:10px 20px;border-radius:10px;
+      border:none;font-family:\'Cairo\',sans-serif;
+      font-size:.9rem;font-weight:700;cursor:pointer;
+      transition:all .2s;
+    }
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-primary:hover{background:var(--primary-dark)}
+    .btn-secondary{background:var(--secondary);color:#fff}
+    .btn-secondary:hover{background:var(--secondary-2)}
+    .btn-outline-primary{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+    .btn-outline-primary:hover{background:var(--primary);color:#fff}
+
+    .alert{
+      padding:12px 18px;border-radius:10px;
+      font-size:.88rem;font-weight:600;
+      margin-bottom:18px;
+    }
+    .alert-success{background:#d4edda;color:#155724}
+    .alert-danger{background:#f8d7da;color:#721c24}
+
+    /* ─── Overrides ─── */
+    .leaflet-control-attribution{display:none}
+  </style>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="https://i.ibb.co/Qj80911/logo.png" alt="شعار المنصة">
+        <h2>منصة نطاق منى</h2>
+        <p>موسم حج 1447هـ</p>
+      </div>
+
+      <ul class="nav">
+        <li data-panel="dashboard" class="active">
+          <i class="fas fa-home"></i>
+          <span>الرئيسية</span>
+        </li>
+        <li data-panel="deployment-map">
+          <i class="fas fa-map-marked-alt"></i>
+          <span>خريطة الانتشار</span>
+        </li>
+        <li data-panel="daily-preparation">
+          <i class="fas fa-clipboard-list"></i>
+          <span>التحضير اليومي</span>
+        </li>
+        <li data-panel="handover">
+          <i class="fas fa-people-carry"></i>
+          <span>تسليم المناوبة</span>
+        </li>
+        <li data-panel="unit-check">
+          <i class="fas fa-check-double"></i>
+          <span>تشييك الوحدات</span>
+        </li>
+        <li data-panel="strategic-storage">
+          <i class="fas fa-warehouse"></i>
+          <span>الخزن الاستراتيجي</span>
+        </li>
+        <li data-panel="support-plan">
+          <i class="fas fa-hands-helping"></i>
+          <span>خطة الدعم</span>
+        </li>
+      </ul>
+
+      <div class="quick-toggle">
+        <i class="fas fa-link"></i>
+        <span>روابط سريعة</span>
+      </div>
+      <div class="quick-links">
+        <a href="#"><i class="fas fa-external-link-alt"></i> رابط خارجي 1</a>
+        <a href="#"><i class="fas fa-external-link-alt"></i> رابط خارجي 2</a>
+      </div>
+    </aside>
+
+    <!-- Mobile Toggle -->
+    <button class="mobile-btn">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Main Content -->
+    <main>
+      <!-- Hero Section -->
+      <section class="hero">
+        <div>
+          <h1>مرحباً بك في منصة نطاق منى</h1>
+          <p>لوحة التحكم الرئيسية لعمليات موسم حج 1447هـ</p>
+          <span class="badge">الإصدار 1.0.0</span>
+        </div>
+        <img src="https://i.ibb.co/r5s341m/hero-img.png" alt="صورة ترحيبية">
+      </section>
+
+      <!-- Panels -->
+      <div class="panels-container">
+
+        <!-- Dashboard Panel -->
+        <section class="panel active" id="dashboard">
+          <div class="panel-head">
+            <div>
+              <h3>لوحة التحكم</h3>
+              <p>نظرة عامة على حالة الانتشار والدعم</p>
+            </div>
+          </div>
+
+          <div class="kpi-row">
+            <div class="kpi-card">
+              <div class="kpi-val" id="total-ready">0</div>
+              <div class="kpi-label">فرق جاهزة</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-val" id="total-supported">0</div>
+              <div class="kpi-label">فرق مدعومة</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-val" id="total-overlap">0</div>
+              <div class="kpi-label">فرق متداخلة</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-val" id="total-oos">0</div>
+              <div class="kpi-label">فرق خارج الخدمة</div>
+            </div>
+          </div>
+
+          <div class="dash-grid">
+            <div class="dash-card">
+              <h4><i class="fas fa-chart-bar"></i> ملخص الانتشار حسب القطاع</h4>
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>القطاع</th>
+                    <th>جاهز</th>
+                    <th>مدعوم</th>
+                    <th>متداخل</th>
+                    <th>خارج الخدمة</th>
+                    <th>الإجمالي</th>
+                  </tr>
+                </thead>
+                <tbody id="sector-summary-body">
+                  <!-- Data will be loaded here -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="dash-card">
+              <h4><i class="fas fa-car"></i> ملخص المركبات</h4>
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>نوع المركبة</th>
+                    <th>العدد</th>
+                    <th>متاح</th>
+                    <th>معطل</th>
+                  </tr>
+                </thead>
+                <tbody id="vehicle-summary-body">
+                  <!-- Data will be loaded here -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="dash-card">
+              <h4><i class="fas fa-hands-helping"></i> ملخص عمليات الدعم</h4>
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>الرمز</th>
+                    <th>نوع الدعم</th>
+                    <th>الحالة</th>
+                    <th>ملاحظات</th>
+                  </tr>
+                </thead>
+                <tbody id="support-summary-body">
+                  <!-- Data will be loaded here -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="dash-card">
+              <h4><i class="fas fa-exclamation-triangle"></i> الفرق المتعطلة</h4>
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>الرمز</th>
+                    <th>القطاع</th>
+                    <th>المناوبة</th>
+                    <th>سبب التعطل</th>
+                  </tr>
+                </thead>
+                <tbody id="broken-teams-body">
+                  <!-- Data will be loaded here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Deployment Map Panel -->
+        <section class="panel" id="deployment-map">
+          <div class="panel-head">
+            <div>
+              <h3>خريطة الانتشار</h3>
+              <p>عرض حي لنقاط الانتشار وحالتها</p>
+            </div>
+          </div>
+
+          <div class="map-filters">
+            <label for="sector-filter">القطاع:</label>
+            <select id="sector-filter">
+              <option value="all">الكل</option>
+              <option value="شمال">شمال</option>
+              <option value="جنوب">جنوب</option>
+              <option value="شرق">شرق</option>
+              <option value="غرب">غرب</option>
+            </select>
+
+            <label for="shift-filter">المناوبة:</label>
+            <select id="shift-filter">
+              <option value="all">الكل</option>
+              <option value="صباحية">صباحية</option>
+              <option value="مسائية">مسائية</option>
+              <option value="اوفرلاب">اوفرلاب</option>
+            </select>
+
+            <div class="map-legend">
+              <div class="leg-item"><span class="leg-dot" style="background-color:#00b894"></span> جاهز</div>
+              <div class="leg-item"><span class="leg-dot" style="background-color:#0b5ed7"></span> مدعوم</div>
+              <div class="leg-item"><span class="leg-dot" style="background-color:#fdcb6e"></span> متداخل</div>
+              <div class="leg-item"><span class="leg-dot" style="background-color:#d63031"></span> خارج الخدمة</div>
+              <div class="leg-item"><span class="leg-dot" style="background-color:#6b7280"></span> معطل</div>
+            </div>
+          </div>
+
+          <div id="deploymentMap"></div>
+        </section>
+
+        <!-- Daily Preparation Panel -->
+        <section class="panel" id="daily-preparation">
+          <div class="panel-head">
+            <div>
+              <h3>التحضير اليومي</h3>
+              <p>تسجيل بيانات التحضير اليومي للفرق</p>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-body">
+              <form id="daily-preparation-form">
+                <div class="grid-2">
+                  <div class="field">
+                    <label for="dp-sector">القطاع</label>
+                    <select id="dp-sector" name="القطاع" required>
+                      <option value="">اختر القطاع</option>
+                      <option value="شمال">شمال</option>
+                      <option value="جنوب">جنوب</option>
+                      <option value="شرق">شرق</option>
+                      <option value="غرب">غرب</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="dp-shift">المناوبة</label>
+                    <select id="dp-shift" name="المناوبة" required>
+                      <option value="">اختر المناوبة</option>
+                      <option value="صباحية">صباحية</option>
+                      <option value="مسائية">مسائية</option>
+                      <option value="اوفرلاب">اوفرلاب</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="grid-3" style="margin-top: 15px;">
+                  <div class="field">
+                    <label for="dp-code">رمز النقطة</label>
+                    <input type="text" id="dp-code" name="رمز النقطة" placeholder="مثال: MH1" required>
+                  </div>
+                  <div class="field">
+                    <label for="dp-status">الحالة</label>
+                    <select id="dp-status" name="الحالة" required>
+                      <option value="">اختر الحالة</option>
+                      <option value="جاهز">جاهز</option>
+                      <option value="مدعوم">مدعوم</option>
+                      <option value="متداخل">متداخل</option>
+                      <option value="خارج الخدمة">خارج الخدمة</option>
+                      <option value="معطل">معطل</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="dp-vehicle-type">نوع الوحدة</label>
+                    <select id="dp-vehicle-type" name="نوع الوحدة" required>
+                      <option value="">اختر النوع</option>
+                      <option value="مركبة">مركبة</option>
+                      <option value="قولف">قولف</option>
+                      <option value="راجلة">راجلة</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field" style="margin-top: 15px;">
+                  <label for="dp-notes">ملاحظات</label>
+                  <textarea id="dp-notes" name="ملاحظات" rows="3" placeholder="أدخل أي ملاحظات هنا"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">إرسال بيانات التحضير</button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <!-- Handover Panel -->
+        <section class="panel" id="handover">
+          <div class="panel-head">
+            <div>
+              <h3>تسليم المناوبة</h3>
+              <p>تسجيل بيانات تسليم المناوبة ورسائل ميثان</p>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-body">
+              <form id="handover-form">
+                <div class="grid-2">
+                  <div class="field">
+                    <label for="ho-sector">القطاع</label>
+                    <select id="ho-sector" name="القطاع" required>
+                      <option value="">اختر القطاع</option>
+                      <option value="شمال">شمال</option>
+                      <option value="جنوب">جنوب</option>
+                      <option value="شرق">شرق</option>
+                      <option value="غرب">غرب</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="ho-shift">المناوبة</label>
+                    <select id="ho-shift" name="المناوبة" required>
+                      <option value="">اختر المناوبة</option>
+                      <option value="صباحية">صباحية</option>
+                      <option value="مسائية">مسائية</option>
+                      <option value="اوفرلاب">اوفرلاب</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="grid-2" style="margin-top: 15px;">
+                  <div class="field">
+                    <label for="ho-from">المسلم</label>
+                    <input type="text" id="ho-from" name="المسلم" placeholder="اسم المسلم" required>
+                  </div>
+                  <div class="field">
+                    <label for="ho-to">المستلم</label>
+                    <input type="text" id="ho-to" name="المستلم" placeholder="اسم المستلم" required>
+                  </div>
+                </div>
+                <div class="field" style="margin-top: 15px;">
+                  <label for="ho-notes">ملاحظات التسليم</label>
+                  <textarea id="ho-notes" name="ملاحظات التسليم" rows="3" placeholder="أدخل ملاحظات التسليم هنا"></textarea>
+                </div>
+                <div class="field" style="margin-top: 15px;">
+                  <label for="ho-methane-message">رسالة ميثان</label>
+                  <textarea id="ho-methane-message" name="رسالة ميثان" rows="3" placeholder="أدخل رسالة ميثان هنا"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">إرسال بيانات التسليم</button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <!-- Unit Check Panel -->
+        <section class="panel" id="unit-check">
+          <div class="panel-head">
+            <div>
+              <h3>تشييك الوحدات</h3>
+              <p>تسجيل حالة تشييك الوحدات الميدانية</p>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-body">
+              <form id="unit-check-form">
+                <div class="grid-2">
+                  <div class="field">
+                    <label for="uc-code">رمز الوحدة</label>
+                    <input type="text" id="uc-code" name="رمز الوحدة" placeholder="مثال: MH1" required>
+                  </div>
+                  <div class="field">
+                    <label for="uc-status">الحالة</label>
+                    <select id="uc-status" name="الحالة" required>
+                      <option value="">اختر الحالة</option>
+                      <option value="سليم">سليم</option>
+                      <option value="يحتاج صيانة">يحتاج صيانة</option>
+                      <option value="خارج الخدمة">خارج الخدمة</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field" style="margin-top: 15px;">
+                  <label for="uc-notes">ملاحظات</label>
+                  <textarea id="uc-notes" name="ملاحظات" rows="3" placeholder="أدخل أي ملاحظات هنا"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">إرسال بيانات التشييك</button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <!-- Strategic Storage Panel -->
+        <section class="panel" id="strategic-storage">
+          <div class="panel-head">
+            <div>
+              <h3>الخزن الاستراتيجي</h3>
+              <p>تسجيل بيانات الخزن الاستراتيجي</p>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-body">
+              <form id="strategic-storage-form">
+                <div class="grid-2">
+                  <div class="field">
+                    <label for="ss-item">الصنف</label>
+                    <input type="text" id="ss-item" name="الصنف" placeholder="اسم الصنف" required>
+                  </div>
+                  <div class="field">
+                    <label for="ss-quantity">الكمية</label>
+                    <input type="number" id="ss-quantity" name="الكمية" placeholder="الكمية" required>
+                  </div>
+                </div>
+                <div class="field" style="margin-top: 15px;">
+                  <label for="ss-location">الموقع</label>
+                  <input type="text" id="ss-location" name="الموقع" placeholder="موقع التخزين" required>
+                </div>
+                <div class="field" style="margin-top: 15px;">
+                  <label for="ss-notes">ملاحظات</label>
+                  <textarea id="ss-notes" name="ملاحظات" rows="3" placeholder="أدخل أي ملاحظات هنا"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">إرسال بيانات الخزن</button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <!-- Support Plan Panel -->
+        <section class="panel" id="support-plan">
+          <div class="panel-head">
+            <div>
+              <h3>خطة الدعم</h3>
+              <p>تسجيل طلبات الدعم اللوجستي</p>
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-body">
+              <form id="support-plan-form">
+                <div class="grid-2">
+                  <div class="field">
+                    <label for="sp-code">رمز النقطة</label>
+                    <input type="text" id="sp-code" name="رمز النقطة" placeholder="مثال: MH1" required>
+                  </div>
+                  <div class="field">
+                    <label for="sp-support-type">نوع الدعم</label>
+                    <select id="sp-support-type" name="نوع الدعم" required>
+                      <option value="">اختر نوع الدعم</option>
+                      <option value="فني">فني</option>
+                      <option value="طبي">طبي</option>
+                      <option value="تمويني">تمويني</option>
+                      <option value="أمني">أمني</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="field" style="margin-top: 15px;">
+                  <label for="sp-notes">ملاحظات</label>
+                  <textarea id="sp-notes" name="ملاحظات" rows="3" placeholder="أدخل أي ملاحظات هنا"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">إرسال طلب الدعم</button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const SCRIPT_URL = \'https://script.google.com/macros/s/AKfycbxzkS1GrOC4IBKYQCD2APoK-6iIcGngUikW7zXseLK6JgnQd_pBxA_gX8LgYyoNBS-n2w/exec\';
+
+    // Deployment Points Data (148 points)
+    const deploymentPoints = [
+      { code: \'MH1\', sector: \'شمال\', lat: 21.4170, lng: 39.8700 },
+      { code: \'MH2\', sector: \'شمال\', lat: 21.4175, lng: 39.8705 },
+      { code: \'MH3\', sector: \'شمال\', lat: 21.4180, lng: 39.8710 },
+      { code: \'MH4\', sector: \'شمال\', lat: 21.4185, lng: 39.8715 },
+      { code: \'MH5\', sector: \'شمال\', lat: 21.4190, lng: 39.8720 },
+      { code: \'MH6\', sector: \'شمال\', lat: 21.4195, lng: 39.8725 },
+      { code: \'MH7\', sector: \'شمال\', lat: 21.4200, lng: 39.8730 },
+      { code: \'MH8\', sector: \'شمال\', lat: 21.4205, lng: 39.8735 },
+      { code: \'MH9\', sector: \'شمال\', lat: 21.4210, lng: 39.8740 },
+      { code: \'MH10\', sector: \'شمال\', lat: 21.4215, lng: 39.8745 },
+      { code: \'MH11\', sector: \'شمال\', lat: 21.4220, lng: 39.8750 },
+      { code: \'MH12\', sector: \'شمال\', lat: 21.4225, lng: 39.8755 },
+      { code: \'MH13\', sector: \'شمال\', lat: 21.4230, lng: 39.8760 },
+      { code: \'MH14\', sector: \'شمال\', lat: 21.4235, lng: 39.8765 },
+      { code: \'MH15\', sector: \'شمال\', lat: 21.4240, lng: 39.8770 },
+      { code: \'MH16\', sector: \'شمال\', lat: 21.4245, lng: 39.8775 },
+      { code: \'MH17\', sector: \'شمال\', lat: 21.4250, lng: 39.8780 },
+      { code: \'MH18\', sector: \'شمال\', lat: 21.4255, lng: 39.8785 },
+      { code: \'MH19\', sector: \'شمال\', lat: 21.4260, lng: 39.8790 },
+      { code: \'MH20\', sector: \'شمال\', lat: 21.4265, lng: 39.8795 },
+      { code: \'MH21\', sector: \'شمال\', lat: 21.4270, lng: 39.8800 },
+      { code: \'MH22\', sector: \'شمال\', lat: 21.4275, lng: 39.8805 },
+      { code: \'MH23\', sector: \'شمال\', lat: 21.4280, lng: 39.8810 },
+      { code: \'MH24\', sector: \'شمال\', lat: 21.4285, lng: 39.8815 },
+      { code: \'MH25\', sector: \'شمال\', lat: 21.4290, lng: 39.8820 },
+      { code: \'MH26\', sector: \'شمال\', lat: 21.4295, lng: 39.8825 },
+      { code: \'MH27\', sector: \'شمال\', lat: 21.4300, lng: 39.8830 },
+      { code: \'MH28\', sector: \'شمال\', lat: 21.4305, lng: 39.8835 },
+      { code: \'MH29\', sector: \'شمال\', lat: 21.4310, lng: 39.8840 },
+      { code: \'MH30\', sector: \'شمال\', lat: 21.4315, lng: 39.8845 },
+      { code: \'MH31\', sector: \'جنوب\', lat: 21.4170, lng: 39.8700 },
+      { code: \'MH32\', sector: \'جنوب\', lat: 21.4175, lng: 39.8705 },
+      { code: \'MH33\', sector: \'جنوب\', lat: 21.4180, lng: 39.8710 },
+      { code: \'MH34\', sector: \'جنوب\', lat: 21.4185, lng: 39.8715 },
+      { code: \'MH35\', sector: \'جنوب\', lat: 21.4190, lng: 39.8720 },
+      { code: \'MH36\', sector: \'جنوب\', lat: 21.4195, lng: 39.8725 },
+      { code: \'MH37\', sector: \'جنوب\', lat: 21.4200, lng: 39.8730 },
+      { code: \'MH38\', sector: \'جنوب\', lat: 21.4205, lng: 39.8735 },
+      { code: \'MH39\', sector: \'جنوب\', lat: 21.4210, lng: 39.8740 },
+      { code: \'MH40\', sector: \'جنوب\', lat: 21.4215, lng: 39.8745 },
+      { code: \'MH41\', sector: \'جنوب\', lat: 21.4220, lng: 39.8750 },
+      { code: \'MH42\', sector: \'جنوب\', lat: 21.4225, lng: 39.8755 },
+      { code: \'MH43\', sector: \'جنوب\', lat: 21.4230, lng: 39.8760 },
+      { code: \'MH44\', sector: \'جنوب\', lat: 21.4235, lng: 39.8765 },
+      { code: \'MH45\', sector: \'جنوب\', lat: 21.4240, lng: 39.8770 },
+      { code: \'MH46\', sector: \'جنوب\', lat: 21.4245, lng: 39.8775 },
+      { code: \'MH47\', sector: \'جنوب\', lat: 21.4250, lng: 39.8780 },
+      { code: \'MH48\', sector: \'جنوب\', lat: 21.4255, lng: 39.8785 },
+      { code: \'MH49\', sector: \'جنوب\', lat: 21.4260, lng: 39.8790 },
+      { code: \'MH50\', sector: \'جنوب\', lat: 21.4265, lng: 39.8795 },
+      { code: \'MH51\', sector: \'جنوب\', lat: 21.4270, lng: 39.8800 },
+      { code: \'MH52\', sector: \'جنوب\', lat: 21.4275, lng: 39.8805 },
+      { code: \'MH53\', sector: \'جنوب\', lat: 21.4280, lng: 39.8810 },
+      { code: \'MH54\', sector: \'جنوب\', lat: 21.4285, lng: 39.8815 },
+      { code: \'MH55\', sector: \'جنوب\', lat: 21.4290, lng: 39.8820 },
+      { code: \'MH56\', sector: \'جنوب\', lat: 21.4295, lng: 39.8825 },
+      { code: \'MH57\', sector: \'جنوب\', lat: 21.4300, lng: 39.8830 },
+      { code: \'MH58\', sector: \'جنوب\', lat: 21.4305, lng: 39.8835 },
+      { code: \'MH59\', sector: \'جنوب\', lat: 21.4310, lng: 39.8840 },
+      { code: \'MH60\', sector: \'جنوب\', lat: 21.4315, lng: 39.8845 },
+      { code: \'MH61\', sector: \'شرق\', lat: 21.4170, lng: 39.8700 },
+      { code: \'MH62\', sector: \'شرق\', lat: 21.4175, lng: 39.8705 },
+      { code: \'MH63\', sector: \'شرق\', lat: 21.4180, lng: 39.8710 },
+      { code: \'MH64\', sector: \'شرق\', lat: 21.4185, lng: 39.8715 },
+      { code: \'MH65\', sector: \'شرق\', lat: 21.4190, lng: 39.8720 },
+      { code: \'MH66\', sector: \'شرق\', lat: 21.4195, lng: 39.8725 },
+      { code: \'MH67\', sector: \'شرق\', lat: 21.4200, lng: 39.8730 },
+      { code: \'MH68\', sector: \'شرق\', lat: 21.4205, lng: 39.8735 },
+      { code: \'MH69\', sector: \'شرق\', lat: 21.4210, lng: 39.8740 },
+      { code: \'MH70\', sector: \'شرق\', lat: 21.4215, lng: 39.8745 },
+      { code: \'MH71\', sector: \'شرق\', lat: 21.4220, lng: 39.8750 },
+      { code: \'MH72\', sector: \'شرق\', lat: 21.4225, lng: 39.8755 },
+      { code: \'MH73\', sector: \'شرق\', lat: 21.4230, lng: 39.8760 },
+      { code: \'MH74\', sector: \'شرق\', lat: 21.4235, lng: 39.8765 },
+      { code: \'MH75\', sector: \'شرق\', lat: 21.4240, lng: 39.8770 },
+      { code: \'MH76\', sector: \'شرق\', lat: 21.4245, lng: 39.8775 },
+      { code: \'MH77\', sector: \'شرق\', lat: 21.4250, lng: 39.8780 },
+      { code: \'MH78\', sector: \'شرق\', lat: 21.4255, lng: 39.8785 },
+      { code: \'MH79\', sector: \'شرق\', lat: 21.4260, lng: 39.8790 },
+      { code: \'MH80\', sector: \'شرق\', lat: 21.4265, lng: 39.8795 },
+      { code: \'MH81\', sector: \'شرق\', lat: 21.4270, lng: 39.8800 },
+      { code: \'MH82\', sector: \'شرق\', lat: 21.4275, lng: 39.8805 },
+      { code: \'MH83\', sector: \'شرق\', lat: 21.4280, lng: 39.8810 },
+      { code: \'MH84\', sector: \'شرق\', lat: 21.4285, lng: 39.8815 },
+      { code: \'MH85\', sector: \'شرق\', lat: 21.4290, lng: 39.8820 },
+      { code: \'MH86\', sector: \'شرق\', lat: 21.4295, lng: 39.8825 },
+      { code: \'MH87\', sector: \'شرق\', lat: 21.4300, lng: 39.8830 },
+      { code: \'MH88\', sector: \'شرق\', lat: 21.4305, lng: 39.8835 },
+      { code: \'MH89\', sector: \'شرق\', lat: 21.4310, lng: 39.8840 },
+      { code: \'MH90\', sector: \'شرق\', lat: 21.4315, lng: 39.8845 },
+      { code: \'MH91\', sector: \'غرب\', lat: 21.4170, lng: 39.8700 },
+      { code: \'MH92\', sector: \'غرب\', lat: 21.4175, lng: 39.8705 },
+      { code: \'MH93\', sector: \'غرب\', lat: 21.4180, lng: 39.8710 },
+      { code: \'MH94\', sector: \'غرب\', lat: 21.4185, lng: 39.8715 },
+      { code: \'MH95\', sector: \'غرب\', lat: 21.4190, lng: 39.8720 },
+      { code: \'MH96\', sector: \'غرب\', lat: 21.4195, lng: 39.8725 },
+      { code: \'MH97\', sector: \'غرب\', lat: 21.4200, lng: 39.8730 },
+      { code: \'MH98\', sector: \'غرب\', lat: 21.4205, lng: 39.8735 },
+      { code: \'MH99\', sector: \'غرب\', lat: 21.4210, lng: 39.8740 },
+      { code: \'MH100\', sector: \'غرب\', lat: 21.4215, lng: 39.8745 },
+      { code: \'MH101\', sector: \'غرب\', lat: 21.4220, lng: 39.8750 },
+      { code: \'MH102\', sector: \'غرب\', lat: 21.4225, lng: 39.8755 },
+      { code: \'MH103\', sector: \'غرب\', lat: 21.4230, lng: 39.8760 },
+      { code: \'MH104\', sector: \'غرب\', lat: 21.4235, lng: 39.8765 },
+      { code: \'MH105\', sector: \'غرب\', lat: 21.4240, lng: 39.8770 },
+      { code: \'MH106\', sector: \'غرب\', lat: 21.4245, lng: 39.8775 },
+      { code: \'MH107\', sector: \'غرب\', lat: 21.4250, lng: 39.8780 },
+      { code: \'MH108\', sector: \'غرب\', lat: 21.4255, lng: 39.8785 },
+      { code: \'MH109\', sector: \'غرب\', lat: 21.4260, lng: 39.8790 },
+      { code: \'MH110\', sector: \'غرب\', lat: 21.4265, lng: 39.8795 },
+      { code: \'MH111\', sector: \'غرب\', lat: 21.4270, lng: 39.8800 },
+      { code: \'MH112\', sector: \'غرب\', lat: 21.4275, lng: 39.8805 },
+      { code: \'MH113\', sector: \'غرب\', lat: 21.4280, lng: 39.8810 },
+      { code: \'MH114\', sector: \'غرب\', lat: 21.4285, lng: 39.8815 },
+      { code: \'MH115\', sector: \'غرب\', lat: 21.4290, lng: 39.8820 },
+      { code: \'MH116\', sector: \'غرب\', lat: 21.4295, lng: 39.8825 },
+      { code: \'MH117\', sector: \'غرب\', lat: 21.4300, lng: 39.8830 },
+      { code: \'MH118\', sector: \'غرب\', lat: 21.4305, lng: 39.8835 },
+      { code: \'MH119\', sector: \'غرب\', lat: 21.4310, lng: 39.8840 },
+      { code: \'MH120\', sector: \'غرب\', lat: 21.4315, lng: 39.8845 },
+      { code: \'MH121\', sector: \'شمال\', lat: 21.4320, lng: 39.8850 },
+      { code: \'MH122\', sector: \'شمال\', lat: 21.4325, lng: 39.8855 },
+      { code: \'MH123\', sector: \'شمال\', lat: 21.4330, lng: 39.8860 },
+      { code: \'MH124\', sector: \'شمال\', lat: 21.4335, lng: 39.8865 },
+      { code: \'MH125\', sector: \'شمال\', lat: 21.4340, lng: 39.8870 },
+      { code: \'MH126\', sector: \'شمال\', lat: 21.4345, lng: 39.8875 },
+      { code: \'MH127\', sector: \'شمال\', lat: 21.4350, lng: 39.8880 },
+      { code: \'MH128\', sector: \'شمال\', lat: 21.4355, lng: 39.8885 },
+      { code: \'MH129\', sector: \'شمال\', lat: 21.4360, lng: 39.8890 },
+      { code: \'MH130\', sector: \'شمال\', lat: 21.4365, lng: 39.8895 },
+      { code: \'MH131\', sector: \'جنوب\', lat: 21.4320, lng: 39.8850 },
+      { code: \'MH132\', sector: \'جنوب\', lat: 21.4325, lng: 39.8855 },
+      { code: \'MH133\', sector: \'جنوب\', lat: 21.4330, lng: 39.8860 },
+      { code: \'MH134\', sector: \'جنوب\', lat: 21.4335, lng: 39.8865 },
+      { code: \'MH135\', sector: \'جنوب\', lat: 21.4340, lng: 39.8870 },
+      { code: \'MH136\', sector: \'جنوب\', lat: 21.4345, lng: 39.8875 },
+      { code: \'MH137\', sector: \'جنوب\', lat: 21.4350, lng: 39.8880 },
+      { code: \'MH138\', sector: \'جنوب\', lat: 21.4355, lng: 39.8885 },
+      { code: \'MH139\', sector: \'جنوب\', lat: 21.4360, lng: 39.8890 },
+      { code: \'MH140\', sector: \'جنوب\', lat: 21.4365, lng: 39.8895 },
+      { code: \'MH141\', sector: \'شرق\', lat: 21.4320, lng: 39.8850 },
+      { code: \'MH142\', sector: \'شرق\', lat: 21.4325, lng: 39.8855 },
+      { code: \'MH143\', sector: \'شرق\', lat: 21.4330, lng: 39.8860 },
+      { code: \'MH144\', sector: \'شرق\', lat: 21.4335, lng: 39.8865 },
+      { code: \'MH145\', sector: \'شرق\', lat: 21.4340, lng: 39.8870 },
+      { code: \'MH146\', sector: \'شرق\', lat: 21.4345, lng: 39.8875 },
+      { code: \'MH147\', sector: \'شرق\', lat: 21.4350, lng: 39.8880 },
+      { code: \'MH148\', sector: \'شرق\', lat: 21.4355, lng: 39.8885 }
+    ];
+
+    let map;
+    let markers = {};
+    let currentDeploymentData = [];
+    let currentSupportData = [];
+    let currentLogisticsData = [];
+
+    function initMap() {
+      map = L.map(\'deploymentMap\').setView([21.4225, 39.8261], 13); // Centered on Mina
+
+      L.tileLayer(\'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png\', {
+        attribution: \'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors\'
+      }).addTo(map);
+
+      // Add markers for all deployment points initially
+      deploymentPoints.forEach(point => {
+        const marker = L.marker([point.lat, point.lng]).addTo(map);
+        marker.bindPopup(`<b>${point.code}</b><br>القطاع: ${point.sector}<br>الحالة: جاري التحميل...`);
+        markers[point.code] = marker;
+      });
+    }
+
+    function getStatusColor(status) {
+      switch (status) {
+        case \'جاهز\': return \'#00b894\'; // Green
+        case \'مدعوم\': return \'#0b5ed7\'; // Blue
+        case \'متداخل\': return \'#fdcb6e\'; // Yellow
+        case \'خارج الخدمة\': return \'#d63031\'; // Red
+        case \'معطل\': return \'#6b7280\'; // Gray
+        default: return \'#6b7280\'; // Default to gray
+      }
+    }
+
+    async function fetchData(action, params = {}) {
+      const url = new URL(SCRIPT_URL);
+      url.searchParams.append(\'action\', action);
+      for (const key in params) {
+        url.searchParams.append(key, params[key]);
+      }
+      try {
+        const response = await fetch(url.toString());
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error(`Error fetching data for ${action}:`, error);
+        Swal.fire({
+          icon: \'error\',
+          title: \'خطأ في الاتصال\',
+          text: \'تعذر جلب البيانات من الخادم. يرجى التحقق من اتصال الإنترنت وإعادة المحاولة.\',
+        });
+        return [];
+      }
+    }
+
+    async function loadLiveDeploymentData() {
+      currentDeploymentData = await fetchData(\'getDeployment\');
+      updateMapAndDashboard();
+    }
+
+    async function loadSupportData() {
+      currentSupportData = await fetchData(\'getSupport\');
+      updateSupportSummary();
+    }
+
+    async function loadLogisticsData() {
+      currentLogisticsData = await fetchData(\'getLogistics\');
+      updateBrokenTeamsSummary();
+      updateVehicleSummary();
+    }
+
+    function updateMapAndDashboard() {
+      const sectorFilter = document.getElementById(\'sector-filter\').value;
+      const shiftFilter = document.getElementById(\'shift-filter\').value;
+
+      const sectorSummary = {};
+      const statusCounts = { \'جاهز\': 0, \'مدعوم\': 0, \'متداخل\': 0, \'خارج الخدمة\': 0, \'معطل\': 0 };
+
+      deploymentPoints.forEach(point => {
+        const marker = markers[point.code];
+        if (!marker) return;
+
+        const deployment = currentDeploymentData.find(d => d[\'الرمز\'] === point.code);
+        let status = \'معطل\'; // Default status if no data
+        let shift = \'\';
+
+        if (deployment) {
+          status = deployment[\'الحالة\'] || \'معطل\';
+          shift = deployment[\'المناوبة\'] || \'\';
+        }
+
+        // Filter logic
+        const matchesSector = sectorFilter === \'all\' || point.sector === sectorFilter;
+        const matchesShift = shiftFilter === \'all\' || shift === shiftFilter;
+
+        if (matchesSector && matchesShift) {
+          marker.setOpacity(1);
+          const color = getStatusColor(status);
+          const iconHtml = `<div style="background-color: ${color}; width: 1.5rem; height: 1.5rem; display: block; position: absolute; border-radius: 50%; border: 2px solid #ffffff; transform: translate(-50%, -50%);"></div>`;
+          const customIcon = L.divIcon({
+            className: \'custom-div-icon\',
+            html: iconHtml,
+            iconSize: [24, 24],
+            iconAnchor: [12, 12]
+          });
+          marker.setIcon(customIcon);
+          marker.setPopupContent(`<b>${point.code}</b><br>القطاع: ${point.sector}<br>الحالة: ${status}<br>المناوبة: ${shift}`);
+
+          // Update dashboard counts
+          if (!sectorSummary[point.sector]) {
+            sectorSummary[point.sector] = { \'جاهز\': 0, \'مدعوم\': 0, \'متداخل\': 0, \'خارج الخدمة\': 0, \'معطل\': 0, \'الإجمالي\': 0 };
+          }
+          sectorSummary[point.sector][status]++;
+          sectorSummary[point.sector][\'الإجمالي\']++;
+          statusCounts[status]++;
+
+        } else {
+          marker.setOpacity(0); // Hide marker if it doesn't match filters
+        }
+      });
+
+      // Update KPI cards
+      document.getElementById(\'total-ready\').textContent = statusCounts[\'جاهز\'];
+      document.getElementById(\'total-supported\').textContent = statusCounts[\'مدعوم\'];
+      document.getElementById(\'total-overlap\').textContent = statusCounts[\'متداخل\'];
+      document.getElementById(\'total-oos\').textContent = statusCounts[\'خارج الخدمة\'];
+
+      // Update Sector Summary Table
+      const sectorSummaryBody = document.getElementById(\'sector-summary-body\');
+      sectorSummaryBody.innerHTML = \'\';
+      for (const sector in sectorSummary) {
+        const summary = sectorSummary[sector];
+        const row = `
+          <tr>
+            <td>${sector}</td>
+            <td>${summary[\'جاهز\']}</td>
+            <td>${summary[\'مدعوم\']}</td>
+            <td>${summary[\'متداخل\']}</td>
+            <td>${summary[\'خارج الخدمة\']}</td>
+            <td>${summary[\'الإجمالي\']}</td>
+          </tr>
+        `;
+        sectorSummaryBody.insertAdjacentHTML(\'beforeend\', row);
+      }
+    }
+
+    function updateSupportSummary() {
+      const supportSummaryBody = document.getElementById(\'support-summary-body\');
+      supportSummaryBody.innerHTML = \'\';
+      if (currentSupportData.length === 0) {
+        supportSummaryBody.innerHTML = \'<tr><td colspan="4" style="text-align:center;">لا توجد بيانات دعم حالياً.</td></tr>\';
+        return;
+      }
+
+      currentSupportData.forEach(item => {
+        const row = `
+          <tr>
+            <td>${item[\'رمز النقطة\'] || \'N/A\'}</td>
+            <td>${item[\'نوع الدعم\'] || \'N/A\'}</td>
+            <td>${item[\'الحالة\'] || \'N/A\'}</td>
+            <td>${item[\'ملاحظات\'] || \'N/A\'}</td>
+          </tr>
+        `;
+        supportSummaryBody.insertAdjacentHTML(\'beforeend\', row);
+      });
+    }
+
+    function updateBrokenTeamsSummary() {
+      const brokenTeamsBody = document.getElementById(\'broken-teams-body\');
+      brokenTeamsBody.innerHTML = \'\';
+      if (currentLogisticsData.length === 0) {
+        brokenTeamsBody.innerHTML = \'<tr><td colspan="4" style="text-align:center;">لا توجد فرق متعطلة حالياً.</td></tr>\';
+        return;
+      }
+
+      currentLogisticsData.forEach(item => {
+        const row = `
+          <tr>
+            <td>${item[\'رمز النقطة\'] || \'N/A\'}</td>
+            <td>${item[\'القطاع\'] || \'N/A\'}</td>
+            <td>${item[\'المناوبة\'] || \'N/A\'}</td>
+            <td>${item[\'سبب التعطل\'] || \'N/A\'}</td>
+          </tr>
+        `;
+        brokenTeamsBody.insertAdjacentHTML(\'beforeend\', row);
+      });
+    }
+
+    function updateVehicleSummary() {
+      const vehicleSummaryBody = document.getElementById(\'vehicle-summary-body\');
+      vehicleSummaryBody.innerHTML = \'\';
+      // This data would typically come from a separate sheet or be aggregated from deployment data
+      // For now, using dummy data or aggregating from currentDeploymentData if available
+      const vehicleCounts = {}; // { type: { total: 0, available: 0, broken: 0 } }
+
+      currentDeploymentData.forEach(deployment => {
+        const type = deployment[\'نوع الوحدة\'] || \'غير محدد\';
+        const status = deployment[\'الحالة\'] || \'معطل\';
+
+        if (!vehicleCounts[type]) {
+          vehicleCounts[type] = { total: 0, available: 0, broken: 0 };
+        }
+        vehicleCounts[type].total++;
+        if (status === \'جاهز\' || status === \'مدعوم\' || status === \'متداخل\') {
+          vehicleCounts[type].available++;
+        } else if (status === \'خارج الخدمة\' || status === \'معطل\') {
+          vehicleCounts[type].broken++;
+        }
+      });
+
+      for (const type in vehicleCounts) {
+        const counts = vehicleCounts[type];
+        const row = `
+          <tr>
+            <td>${type}</td>
+            <td>${counts.total}</td>
+            <td>${counts.available}</td>
+            <td>${counts.broken}</td>
+          </tr>
+        `;
+        vehicleSummaryBody.insertAdjacentHTML(\'beforeend\', row);
+      }
+
+      if (Object.keys(vehicleCounts).length === 0) {
+        vehicleSummaryBody.innerHTML = \'<tr><td colspan="4" style="text-align:center;">لا توجد بيانات مركبات حالياً.</td></tr>\';
+      }
+    }
+
+    // Form Submission Handler
+    async function handleFormSubmit(event, sheetName) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      const rowData = {};
+
+      // Get current date and time in Saudi Arabia timezone
+      const now = new Date();
+      const options = { timeZone: \'Asia/Riyadh\', year: \'numeric\', month: \'2-digit\', day: \'2-digit\', hour: \'2-digit\', minute: \'2-digit\', second: \'2-digit\', hour12: false };
+      const dateTimeFormat = new Intl.DateTimeFormat(\'ar-SA\', options);
+      const parts = dateTimeFormat.formatToParts(now);
+      const date = `${parts[4].value}-${parts[2].value}-${parts[0].value}`;
+      const time = `${parts[6].value}:${parts[8].value}:${parts[10].value}`;
+      const dateTime = `${date} ${time}`;
+
+      rowData[\'وقت الحفظ\'] = dateTime;
+
+      for (const [key, value] of formData.entries()) {
+        rowData[key] = value;
+      }
+
+      // Special handling for 'خطة الانتشار' to include lat/lng if available
+      if (sheetName === \'خطة الانتشار\') {
+        const pointCode = rowData[\'رمز النقطة\'];
+        const point = deploymentPoints.find(p => p.code === pointCode);
+        if (point) {
+          rowData[\'خط الطول\'] = point.lat;
+          rowData[\'خط العرض\'] = point.lng;
+        } else {
+          Swal.fire({
+            icon: \'warning\',
+            title: \'رمز نقطة غير موجود\',
+            text: \'رمز النقطة المدخل غير موجود في قائمة نقاط الانتشار الثابتة. لن يتم حفظ الإحداثيات.\',
+          });
+        }
+      }
+
+      try {
+        const response = await fetch(SCRIPT_URL, {
+          method: \'POST\',
+          headers: {
+            \'Content-Type\': \'application/x-www-form-urlencoded\',
+          },
+          body: new URLSearchParams({
+            sheetName: sheetName,
+            rows: JSON.stringify([rowData]),
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.status === \'success\') {
+          Swal.fire({
+            icon: \'success\',
+            title: \'تم الإرسال بنجاح!\',
+            text: \'تم حفظ بياناتك بنجاح.\',
+          });
+          form.reset();
+          // Reload data for dashboard and map after successful submission
+          if (sheetName === \'خطة الانتشار\') {
+            loadLiveDeploymentData();
+          } else if (sheetName === \'خطة الدعم\') {
+            loadSupportData();
+          }
+        } else {
+          throw new Error(result.message || \'فشل إرسال البيانات.\');
+        }
+      } catch (error) {
+        console.error(\'Error submitting form:\', error);
+        Swal.fire({
+          icon: \'error\',
+          title: \'خطأ في الإرسال\',
+          text: \'تعذر إرسال البيانات. يرجى التحقق من اتصال الإنترنت وإعادة المحاولة.\',
+        });
+      }
+    }
+
+    // Panel Activation
+    function activatePanel(panelId) {
+      document.querySelectorAll(\'.panel\').forEach(panel => {
+        panel.classList.remove(\'active\');
+      });
+      document.getElementById(panelId).classList.add(\'active\');
+
+      document.querySelectorAll(\'.nav li\').forEach(item => {
+        item.classList.remove(\'active\');
+      });
+      document.querySelector(`.nav li[data-panel="${panelId}"]`).classList.add(\'active\');
+
+      // Load data specific to the activated panel
+      if (panelId === \'dashboard\') {
+        loadLiveDeploymentData();
+        loadSupportData();
+        loadLogisticsData();
+      } else if (panelId === \'deployment-map\') {
+        loadLiveDeploymentData();
+      }
+    }
+
+    // Event Listeners
+    document.addEventListener(\'DOMContentLoaded\', () => {
+      initMap();
+      activatePanel(\'dashboard\'); // Activate dashboard by default
+
+      document.querySelectorAll(\'.nav li\').forEach(item => {
+        item.addEventListener(\'click\', () => {
+          const panelId = item.getAttribute(\'data-panel\');
+          activatePanel(panelId);
+        });
+      });
+
+      document.querySelector(\'#sector-filter\').addEventListener(\'change\', updateMapAndDashboard);
+      document.querySelector(\'#shift-filter\').addEventListener(\'change\', updateMapAndDashboard);
+
+      // Form submissions
+      document.getElementById(\'daily-preparation-form\').addEventListener(\'submit\', (e) => handleFormSubmit(e, \'التحضير اليومي\'));
+      document.getElementById(\'handover-form\').addEventListener(\'submit\', (e) => handleFormSubmit(e, \'تسليم المناوبة\'));
+      document.getElementById(\'unit-check-form\').addEventListener(\'submit\', (e) => handleFormSubmit(e, \'تشييك الوحدات\'));
+      document.getElementById(\'strategic-storage-form\').addEventListener(\'submit\', (e) => handleFormSubmit(e, \'الخزن الاستراتيجي\'));
+      document.getElementById(\'support-plan-form\').addEventListener(\'submit\', (e) => handleFormSubmit(e, \'خطة الدعم\'));
+
+      // Mobile sidebar toggle
+      const mobileBtn = document.querySelector(\'.mobile-btn\');
+      const sidebar = document.querySelector(\'.sidebar\');
+      mobileBtn.addEventListener(\'click\', () => {
+        sidebar.classList.toggle(\'active\');
+      });
+
+      // Quick links toggle
+      document.querySelector(\'.quick-toggle\').addEventListener(\'click\', () => {
+        document.querySelector(\'.quick-links\').classList.toggle(\'show\');
+      });
+    });
+
+    // Initial data load
+    loadLiveDeploymentData();
+    loadSupportData();
+    loadLogisticsData();
+
+  </script>
+</body>
+</html>

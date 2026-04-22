@@ -1198,13 +1198,6 @@
             </div>
 
             <div class="field">
-              <label for="deploy_assistant_name">يتم كتابة اسم مساعد كبير المسعفين المدخل للبيانات</label>
-              <select id="deploy_assistant_name">
-                <option value="" disabled selected>اختر اسم المساعد</option>
-              </select>
-            </div>
-
-            <div class="field">
               <label for="deploy_current_lead">اسم كبير المسعفين المناوب</label>
               <input type="text" id="deploy_current_lead" readonly>
             </div>
@@ -2190,16 +2183,7 @@ ${supportLines}
       document.getElementById('deploy_assistant3_auto').value = team?.assistants?.[2] || '';
       document.getElementById('deploy_assistant4_auto').value = team?.assistants?.[3] || '';
 
-      const select = document.getElementById('deploy_assistant_name');
-      select.innerHTML = '<option value="" disabled selected>اختر اسم المساعد</option>';
-      (team?.assistants || []).forEach(name => {
-        if(name && name.trim()){
-          const op = document.createElement('option');
-          op.value = name;
-          op.textContent = name;
-          select.appendChild(op);
-        }
-      });
+
     }
 
     function getDefaultTimes(shift){
@@ -2326,7 +2310,10 @@ ${supportLines}
 
   body.innerHTML = '';
 
-  if(!sector) return;
+  if(!sector) {
+    body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#999;">اختر القطاع لعرض النقاط</td></tr>';
+    return;
+  }
 
   const data = await fetchDeploymentFromSheet();
 
@@ -2381,9 +2368,7 @@ const items = data.filter(d =>
       const date = document.getElementById('deployment_date').value;
       const time = document.getElementById('deployment_time').value;
       const lead = document.getElementById('deploy_current_lead').value || '-';
-      const entryName = role === 'كبير مسعفين'
-        ? (document.getElementById('deploy_lead_name').value || '')
-        : (document.getElementById('deploy_assistant_name').value || '');
+      const entryName = document.getElementById('deploy_lead_name').value || '';
       const notes = document.getElementById('deployment_notes').value.trim();
 
       const canEdit = role === 'كبير مسعفين' || role === 'مساعد كبير مسعفين';
@@ -2393,7 +2378,7 @@ const items = data.filter(d =>
         return;
       }
 
-      if(!sector || !shift || !role || !date || !time || !entryName){
+      if(!sector || !role || !date || !time || !entryName){
         showAlert('deploymentAlert','error','يرجى تعبئة البيانات الأساسية لخطة الانتشار');
         return;
       }

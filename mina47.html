@@ -2069,8 +2069,2976 @@
   </main>
 </div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">// Static Deployment Points (148 نقطة انتشار)
+const staticDeploymentPoints = [
+  {
+    id: 'MH1',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.425546,
+    lng: 39.86387,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH2',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.424468,
+    lng: 39.863626,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH3',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.425116,
+    lng: 39.865597,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH4',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.425066,
+    lng: 39.865984,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH5',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.425314,
+    lng: 39.867029,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH6',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.423748,
+    lng: 39.865322,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH7',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.424757,
+    lng: 39.86711,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH8',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.425946,
+    lng: 39.870235,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH9',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.424427,
+    lng: 39.868784,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH10',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.422679,
+    lng: 39.876464,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH11',
+    sector: 'الجمرات',
+    type: 'مركبة',
+    lat: 21.424594,
+    lng: 39.872963,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH12',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.422541,
+    lng: 39.8765,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH13',
+    sector: 'الجمرات',
+    type: 'مركبة',
+    lat: 21.42235,
+    lng: 39.868068,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH14',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.421914,
+    lng: 39.869211,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH15',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.42362,
+    lng: 39.873042,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH16',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.419938,
+    lng: 39.872258,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH17',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.419297,
+    lng: 39.873766,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH18',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.422883,
+    lng: 39.871233,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH19',
+    sector: 'الجمرات',
+    type: 'راجلة',
+    lat: 21.420706,
+    lng: 39.876611,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH20',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.425302,
+    lng: 39.867091,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH21',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.420791,
+    lng: 39.876812,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH22',
+    sector: 'الجمرات',
+    type: 'راجلة',
+    lat: 21.420252,
+    lng: 39.871201,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH23',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.420067,
+    lng: 39.877646,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH24',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.416968,
+    lng: 39.877064,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH25',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.423457,
+    lng: 39.871308,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH26',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.422453,
+    lng: 39.877141,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH27',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.422588,
+    lng: 39.878702,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH28‏',
+    sector: 'الجمرات',
+    type: 'راجلة',
+    lat: 21.422333,
+    lng: 39.879185,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH29‏‏',
+    sector: 'الجمرات',
+    type: 'راجلة',
+    lat: 21.422707,
+    lng: 39.877685,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH30',
+    sector: 'الجمرات',
+    type: 'راجلة',
+    lat: 21.420637,
+    lng: 39.87462,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH31',
+    sector: 'الجمرات',
+    type: 'راجلة',
+    lat: 21.422205,
+    lng: 39.871614,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH32',
+    sector: 'الجمرات',
+    type: 'راجلة',
+    lat: 21.420539,
+    lng: 39.872534,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH33',
+    sector: 'الجمرات',
+    type: 'راجلة',
+    lat: 21.419933,
+    lng: 39.874036,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH34',
+    sector: 'الجمرات',
+    type: 'راجلة',
+    lat: 21.419995,
+    lng: 39.873977,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH35',
+    sector: 'الجمرات',
+    type: 'راجلة',
+    lat: 21.41991,
+    lng: 39.874087,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH36',
+    sector: 'القطارات',
+    type: 'قولف',
+    lat: 21.419885,
+    lng: 39.87414,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH37',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.422027,
+    lng: 39.871756,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH38',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.422112,
+    lng: 39.871644,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH39',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.421962,
+    lng: 39.871955,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH40',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.419221,
+    lng: 39.874428,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH41',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.419401,
+    lng: 39.874868,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH42',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.422243,
+    lng: 39.870157,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH43',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.420376,
+    lng: 39.874716,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH44',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.420419,
+    lng: 39.87468,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH45',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.421437,
+    lng: 39.873249,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH46',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.421861,
+    lng: 39.872251,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH47',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.422352,
+    lng: 39.871188,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH48',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.421639,
+    lng: 39.870778,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH49',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.42134,
+    lng: 39.871958,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH50',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.420853,
+    lng: 39.872719,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH51',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.42095,
+    lng: 39.872647,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH52',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.419738,
+    lng: 39.87439,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH53',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.418786,
+    lng: 39.877496,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH54',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.417938,
+    lng: 39.877104,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH55',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.412133,
+    lng: 39.88039,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH56',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.411564,
+    lng: 39.884305,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH57',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.412566,
+    lng: 39.881988,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH58',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.422928,
+    lng: 39.865427,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH59',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.420532,
+    lng: 39.868676,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH60',
+    sector: 'القطارات',
+    type: 'قولف',
+    lat: 21.420106,
+    lng: 39.869124,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH61',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.4195019,
+    lng: 39.8707124,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH62',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.419418,
+    lng: 39.87085,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH63',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.4175948,
+    lng: 39.8733618,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH64',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.419053,
+    lng: 39.871377,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH65',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.416051,
+    lng: 39.87703,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH66',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.41536,
+    lng: 39.876724,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH67',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.4098948,
+    lng: 39.8850895,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH68',
+    sector: 'بطن منى الجنوبي',
+    type: 'راجلة',
+    lat: 21.413628,
+    lng: 39.880993,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH69',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.408507,
+    lng: 39.886137,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH70',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.407028,
+    lng: 39.887845,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH71',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.415282,
+    lng: 39.87698,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH72',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.42343,
+    lng: 39.861696,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH73',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.4077995,
+    lng: 39.8868492,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH74',
+    sector: 'بطن منى الجنوبي',
+    type: 'راجلة',
+    lat: 21.4134565,
+    lng: 39.8777455,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH75',
+    sector: 'بطن منى الجنوبي',
+    type: 'راجلة',
+    lat: 21.4218743,
+    lng: 39.8671726,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH76‏‏',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.4231765,
+    lng: 39.8640488,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH77',
+    sector: 'بطن منى الجنوبي',
+    type: 'مركبة',
+    lat: 21.4153106,
+    lng: 39.8753135,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH78',
+    sector: 'بطن منى الجنوبي',
+    type: 'راجلة',
+    lat: 21.40939,
+    lng: 39.8908049,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH79',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.4105,
+    lng: 39.8904449,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH80',
+    sector: 'بطن منى الجنوبي',
+    type: 'راجلة',
+    lat: 21.40775,
+    lng: 39.8915449,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH81',
+    sector: 'بطن منى الجنوبي',
+    type: 'مركبة',
+    lat: 21.41402,
+    lng: 39.8861949,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH82',
+    sector: 'بطن منى الجنوبي',
+    type: 'مركبة',
+    lat: 21.41225,
+    lng: 39.8900849,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH83',
+    sector: 'بطن منى الجنوبي',
+    type: 'مركبة',
+    lat: 21.410197,
+    lng: 39.88949,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH84',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.414572,
+    lng: 39.884976,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH85',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.412519,
+    lng: 39.885623,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH86',
+    sector: 'بطن منى الشمالي',
+    type: 'مركبة اسعافية',
+    lat: 21.4150064,
+    lng: 39.8802659,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH87',
+    sector: 'بطن منى الشمالي',
+    type: 'مركبة اسعافية',
+    lat: 21.416245,
+    lng: 39.8832549,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH88',
+    sector: 'بطن منى الشمالي',
+    type: 'تدخل سريع',
+    lat: 21.413125,
+    lng: 39.8857449,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH89',
+    sector: 'بطن منى الشمالي',
+    type: 'مركبة اسعافية',
+    lat: 21.417865,
+    lng: 39.8825649,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH90‏',
+    sector: 'بطن منى الشمالي',
+    type: 'مركبة اسعافية',
+    lat: 21.411215,
+    lng: 39.8883049,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH91',
+    sector: 'بطن منى الشمالي',
+    type: 'مركبة اسعافية',
+    lat: 21.407645,
+    lng: 39.8925349,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH92',
+    sector: 'بطن منى الشمالي',
+    type: 'قولف',
+    lat: 21.4084,
+    lng: 39.8931249,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH93',
+    sector: 'بطن منى الشمالي',
+    type: 'قولف',
+    lat: 21.417475,
+    lng: 39.8835549,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH94',
+    sector: 'بطن منى الشمالي',
+    type: 'مركبة اسعافية',
+    lat: 21.41787,
+    lng: 39.8887049,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH95',
+    sector: 'بطن منى الشمالي',
+    type: 'قولف',
+    lat: 21.41533,
+    lng: 39.8887149,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH96‏',
+    sector: 'بطن منى الشمالي',
+    type: 'مركبة اسعافية',
+    lat: 21.41705,
+    lng: 39.8898649,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH97‏',
+    sector: 'بطن منى الشمالي',
+    type: 'مركبة اسعافية',
+    lat: 21.41484,
+    lng: 39.8940749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH98‏',
+    sector: 'بطن منى الشمالي',
+    type: 'مركبة اسعافية',
+    lat: 21.41895,
+    lng: 39.8856949,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH99‏',
+    sector: 'بطن منى الشمالي',
+    type: 'راجلة',
+    lat: 21.41801,
+    lng: 39.8863549,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH100',
+    sector: 'بطن منى الشمالي',
+    type: 'راجلة',
+    lat: 21.41852,
+    lng: 39.8871449,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH101‏',
+    sector: 'بطن منى الشمالي',
+    type: 'راجلة',
+    lat: 21.41612,
+    lng: 39.8908049,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH102',
+    sector: 'بطن منى الشمالي',
+    type: 'قولف',
+    lat: 21.41934,
+    lng: 39.8837749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH103',
+    sector: 'بطن منى الشمالي',
+    type: 'قولف',
+    lat: 21.41558,
+    lng: 39.8904049,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH104‏‏',
+    sector: 'بطن منى الشمالي',
+    type: 'قولف',
+    lat: 21.41382,
+    lng: 39.8930049,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH105‏‏‏',
+    sector: 'بطن منى الشمالي',
+    type: 'قولف',
+    lat: 21.41382,
+    lng: 39.8930049,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH106‏‏',
+    sector: 'بطن منى الشمالي',
+    type: 'قولف',
+    lat: 21.42023,
+    lng: 39.8841849,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH107',
+    sector: 'بطن منى الشمالي',
+    type: 'قولف',
+    lat: 21.42023,
+    lng: 39.8841849,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH108',
+    sector: 'بطن منى الشمالي',
+    type: 'تدخل سريع',
+    lat: 21.41065,
+    lng: 39.8944849,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH109',
+    sector: 'بطن منى الشمالي',
+    type: 'راجلة',
+    lat: 21.41284,
+    lng: 39.8950749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH110',
+    sector: 'بطن منى الشمالي',
+    type: 'تدخل سريع',
+    lat: 21.41284,
+    lng: 39.8950749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH111',
+    sector: 'بطن منى الشمالي',
+    type: 'راجلة',
+    lat: 21.4137,
+    lng: 39.8913249,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH112',
+    sector: 'الشعيبين',
+    type: 'مركبة اسعافية',
+    lat: 21.41714,
+    lng: 39.8862349,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH113',
+    sector: 'الشعيبين',
+    type: 'مركبة اسعافية',
+    lat: 21.420315,
+    lng: 39.8837149,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH114',
+    sector: 'الشعيبين',
+    type: 'مركبة اسعافية',
+    lat: 21.419355,
+    lng: 39.8836549,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH115',
+    sector: 'الشعيبين',
+    type: 'مركبة اسعافية',
+    lat: 21.417655,
+    lng: 39.8849649,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH116',
+    sector: 'الشعيبين',
+    type: 'مركبة اسعافية',
+    lat: 21.417265,
+    lng: 39.8890749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH117',
+    sector: 'الشعيبين',
+    type: 'مركبة اسعافية',
+    lat: 21.41727,
+    lng: 39.9044749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH118',
+    sector: 'الشعيبين',
+    type: 'مركبة اسعافية',
+    lat: 21.42516,
+    lng: 39.8958549,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH119',
+    sector: 'الشعيبين',
+    type: 'مركبة اسعافية',
+    lat: 21.41971,
+    lng: 39.8942049,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH120',
+    sector: 'الشعيبين',
+    type: 'مركبة اسعافية',
+    lat: 21.4219,
+    lng: 39.9015749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH121',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.4219,
+    lng: 39.9015749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH122',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.41767,
+    lng: 39.8995449,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH123',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.4242799,
+    lng: 39.9057209,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH124',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.42085,
+    lng: 39.8947749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH125',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.42085,
+    lng: 39.8947749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH126',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.42245,
+    lng: 39.8797149,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH127',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.42947,
+    lng: 39.9080249,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH128',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.42038,
+    lng: 39.8880349,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH129',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.42104,
+    lng: 39.8964449,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH130',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.42348,
+    lng: 39.9034349,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH131',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.42348,
+    lng: 39.9034349,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH132',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.42402,
+    lng: 39.8975449,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH133',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.41167,
+    lng: 39.9120049,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH134',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.41285,
+    lng: 39.9022649,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH135',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.41146,
+    lng: 39.9120649,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH136',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.417675,
+    lng: 39.8995449,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH137',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.414515,
+    lng: 39.8988649,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH138',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.414875,
+    lng: 39.9015749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH139',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.41311,
+    lng: 39.8968749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH140',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.41263,
+    lng: 39.9013149,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH141',
+    sector: 'منى الجديد 2',
+    type: 'قولف',
+    lat: 21.4055,
+    lng: 39.8917449,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH142',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.41101,
+    lng: 39.9013649,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH143',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.40654,
+    lng: 39.8972549,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH144',
+    sector: 'منى الجديد 2',
+    type: 'قولف',
+    lat: 21.40654,
+    lng: 39.8972549,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH145',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.4037,
+    lng: 39.8959249,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH146',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.40314,
+    lng: 39.8966349,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH147',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.40951,
+    lng: 39.8979749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH148',
+    sector: 'منى الجديد 2',
+    type: 'قولف',
+    lat: 21.41226,
+    lng: 39.8986349,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+];
+
+</script>
 <script>
+// Static Deployment Points (148 نقطة انتشار)
+const staticDeploymentPoints = [
+  {
+    id: 'MH1',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.425546,
+    lng: 39.86387,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH2',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.424468,
+    lng: 39.863626,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH3',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.425116,
+    lng: 39.865597,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH4',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.425066,
+    lng: 39.865984,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH5',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.425314,
+    lng: 39.867029,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH6',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.423748,
+    lng: 39.865322,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH7',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.424757,
+    lng: 39.86711,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH8',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.425946,
+    lng: 39.870235,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH9',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.424427,
+    lng: 39.868784,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH10',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.422679,
+    lng: 39.876464,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH11',
+    sector: 'الجمرات',
+    type: 'مركبة',
+    lat: 21.424594,
+    lng: 39.872963,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH12',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.422541,
+    lng: 39.8765,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH13',
+    sector: 'الجمرات',
+    type: 'مركبة',
+    lat: 21.42235,
+    lng: 39.868068,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH14',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.421914,
+    lng: 39.869211,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH15',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.42362,
+    lng: 39.873042,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH16',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.419938,
+    lng: 39.872258,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH17',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.419297,
+    lng: 39.873766,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH18',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.422883,
+    lng: 39.871233,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH19',
+    sector: 'الجمرات',
+    type: 'راجلة',
+    lat: 21.420706,
+    lng: 39.876611,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH20',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.425302,
+    lng: 39.867091,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH21',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.420791,
+    lng: 39.876812,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH22',
+    sector: 'الجمرات',
+    type: 'راجلة',
+    lat: 21.420252,
+    lng: 39.871201,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH23',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.420067,
+    lng: 39.877646,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH24',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.416968,
+    lng: 39.877064,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH25',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.423457,
+    lng: 39.871308,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH26',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.422453,
+    lng: 39.877141,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH27',
+    sector: 'الجمرات',
+    type: 'مركبة اسعافية',
+    lat: 21.422588,
+    lng: 39.878702,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH28‏',
+    sector: 'الجمرات',
+    type: 'راجلة',
+    lat: 21.422333,
+    lng: 39.879185,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH29‏‏',
+    sector: 'الجمرات',
+    type: 'راجلة',
+    lat: 21.422707,
+    lng: 39.877685,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH30',
+    sector: 'الجمرات',
+    type: 'راجلة',
+    lat: 21.420637,
+    lng: 39.87462,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH31',
+    sector: 'الجمرات',
+    type: 'راجلة',
+    lat: 21.422205,
+    lng: 39.871614,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH32',
+    sector: 'الجمرات',
+    type: 'راجلة',
+    lat: 21.420539,
+    lng: 39.872534,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH33',
+    sector: 'الجمرات',
+    type: 'راجلة',
+    lat: 21.419933,
+    lng: 39.874036,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH34',
+    sector: 'الجمرات',
+    type: 'راجلة',
+    lat: 21.419995,
+    lng: 39.873977,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH35',
+    sector: 'الجمرات',
+    type: 'راجلة',
+    lat: 21.41991,
+    lng: 39.874087,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH36',
+    sector: 'القطارات',
+    type: 'قولف',
+    lat: 21.419885,
+    lng: 39.87414,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH37',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.422027,
+    lng: 39.871756,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH38',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.422112,
+    lng: 39.871644,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH39',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.421962,
+    lng: 39.871955,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH40',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.419221,
+    lng: 39.874428,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH41',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.419401,
+    lng: 39.874868,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH42',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.422243,
+    lng: 39.870157,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH43',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.420376,
+    lng: 39.874716,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH44',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.420419,
+    lng: 39.87468,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH45',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.421437,
+    lng: 39.873249,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH46',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.421861,
+    lng: 39.872251,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH47',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.422352,
+    lng: 39.871188,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH48',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.421639,
+    lng: 39.870778,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH49',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.42134,
+    lng: 39.871958,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH50',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.420853,
+    lng: 39.872719,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH51',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.42095,
+    lng: 39.872647,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH52',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.419738,
+    lng: 39.87439,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH53',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.418786,
+    lng: 39.877496,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH54',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.417938,
+    lng: 39.877104,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH55',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.412133,
+    lng: 39.88039,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH56',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.411564,
+    lng: 39.884305,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH57',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.412566,
+    lng: 39.881988,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH58',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.422928,
+    lng: 39.865427,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH59',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.420532,
+    lng: 39.868676,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH60',
+    sector: 'القطارات',
+    type: 'قولف',
+    lat: 21.420106,
+    lng: 39.869124,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH61',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.4195019,
+    lng: 39.8707124,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH62',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.419418,
+    lng: 39.87085,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH63',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.4175948,
+    lng: 39.8733618,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH64',
+    sector: 'القطارات',
+    type: 'مركبة اسعافية',
+    lat: 21.419053,
+    lng: 39.871377,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH65',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.416051,
+    lng: 39.87703,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH66',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.41536,
+    lng: 39.876724,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH67',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.4098948,
+    lng: 39.8850895,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH68',
+    sector: 'بطن منى الجنوبي',
+    type: 'راجلة',
+    lat: 21.413628,
+    lng: 39.880993,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH69',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.408507,
+    lng: 39.886137,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH70',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.407028,
+    lng: 39.887845,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH71',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.415282,
+    lng: 39.87698,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH72',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.42343,
+    lng: 39.861696,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH73',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.4077995,
+    lng: 39.8868492,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH74',
+    sector: 'بطن منى الجنوبي',
+    type: 'راجلة',
+    lat: 21.4134565,
+    lng: 39.8777455,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH75',
+    sector: 'بطن منى الجنوبي',
+    type: 'راجلة',
+    lat: 21.4218743,
+    lng: 39.8671726,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH76‏‏',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.4231765,
+    lng: 39.8640488,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH77',
+    sector: 'بطن منى الجنوبي',
+    type: 'مركبة',
+    lat: 21.4153106,
+    lng: 39.8753135,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH78',
+    sector: 'بطن منى الجنوبي',
+    type: 'راجلة',
+    lat: 21.40939,
+    lng: 39.8908049,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH79',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.4105,
+    lng: 39.8904449,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH80',
+    sector: 'بطن منى الجنوبي',
+    type: 'راجلة',
+    lat: 21.40775,
+    lng: 39.8915449,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH81',
+    sector: 'بطن منى الجنوبي',
+    type: 'مركبة',
+    lat: 21.41402,
+    lng: 39.8861949,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH82',
+    sector: 'بطن منى الجنوبي',
+    type: 'مركبة',
+    lat: 21.41225,
+    lng: 39.8900849,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH83',
+    sector: 'بطن منى الجنوبي',
+    type: 'مركبة',
+    lat: 21.410197,
+    lng: 39.88949,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH84',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.414572,
+    lng: 39.884976,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH85',
+    sector: 'بطن منى الجنوبي',
+    type: 'قولف',
+    lat: 21.412519,
+    lng: 39.885623,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH86',
+    sector: 'بطن منى الشمالي',
+    type: 'مركبة اسعافية',
+    lat: 21.4150064,
+    lng: 39.8802659,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH87',
+    sector: 'بطن منى الشمالي',
+    type: 'مركبة اسعافية',
+    lat: 21.416245,
+    lng: 39.8832549,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH88',
+    sector: 'بطن منى الشمالي',
+    type: 'تدخل سريع',
+    lat: 21.413125,
+    lng: 39.8857449,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH89',
+    sector: 'بطن منى الشمالي',
+    type: 'مركبة اسعافية',
+    lat: 21.417865,
+    lng: 39.8825649,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH90‏',
+    sector: 'بطن منى الشمالي',
+    type: 'مركبة اسعافية',
+    lat: 21.411215,
+    lng: 39.8883049,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH91',
+    sector: 'بطن منى الشمالي',
+    type: 'مركبة اسعافية',
+    lat: 21.407645,
+    lng: 39.8925349,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH92',
+    sector: 'بطن منى الشمالي',
+    type: 'قولف',
+    lat: 21.4084,
+    lng: 39.8931249,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH93',
+    sector: 'بطن منى الشمالي',
+    type: 'قولف',
+    lat: 21.417475,
+    lng: 39.8835549,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH94',
+    sector: 'بطن منى الشمالي',
+    type: 'مركبة اسعافية',
+    lat: 21.41787,
+    lng: 39.8887049,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH95',
+    sector: 'بطن منى الشمالي',
+    type: 'قولف',
+    lat: 21.41533,
+    lng: 39.8887149,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH96‏',
+    sector: 'بطن منى الشمالي',
+    type: 'مركبة اسعافية',
+    lat: 21.41705,
+    lng: 39.8898649,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH97‏',
+    sector: 'بطن منى الشمالي',
+    type: 'مركبة اسعافية',
+    lat: 21.41484,
+    lng: 39.8940749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH98‏',
+    sector: 'بطن منى الشمالي',
+    type: 'مركبة اسعافية',
+    lat: 21.41895,
+    lng: 39.8856949,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH99‏',
+    sector: 'بطن منى الشمالي',
+    type: 'راجلة',
+    lat: 21.41801,
+    lng: 39.8863549,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH100',
+    sector: 'بطن منى الشمالي',
+    type: 'راجلة',
+    lat: 21.41852,
+    lng: 39.8871449,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH101‏',
+    sector: 'بطن منى الشمالي',
+    type: 'راجلة',
+    lat: 21.41612,
+    lng: 39.8908049,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH102',
+    sector: 'بطن منى الشمالي',
+    type: 'قولف',
+    lat: 21.41934,
+    lng: 39.8837749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH103',
+    sector: 'بطن منى الشمالي',
+    type: 'قولف',
+    lat: 21.41558,
+    lng: 39.8904049,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH104‏‏',
+    sector: 'بطن منى الشمالي',
+    type: 'قولف',
+    lat: 21.41382,
+    lng: 39.8930049,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH105‏‏‏',
+    sector: 'بطن منى الشمالي',
+    type: 'قولف',
+    lat: 21.41382,
+    lng: 39.8930049,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH106‏‏',
+    sector: 'بطن منى الشمالي',
+    type: 'قولف',
+    lat: 21.42023,
+    lng: 39.8841849,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH107',
+    sector: 'بطن منى الشمالي',
+    type: 'قولف',
+    lat: 21.42023,
+    lng: 39.8841849,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH108',
+    sector: 'بطن منى الشمالي',
+    type: 'تدخل سريع',
+    lat: 21.41065,
+    lng: 39.8944849,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH109',
+    sector: 'بطن منى الشمالي',
+    type: 'راجلة',
+    lat: 21.41284,
+    lng: 39.8950749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH110',
+    sector: 'بطن منى الشمالي',
+    type: 'تدخل سريع',
+    lat: 21.41284,
+    lng: 39.8950749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH111',
+    sector: 'بطن منى الشمالي',
+    type: 'راجلة',
+    lat: 21.4137,
+    lng: 39.8913249,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH112',
+    sector: 'الشعيبين',
+    type: 'مركبة اسعافية',
+    lat: 21.41714,
+    lng: 39.8862349,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH113',
+    sector: 'الشعيبين',
+    type: 'مركبة اسعافية',
+    lat: 21.420315,
+    lng: 39.8837149,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH114',
+    sector: 'الشعيبين',
+    type: 'مركبة اسعافية',
+    lat: 21.419355,
+    lng: 39.8836549,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH115',
+    sector: 'الشعيبين',
+    type: 'مركبة اسعافية',
+    lat: 21.417655,
+    lng: 39.8849649,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH116',
+    sector: 'الشعيبين',
+    type: 'مركبة اسعافية',
+    lat: 21.417265,
+    lng: 39.8890749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH117',
+    sector: 'الشعيبين',
+    type: 'مركبة اسعافية',
+    lat: 21.41727,
+    lng: 39.9044749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH118',
+    sector: 'الشعيبين',
+    type: 'مركبة اسعافية',
+    lat: 21.42516,
+    lng: 39.8958549,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH119',
+    sector: 'الشعيبين',
+    type: 'مركبة اسعافية',
+    lat: 21.41971,
+    lng: 39.8942049,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH120',
+    sector: 'الشعيبين',
+    type: 'مركبة اسعافية',
+    lat: 21.4219,
+    lng: 39.9015749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH121',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.4219,
+    lng: 39.9015749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH122',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.41767,
+    lng: 39.8995449,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH123',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.4242799,
+    lng: 39.9057209,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH124',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.42085,
+    lng: 39.8947749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH125',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.42085,
+    lng: 39.8947749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH126',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.42245,
+    lng: 39.8797149,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH127',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.42947,
+    lng: 39.9080249,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH128',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.42038,
+    lng: 39.8880349,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH129',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.42104,
+    lng: 39.8964449,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH130',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.42348,
+    lng: 39.9034349,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH131',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.42348,
+    lng: 39.9034349,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH132',
+    sector: 'منى الجديد 1',
+    type: 'مركبة اسعافية',
+    lat: 21.42402,
+    lng: 39.8975449,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH133',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.41167,
+    lng: 39.9120049,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH134',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.41285,
+    lng: 39.9022649,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH135',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.41146,
+    lng: 39.9120649,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH136',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.417675,
+    lng: 39.8995449,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH137',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.414515,
+    lng: 39.8988649,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH138',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.414875,
+    lng: 39.9015749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH139',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.41311,
+    lng: 39.8968749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH140',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.41263,
+    lng: 39.9013149,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH141',
+    sector: 'منى الجديد 2',
+    type: 'قولف',
+    lat: 21.4055,
+    lng: 39.8917449,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH142',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.41101,
+    lng: 39.9013649,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH143',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.40654,
+    lng: 39.8972549,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH144',
+    sector: 'منى الجديد 2',
+    type: 'قولف',
+    lat: 21.40654,
+    lng: 39.8972549,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH145',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.4037,
+    lng: 39.8959249,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH146',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.40314,
+    lng: 39.8966349,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH147',
+    sector: 'منى الجديد 2',
+    type: 'مركبة اسعافية',
+    lat: 21.40951,
+    lng: 39.8979749,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+  {
+    id: 'MH148',
+    sector: 'منى الجديد 2',
+    type: 'قولف',
+    lat: 21.41226,
+    lng: 39.8986349,
+    status: 'available',
+    teams: 0,
+    shift: ''
+  },
+];
+
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxzkS1GrOC4IBKYQCD2APoK-6iIcGngUikW7zXseLK6JgnQd_pBxA_gX8LgYyoNBS-n2w/exec';
 
     const deploymentPlanData = {

@@ -425,7 +425,7 @@
     </div>
     <div class="quick-links" id="quickLinks">
       <a id="dashboardLinkTop" href="#" target="_blank"><i class="fas fa-tv"></i> لوحة القائد</a>
-      <a href="https://www.google.com/maps/d/viewer?mid=15jPyMtPR5xmD0hZpE7g2-B1J0rSosvM&ll=21.416799550046317%2C39.873667103872805&z=15" target="_blank"><i class="fas fa-map"></i> خريطة Google</a>
+      <a href="https://www.google.com/maps/d/viewer?mid=15jPyMtPR5xmD0hZpE7g2-B1J0rSosvM&ll=21.41679955004633%2C39.873667103872805&z=15" target="_blank"><i class="fas fa-map"></i> خريطة Google</a>
     </div>
   </aside>
 
@@ -1276,7 +1276,7 @@
             <h4>خيارات سريعة</h4>
             <p>يمكنك فتح الخريطة مباشرة أو الانتقال إلى لوحة القائد الشاملة.</p>
             <div class="actions">
-              <a class="btn btn-blue" href="https://www.google.com/maps/d/viewer?mid=15jPyMtPR5xmD0hZpE7g2-B1J0rSosvM&ll=21.416799550046317%2C39.873667103872805&z=15" target="_blank"><i class="fas fa-map"></i> فتح الخريطة</a>
+              <a class="btn btn-blue" href="https://www.google.com/maps/d/viewer?mid=15jPyMtPR5xmD0hZpE7g2-B1J0rSosvM&ll=21.41679955004633%2C39.873667103872805&z=15" target="_blank"><i class="fas fa-map"></i> فتح الخريطة</a>
               <a class="btn btn-dark" id="dashboardLinkMap" href="#" target="_blank"><i class="fas fa-tv"></i> فتح لوحة القائد</a>
             </div>
             <div class="note" style="margin-top:14px">
@@ -3041,25 +3041,41 @@ function updateDashboard(data){
    ═══════════════════════════════════════════ */
 async function updateSupportSummary() {
   try {
+    const tbody = document.querySelector('#dashSupportTable tbody');
+    if (!tbody) return;
+    
     // جلب بيانات الدعم من Google Sheets
-    const response = await fetch(SCRIPT_URL + '?action=getSupportData');
     let result = { data: [] };
     
     try {
-      result = await response.json();
+      const response = await fetch(SCRIPT_URL + '?action=getSupportData', {
+        method: 'GET',
+        mode: 'cors'
+      });
+      
+      if (response.ok) {
+        result = await response.json();
+      } else {
+        console.log('استجابة الخادم غير صحيحة:', response.status);
+      }
     } catch (e) {
-      console.log('لم يتم جلب البيانات من Google Sheets، سيتم استخدام البيانات المحلية');
+      console.log('لم يتم جلب البيانات من Google Sheets، سيتم استخدام البيانات المحلية:', e.message);
+    }
+    
+    // استخدام البيانات المحلية إذا لم تتوفر بيانات من الخادم
+    if (!result.data || result.data.length === 0) {
       result.data = window.supportPlanData || [];
     }
     
     if (!result.data || result.data.length === 0) {
-      document.querySelector('#dashSupportTable tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم -</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم -</td></tr>';
       return;
     }
 
     // تجميع البيانات حسب القطاع/النطاق والتاريخ والفترة
     const supportMap = {};
     result.data.forEach(row => {
+      if (!row) return;
       const type = row['النوع'] || (row['نوع التدعيم'] === 'داخل_النطاق' ? 
         (row['القطاع المدعم له'] || 'بين القطاعات') : 
         (row['النطاق المدعم له'] || 'بين النطاقات'));
@@ -3081,20 +3097,27 @@ async function updateSupportSummary() {
     });
 
     // عرض البيانات في الجدول
-    const tbody = document.querySelector('#dashSupportTable tbody');
     tbody.innerHTML = '';
-    Object.values(supportMap).slice(0, 10).forEach(item => {
-      tbody.innerHTML += `<tr>
-        <td style="font-weight:700">${item.type}</td>
-        <td>${item.count}</td>
-        <td>${item.teams}</td>
-        <td>${item.date}</td>
-        <td>${item.period}</td>
-      </tr>`;
-    });
+    const items = Object.values(supportMap).slice(0, 10);
+    if (items.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم -</td></tr>';
+    } else {
+      items.forEach(item => {
+        tbody.innerHTML += `<tr>
+          <td style="font-weight:700">${item.type}</td>
+          <td>${item.count}</td>
+          <td>${item.teams}</td>
+          <td>${item.date}</td>
+          <td>${item.period}</td>
+        </tr>`;
+      });
+    }
   } catch (err) {
     console.error('خطأ في جلب بيانات الدعم:', err);
-    document.querySelector('#dashSupportTable tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--danger)">- خطأ في تحميل البيانات -</td></tr>';
+    const tbody = document.querySelector('#dashSupportTable tbody');
+    if (tbody) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم متاحة حالياً -</td></tr>';
+    }
   }
 }
 

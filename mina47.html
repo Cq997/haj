@@ -47,7 +47,7 @@
       min-height:100vh;
     }
 
-    /* ─── Sidebar ─── */
+    /* --- Sidebar --- */
     .sidebar{
       background:linear-gradient(180deg,var(--dark) 0%,#1a2744 100%);
       color:#fff;
@@ -99,7 +99,7 @@
     }
     .quick-links a:hover{background:rgba(255,255,255,.08);color:#fff}
 
-    /* ─── Mobile ─── */
+    /* --- Mobile --- */
     .mobile-btn{
       display:none;position:fixed;top:14px;right:14px;z-index:200;
       width:44px;height:44px;border-radius:12px;
@@ -119,7 +119,7 @@
       .mobile-btn{display:flex;align-items:center;justify-content:center}
     }
 
-    /* ─── Main ─── */
+    /* --- Main --- */
     main{
       padding:28px 32px 60px;
       max-width:1400px;
@@ -131,7 +131,7 @@
       main{padding:18px 10px 40px}
     }
 
-    /* ─── Hero ─── */
+    /* --- Hero --- */
     .hero{
       background:linear-gradient(135deg,var(--primary) 0%,var(--primary-dark) 100%);
       color:#fff;border-radius:18px;
@@ -153,7 +153,7 @@
       margin-top:10px;position:relative;z-index:1;
     }
 
-    /* ─── KPI Row ─── */
+    /* --- KPI Row --- */
     .kpi-row{
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
@@ -170,7 +170,7 @@
     .kpi-card .kpi-val{font-size:1.8rem;font-weight:900;color:var(--primary)}
     .kpi-card .kpi-label{font-size:.78rem;color:var(--muted);margin-top:2px}
 
-    /* ─── Tabs ─── */
+    /* --- Tabs --- */
     .main-tabs{
       display:flex;gap:8px;margin-bottom:20px;
       flex-wrap:wrap;
@@ -192,7 +192,7 @@
     .tab-content{display:none}
     .tab-content.active{display:block}
 
-    /* ─── Dashboard ─── */
+    /* --- Dashboard --- */
     .dash-grid{
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
@@ -231,7 +231,7 @@
     .status-badge.oos{background:#f8d7da;color:#721c24}
     .status-badge.broken{background:#e2e3e5;color:#383d41}
 
-    /* ─── Map ─── */
+    /* --- Map --- */
     #deploymentMap{
       height:550px;border-radius:14px;
       box-shadow:var(--shadow);
@@ -266,9 +266,10 @@
       border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2);
     }
 
-    /* ─── Panels / Forms ─── */
-    .panel{display:none}
-    .panel.active{display:block}
+    /* --- Panels / Forms --- */
+    .panel{display:none;width:100%;min-height:calc(100vh - 100px)}
+    .panel.active{display:block!important}
+    .panel.active.hidden{display:block!important}
 
     .panel-head{
       display:flex;align-items:center;justify-content:space-between;
@@ -306,1022 +307,1069 @@
     .field input:focus,.field select:focus,.field textarea:focus{
       border-color:var(--primary);outline:none;
     }
-    .field input[type="radio"],.field input[type="checkbox"]{
-      width:auto;height:auto;margin-right:8px;
+    .field input[type="checkbox"]{
+      width:18px;height:18px;margin-top:4px;
     }
-    .field input[type="color"]{
-      height:40px;padding:4px;
+    .field input[type="checkbox"]:checked{
+      background-color:var(--primary);
+      border-color:var(--primary);
     }
 
     .btn{
+      display:inline-flex;align-items:center;justify-content:center;
       padding:10px 20px;border-radius:10px;
-      border:none;font-family:\'Cairo\',sans-serif;
       font-size:.9rem;font-weight:700;cursor:pointer;
-      transition:all .2s;
+      transition:all .2s;border:none;
     }
     .btn-primary{background:var(--primary);color:#fff}
     .btn-primary:hover{background:var(--primary-dark)}
     .btn-secondary{background:var(--secondary);color:#fff}
     .btn-secondary:hover{background:var(--secondary-2)}
-    .btn-outline-primary{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+    .btn-outline-primary{background:transparent;color:var(--primary);border:1px solid var(--primary)}
     .btn-outline-primary:hover{background:var(--primary);color:#fff}
 
     .alert{
       padding:12px 18px;border-radius:10px;
       font-size:.88rem;font-weight:600;
-      margin-bottom:18px;
+      margin-bottom:15px;
     }
     .alert-success{background:#d4edda;color:#155724}
     .alert-danger{background:#f8d7da;color:#721c24}
 
-    /* ─── Overrides ─── */
-    .leaflet-control-attribution{display:none}
-  </style>
+    /* --- Footer --- */
+    footer{
+      text-align:center;padding:20px;
+      font-size:.78rem;color:var(--muted);
+      margin-top:30px;
+    }
 
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    /* --- Loading Overlay --- */
+    .loading-overlay{
+      position:fixed;top:0;left:0;width:100%;height:100%;
+      background:rgba(255,255,255,.8);display:flex;
+      justify-content:center;align-items:center;
+      z-index:1000;display:none;
+    }
+    .loading-overlay.active{display:flex}
+    .spinner{
+      border:4px solid rgba(0,0,0,.1);
+      width:36px;height:36px;border-radius:50%;
+      border-left-color:var(--primary);
+      animation:spin 1s ease infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* --- Custom Select --- */
+    .custom-select-wrapper{
+      position:relative;width:100%;
+    }
+    .custom-select{
+      position:relative;display:flex;
+      flex-direction:column;width:100%;
+    }
+    .custom-select-trigger{
+      padding:10px 14px;border-radius:10px;
+      border:1px solid var(--line);
+      font-family:\'Cairo\',sans-serif;
+      font-size:.88rem;transition:border .2s;
+      background:var(--soft);cursor:pointer;
+      display:flex;justify-content:space-between;align-items:center;
+    }
+    .custom-select-trigger:focus{
+      border-color:var(--primary);outline:none;
+    }
+    .custom-options{
+      position:absolute;top:100%;left:0;right:0;
+      background:var(--card);border:1px solid var(--line);
+      border-radius:10px;box-shadow:var(--shadow);
+      z-index:100;max-height:200px;overflow-y:auto;
+      display:none;
+    }
+    .custom-options.show{display:block}
+    .custom-option{
+      padding:10px 14px;cursor:pointer;
+      font-size:.88rem;
+    }
+    .custom-option:hover{background:var(--soft)}
+    .custom-option.selected{background:var(--primary);color:#fff}
+
+  </style>
 </head>
 <body>
 
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+  </div>
+
   <div class="layout">
-    <!-- Sidebar -->
     <aside class="sidebar">
       <div class="brand">
-        <img src="https://i.ibb.co/Qj80911/logo.png" alt="شعار المنصة">
+        <img src="https://i.ibb.co/L84w523/logo.png" alt="شعار المنصة">
         <h2>منصة نطاق منى</h2>
         <p>موسم حج 1447هـ</p>
       </div>
 
       <ul class="nav">
-        <li data-panel="dashboard" class="active">
-          <i class="fas fa-home"></i>
-          <span>الرئيسية</span>
-        </li>
-        <li data-panel="deployment-map">
-          <i class="fas fa-map-marked-alt"></i>
-          <span>خريطة الانتشار</span>
-        </li>
-        <li data-panel="daily-preparation">
-          <i class="fas fa-clipboard-list"></i>
-          <span>التحضير اليومي</span>
-        </li>
-        <li data-panel="handover">
-          <i class="fas fa-people-carry"></i>
-          <span>تسليم المناوبة</span>
-        </li>
-        <li data-panel="unit-check">
-          <i class="fas fa-check-double"></i>
-          <span>تشييك الوحدات</span>
-        </li>
-        <li data-panel="strategic-storage">
-          <i class="fas fa-warehouse"></i>
-          <span>الخزن الاستراتيجي</span>
-        </li>
-        <li data-panel="support-plan">
-          <i class="fas fa-hands-helping"></i>
-          <span>خطة الدعم</span>
-        </li>
+        <li onclick="activatePanel(\'dashboard\')" class="active"><i class="fas fa-tachometer-alt"></i> الداشبورد</li>
+        <li onclick="activatePanel(\'daily-preparation\')"><i class="fas fa-clipboard-list"></i> التحضير اليومي</li>
+        <li onclick="activatePanel(\'shift-handover\')"><i class="fas fa-exchange-alt"></i> تسليم المناوبة</li>
+        <li onclick="activatePanel(\'unit-check\')"><i class="fas fa-check-square"></i> تشييك الوحدات</li>
+        <li onclick="activatePanel(\'strategic-storage\')"><i class="fas fa-warehouse"></i> الخزن الاستراتيجي</li>
+        <li onclick="activatePanel(\'support-plan\')"><i class="fas fa-hands-helping"></i> خطة الدعم</li>
+        <li onclick="activatePanel(\'deployment-plan\')"><i class="fas fa-map-marked-alt"></i> خطة الانتشار</li>
+        <li onclick="activatePanel(\'logistics-support\')"><i class="fas fa-truck"></i> الدعم اللوجستي</li>
       </ul>
 
-      <div class="quick-toggle">
-        <i class="fas fa-link"></i>
-        <span>روابط سريعة</span>
+      <div class="quick-toggle" onclick="toggleQuickLinks()">
+        روابط سريعة <i class="fas fa-chevron-down"></i>
       </div>
-      <div class="quick-links">
-        <a href="#"><i class="fas fa-external-link-alt"></i> رابط خارجي 1</a>
-        <a href="#"><i class="fas fa-external-link-alt"></i> رابط خارجي 2</a>
+      <div class="quick-links" id="quickLinks">
+        <a href="#"><i class="fas fa-link"></i> رابط 1</a>
+        <a href="#"><i class="fas fa-link"></i> رابط 2</a>
       </div>
     </aside>
 
-    <!-- Mobile Toggle -->
-    <button class="mobile-btn">
-      <i class="fas fa-bars"></i>
-    </button>
-
-    <!-- Main Content -->
     <main>
-      <!-- Hero Section -->
-      <section class="hero">
-        <div>
-          <h1>مرحباً بك في منصة نطاق منى</h1>
-          <p>لوحة التحكم الرئيسية لعمليات موسم حج 1447هـ</p>
-          <span class="badge">الإصدار 1.0.0</span>
+      <button class="mobile-btn" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <!-- Dashboard Panel -->
+      <div id="dashboard" class="panel active">
+        <div class="panel-head">
+          <div>
+            <h3>الداشبورد</h3>
+            <p>نظرة عامة على حالة العمليات</p>
+          </div>
+          <p id="currentDateTime"></p>
         </div>
-        <img src="https://i.ibb.co/r5s341m/hero-img.png" alt="صورة ترحيبية">
-      </section>
 
-      <!-- Panels -->
-      <div class="panels-container">
+        <div class="hero">
+          <img src="https://i.ibb.co/L84w523/logo.png" alt="شعار المنصة">
+          <h1>منصة نطاق منى لموسم حج 1447هـ</h1>
+          <p>لوحة تحكم شاملة لإدارة وتتبع عمليات الحج في نطاق منى.</p>
+          <span class="badge">الإصدار 1.0</span>
+        </div>
 
-        <!-- Dashboard Panel -->
-        <section class="panel active" id="dashboard">
-          <div class="panel-head">
-            <div>
-              <h3>لوحة التحكم</h3>
-              <p>نظرة عامة على حالة الانتشار والدعم</p>
-            </div>
+        <div class="kpi-row">
+          <div class="kpi-card">
+            <div class="kpi-val" id="totalReady">0</div>
+            <div class="kpi-label">فرق جاهزة</div>
           </div>
-
-          <div class="kpi-row">
-            <div class="kpi-card">
-              <div class="kpi-val" id="total-ready">0</div>
-              <div class="kpi-label">فرق جاهزة</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-val" id="total-supported">0</div>
-              <div class="kpi-label">فرق مدعومة</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-val" id="total-overlap">0</div>
-              <div class="kpi-label">فرق متداخلة</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-val" id="total-oos">0</div>
-              <div class="kpi-label">فرق خارج الخدمة</div>
-            </div>
+          <div class="kpi-card">
+            <div class="kpi-val" id="totalSupported">0</div>
+            <div class="kpi-label">فرق مدعومة</div>
           </div>
-
-          <div class="dash-grid">
-            <div class="dash-card">
-              <h4><i class="fas fa-chart-bar"></i> ملخص الانتشار حسب القطاع</h4>
-              <table class="dash-table">
-                <thead>
-                  <tr>
-                    <th>القطاع</th>
-                    <th>جاهز</th>
-                    <th>مدعوم</th>
-                    <th>متداخل</th>
-                    <th>خارج الخدمة</th>
-                    <th>الإجمالي</th>
-                  </tr>
-                </thead>
-                <tbody id="sector-summary-body">
-                  <!-- Data will be loaded here -->
-                </tbody>
-              </table>
-            </div>
-
-            <div class="dash-card">
-              <h4><i class="fas fa-car"></i> ملخص المركبات</h4>
-              <table class="dash-table">
-                <thead>
-                  <tr>
-                    <th>نوع المركبة</th>
-                    <th>العدد</th>
-                    <th>متاح</th>
-                    <th>معطل</th>
-                  </tr>
-                </thead>
-                <tbody id="vehicle-summary-body">
-                  <!-- Data will be loaded here -->
-                </tbody>
-              </table>
-            </div>
-
-            <div class="dash-card">
-              <h4><i class="fas fa-hands-helping"></i> ملخص عمليات الدعم</h4>
-              <table class="dash-table">
-                <thead>
-                  <tr>
-                    <th>الرمز</th>
-                    <th>نوع الدعم</th>
-                    <th>الحالة</th>
-                    <th>ملاحظات</th>
-                  </tr>
-                </thead>
-                <tbody id="support-summary-body">
-                  <!-- Data will be loaded here -->
-                </tbody>
-              </table>
-            </div>
-
-            <div class="dash-card">
-              <h4><i class="fas fa-exclamation-triangle"></i> الفرق المتعطلة</h4>
-              <table class="dash-table">
-                <thead>
-                  <tr>
-                    <th>الرمز</th>
-                    <th>القطاع</th>
-                    <th>المناوبة</th>
-                    <th>سبب التعطل</th>
-                  </tr>
-                </thead>
-                <tbody id="broken-teams-body">
-                  <!-- Data will be loaded here -->
-                </tbody>
-              </table>
-            </div>
+          <div class="kpi-card">
+            <div class="kpi-val" id="totalOverlap">0</div>
+            <div class="kpi-label">فرق متداخلة</div>
           </div>
-        </section>
-
-        <!-- Deployment Map Panel -->
-        <section class="panel" id="deployment-map">
-          <div class="panel-head">
-            <div>
-              <h3>خريطة الانتشار</h3>
-              <p>عرض حي لنقاط الانتشار وحالتها</p>
-            </div>
+          <div class="kpi-card">
+            <div class="kpi-val" id="totalOOS">0</div>
+            <div class="kpi-label">فرق خارج الخدمة</div>
           </div>
+          <div class="kpi-card">
+            <div class="kpi-val" id="totalBroken">0</div>
+            <div class="kpi-label">فرق معطلة</div>
+          </div>
+        </div>
 
-          <div class="map-filters">
-            <label for="sector-filter">القطاع:</label>
-            <select id="sector-filter">
-              <option value="all">الكل</option>
-              <option value="شمال">شمال</option>
-              <option value="جنوب">جنوب</option>
-              <option value="شرق">شرق</option>
-              <option value="غرب">غرب</option>
-            </select>
+        <div class="section">
+          <div class="section-title"><i class="fas fa-map-marked-alt"></i> خريطة الانتشار</div>
+          <div class="section-body">
+            <div class="map-filters">
+              <label for="sectorFilter">القطاع:</label>
+              <select id="sectorFilter">
+                <option value="all">الكل</option>
+                <option value="القطاع أ">القطاع أ</option>
+                <option value="القطاع ب">القطاع ب</option>
+                <option value="القطاع ج">القطاع ج</option>
+                <option value="القطاع د">القطاع د</option>
+              </select>
 
-            <label for="shift-filter">المناوبة:</label>
-            <select id="shift-filter">
-              <option value="all">الكل</option>
-              <option value="صباحية">صباحية</option>
-              <option value="مسائية">مسائية</option>
-              <option value="اوفرلاب">اوفرلاب</option>
-            </select>
+              <label for="shiftFilter">المناوبة:</label>
+              <select id="shiftFilter">
+                <option value="all">الكل</option>
+                <option value="صباحية">صباحية</option>
+                <option value="مسائية">مسائية</option>
+                <option value="اوفرلاب">اوفرلاب</option>
+              </select>
 
+              <label for="unitTypeFilter">نوع الوحدة:</label>
+              <select id="unitTypeFilter">
+                <option value="all">الكل</option>
+                <option value="مركبة">مركبة</option>
+                <option value="راجلة">راجلة</option>
+                <option value="قولف">قولف</option>
+              </select>
+            </div>
             <div class="map-legend">
-              <div class="leg-item"><span class="leg-dot" style="background-color:#00b894"></span> جاهز</div>
-              <div class="leg-item"><span class="leg-dot" style="background-color:#0b5ed7"></span> مدعوم</div>
-              <div class="leg-item"><span class="leg-dot" style="background-color:#fdcb6e"></span> متداخل</div>
-              <div class="leg-item"><span class="leg-dot" style="background-color:#d63031"></span> خارج الخدمة</div>
-              <div class="leg-item"><span class="leg-dot" style="background-color:#6b7280"></span> معطل</div>
+              <div class="leg-item"><span class="leg-dot" style="background:#00b894;"></span> جاهز</div>
+              <div class="leg-item"><span class="leg-dot" style="background:#0b5ed7;"></span> مدعوم</div>
+              <div class="leg-item"><span class="leg-dot" style="background:#fdcb6e;"></span> متداخل</div>
+              <div class="leg-item"><span class="leg-dot" style="background:#d63031;"></span> خارج الخدمة</div>
+              <div class="leg-item"><span class="leg-dot" style="background:#6c757d;"></span> معطل</div>
             </div>
+            <div id="deploymentMap"></div>
+          </div>
+        </div>
+
+        <div class="dash-grid">
+          <div class="dash-card">
+            <h4><i class="fas fa-chart-bar"></i> ملخص الانتشار</h4>
+            <table class="dash-table">
+              <thead>
+                <tr>
+                  <th>القطاع</th>
+                  <th>جاهز</th>
+                  <th>مدعوم</th>
+                  <th>متداخل</th>
+                  <th>خارج الخدمة</th>
+                  <th>معطل</th>
+                  <th>الإجمالي</th>
+                </tr>
+              </thead>
+              <tbody id="deploymentSummaryBody">
+                <!-- Data will be loaded here -->
+              </tbody>
+            </table>
           </div>
 
-          <div id="deploymentMap"></div>
-        </section>
-
-        <!-- Daily Preparation Panel -->
-        <section class="panel" id="daily-preparation">
-          <div class="panel-head">
-            <div>
-              <h3>التحضير اليومي</h3>
-              <p>تسجيل بيانات التحضير اليومي للفرق</p>
-            </div>
+          <div class="dash-card">
+            <h4><i class="fas fa-tools"></i> ملخص عمليات الدعم</h4>
+            <table class="dash-table">
+              <thead>
+                <tr>
+                  <th>الرمز</th>
+                  <th>الحالة</th>
+                  <th>نوع الدعم</th>
+                  <th>الملاحظات</th>
+                </tr>
+              </thead>
+              <tbody id="supportSummaryBody">
+                <!-- Data will be loaded here -->
+              </tbody>
+            </table>
           </div>
-
-          <div class="section">
-            <div class="section-body">
-              <form id="daily-preparation-form">
-                <div class="grid-2">
-                  <div class="field">
-                    <label for="dp-sector">القطاع</label>
-                    <select id="dp-sector" name="القطاع" required>
-                      <option value="">اختر القطاع</option>
-                      <option value="شمال">شمال</option>
-                      <option value="جنوب">جنوب</option>
-                      <option value="شرق">شرق</option>
-                      <option value="غرب">غرب</option>
-                    </select>
-                  </div>
-                  <div class="field">
-                    <label for="dp-shift">المناوبة</label>
-                    <select id="dp-shift" name="المناوبة" required>
-                      <option value="">اختر المناوبة</option>
-                      <option value="صباحية">صباحية</option>
-                      <option value="مسائية">مسائية</option>
-                      <option value="اوفرلاب">اوفرلاب</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="grid-3" style="margin-top: 15px;">
-                  <div class="field">
-                    <label for="dp-code">رمز النقطة</label>
-                    <input type="text" id="dp-code" name="رمز النقطة" placeholder="مثال: MH1" required>
-                  </div>
-                  <div class="field">
-                    <label for="dp-status">الحالة</label>
-                    <select id="dp-status" name="الحالة" required>
-                      <option value="">اختر الحالة</option>
-                      <option value="جاهز">جاهز</option>
-                      <option value="مدعوم">مدعوم</option>
-                      <option value="متداخل">متداخل</option>
-                      <option value="خارج الخدمة">خارج الخدمة</option>
-                      <option value="معطل">معطل</option>
-                    </select>
-                  </div>
-                  <div class="field">
-                    <label for="dp-vehicle-type">نوع الوحدة</label>
-                    <select id="dp-vehicle-type" name="نوع الوحدة" required>
-                      <option value="">اختر النوع</option>
-                      <option value="مركبة">مركبة</option>
-                      <option value="قولف">قولف</option>
-                      <option value="راجلة">راجلة</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="field" style="margin-top: 15px;">
-                  <label for="dp-notes">ملاحظات</label>
-                  <textarea id="dp-notes" name="ملاحظات" rows="3" placeholder="أدخل أي ملاحظات هنا"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">إرسال بيانات التحضير</button>
-              </form>
-            </div>
-          </div>
-        </section>
-
-        <!-- Handover Panel -->
-        <section class="panel" id="handover">
-          <div class="panel-head">
-            <div>
-              <h3>تسليم المناوبة</h3>
-              <p>تسجيل بيانات تسليم المناوبة ورسائل ميثان</p>
-            </div>
-          </div>
-
-          <div class="section">
-            <div class="section-body">
-              <form id="handover-form">
-                <div class="grid-2">
-                  <div class="field">
-                    <label for="ho-sector">القطاع</label>
-                    <select id="ho-sector" name="القطاع" required>
-                      <option value="">اختر القطاع</option>
-                      <option value="شمال">شمال</option>
-                      <option value="جنوب">جنوب</option>
-                      <option value="شرق">شرق</option>
-                      <option value="غرب">غرب</option>
-                    </select>
-                  </div>
-                  <div class="field">
-                    <label for="ho-shift">المناوبة</label>
-                    <select id="ho-shift" name="المناوبة" required>
-                      <option value="">اختر المناوبة</option>
-                      <option value="صباحية">صباحية</option>
-                      <option value="مسائية">مسائية</option>
-                      <option value="اوفرلاب">اوفرلاب</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="grid-2" style="margin-top: 15px;">
-                  <div class="field">
-                    <label for="ho-from">المسلم</label>
-                    <input type="text" id="ho-from" name="المسلم" placeholder="اسم المسلم" required>
-                  </div>
-                  <div class="field">
-                    <label for="ho-to">المستلم</label>
-                    <input type="text" id="ho-to" name="المستلم" placeholder="اسم المستلم" required>
-                  </div>
-                </div>
-                <div class="field" style="margin-top: 15px;">
-                  <label for="ho-notes">ملاحظات التسليم</label>
-                  <textarea id="ho-notes" name="ملاحظات التسليم" rows="3" placeholder="أدخل ملاحظات التسليم هنا"></textarea>
-                </div>
-                <div class="field" style="margin-top: 15px;">
-                  <label for="ho-methane-message">رسالة ميثان</label>
-                  <textarea id="ho-methane-message" name="رسالة ميثان" rows="3" placeholder="أدخل رسالة ميثان هنا"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">إرسال بيانات التسليم</button>
-              </form>
-            </div>
-          </div>
-        </section>
-
-        <!-- Unit Check Panel -->
-        <section class="panel" id="unit-check">
-          <div class="panel-head">
-            <div>
-              <h3>تشييك الوحدات</h3>
-              <p>تسجيل حالة تشييك الوحدات الميدانية</p>
-            </div>
-          </div>
-
-          <div class="section">
-            <div class="section-body">
-              <form id="unit-check-form">
-                <div class="grid-2">
-                  <div class="field">
-                    <label for="uc-code">رمز الوحدة</label>
-                    <input type="text" id="uc-code" name="رمز الوحدة" placeholder="مثال: MH1" required>
-                  </div>
-                  <div class="field">
-                    <label for="uc-status">الحالة</label>
-                    <select id="uc-status" name="الحالة" required>
-                      <option value="">اختر الحالة</option>
-                      <option value="سليم">سليم</option>
-                      <option value="يحتاج صيانة">يحتاج صيانة</option>
-                      <option value="خارج الخدمة">خارج الخدمة</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="field" style="margin-top: 15px;">
-                  <label for="uc-notes">ملاحظات</label>
-                  <textarea id="uc-notes" name="ملاحظات" rows="3" placeholder="أدخل أي ملاحظات هنا"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">إرسال بيانات التشييك</button>
-              </form>
-            </div>
-          </div>
-        </section>
-
-        <!-- Strategic Storage Panel -->
-        <section class="panel" id="strategic-storage">
-          <div class="panel-head">
-            <div>
-              <h3>الخزن الاستراتيجي</h3>
-              <p>تسجيل بيانات الخزن الاستراتيجي</p>
-            </div>
-          </div>
-
-          <div class="section">
-            <div class="section-body">
-              <form id="strategic-storage-form">
-                <div class="grid-2">
-                  <div class="field">
-                    <label for="ss-item">الصنف</label>
-                    <input type="text" id="ss-item" name="الصنف" placeholder="اسم الصنف" required>
-                  </div>
-                  <div class="field">
-                    <label for="ss-quantity">الكمية</label>
-                    <input type="number" id="ss-quantity" name="الكمية" placeholder="الكمية" required>
-                  </div>
-                </div>
-                <div class="field" style="margin-top: 15px;">
-                  <label for="ss-location">الموقع</label>
-                  <input type="text" id="ss-location" name="الموقع" placeholder="موقع التخزين" required>
-                </div>
-                <div class="field" style="margin-top: 15px;">
-                  <label for="ss-notes">ملاحظات</label>
-                  <textarea id="ss-notes" name="ملاحظات" rows="3" placeholder="أدخل أي ملاحظات هنا"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">إرسال بيانات الخزن</button>
-              </form>
-            </div>
-          </div>
-        </section>
-
-        <!-- Support Plan Panel -->
-        <section class="panel" id="support-plan">
-          <div class="panel-head">
-            <div>
-              <h3>خطة الدعم</h3>
-              <p>تسجيل طلبات الدعم اللوجستي</p>
-            </div>
-          </div>
-
-          <div class="section">
-            <div class="section-body">
-              <form id="support-plan-form">
-                <div class="grid-2">
-                  <div class="field">
-                    <label for="sp-code">رمز النقطة</label>
-                    <input type="text" id="sp-code" name="رمز النقطة" placeholder="مثال: MH1" required>
-                  </div>
-                  <div class="field">
-                    <label for="sp-support-type">نوع الدعم</label>
-                    <select id="sp-support-type" name="نوع الدعم" required>
-                      <option value="">اختر نوع الدعم</option>
-                      <option value="فني">فني</option>
-                      <option value="طبي">طبي</option>
-                      <option value="تمويني">تمويني</option>
-                      <option value="أمني">أمني</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="field" style="margin-top: 15px;">
-                  <label for="sp-notes">ملاحظات</label>
-                  <textarea id="sp-notes" name="ملاحظات" rows="3" placeholder="أدخل أي ملاحظات هنا"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary" style="margin-top: 20px;">إرسال طلب الدعم</button>
-              </form>
-            </div>
-          </div>
-        </section>
-
+        </div>
       </div>
+
+      <!-- Daily Preparation Panel -->
+      <div id="daily-preparation" class="panel">
+        <div class="panel-head">
+          <h3>التحضير اليومي</h3>
+          <p>تسجيل بيانات التحضير اليومي للفرق</p>
+        </div>
+
+        <div class="section">
+          <div class="section-title">بيانات التحضير</div>
+          <div class="section-body">
+            <form id="dailyPreparationForm">
+              <div class="grid-2">
+                <div class="field">
+                  <label for="dp_name">اسم المحضر</label>
+                  <input type="text" id="dp_name" name="اسم المحضر" required>
+                </div>
+                <div class="field">
+                  <label for="dp_military_number">الرقم العسكري</label>
+                  <input type="text" id="dp_military_number" name="الرقم العسكري" required>
+                </div>
+                <div class="field">
+                  <label for="dp_sector">القطاع</label>
+                  <select id="dp_sector" name="القطاع" required>
+                    <option value="">اختر قطاع</option>
+                    <option value="القطاع أ">القطاع أ</option>
+                    <option value="القطاع ب">القطاع ب</option>
+                    <option value="القطاع ج">القطاع ج</option>
+                    <option value="القطاع د">القطاع د</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="dp_shift">المناوبة</label>
+                  <select id="dp_shift" name="المناوبة" required>
+                    <option value="">اختر مناوبة</option>
+                    <option value="صباحية">صباحية</option>
+                    <option value="مسائية">مسائية</option>
+                    <option value="اوفرلاب">اوفرلاب</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="dp_date_time">التاريخ والوقت</label>
+                  <input type="datetime-local" id="dp_date_time" name="التاريخ والوقت" required>
+                </div>
+                <div class="field">
+                  <label for="dp_notes">ملاحظات</label>
+                  <textarea id="dp_notes" name="ملاحظات" rows="3"></textarea>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" style="margin-top:20px;">تسجيل التحضير</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shift Handover Panel -->
+      <div id="shift-handover" class="panel">
+        <div class="panel-head">
+          <h3>تسليم المناوبة</h3>
+          <p>تسجيل بيانات تسليم المناوبة</p>
+        </div>
+
+        <div class="section">
+          <div class="section-title">بيانات التسليم</div>
+          <div class="section-body">
+            <form id="shiftHandoverForm">
+              <div class="grid-2">
+                <div class="field">
+                  <label for="sh_date_time">التاريخ والوقت</label>
+                  <input type="datetime-local" id="sh_date_time" name="التاريخ والوقت" required>
+                </div>
+                <div class="field">
+                  <label for="sh_handover_person">المسلم</label>
+                  <input type="text" id="sh_handover_person" name="المسلم" required>
+                </div>
+                <div class="field">
+                  <label for="sh_receiver_person">المستلم</label>
+                  <input type="text" id="sh_receiver_person" name="المستلم" required>
+                </div>
+                <div class="field">
+                  <label for="sh_sector">القطاع</label>
+                  <select id="sh_sector" name="القطاع" required>
+                    <option value="">اختر قطاع</option>
+                    <option value="القطاع أ">القطاع أ</option>
+                    <option value="القطاع ب">القطاع ب</option>
+                    <option value="القطاع ج">القطاع ج</option>
+                    <option value="القطاع د">القطاع د</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="sh_shift">المناوبة</label>
+                  <select id="sh_shift" name="المناوبة" required>
+                    <option value="">اختر مناوبة</option>
+                    <option value="صباحية">صباحية</option>
+                    <option value="مسائية">مسائية</option>
+                    <option value="اوفرلاب">اوفرلاب</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="sh_notes">ملاحظات التسليم</label>
+                  <textarea id="sh_notes" name="ملاحظات التسليم" rows="3"></textarea>
+                </div>
+              </div>
+              <h4 style="margin-top:30px;margin-bottom:15px;border-bottom:1px solid var(--line);padding-bottom:10px;">رسائل ميثان</h4>
+              <div class="grid-2">
+                <div class="field">
+                  <label for="sh_methane_message">الرسالة</label>
+                  <textarea id="sh_methane_message" name="رسالة ميثان" rows="3"></textarea>
+                </div>
+                <div class="field">
+                  <label for="sh_methane_sender">المرسل</label>
+                  <input type="text" id="sh_methane_sender" name="مرسل الرسالة">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" style="margin-top:20px;">تسجيل التسليم</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Unit Check Panel -->
+      <div id="unit-check" class="panel">
+        <div class="panel-head">
+          <h3>تشييك الوحدات</h3>
+          <p>تسجيل حالة تشييك الوحدات</p>
+        </div>
+
+        <div class="section">
+          <div class="section-title">بيانات التشييك</div>
+          <div class="section-body">
+            <form id="unitCheckForm">
+              <div class="grid-2">
+                <div class="field">
+                  <label for="uc_unit_code">رمز الوحدة</label>
+                  <input type="text" id="uc_unit_code" name="رمز الوحدة" required>
+                </div>
+                <div class="field">
+                  <label for="uc_status">الحالة</label>
+                  <select id="uc_status" name="الحالة" required>
+                    <option value="">اختر حالة</option>
+                    <option value="جاهز">جاهز</option>
+                    <option value="مدعوم">مدعوم</option>
+                    <option value="متداخل">متداخل</option>
+                    <option value="خارج الخدمة">خارج الخدمة</option>
+                    <option value="معطل">معطل</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="uc_notes">ملاحظات</label>
+                  <textarea id="uc_notes" name="ملاحظات" rows="3"></textarea>
+                </div>
+                <div class="field">
+                  <label for="uc_date_time">التاريخ والوقت</label>
+                  <input type="datetime-local" id="uc_date_time" name="التاريخ والوقت" required>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" style="margin-top:20px;">تسجيل التشييك</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Strategic Storage Panel -->
+      <div id="strategic-storage" class="panel">
+        <div class="panel-head">
+          <h3>الخزن الاستراتيجي</h3>
+          <p>إدارة بيانات الخزن الاستراتيجي</p>
+        </div>
+
+        <div class="section">
+          <div class="section-title">بيانات المخزون</div>
+          <div class="section-body">
+            <form id="strategicStorageForm">
+              <div class="grid-2">
+                <div class="field">
+                  <label for="ss_item_name">اسم الصنف</label>
+                  <input type="text" id="ss_item_name" name="اسم الصنف" required>
+                </div>
+                <div class="field">
+                  <label for="ss_quantity">الكمية</label>
+                  <input type="number" id="ss_quantity" name="الكمية" required>
+                </div>
+                <div class="field">
+                  <label for="ss_location">الموقع</label>
+                  <input type="text" id="ss_location" name="الموقع" required>
+                </div>
+                <div class="field">
+                  <label for="ss_date">تاريخ الإدخال</label>
+                  <input type="date" id="ss_date" name="تاريخ الإدخال" required>
+                </div>
+                <div class="field">
+                  <label for="ss_notes">ملاحظات</label>
+                  <textarea id="ss_notes" name="ملاحظات" rows="3"></textarea>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" style="margin-top:20px;">تسجيل المخزون</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Support Plan Panel -->
+      <div id="support-plan" class="panel">
+        <div class="panel-head">
+          <h3>خطة الدعم</h3>
+          <p>تسجيل طلبات وخطط الدعم</p>
+        </div>
+
+        <div class="section">
+          <div class="section-title">بيانات الدعم</div>
+          <div class="section-body">
+            <form id="supportPlanForm">
+              <div class="grid-2">
+                <div class="field">
+                  <label for="sp_unit_code">رمز الوحدة</label>
+                  <input type="text" id="sp_unit_code" name="رمز الوحدة" required>
+                </div>
+                <div class="field">
+                  <label for="sp_support_type">نوع الدعم</label>
+                  <select id="sp_support_type" name="نوع الدعم" required>
+                    <option value="">اختر نوع الدعم</option>
+                    <option value="فني">فني</option>
+                    <option value="لوجستي">لوجستي</option>
+                    <option value="طبي">طبي</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="sp_status">الحالة</label>
+                  <select id="sp_status" name="الحالة" required>
+                    <option value="">اختر حالة</option>
+                    <option value="قيد الانتظار">قيد الانتظار</option>
+                    <option value="تم التنفيذ">تم التنفيذ</option>
+                    <option value="ملغاة">ملغاة</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="sp_date_time">التاريخ والوقت</label>
+                  <input type="datetime-local" id="sp_date_time" name="التاريخ والوقت" required>
+                </div>
+                <div class="field">
+                  <label for="sp_notes">ملاحظات</label>
+                  <textarea id="sp_notes" name="ملاحظات" rows="3"></textarea>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" style="margin-top:20px;">تسجيل الدعم</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Deployment Plan Panel -->
+      <div id="deployment-plan" class="panel">
+        <div class="panel-head">
+          <h3>خطة الانتشار</h3>
+          <p>تسجيل وتحديث نقاط الانتشار</p>
+        </div>
+
+        <div class="section">
+          <div class="section-title">بيانات الانتشار</div>
+          <div class="section-body">
+            <form id="deploymentPlanForm">
+              <div class="grid-2">
+                <div class="field">
+                  <label for="dp_unit_code">رمز الوحدة</label>
+                  <input type="text" id="dp_unit_code" name="رمز الوحدة" required>
+                </div>
+                <div class="field">
+                  <label for="dp_sector">القطاع</label>
+                  <select id="dp_sector" name="القطاع" required>
+                    <option value="">اختر قطاع</option>
+                    <option value="القطاع أ">القطاع أ</option>
+                    <option value="القطاع ب">القطاع ب</option>
+                    <option value="القطاع ج">القطاع ج</option>
+                    <option value="القطاع د">القطاع د</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="dp_shift">المناوبة</label>
+                  <select id="dp_shift" name="المناوبة" required>
+                    <option value="">اختر مناوبة</option>
+                    <option value="صباحية">صباحية</option>
+                    <option value="مسائية">مسائية</option>
+                    <option value="اوفرلاب">اوفرلاب</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="dp_status">الحالة</label>
+                  <select id="dp_status" name="الحالة" required>
+                    <option value="">اختر حالة</option>
+                    <option value="جاهز">جاهز</option>
+                    <option value="مدعوم">مدعوم</option>
+                    <option value="متداخل">متداخل</option>
+                    <option value="خارج الخدمة">خارج الخدمة</option>
+                    <option value="معطل">معطل</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="dp_period">الفترة</label>
+                  <input type="text" id="dp_period" name="الفترة">
+                </div>
+                <div class="field">
+                  <label for="dp_notes">ملاحظات</label>
+                  <textarea id="dp_notes" name="ملاحظات" rows="3"></textarea>
+                </div>
+                <div class="field">
+                  <label for="dp_latitude">خط الطول</label>
+                  <input type="text" id="dp_latitude" name="خط الطول" required>
+                </div>
+                <div class="field">
+                  <label for="dp_longitude">خط العرض</label>
+                  <input type="text" id="dp_longitude" name="خط العرض" required>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" style="margin-top:20px;">تسجيل الانتشار</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logistics Support Panel -->
+      <div id="logistics-support" class="panel">
+        <div class="panel-head">
+          <h3>الدعم اللوجستي</h3>
+          <p>تسجيل بيانات الدعم اللوجستي للفرق المتعطلة</p>
+        </div>
+
+        <div class="section">
+          <div class="section-title">بيانات الدعم اللوجستي</div>
+          <div class="section-body">
+            <form id="logisticsSupportForm">
+              <div class="grid-2">
+                <div class="field">
+                  <label for="ls_unit_code">رمز الوحدة المتعطلة</label>
+                  <input type="text" id="ls_unit_code" name="رمز الوحدة المتعطلة" required>
+                </div>
+                <div class="field">
+                  <label for="ls_support_needed">نوع الدعم المطلوب</label>
+                  <input type="text" id="ls_support_needed" name="نوع الدعم المطلوب" required>
+                </div>
+                <div class="field">
+                  <label for="ls_status">الحالة</label>
+                  <select id="ls_status" name="الحالة" required>
+                    <option value="">اختر حالة</option>
+                    <option value="قيد المعالجة">قيد المعالجة</option>
+                    <option value="تم الحل">تم الحل</option>
+                    <option value="معلقة">معلقة</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="ls_date_time">التاريخ والوقت</label>
+                  <input type="datetime-local" id="ls_date_time" name="التاريخ والوقت" required>
+                </div>
+                <div class="field">
+                  <label for="ls_notes">ملاحظات</label>
+                  <textarea id="ls_notes" name="ملاحظات" rows="3"></textarea>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" style="margin-top:20px;">تسجيل الدعم اللوجستي</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
     </main>
   </div>
 
+  <footer>
+    <p>&copy; 2024 منصة نطاق منى. جميع الحقوق محفوظة.</p>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     const SCRIPT_URL = \'https://script.google.com/macros/s/AKfycbxzkS1GrOC4IBKYQCD2APoK-6iIcGngUikW7zXseLK6JgnQd_pBxA_gX8LgYyoNBS-n2w/exec\';
 
-    // Deployment Points Data (148 points)
-    const deploymentPoints = [
-      { code: \'MH1\', sector: \'شمال\', lat: 21.4170, lng: 39.8700 },
-      { code: \'MH2\', sector: \'شمال\', lat: 21.4175, lng: 39.8705 },
-      { code: \'MH3\', sector: \'شمال\', lat: 21.4180, lng: 39.8710 },
-      { code: \'MH4\', sector: \'شمال\', lat: 21.4185, lng: 39.8715 },
-      { code: \'MH5\', sector: \'شمال\', lat: 21.4190, lng: 39.8720 },
-      { code: \'MH6\', sector: \'شمال\', lat: 21.4195, lng: 39.8725 },
-      { code: \'MH7\', sector: \'شمال\', lat: 21.4200, lng: 39.8730 },
-      { code: \'MH8\', sector: \'شمال\', lat: 21.4205, lng: 39.8735 },
-      { code: \'MH9\', sector: \'شمال\', lat: 21.4210, lng: 39.8740 },
-      { code: \'MH10\', sector: \'شمال\', lat: 21.4215, lng: 39.8745 },
-      { code: \'MH11\', sector: \'شمال\', lat: 21.4220, lng: 39.8750 },
-      { code: \'MH12\', sector: \'شمال\', lat: 21.4225, lng: 39.8755 },
-      { code: \'MH13\', sector: \'شمال\', lat: 21.4230, lng: 39.8760 },
-      { code: \'MH14\', sector: \'شمال\', lat: 21.4235, lng: 39.8765 },
-      { code: \'MH15\', sector: \'شمال\', lat: 21.4240, lng: 39.8770 },
-      { code: \'MH16\', sector: \'شمال\', lat: 21.4245, lng: 39.8775 },
-      { code: \'MH17\', sector: \'شمال\', lat: 21.4250, lng: 39.8780 },
-      { code: \'MH18\', sector: \'شمال\', lat: 21.4255, lng: 39.8785 },
-      { code: \'MH19\', sector: \'شمال\', lat: 21.4260, lng: 39.8790 },
-      { code: \'MH20\', sector: \'شمال\', lat: 21.4265, lng: 39.8795 },
-      { code: \'MH21\', sector: \'شمال\', lat: 21.4270, lng: 39.8800 },
-      { code: \'MH22\', sector: \'شمال\', lat: 21.4275, lng: 39.8805 },
-      { code: \'MH23\', sector: \'شمال\', lat: 21.4280, lng: 39.8810 },
-      { code: \'MH24\', sector: \'شمال\', lat: 21.4285, lng: 39.8815 },
-      { code: \'MH25\', sector: \'شمال\', lat: 21.4290, lng: 39.8820 },
-      { code: \'MH26\', sector: \'شمال\', lat: 21.4295, lng: 39.8825 },
-      { code: \'MH27\', sector: \'شمال\', lat: 21.4300, lng: 39.8830 },
-      { code: \'MH28\', sector: \'شمال\', lat: 21.4305, lng: 39.8835 },
-      { code: \'MH29\', sector: \'شمال\', lat: 21.4310, lng: 39.8840 },
-      { code: \'MH30\', sector: \'شمال\', lat: 21.4315, lng: 39.8845 },
-      { code: \'MH31\', sector: \'جنوب\', lat: 21.4170, lng: 39.8700 },
-      { code: \'MH32\', sector: \'جنوب\', lat: 21.4175, lng: 39.8705 },
-      { code: \'MH33\', sector: \'جنوب\', lat: 21.4180, lng: 39.8710 },
-      { code: \'MH34\', sector: \'جنوب\', lat: 21.4185, lng: 39.8715 },
-      { code: \'MH35\', sector: \'جنوب\', lat: 21.4190, lng: 39.8720 },
-      { code: \'MH36\', sector: \'جنوب\', lat: 21.4195, lng: 39.8725 },
-      { code: \'MH37\', sector: \'جنوب\', lat: 21.4200, lng: 39.8730 },
-      { code: \'MH38\', sector: \'جنوب\', lat: 21.4205, lng: 39.8735 },
-      { code: \'MH39\', sector: \'جنوب\', lat: 21.4210, lng: 39.8740 },
-      { code: \'MH40\', sector: \'جنوب\', lat: 21.4215, lng: 39.8745 },
-      { code: \'MH41\', sector: \'جنوب\', lat: 21.4220, lng: 39.8750 },
-      { code: \'MH42\', sector: \'جنوب\', lat: 21.4225, lng: 39.8755 },
-      { code: \'MH43\', sector: \'جنوب\', lat: 21.4230, lng: 39.8760 },
-      { code: \'MH44\', sector: \'جنوب\', lat: 21.4235, lng: 39.8765 },
-      { code: \'MH45\', sector: \'جنوب\', lat: 21.4240, lng: 39.8770 },
-      { code: \'MH46\', sector: \'جنوب\', lat: 21.4245, lng: 39.8775 },
-      { code: \'MH47\', sector: \'جنوب\', lat: 21.4250, lng: 39.8780 },
-      { code: \'MH48\', sector: \'جنوب\', lat: 21.4255, lng: 39.8785 },
-      { code: \'MH49\', sector: \'جنوب\', lat: 21.4260, lng: 39.8790 },
-      { code: \'MH50\', sector: \'جنوب\', lat: 21.4265, lng: 39.8795 },
-      { code: \'MH51\', sector: \'جنوب\', lat: 21.4270, lng: 39.8800 },
-      { code: \'MH52\', sector: \'جنوب\', lat: 21.4275, lng: 39.8805 },
-      { code: \'MH53\', sector: \'جنوب\', lat: 21.4280, lng: 39.8810 },
-      { code: \'MH54\', sector: \'جنوب\', lat: 21.4285, lng: 39.8815 },
-      { code: \'MH55\', sector: \'جنوب\', lat: 21.4290, lng: 39.8820 },
-      { code: \'MH56\', sector: \'جنوب\', lat: 21.4295, lng: 39.8825 },
-      { code: \'MH57\', sector: \'جنوب\', lat: 21.4300, lng: 39.8830 },
-      { code: \'MH58\', sector: \'جنوب\', lat: 21.4305, lng: 39.8835 },
-      { code: \'MH59\', sector: \'جنوب\', lat: 21.4310, lng: 39.8840 },
-      { code: \'MH60\', sector: \'جنوب\', lat: 21.4315, lng: 39.8845 },
-      { code: \'MH61\', sector: \'شرق\', lat: 21.4170, lng: 39.8700 },
-      { code: \'MH62\', sector: \'شرق\', lat: 21.4175, lng: 39.8705 },
-      { code: \'MH63\', sector: \'شرق\', lat: 21.4180, lng: 39.8710 },
-      { code: \'MH64\', sector: \'شرق\', lat: 21.4185, lng: 39.8715 },
-      { code: \'MH65\', sector: \'شرق\', lat: 21.4190, lng: 39.8720 },
-      { code: \'MH66\', sector: \'شرق\', lat: 21.4195, lng: 39.8725 },
-      { code: \'MH67\', sector: \'شرق\', lat: 21.4200, lng: 39.8730 },
-      { code: \'MH68\', sector: \'شرق\', lat: 21.4205, lng: 39.8735 },
-      { code: \'MH69\', sector: \'شرق\', lat: 21.4210, lng: 39.8740 },
-      { code: \'MH70\', sector: \'شرق\', lat: 21.4215, lng: 39.8745 },
-      { code: \'MH71\', sector: \'شرق\', lat: 21.4220, lng: 39.8750 },
-      { code: \'MH72\', sector: \'شرق\', lat: 21.4225, lng: 39.8755 },
-      { code: \'MH73\', sector: \'شرق\', lat: 21.4230, lng: 39.8760 },
-      { code: \'MH74\', sector: \'شرق\', lat: 21.4235, lng: 39.8765 },
-      { code: \'MH75\', sector: \'شرق\', lat: 21.4240, lng: 39.8770 },
-      { code: \'MH76\', sector: \'شرق\', lat: 21.4245, lng: 39.8775 },
-      { code: \'MH77\', sector: \'شرق\', lat: 21.4250, lng: 39.8780 },
-      { code: \'MH78\', sector: \'شرق\', lat: 21.4255, lng: 39.8785 },
-      { code: \'MH79\', sector: \'شرق\', lat: 21.4260, lng: 39.8790 },
-      { code: \'MH80\', sector: \'شرق\', lat: 21.4265, lng: 39.8795 },
-      { code: \'MH81\', sector: \'شرق\', lat: 21.4270, lng: 39.8800 },
-      { code: \'MH82\', sector: \'شرق\', lat: 21.4275, lng: 39.8805 },
-      { code: \'MH83\', sector: \'شرق\', lat: 21.4280, lng: 39.8810 },
-      { code: \'MH84\', sector: \'شرق\', lat: 21.4285, lng: 39.8815 },
-      { code: \'MH85\', sector: \'شرق\', lat: 21.4290, lng: 39.8820 },
-      { code: \'MH86\', sector: \'شرق\', lat: 21.4295, lng: 39.8825 },
-      { code: \'MH87\', sector: \'شرق\', lat: 21.4300, lng: 39.8830 },
-      { code: \'MH88\', sector: \'شرق\', lat: 21.4305, lng: 39.8835 },
-      { code: \'MH89\', sector: \'شرق\', lat: 21.4310, lng: 39.8840 },
-      { code: \'MH90\', sector: \'شرق\', lat: 21.4315, lng: 39.8845 },
-      { code: \'MH91\', sector: \'غرب\', lat: 21.4170, lng: 39.8700 },
-      { code: \'MH92\', sector: \'غرب\', lat: 21.4175, lng: 39.8705 },
-      { code: \'MH93\', sector: \'غرب\', lat: 21.4180, lng: 39.8710 },
-      { code: \'MH94\', sector: \'غرب\', lat: 21.4185, lng: 39.8715 },
-      { code: \'MH95\', sector: \'غرب\', lat: 21.4190, lng: 39.8720 },
-      { code: \'MH96\', sector: \'غرب\', lat: 21.4195, lng: 39.8725 },
-      { code: \'MH97\', sector: \'غرب\', lat: 21.4200, lng: 39.8730 },
-      { code: \'MH98\', sector: \'غرب\', lat: 21.4205, lng: 39.8735 },
-      { code: \'MH99\', sector: \'غرب\', lat: 21.4210, lng: 39.8740 },
-      { code: \'MH100\', sector: \'غرب\', lat: 21.4215, lng: 39.8745 },
-      { code: \'MH101\', sector: \'غرب\', lat: 21.4220, lng: 39.8750 },
-      { code: \'MH102\', sector: \'غرب\', lat: 21.4225, lng: 39.8755 },
-      { code: \'MH103\', sector: \'غرب\', lat: 21.4230, lng: 39.8760 },
-      { code: \'MH104\', sector: \'غرب\', lat: 21.4235, lng: 39.8765 },
-      { code: \'MH105\', sector: \'غرب\', lat: 21.4240, lng: 39.8770 },
-      { code: \'MH106\', sector: \'غرب\', lat: 21.4245, lng: 39.8775 },
-      { code: \'MH107\', sector: \'غرب\', lat: 21.4250, lng: 39.8780 },
-      { code: \'MH108\', sector: \'غرب\', lat: 21.4255, lng: 39.8785 },
-      { code: \'MH109\', sector: \'غرب\', lat: 21.4260, lng: 39.8790 },
-      { code: \'MH110\', sector: \'غرب\', lat: 21.4265, lng: 39.8795 },
-      { code: \'MH111\', sector: \'غرب\', lat: 21.4270, lng: 39.8800 },
-      { code: \'MH112\', sector: \'غرب\', lat: 21.4275, lng: 39.8805 },
-      { code: \'MH113\', sector: \'غرب\', lat: 21.4280, lng: 39.8810 },
-      { code: \'MH114\', sector: \'غرب\', lat: 21.4285, lng: 39.8815 },
-      { code: \'MH115\', sector: \'غرب\', lat: 21.4290, lng: 39.8820 },
-      { code: \'MH116\', sector: \'غرب\', lat: 21.4295, lng: 39.8825 },
-      { code: \'MH117\', sector: \'غرب\', lat: 21.4300, lng: 39.8830 },
-      { code: \'MH118\', sector: \'غرب\', lat: 21.4305, lng: 39.8835 },
-      { code: \'MH119\', sector: \'غرب\', lat: 21.4310, lng: 39.8840 },
-      { code: \'MH120\', sector: \'غرب\', lat: 21.4315, lng: 39.8845 },
-      { code: \'MH121\', sector: \'شمال\', lat: 21.4320, lng: 39.8850 },
-      { code: \'MH122\', sector: \'شمال\', lat: 21.4325, lng: 39.8855 },
-      { code: \'MH123\', sector: \'شمال\', lat: 21.4330, lng: 39.8860 },
-      { code: \'MH124\', sector: \'شمال\', lat: 21.4335, lng: 39.8865 },
-      { code: \'MH125\', sector: \'شمال\', lat: 21.4340, lng: 39.8870 },
-      { code: \'MH126\', sector: \'شمال\', lat: 21.4345, lng: 39.8875 },
-      { code: \'MH127\', sector: \'شمال\', lat: 21.4350, lng: 39.8880 },
-      { code: \'MH128\', sector: \'شمال\', lat: 21.4355, lng: 39.8885 },
-      { code: \'MH129\', sector: \'شمال\', lat: 21.4360, lng: 39.8890 },
-      { code: \'MH130\', sector: \'شمال\', lat: 21.4365, lng: 39.8895 },
-      { code: \'MH131\', sector: \'جنوب\', lat: 21.4320, lng: 39.8850 },
-      { code: \'MH132\', sector: \'جنوب\', lat: 21.4325, lng: 39.8855 },
-      { code: \'MH133\', sector: \'جنوب\', lat: 21.4330, lng: 39.8860 },
-      { code: \'MH134\', sector: \'جنوب\', lat: 21.4335, lng: 39.8865 },
-      { code: \'MH135\', sector: \'جنوب\', lat: 21.4340, lng: 39.8870 },
-      { code: \'MH136\', sector: \'جنوب\', lat: 21.4345, lng: 39.8875 },
-      { code: \'MH137\', sector: \'جنوب\', lat: 21.4350, lng: 39.8880 },
-      { code: \'MH138\', sector: \'جنوب\', lat: 21.4355, lng: 39.8885 },
-      { code: \'MH139\', sector: \'جنوب\', lat: 21.4360, lng: 39.8890 },
-      { code: \'MH140\', sector: \'جنوب\', lat: 21.4365, lng: 39.8895 },
-      { code: \'MH141\', sector: \'شرق\', lat: 21.4320, lng: 39.8850 },
-      { code: \'MH142\', sector: \'شرق\', lat: 21.4325, lng: 39.8855 },
-      { code: \'MH143\', sector: \'شرق\', lat: 21.4330, lng: 39.8860 },
-      { code: \'MH144\', sector: \'شرق\', lat: 21.4335, lng: 39.8865 },
-      { code: \'MH145\', sector: \'شرق\', lat: 21.4340, lng: 39.8870 },
-      { code: \'MH146\', sector: \'شرق\', lat: 21.4345, lng: 39.8875 },
-      { code: \'MH147\', sector: \'شرق\', lat: 21.4350, lng: 39.8880 },
-      { code: \'MH148\', sector: \'شرق\', lat: 21.4355, lng: 39.8885 }
+    // --- Sidebar & Panel Activation ---
+    const sidebar = document.querySelector(\".sidebar\");
+    const navItems = document.querySelectorAll(\".nav li\");
+    const panels = document.querySelectorAll(\".panel\");
+
+    function toggleSidebar() {
+      sidebar.classList.toggle(\"active\");
+    }
+
+    function activatePanel(panelId) {
+      navItems.forEach(item => item.classList.remove(\"active\"));
+      panels.forEach(panel => panel.classList.remove(\"active\"));
+
+      document.getElementById(panelId).classList.add(\"active\");
+      document.querySelector(`.nav li[onclick=\"activatePanel(\'${panelId}\')\"]`).classList.add(\"active\");
+
+      if (panelId === \'dashboard\') {
+        loadLiveDeploymentData();
+        updateSupportSummary();
+      }
+      if (window.innerWidth <= 1180) {
+        toggleSidebar(); // Close sidebar on mobile after selecting a panel
+      }
+    }
+
+    // Activate dashboard by default or based on URL hash
+    const initialPanel = window.location.hash ? window.location.hash.substring(1) : \'dashboard\';
+    activatePanel(initialPanel);
+
+    // --- Quick Links ---
+    function toggleQuickLinks() {
+      document.getElementById(\"quickLinks\").classList.toggle(\"show\");
+    }
+
+    // --- Date & Time ---
+    function updateDateTime() {
+      const now = new Date();
+      const options = { weekday: \'long\', year: \'numeric\', month: \'long\', day: \'numeric\', hour: \'numeric\', minute: \'numeric\', second: \'numeric\', hour12: true };
+      document.getElementById(\"currentDateTime\").textContent = now.toLocaleDateString(\'ar-EG\', options);
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+
+    // --- Form Submission ---
+    async function handleSubmit(event, sheetName) {
+      event.preventDefault();
+      showLoading();
+
+      const form = event.target;
+      const formData = new FormData(form);
+      const data = {};
+      for (let [key, value] of formData.entries()) {
+        data[key] = value;
+      }
+
+      try {
+        const response = await fetch(SCRIPT_URL + \'?action=submitForm&sheet=\' + sheetName, {
+          method: \'POST\',
+          mode: \'no-cors\', // Required for Google Apps Script
+          headers: {
+            \'Content-Type\': \'application/json\',
+          },
+          body: JSON.stringify(data),
+        });
+
+        // Since mode is \'no-cors\', response.ok will always be false. We assume success if no error is thrown.
+        // For actual response handling, a proxy or CORS enabled endpoint would be needed.
+        alert(\"تم إرسال البيانات بنجاح!\");
+        form.reset();
+        if (sheetName === \'خطة الانتشار\') {
+          loadLiveDeploymentData(); // Refresh map and dashboard if deployment data changes
+        }
+        if (sheetName === \'خطة الدعم\') {
+          updateSupportSummary(); // Refresh support summary if support data changes
+        }
+
+      } catch (error) {
+        console.error(\"Error submitting form:\", error);
+        alert(\"حدث خطأ أثناء إرسال البيانات. الرجاء المحاولة مرة أخرى.\");
+      } finally {
+        hideLoading();
+      }
+    }
+
+    document.getElementById(\"dailyPreparationForm\").addEventListener(\"submit\", (e) => handleSubmit(e, \'التحضير اليومي\'));
+    document.getElementById(\"shiftHandoverForm\").addEventListener(\"submit\", (e) => handleSubmit(e, \'تسليم المناوبة\'));
+    document.getElementById(\"unitCheckForm\").addEventListener(\"submit\", (e) => handleSubmit(e, \'تشييك الوحدات\'));
+    document.getElementById(\"strategicStorageForm\").addEventListener(\"submit\", (e) => handleSubmit(e, \'الخزن الاستراتيجي\'));
+    document.getElementById(\"supportPlanForm\").addEventListener(\"submit\", (e) => handleSubmit(e, \'خطة الدعم\'));
+    document.getElementById(\"deploymentPlanForm\").addEventListener(\"submit\", (e) => handleSubmit(e, \'خطة الانتشار\'));
+    document.getElementById(\"logisticsSupportForm\").addEventListener(\"submit\", (e) => handleSubmit(e, \'الدعم اللوجستي\'));
+
+    // --- Loading Overlay ---
+    function showLoading() {
+      document.getElementById(\"loadingOverlay\").classList.add(\"active\");
+    }
+
+    function hideLoading() {
+      document.getElementById(\"loadingOverlay\").classList.remove(\"active\");
+    }
+
+    // --- Map Initialization ---
+    const map = L.map(\'deploymentMap\').setView([21.4167, 39.8167], 13); // Centered around Mina
+    L.tileLayer(\'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png\', {
+      attribution: \'&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors\'
+    }).addTo(map);
+
+    const markers = {}; // Store markers to update them later
+
+    // Static Deployment Points (MH1-MH148) with their coordinates
+    const staticDeploymentPoints = [
+      { code: \'MH1\', lat: 21.4167, lng: 39.8167, sector: \'القطاع أ\', unitType: \'مركبة\' },
+      { code: \'MH2\', lat: 21.4170, lng: 39.8170, sector: \'القطاع أ\', unitType: \'راجلة\' },
+      { code: \'MH3\', lat: 21.4173, lng: 39.8173, sector: \'القطاع أ\', unitType: \'قولف\' },
+      { code: \'MH4\', lat: 21.4176, lng: 39.8176, sector: \'القطاع ب\', unitType: \'مركبة\' },
+      { code: \'MH5\', lat: 21.4179, lng: 39.8179, sector: \'القطاع ب\', unitType: \'راجلة\' },
+      { code: \'MH6\', lat: 21.4182, lng: 39.8182, sector: \'القطاع ب\', unitType: \'قولف\' },
+      { code: \'MH7\', lat: 21.4185, lng: 39.8185, sector: \'القطاع ج\', unitType: \'مركبة\' },
+      { code: \'MH8\', lat: 21.4188, lng: 39.8188, sector: \'القطاع ج\', unitType: \'راجلة\' },
+      { code: \'MH9\', lat: 21.4191, lng: 39.8191, sector: \'القطاع ج\', unitType: \'قولف\' },
+      { code: \'MH10\', lat: 21.4194, lng: 39.8194, sector: \'القطاع د\', unitType: \'مركبة\' },
+      { code: \'MH11\', lat: 21.4197, lng: 39.8197, sector: \'القطاع د\', unitType: \'راجلة\' },
+      { code: \'MH12\', lat: 21.4200, lng: 39.8200, sector: \'القطاع د\', unitType: \'قولف\' },
+      { code: \'MH13\', lat: 21.4203, lng: 39.8203, sector: \'القطاع أ\', unitType: \'مركبة\' },
+      { code: \'MH14\', lat: 21.4206, lng: 39.8206, sector: \'القطاع أ\', unitType: \'راجلة\' },
+      { code: \'MH15\', lat: 21.4209, lng: 39.8209, sector: \'القطاع أ\', unitType: \'قولف\' },
+      { code: \'MH16\', lat: 21.4212, lng: 39.8212, sector: \'القطاع ب\', unitType: \'مركبة\' },
+      { code: \'MH17\', lat: 21.4215, lng: 39.8215, sector: \'القطاع ب\', unitType: \'راجلة\' },
+      { code: \'MH18\', lat: 21.4218, lng: 39.8218, sector: \'القطاع ب\', unitType: \'قولف\' },
+      { code: \'MH19\', lat: 21.4221, lng: 39.8221, sector: \'القطاع ج\', unitType: \'مركبة\' },
+      { code: \'MH20\', lat: 21.4224, lng: 39.8224, sector: \'القطاع ج\', unitType: \'راجلة\' },
+      { code: \'MH21\', lat: 21.4227, lng: 39.8227, sector: \'القطاع ج\', unitType: \'قولف\' },
+      { code: \'MH22\', lat: 21.4230, lng: 39.8230, sector: \'القطاع د\', unitType: \'مركبة\' },
+      { code: \'MH23\', lat: 21.4233, lng: 39.8233, sector: \'القطاع د\', unitType: \'راجلة\' },
+      { code: \'MH24\', lat: 21.4236, lng: 39.8236, sector: \'القطاع د\', unitType: \'قولف\' },
+      { code: \'MH25\', lat: 21.4239, lng: 39.8239, sector: \'القطاع أ\', unitType: \'مركبة\' },
+      { code: \'MH26\', lat: 21.4242, lng: 39.8242, sector: \'القطاع أ\', unitType: \'راجلة\' },
+      { code: \'MH27\', lat: 21.4245, lng: 39.8245, sector: \'القطاع أ\', unitType: \'قولف\' },
+      { code: \'MH28\', lat: 21.4248, lng: 39.8248, sector: \'القطاع ب\', unitType: \'مركبة\' },
+      { code: \'MH29\', lat: 21.4251, lng: 39.8251, sector: \'القطاع ب\', unitType: \'راجلة\' },
+      { code: \'MH30\', lat: 21.4254, lng: 39.8254, sector: \'القطاع ب\', unitType: \'قولف\' },
+      { code: \'MH31\', lat: 21.4257, lng: 39.8257, sector: \'القطاع ج\', unitType: \'مركبة\' },
+      { code: \'MH32\', lat: 21.4260, lng: 39.8260, sector: \'القطاع ج\', unitType: \'راجلة\' },
+      { code: \'MH33\', lat: 21.4263, lng: 39.8263, sector: \'القطاع ج\', unitType: \'قولف\' },
+      { code: \'MH34\', lat: 21.4266, lng: 39.8266, sector: \'القطاع د\', unitType: \'مركبة\' },
+      { code: \'MH35\', lat: 21.4269, lng: 39.8269, sector: \'القطاع د\', unitType: \'راجلة\' },
+      { code: \'MH36\', lat: 21.4272, lng: 39.8272, sector: \'القطاع د\', unitType: \'قولف\' },
+      { code: \'MH37\', lat: 21.4275, lng: 39.8275, sector: \'القطاع أ\', unitType: \'مركبة\' },
+      { code: \'MH38\', lat: 21.4278, lng: 39.8278, sector: \'القطاع أ\', unitType: \'راجلة\' },
+      { code: \'MH39\', lat: 21.4281, lng: 39.8281, sector: \'القطاع أ\', unitType: \'قولف\' },
+      { code: \'MH40\', lat: 21.4284, lng: 39.8284, sector: \'القطاع ب\', unitType: \'مركبة\' },
+      { code: \'MH41\', lat: 21.4287, lng: 39.8287, sector: \'القطاع ب\', unitType: \'راجلة\' },
+      { code: \'MH42\', lat: 21.4290, lng: 39.8290, sector: \'القطاع ب\', unitType: \'قولف\' },
+      { code: \'MH43\', lat: 21.4293, lng: 39.8293, sector: \'القطاع ج\', unitType: \'مركبة\' },
+      { code: \'MH44\', lat: 21.4296, lng: 39.8296, sector: \'القطاع ج\', unitType: \'راجلة\' },
+      { code: \'MH45\', lat: 21.4299, lng: 39.8299, sector: \'القطاع ج\', unitType: \'قولف\' },
+      { code: \'MH46\', lat: 21.4302, lng: 39.8302, sector: \'القطاع د\', unitType: \'مركبة\' },
+      { code: \'MH47\', lat: 21.4305, lng: 39.8305, sector: \'القطاع د\', unitType: \'راجلة\' },
+      { code: \'MH48\', lat: 21.4308, lng: 39.8308, sector: \'القطاع د\', unitType: \'قولف\' },
+      { code: \'MH49\', lat: 21.4311, lng: 39.8311, sector: \'القطاع أ\', unitType: \'مركبة\' },
+      { code: \'MH50\', lat: 21.4314, lng: 39.8314, sector: \'القطاع أ\', unitType: \'راجلة\' },
+      { code: \'MH51\', lat: 21.4317, lng: 39.8317, sector: \'القطاع أ\', unitType: \'قولف\' },
+      { code: \'MH52\', lat: 21.4320, lng: 39.8320, sector: \'القطاع ب\', unitType: \'مركبة\' },
+      { code: \'MH53\', lat: 21.4323, lng: 39.8323, sector: \'القطاع ب\', unitType: \'راجلة\' },
+      { code: \'MH54\', lat: 21.4326, lng: 39.8326, sector: \'القطاع ب\', unitType: \'قولف\' },
+      { code: \'MH55\', lat: 21.4329, lng: 39.8329, sector: \'القطاع ج\', unitType: \'مركبة\' },
+      { code: \'MH56\', lat: 21.4332, lng: 39.8332, sector: \'القطاع ج\', unitType: \'راجلة\' },
+      { code: \'MH57\', lat: 21.4335, lng: 39.8335, sector: \'القطاع ج\', unitType: \'قولف\' },
+      { code: \'MH58\', lat: 21.4338, lng: 39.8338, sector: \'القطاع د\', unitType: \'مركبة\' },
+      { code: \'MH59\', lat: 21.4341, lng: 39.8341, sector: \'القطاع د\', unitType: \'راجلة\' },
+      { code: \'MH60\', lat: 21.4344, lng: 39.8344, sector: \'القطاع د\', unitType: \'قولف\' },
+      { code: \'MH61\', lat: 21.4347, lng: 39.8347, sector: \'القطاع أ\', unitType: \'مركبة\' },
+      { code: \'MH62\', lat: 21.4350, lng: 39.8350, sector: \'القطاع أ\', unitType: \'راجلة\' },
+      { code: \'MH63\', lat: 21.4353, lng: 39.8353, sector: \'القطاع أ\', unitType: \'قولف\' },
+      { code: \'MH64\', lat: 21.4356, lng: 39.8356, sector: \'القطاع ب\', unitType: \'مركبة\' },
+      { code: \'MH65\', lat: 21.4359, lng: 39.8359, sector: \'القطاع ب\', unitType: \'راجلة\' },
+      { code: \'MH66\', lat: 21.4362, lng: 39.8362, sector: \'القطاع ب\', unitType: \'قولف\' },
+      { code: \'MH67\', lat: 21.4365, lng: 39.8365, sector: \'القطاع ج\', unitType: \'مركبة\' },
+      { code: \'MH68\', lat: 21.4368, lng: 39.8368, sector: \'القطاع ج\', unitType: \'راجلة\' },
+      { code: \'MH69\', lat: 21.4371, lng: 39.8371, sector: \'القطاع ج\', unitType: \'قولف\' },
+      { code: \'MH70\', lat: 21.4374, lng: 39.8374, sector: \'القطاع د\', unitType: \'مركبة\' },
+      { code: \'MH71\', lat: 21.4377, lng: 39.8377, sector: \'القطاع د\', unitType: \'راجلة\' },
+      { code: \'MH72\', lat: 21.4380, lng: 39.8380, sector: \'القطاع د\', unitType: \'قولف\' },
+      { code: \'MH73\', lat: 21.4383, lng: 39.8383, sector: \'القطاع أ\', unitType: \'مركبة\' },
+      { code: \'MH74\', lat: 21.4386, lng: 39.8386, sector: \'القطاع أ\', unitType: \'راجلة\' },
+      { code: \'MH75\', lat: 21.4389, lng: 39.8389, sector: \'القطاع أ\', unitType: \'قولف\' },
+      { code: \'MH76\', lat: 21.4392, lng: 39.8392, sector: \'القطاع ب\', unitType: \'مركبة\' },
+      { code: \'MH77\', lat: 21.4395, lng: 39.8395, sector: \'القطاع ب\', unitType: \'راجلة\' },
+      { code: \'MH78\', lat: 21.4398, lng: 39.8398, sector: \'القطاع ب\', unitType: \'قولف\' },
+      { code: \'MH79\', lat: 21.4401, lng: 39.8401, sector: \'القطاع ج\', unitType: \'مركبة\' },
+      { code: \'MH80\', lat: 21.4404, lng: 39.8404, sector: \'القطاع ج\', unitType: \'راجلة\' },
+      { code: \'MH81\', lat: 21.4407, lng: 39.8407, sector: \'القطاع ج\', unitType: \'قولف\' },
+      { code: \'MH82\', lat: 21.4410, lng: 39.8410, sector: \'القطاع د\', unitType: \'مركبة\' },
+      { code: \'MH83\', lat: 21.4413, lng: 39.8413, sector: \'القطاع د\', unitType: \'راجلة\' },
+      { code: \'MH84\', lat: 21.4416, lng: 39.8416, sector: \'القطاع د\', unitType: \'قولف\' },
+      { code: \'MH85\', lat: 21.4419, lng: 39.8419, sector: \'القطاع أ\', unitType: \'مركبة\' },
+      { code: \'MH86\', lat: 21.4422, lng: 39.8422, sector: \'القطاع أ\', unitType: \'راجلة\' },
+      { code: \'MH87\', lat: 21.4425, lng: 39.8425, sector: \'القطاع أ\', unitType: \'قولف\' },
+      { code: \'MH88\', lat: 21.4428, lng: 39.8428, sector: \'القطاع ب\', unitType: \'مركبة\' },
+      { code: \'MH89\', lat: 21.4431, lng: 39.8431, sector: \'القطاع ب\', unitType: \'راجلة\' },
+      { code: \'MH90\', lat: 21.4434, lng: 39.8434, sector: \'القطاع ب\', unitType: \'قولف\' },
+      { code: \'MH91\', lat: 21.4437, lng: 39.8437, sector: \'القطاع ج\', unitType: \'مركبة\' },
+      { code: \'MH92\', lat: 21.4440, lng: 39.8440, sector: \'القطاع ج\', unitType: \'راجلة\' },
+      { code: \'MH93\', lat: 21.4443, lng: 39.8443, sector: \'القطاع ج\', unitType: \'قولف\' },
+      { code: \'MH94\', lat: 21.4446, lng: 39.8446, sector: \'القطاع د\', unitType: \'مركبة\' },
+      { code: \'MH95\', lat: 21.4449, lng: 39.8449, sector: \'القطاع د\', unitType: \'راجلة\' },
+      { code: \'MH96\', lat: 21.4452, lng: 39.8452, sector: \'القطاع د\', unitType: \'قولف\' },
+      { code: \'MH97\', lat: 21.4455, lng: 39.8455, sector: \'القطاع أ\', unitType: \'مركبة\' },
+      { code: \'MH98\', lat: 21.4458, lng: 39.8458, sector: \'القطاع أ\', unitType: \'راجلة\' },
+      { code: \'MH99\', lat: 21.4461, lng: 39.8461, sector: \'القطاع أ\', unitType: \'قولف\' },
+      { code: \'MH100\', lat: 21.4464, lng: 39.8464, sector: \'القطاع ب\', unitType: \'مركبة\' },
+      { code: \'MH101\', lat: 21.4467, lng: 39.8467, sector: \'القطاع ب\', unitType: \'راجلة\' },
+      { code: \'MH102\', lat: 21.4470, lng: 39.8470, sector: \'القطاع ب\', unitType: \'قولف\' },
+      { code: \'MH103\', lat: 21.4473, lng: 39.8473, sector: \'القطاع ج\', unitType: \'مركبة\' },
+      { code: \'MH104\', lat: 21.4476, lng: 39.8476, sector: \'القطاع ج\', unitType: \'راجلة\' },
+      { code: \'MH105\', lat: 21.4479, lng: 39.8479, sector: \'القطاع ج\', unitType: \'قولف\' },
+      { code: \'MH106\', lat: 21.4482, lng: 39.8482, sector: \'القطاع د\', unitType: \'مركبة\' },
+      { code: \'MH107\', lat: 21.4485, lng: 39.8485, sector: \'القطاع د\', unitType: \'راجلة\' },
+      { code: \'MH108\', lat: 21.4488, lng: 39.8488, sector: \'القطاع د\', unitType: \'قولف\' },
+      { code: \'MH109\', lat: 21.4491, lng: 39.8491, sector: \'القطاع أ\', unitType: \'مركبة\' },
+      { code: \'MH110\', lat: 21.4494, lng: 39.8494, sector: \'القطاع أ\', unitType: \'راجلة\' },
+      { code: \'MH111\', lat: 21.4497, lng: 39.8497, sector: \'القطاع أ\', unitType: \'قولف\' },
+      { code: \'MH112\', lat: 21.4500, lng: 39.8500, sector: \'القطاع ب\', unitType: \'مركبة\' },
+      { code: \'MH113\', lat: 21.4503, lng: 39.8503, sector: \'القطاع ب\', unitType: \'راجلة\' },
+      { code: \'MH114\', lat: 21.4506, lng: 39.8506, sector: \'القطاع ب\', unitType: \'قولف\' },
+      { code: \'MH115\', lat: 21.4509, lng: 39.8509, sector: \'القطاع ج\', unitType: \'مركبة\' },
+      { code: \'MH116\', lat: 21.4512, lng: 39.8512, sector: \'القطاع ج\', unitType: \'راجلة\' },
+      { code: \'MH117\', lat: 21.4515, lng: 39.8515, sector: \'القطاع ج\', unitType: \'قولف\' },
+      { code: \'MH118\', lat: 21.4518, lng: 39.8518, sector: \'القطاع د\', unitType: \'مركبة\' },
+      { code: \'MH119\', lat: 21.4521, lng: 39.8521, sector: \'القطاع د\', unitType: \'راجلة\' },
+      { code: \'MH120\', lat: 21.4524, lng: 39.8524, sector: \'القطاع د\', unitType: \'قولف\' },
+      { code: \'MH121\', lat: 21.4527, lng: 39.8527, sector: \'القطاع أ\', unitType: \'مركبة\' },
+      { code: \'MH122\', lat: 21.4530, lng: 39.8530, sector: \'القطاع أ\', unitType: \'راجلة\' },
+      { code: \'MH123\', lat: 21.4533, lng: 39.8533, sector: \'القطاع أ\', unitType: \'قولف\' },
+      { code: \'MH124\', lat: 21.4536, lng: 39.8536, sector: \'القطاع ب\', unitType: \'مركبة\' },
+      { code: \'MH125\', lat: 21.4539, lng: 39.8539, sector: \'القطاع ب\', unitType: \'راجلة\' },
+      { code: \'MH126\', lat: 21.4542, lng: 39.8542, sector: \'القطاع ب\', unitType: \'قولف\' },
+      { code: \'MH127\', lat: 21.4545, lng: 39.8545, sector: \'القطاع ج\', unitType: \'مركبة\' },
+      { code: \'MH128\', lat: 21.4548, lng: 39.8548, sector: \'القطاع ج\', unitType: \'راجلة\' },
+      { code: \'MH129\', lat: 21.4551, lng: 39.8551, sector: \'القطاع ج\', unitType: \'قولف\' },
+      { code: \'MH130\', lat: 21.4554, lng: 39.8554, sector: \'القطاع د\', unitType: \'مركبة\' },
+      { code: \'MH131\', lat: 21.4557, lng: 39.8557, sector: \'القطاع د\', unitType: \'راجلة\' },
+      { code: \'MH132\', lat: 21.4560, lng: 39.8560, sector: \'القطاع د\', unitType: \'قولف\' },
+      { code: \'MH133\', lat: 21.4563, lng: 39.8563, sector: \'القطاع أ\', unitType: \'مركبة\' },
+      { code: \'MH134\', lat: 21.4566, lng: 39.8566, sector: \'القطاع أ\', unitType: \'راجلة\' },
+      { code: \'MH135\', lat: 21.4569, lng: 39.8569, sector: \'القطاع أ\', unitType: \'قولف\' },
+      { code: \'MH136\', lat: 21.4572, lng: 39.8572, sector: \'القطاع ب\', unitType: \'مركبة\' },
+      { code: \'MH137\', lat: 21.4575, lng: 39.8575, sector: \'القطاع ب\', unitType: \'راجلة\' },
+      { code: \'MH138\', lat: 21.4578, lng: 39.8578, sector: \'القطاع ب\', unitType: \'قولف\' },
+      { code: \'MH139\', lat: 21.4581, lng: 39.8581, sector: \'القطاع ج\', unitType: \'مركبة\' },
+      { code: \'MH140\', lat: 21.4584, lng: 39.8584, sector: \'القطاع ج\', unitType: \'راجلة\' },
+      { code: \'MH141\', lat: 21.4587, lng: 39.8587, sector: \'القطاع ج\', unitType: \'قولف\' },
+      { code: \'MH142\', lat: 21.4590, lng: 39.8590, sector: \'القطاع د\', unitType: \'مركبة\' },
+      { code: \'MH143\', lat: 21.4593, lng: 39.8593, sector: \'القطاع د\', unitType: \'راجلة\' },
+      { code: \'MH144\', lat: 21.4596, lng: 39.8596, sector: \'القطاع د\', unitType: \'قولف\' },
+      { code: \'MH145\', lat: 21.4599, lng: 39.8599, sector: \'القطاع أ\', unitType: \'مركبة\' },
+      { code: \'MH146\', lat: 21.4602, lng: 39.8602, sector: \'القطاع أ\', unitType: \'راجلة\' },
+      { code: \'MH147\', lat: 21.4605, lng: 39.8605, sector: \'القطاع أ\', unitType: \'قولف\' },
+      { code: \'MH148\', lat: 21.4608, lng: 39.8608, sector: \'القطاع ب\', unitType: \'مركبة\' }
     ];
 
-    let map;
-    let markers = {};
-    let currentDeploymentData = [];
-    let currentSupportData = [];
-    let currentLogisticsData = [];
+    staticDeploymentPoints.forEach(point => {
+      const marker = L.marker([point.lat, point.lng]).addTo(map);
+      marker.bindPopup(`<b>${point.code}</b><br>القطاع: ${point.sector}<br>النوع: ${point.unitType}<br>الحالة: جاري التحميل...`);
+      markers[point.code] = marker;
+    });
 
-    function initMap() {
-      map = L.map(\'deploymentMap\').setView([21.4225, 39.8261], 13); // Centered on Mina
+    // --- Live Data Loading ---
+    async function loadLiveDeploymentData() {
+      showLoading();
+      try {
+        const response = await fetch(SCRIPT_URL + \'?action=getDeployment\');
+        const data = await response.json();
+        console.log(\"Deployment Data:\", data);
 
-      L.tileLayer(\'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png\', {
-        attribution: \'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors\'
-      }).addTo(map);
+        const deploymentMapData = {};
+        data.forEach(row => {
+          deploymentMapData[row[\"رمز الوحدة\"]] = {
+            status: row[\"الحالة\"] || \'غير معروف\',
+            shift: row[\"المناوبة\"] || \'غير معروف\',
+            sector: row[\"القطاع\"] || \'غير معروف\',
+            unitType: row[\"نوع الوحدة\"] || \'غير معروف\',
+          };
+        });
 
-      // Add markers for all deployment points initially
-      deploymentPoints.forEach(point => {
-        const marker = L.marker([point.lat, point.lng]).addTo(map);
-        marker.bindPopup(`<b>${point.code}</b><br>القطاع: ${point.sector}<br>الحالة: جاري التحميل...`);
-        markers[point.code] = marker;
-      });
+        // Update map markers
+        Object.values(markers).forEach(marker => map.removeLayer(marker)); // Clear existing markers
+        staticDeploymentPoints.forEach(point => {
+          const liveData = deploymentMapData[point.code];
+          let status = \'غير معروف\';
+          let shift = \'غير معروف\';
+          let sector = point.sector; // Default to static sector
+          let unitType = point.unitType; // Default to static unitType
+
+          if (liveData) {
+            status = liveData.status;
+            shift = liveData.shift;
+            sector = liveData.sector; // Use live data if available
+            unitType = liveData.unitType; // Use live data if available
+          }
+
+          // Apply filters
+          const selectedSector = document.getElementById(\"sectorFilter\").value;
+          const selectedShift = document.getElementById(\"shiftFilter\").value;
+          const selectedUnitType = document.getElementById(\"unitTypeFilter\").value;
+
+          const matchesSector = selectedSector === \'all\' || sector === selectedSector;
+          const matchesShift = selectedShift === \'all\' || shift === selectedShift;
+          const matchesUnitType = selectedUnitType === \'all\' || unitType === selectedUnitType;
+
+          if (matchesSector && matchesShift && matchesUnitType) {
+            const markerColor = getStatusColor(status);
+            const customIcon = L.divIcon({
+              className: \'custom-div-icon\',
+              html: `<div style=\"background-color:${markerColor}; width:18px; height:18px; border-radius:50%; border:2px solid #fff; box-shadow:0 1px 3px rgba(0,0,0,.2);\"></div>`,
+              iconSize: [18, 18],
+              iconAnchor: [9, 9]
+            });
+
+            const marker = L.marker([point.lat, point.lng], { icon: customIcon }).addTo(map);
+            marker.bindPopup(`<b>${point.code}</b><br>القطاع: ${sector}<br>النوع: ${unitType}<br>الحالة: ${status}<br>المناوبة: ${shift}`);
+            markers[point.code] = marker; // Update marker in the global object
+          }
+        });
+
+        updateDeploymentSummary(data);
+
+      } catch (error) {
+        console.error(\"Error loading deployment data:\", error);
+      } finally {
+        hideLoading();
+      }
     }
 
     function getStatusColor(status) {
       switch (status) {
-        case \'جاهز\': return \'#00b894\'; // Green
-        case \'مدعوم\': return \'#0b5ed7\'; // Blue
-        case \'متداخل\': return \'#fdcb6e\'; // Yellow
-        case \'خارج الخدمة\': return \'#d63031\'; // Red
-        case \'معطل\': return \'#6b7280\'; // Gray
-        default: return \'#6b7280\'; // Default to gray
+        case \'جاهز\': return \'#00b894\';
+        case \'مدعوم\': return \'#0b5ed7\';
+        case \'متداخل\': return \'#fdcb6e\';
+        case \'خارج الخدمة\': return \'#d63031\';
+        case \'معطل\': return \'#6c757d\';
+        default: return \'#cccccc\'; // Default grey
       }
     }
 
-    async function fetchData(action, params = {}) {
-      const url = new URL(SCRIPT_URL);
-      url.searchParams.append(\'action\', action);
-      for (const key in params) {
-        url.searchParams.append(key, params[key]);
-      }
-      try {
-        const response = await fetch(url.toString());
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+    function updateDeploymentSummary(data) {
+      const summaryBody = document.getElementById(\"deploymentSummaryBody\");
+      summaryBody.innerHTML = \'\';
+
+      const summary = {};
+      const sectors = [\'القطاع أ\', \'القطاع ب\', \'القطاع ج\', \'القطاع د\'];
+      const statuses = [\'جاهز\', \'مدعوم\', \'متداخل\', \'خارج الخدمة\', \'معطل\'];
+
+      sectors.forEach(sector => {
+        summary[sector] = { total: 0 };
+        statuses.forEach(status => summary[sector][status] = 0);
+      });
+
+      data.forEach(row => {
+        const sector = row[\"القطاع\"];
+        const status = row[\"الحالة\"];
+        if (summary[sector]) {
+          summary[sector][status]++;
+          summary[sector].total++;
         }
-        const data = await response.json();
-        return data;
-      } catch (error) {
-        console.error(`Error fetching data for ${action}:`, error);
-        Swal.fire({
-          icon: \'error\',
-          title: \'خطأ في الاتصال\',
-          text: \'تعذر جلب البيانات من الخادم. يرجى التحقق من اتصال الإنترنت وإعادة المحاولة.\',
+      });
+
+      sectors.forEach(sector => {
+        const row = summaryBody.insertRow();
+        row.insertCell().textContent = sector;
+        statuses.forEach(status => {
+          row.insertCell().textContent = summary[sector][status];
         });
-        return [];
-      }
-    }
-
-    async function loadLiveDeploymentData() {
-      currentDeploymentData = await fetchData(\'getDeployment\');
-      updateMapAndDashboard();
-    }
-
-    async function loadSupportData() {
-      currentSupportData = await fetchData(\'getSupport\');
-      updateSupportSummary();
-    }
-
-    async function loadLogisticsData() {
-      currentLogisticsData = await fetchData(\'getLogistics\');
-      updateBrokenTeamsSummary();
-      updateVehicleSummary();
-    }
-
-    function updateMapAndDashboard() {
-      const sectorFilter = document.getElementById(\'sector-filter\').value;
-      const shiftFilter = document.getElementById(\'shift-filter\').value;
-
-      const sectorSummary = {};
-      const statusCounts = { \'جاهز\': 0, \'مدعوم\': 0, \'متداخل\': 0, \'خارج الخدمة\': 0, \'معطل\': 0 };
-
-      deploymentPoints.forEach(point => {
-        const marker = markers[point.code];
-        if (!marker) return;
-
-        const deployment = currentDeploymentData.find(d => d[\'الرمز\'] === point.code);
-        let status = \'معطل\'; // Default status if no data
-        let shift = \'\';
-
-        if (deployment) {
-          status = deployment[\'الحالة\'] || \'معطل\';
-          shift = deployment[\'المناوبة\'] || \'\';
-        }
-
-        // Filter logic
-        const matchesSector = sectorFilter === \'all\' || point.sector === sectorFilter;
-        const matchesShift = shiftFilter === \'all\' || shift === shiftFilter;
-
-        if (matchesSector && matchesShift) {
-          marker.setOpacity(1);
-          const color = getStatusColor(status);
-          const iconHtml = `<div style="background-color: ${color}; width: 1.5rem; height: 1.5rem; display: block; position: absolute; border-radius: 50%; border: 2px solid #ffffff; transform: translate(-50%, -50%);"></div>`;
-          const customIcon = L.divIcon({
-            className: \'custom-div-icon\',
-            html: iconHtml,
-            iconSize: [24, 24],
-            iconAnchor: [12, 12]
-          });
-          marker.setIcon(customIcon);
-          marker.setPopupContent(`<b>${point.code}</b><br>القطاع: ${point.sector}<br>الحالة: ${status}<br>المناوبة: ${shift}`);
-
-          // Update dashboard counts
-          if (!sectorSummary[point.sector]) {
-            sectorSummary[point.sector] = { \'جاهز\': 0, \'مدعوم\': 0, \'متداخل\': 0, \'خارج الخدمة\': 0, \'معطل\': 0, \'الإجمالي\': 0 };
-          }
-          sectorSummary[point.sector][status]++;
-          sectorSummary[point.sector][\'الإجمالي\']++;
-          statusCounts[status]++;
-
-        } else {
-          marker.setOpacity(0); // Hide marker if it doesn\'t match filters
-        }
+        row.insertCell().textContent = summary[sector].total;
       });
 
       // Update KPI cards
-      document.getElementById(\'total-ready\').textContent = statusCounts[\'جاهز\'];
-      document.getElementById(\'total-supported\').textContent = statusCounts[\'مدعوم\'];
-      document.getElementById(\'total-overlap\').textContent = statusCounts[\'متداخل\'];
-      document.getElementById(\'total-oos\').textContent = statusCounts[\'خارج الخدمة\'];
-
-      // Update Sector Summary Table
-      const sectorSummaryBody = document.getElementById(\'sector-summary-body\');
-      sectorSummaryBody.innerHTML = \'\';
-      for (const sector in sectorSummary) {
-        const summary = sectorSummary[sector];
-        const row = `
-          <tr>
-            <td>${sector}</td>
-            <td>${summary[\'جاهز\']}</td>
-            <td>${summary[\'مدعوم\']}</td>
-            <td>${summary[\'متداخل\']}</td>
-            <td>${summary[\'خارج الخدمة\']}</td>
-            <td>${summary[\'الإجمالي\']}</td>
-          </tr>
-        `;
-        sectorSummaryBody.insertAdjacentHTML(\'beforeend\', row);
-      }
+      document.getElementById(\"totalReady\").textContent = data.filter(row => row[\"الحالة\"] === \'جاهز\').length;
+      document.getElementById(\"totalSupported\").textContent = data.filter(row => row[\"الحالة\"] === \'مدعوم\').length;
+      document.getElementById(\"totalOverlap\").textContent = data.filter(row => row[\"الحالة\"] === \'متداخل\').length;
+      document.getElementById(\"totalOOS\").textContent = data.filter(row => row[\"الحالة\"] === \'خارج الخدمة\').length;
+      document.getElementById(\"totalBroken\").textContent = data.filter(row => row[\"الحالة\"] === \'معطل\').length;
     }
 
-    function updateSupportSummary() {
-      const supportSummaryBody = document.getElementById(\'support-summary-body\');
-      supportSummaryBody.innerHTML = \'\';
-      if (currentSupportData.length === 0) {
-        supportSummaryBody.innerHTML = \'<tr><td colspan="4" style="text-align:center;">لا توجد بيانات دعم حالياً.</td></tr>\';
-        return;
-      }
-
-      currentSupportData.forEach(item => {
-        const row = `
-          <tr>
-            <td>${item[\'رمز النقطة\'] || \'N/A\'}</td>
-            <td>${item[\'نوع الدعم\'] || \'N/A\'}</td>
-            <td>${item[\'الحالة\'] || \'N/A\'}</td>
-            <td>${item[\'ملاحظات\'] || \'N/A\'}</td>
-          </tr>
-        `;
-        supportSummaryBody.insertAdjacentHTML(\'beforeend\', row);
-      });
-    }
-
-    function updateBrokenTeamsSummary() {
-      const brokenTeamsBody = document.getElementById(\'broken-teams-body\');
-      brokenTeamsBody.innerHTML = \'\';
-      if (currentLogisticsData.length === 0) {
-        brokenTeamsBody.innerHTML = \'<tr><td colspan="4" style="text-align:center;">لا توجد فرق متعطلة حالياً.</td></tr>\';
-        return;
-      }
-
-      currentLogisticsData.forEach(item => {
-        const row = `
-          <tr>
-            <td>${item[\'رمز النقطة\'] || \'N/A\'}</td>
-            <td>${item[\'القطاع\'] || \'N/A\'}</td>
-            <td>${item[\'المناوبة\'] || \'N/A\'}</td>
-            <td>${item[\'سبب التعطل\'] || \'N/A\'}</td>
-          </tr>
-        `;
-        brokenTeamsBody.insertAdjacentHTML(\'beforeend\', row);
-      });
-    }
-
-    function updateVehicleSummary() {
-      const vehicleSummaryBody = document.getElementById(\'vehicle-summary-body\');
-      vehicleSummaryBody.innerHTML = \'\';
-      // This data would typically come from a separate sheet or be aggregated from deployment data
-      // For now, using dummy data or aggregating from currentDeploymentData if available
-      const vehicleCounts = {}; // { type: { total: 0, available: 0, broken: 0 } }
-
-      currentDeploymentData.forEach(deployment => {
-        const type = deployment[\'نوع الوحدة\'] || \'غير محدد\';
-        const status = deployment[\'الحالة\'] || \'معطل\';
-
-        if (!vehicleCounts[type]) {
-          vehicleCounts[type] = { total: 0, available: 0, broken: 0 };
-        }
-        vehicleCounts[type].total++;
-        if (status === \'جاهز\' || status === \'مدعوم\' || status === \'متداخل\') {
-          vehicleCounts[type].available++;
-        } else if (status === \'خارج الخدمة\' || status === \'معطل\') {
-          vehicleCounts[type].broken++;
-        }
-      });
-
-      for (const type in vehicleCounts) {
-        const counts = vehicleCounts[type];
-        const row = `
-          <tr>
-            <td>${type}</td>
-            <td>${counts.total}</td>
-            <td>${counts.available}</td>
-            <td>${counts.broken}</td>
-          </tr>
-        `;
-        vehicleSummaryBody.insertAdjacentHTML(\'beforeend\', row);
-      }
-
-      if (Object.keys(vehicleCounts).length === 0) {
-        vehicleSummaryBody.innerHTML = \'<tr><td colspan="4" style="text-align:center;">لا توجد بيانات مركبات حالياً.</td></tr>\';
-      }
-    }
-
-    // Form Submission Handler
-    async function handleFormSubmit(event, sheetName) {
-      event.preventDefault();
-      const form = event.target;
-      const formData = new FormData(form);
-      const rowData = {};
-
-      // Get current date and time in Saudi Arabia timezone
-      const now = new Date();
-      const options = { timeZone: \'Asia/Riyadh\', year: \'numeric\', month: \'2-digit\', day: \'2-digit\', hour: \'2-digit\', minute: \'2-digit\', second: \'2-digit\', hour12: false };
-      const dateTimeFormat = new Intl.DateTimeFormat(\'ar-SA\', options);
-      const parts = dateTimeFormat.formatToParts(now);
-      const date = `${parts[4].value}-${parts[2].value}-${parts[0].value}`;
-      const time = `${parts[6].value}:${parts[8].value}:${parts[10].value}`;
-      const dateTime = `${date} ${time}`;
-
-      rowData[\'وقت الحفظ\'] = dateTime;
-
-      for (const [key, value] of formData.entries()) {
-        rowData[key] = value;
-      }
-
-      // Special handling for \'خطة الانتشار\' to include lat/lng if available
-      if (sheetName === \'خطة الانتشار\') {
-        const pointCode = rowData[\'رمز النقطة\'];
-        const point = deploymentPoints.find(p => p.code === pointCode);
-        if (point) {
-          rowData[\'خط الطول\'] = point.lat;
-          rowData[\'خط العرض\'] = point.lng;
-        } else {
-          Swal.fire({
-            icon: \'warning\',
-            title: \'رمز نقطة غير موجود\',
-            text: \'رمز النقطة المدخل غير موجود في قائمة نقاط الانتشار الثابتة. لن يتم حفظ الإحداثيات.\',
-          });
-        }
-      }
-
+    // --- Support Summary ---
+    async function updateSupportSummary() {
+      showLoading();
       try {
-        const response = await fetch(SCRIPT_URL, {
-          method: \'POST\',
-          headers: {
-            \'Content-Type\': \'application/x-www-form-urlencoded\',
-          },
-          body: new URLSearchParams({
-            sheetName: sheetName,
-            rows: JSON.stringify([rowData]),
-          }),
+        const response = await fetch(SCRIPT_URL + \'?action=getSupport\');
+        const data = await response.json();
+        console.log(\"Support Data:\", data);
+
+        const supportSummaryBody = document.getElementById(\"supportSummaryBody\");
+        supportSummaryBody.innerHTML = \'\';
+
+        if (data.length === 0) {
+          supportSummaryBody.innerHTML = \'<tr><td colspan=\"4\">لا توجد بيانات دعم حالياً.</td></tr>\';
+          return;
+        }
+
+        data.forEach(row => {
+          const tr = supportSummaryBody.insertRow();
+          tr.insertCell().textContent = row[\"رمز الوحدة\"] || \'N/A\';
+          tr.insertCell().textContent = row[\"الحالة\"] || \'N/A\';
+          tr.insertCell().textContent = row[\"نوع الدعم\"] || \'N/A\';
+          tr.insertCell().textContent = row[\"ملاحظات\"] || \'N/A\';
         });
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const result = await response.json();
-
-        if (result.status === \'success\') {
-          Swal.fire({
-            icon: \'success\',
-            title: \'تم الإرسال بنجاح!\',
-            text: \'تم حفظ بياناتك بنجاح.\',
-          });
-          form.reset();
-          // Reload data for dashboard and map after successful submission
-          if (sheetName === \'خطة الانتشار\') {
-            loadLiveDeploymentData();
-          } else if (sheetName === \'خطة الدعم\') {
-            loadSupportData();
-          }
-        } else {
-          throw new Error(result.message || \'فشل إرسال البيانات.\');
-        }
       } catch (error) {
-        console.error(\'Error submitting form:\', error);
-        Swal.fire({
-          icon: \'error\',
-          title: \'خطأ في الإرسال\',
-          text: \'تعذر إرسال البيانات. يرجى التحقق من اتصال الإنترنت وإعادة المحاولة.\',
-        });
+        console.error(\"Error loading support data:\", error);
+        document.getElementById(\"supportSummaryBody\").innerHTML = \'<tr><td colspan=\"4\">خطأ في تحميل بيانات الدعم.</td></tr>\';
+      } finally {
+        hideLoading();
       }
     }
 
-    // Panel Activation
-    function activatePanel(panelId) {
-      document.querySelectorAll(\'.panel\').forEach(panel => {
-        panel.classList.remove(\'active\');
-      });
-      document.getElementById(panelId).classList.add(\'active\');
+    // --- Event Listeners for Map Filters ---
+    document.getElementById(\"sectorFilter\").addEventListener(\"change\", loadLiveDeploymentData);
+    document.getElementById(\"shiftFilter\").addEventListener(\"change\", loadLiveDeploymentData);
+    document.getElementById(\"unitTypeFilter\").addEventListener(\"change\", loadLiveDeploymentData);
 
-      document.querySelectorAll(\'.nav li\').forEach(item => {
-        item.classList.remove(\'active\');
-      });
-      document.querySelector(`.nav li[data-panel="${panelId}"]`).classList.add(\'active\');
-
-      // Load data specific to the activated panel
-      if (panelId === \'dashboard\') {
-        loadLiveDeploymentData();
-        loadSupportData();
-        loadLogisticsData();
-      } else if (panelId === \'deployment-map\') {
-        loadLiveDeploymentData();
-      }
-    }
-
-    // Event Listeners
-    document.addEventListener(\'DOMContentLoaded\', () => {
-      initMap();
-      activatePanel(\'dashboard\'); // Activate dashboard by default
-
-      document.querySelectorAll(\'.nav li\').forEach(item => {
-        item.addEventListener(\'click\', () => {
-          const panelId = item.getAttribute(\'data-panel\');
-          activatePanel(panelId);
-        });
-      });
-
-      document.querySelector(\'#sector-filter\').addEventListener(\'change\', updateMapAndDashboard);
-      document.querySelector(\'#shift-filter\').addEventListener(\'change\', updateMapAndDashboard);
-
-      // Form submissions
-      document.getElementById(\'daily-preparation-form\').addEventListener(\'submit\', (e) => handleFormSubmit(e, \'التحضير اليومي\'));
-      document.getElementById(\'handover-form\').addEventListener(\'submit\', (e) => handleFormSubmit(e, \'تسليم المناوبة\'));
-      document.getElementById(\'unit-check-form\').addEventListener(\'submit\', (e) => handleFormSubmit(e, \'تشييك الوحدات\'));
-      document.getElementById(\'strategic-storage-form\').addEventListener(\'submit\', (e) => handleFormSubmit(e, \'الخزن الاستراتيجي\'));
-      document.getElementById(\'support-plan-form\').addEventListener(\'submit\', (e) => handleFormSubmit(e, \'خطة الدعم\'));
-
-      // Mobile sidebar toggle
-      const mobileBtn = document.querySelector(\'.mobile-btn\');
-      const sidebar = document.querySelector(\'.sidebar\');
-      mobileBtn.addEventListener(\'click\', () => {
-        sidebar.classList.toggle(\'active\');
-      });
-
-      // Quick links toggle
-      document.querySelector(\'.quick-toggle\').addEventListener(\'click\', () => {
-        document.querySelector(\'.quick-links\').classList.toggle(\'show\');
-      });
-    });
-
-    // Initial data load
+    // Initial data load for dashboard
     loadLiveDeploymentData();
-    loadSupportData();
-    loadLogisticsData();
+    updateSupportSummary();
+
+    // --- Custom Select (if needed, not fully implemented in this version) ---
+    // This section is for custom select dropdowns if you want to replace native ones.
+    // Example structure for a custom select:
+    /*
+    <div class=\"custom-select-wrapper\">
+      <div class=\"custom-select\">
+        <div class=\"custom-select-trigger\"><span>Select an option</span><i class=\"arrow down\"></i></div>
+        <div class=\"custom-options\">
+          <span class=\"custom-option selected\" data-value=\"option1\">Option 1</span>
+          <span class=\"custom-option\" data-value=\"option2\">Option 2</span>
+        </div>
+      </div>
+    </div>
+    */
+
+    // You would need JavaScript to handle opening/closing, selecting options, and updating the trigger.
+    // For simplicity, native selects are used in the forms.
 
   </script>
-</body>
-</html>
+
+</body></html>

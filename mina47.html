@@ -1645,10 +1645,17 @@ async function fetchDeploymentFromSheet(){
 
     function openWhatsApp(text){
       const encoded = encodeURIComponent(text);
-      const url = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
-        ? `https://wa.me/?text=${encoded}`
-        : `https://web.whatsapp.com/send?text=${encoded}`;
-      window.open(url, '_blank');
+      // استخدام api.whatsapp.com كخيار أكثر استقراراً لجميع المنصات
+      const url = `https://api.whatsapp.com/send?text=${encoded}`;
+      
+      // محاولة فتح الرابط في نافذة جديدة
+      const win = window.open(url, '_blank');
+      
+      // إذا تم حظر النافذة المنبثقة، نقوم بتنبيه المستخدم أو تغيير الموقع الحالي
+      if (!win || win.closed || typeof win.closed === 'undefined') {
+        // خيار بديل في حال حظر النوافذ المنبثقة
+        window.location.href = url;
+      }
     }
 
     const sectorSelect = document.getElementById('sector');

@@ -455,35 +455,7 @@
 
       <!-- ── Tab: Dashboard ── -->
       <div class="tab-content active" id="tabDashboard">
-        <div class="dashboard-filters">
-              <div class="field">
-                <label for="dashboard_date_filter">التاريخ</label>
-                <input type="date" id="dashboard_date_filter" onchange="loadLiveDeploymentData()">
-              </div>
-              <div class="field">
-                <label for="dashboard_sector_filter">القطاع</label>
-                <select id="dashboard_sector_filter" onchange="loadLiveDeploymentData()">
-                  <option value="الكل">الكل</option>
-                  <option value="الجمرات">الجمرات</option>
-                  <option value="القطارات">القطارات</option>
-                  <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
-                  <option value="بطن منى الشمالي">بطن منى الشمالي</option>
-                  <option value="الشعيبين">الشعيبين</option>
-                  <option value="منى الجديد 1">منى الجديد 1</option>
-                  <option value="منى الجديد 2">منى الجديد 2</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="dashboard_shift_filter">المناوبة</label>
-                <select id="dashboard_shift_filter" onchange="loadLiveDeploymentData()">
-                  <option value="الكل">الكل</option>
-                  <option value="الصباحية">الصباحية</option>
-                  <option value="المسائية">المسائية</option>
-                  <option value="اوفرلاب">اوفرلاب</option>
-                </select>
-              </div>
-            </div>
-            <div class="dash-grid">
+        <div class="dash-grid">
 
           <!-- Sector Summary -->
           <div class="dash-card">
@@ -716,7 +688,7 @@
         <div class="panel-head">
           <div>
             <h3>نموذج التحضير اليومي</h3>
-            <p>يتم حفظ البيانات في ورقة التحضير اليومي مع  إرسالها عبر الواتساب.</p>
+            <p>يتم حفظ البيانات في ورقة التحضير اليومي مع إمكانية إرسالها عبر الواتساب.</p>
           </div>
         </div>
 
@@ -803,7 +775,6 @@
             <div class="field"><label for="vehicles_count">عدد فرق المركبات الإسعافية</label><input type="number" id="vehicles_count" min="0" value="0" style=""></div>
             <div class="field"><label for="golf_count">عدد فرق عربات القولف</label><input type="number" id="golf_count" min="0" value="0" style=""></div>
             <div class="field"><label for="walking_count">عدد الفرق الراجلة</label><input type="number" id="walking_count" min="0" value="0" style=""></div>
-            <div class="field"><label for="rapid_intervention_count">عدد فرق التدخل السريع</label><input type="number" id="rapid_intervention_count" min="0" value="0" style=""></div>
           </div>
         </div>
 
@@ -828,7 +799,7 @@
         <div class="panel-head">
           <div>
             <h3>نموذج تسليم المناوبة</h3>
-            <p>نموذج تسليم واستلام المناوبة يجب تعبئته من قبل كبار المسعفين بداية كل مناوبة.  </p>
+            <p>النسخة الكاملة مع إدخال عدد الوحدات التشغيلية بدل علامة الصح.</p>
           </div>
         </div>
 
@@ -968,10 +939,6 @@
             <div class="field">
               <label for="handover_special_response_count">عدد الاستجابة النوعية</label>
               <input type="number" id="handover_special_response_count" min="0" value="0" style="">
-            </div>
-            <div class="field">
-              <label for="handover_rapid_response_count">عدد فرق التدخل السريع</label>
-              <input type="number" id="handover_rapid_response_count" min="0" value="0" style="">
             </div>
           </div>
         </div>
@@ -1491,10 +1458,6 @@
                     <th>الصنف</th>
                     <th>الحالة</th>
                     <th>الكمية الحالية</th>
-                    <th>الكمية المطلوبة</th>
-                    <th>الكمية المتوفرة</th>
-                    <th>الكمية الناقصة</th>
-                    <th>ملاحظات</th>
                   </tr>
                 </thead>
                 <tbody id="strategicTableBody"><tr>
@@ -1925,7 +1888,6 @@
 
             <div class="actions">
               <button class="btn btn-outline" onclick="addManualDeploymentRow()"><i class="fas fa-plus"></i> إضافة صف جديد</button>
-              <button class="btn btn-primary" onclick="loadDeploymentTemplate()"><i class="fas fa-sync-alt"></i> تحميل أكواد الفرق</button>
             </div>
 
             <div class="bullets-box">
@@ -2403,8 +2365,7 @@ async function fetchDeploymentFromSheet(){
         "المتطوعين": document.getElementById('volunteers_count').value || 0,
         "المركبات": document.getElementById('vehicles_count').value || 0,
         "القولف": document.getElementById('golf_count').value || 0,
-        'الراجلة': document.getElementById('walking_count').value || 0,
-        'التدخل السريع': document.getElementById('rapid_intervention_count').value || 0,
+        "الراجلة": document.getElementById('walking_count').value || 0,
         "الملاحظات": document.getElementById('notes').value.trim() || 'لا توجد ملاحظات'
       };
 
@@ -2588,69 +2549,68 @@ ${supportLines}
       }
 
       const row = {
-        "وقت الحفظ": new Date().toLocaleString(\'ar-SA\'),
-        "القطاع": document.getElementById(\'handover_sector\').value,
-        "نوع المناوبة": document.getElementById(\'handover_shift\').value,
-        "التاريخ": document.getElementById(\'handover_date\').value,
-        "الوقت من": document.getElementById(\'handover_time_from\').value,
-        "الوقت إلى": document.getElementById(\'handover_time_to\').value,
-        "كبير المسعفين المسلم": document.getElementById(\'handover_sender\').value || \'-\' ,
-        "كبير المسعفين المستلم": document.getElementById(\'handover_receiver\').value || \'-\' ,
-        "مساعد 1": document.getElementById(\'handover_assistant1\').value || \'-\' ,
-        "مساعد 2": document.getElementById(\'handover_assistant2\').value || \'-\' ,
-        "مساعد 3": document.getElementById(\'handover_assistant3\').value || \'-\' ,
-        "مساعد 4": document.getElementById(\'handover_assistant4\').value || \'-\' ,
-        "متوسط زمن الاستجابة": document.getElementById(\'avg_response\').value || \'0\',
-        "متوسط زمن استجابة ECHO": document.getElementById(\'echo_response\').value || \'0\',
-        "إجمالي البلاغات": document.getElementById(\'total_cases\').value || \'0\',
-        "عدد الفرق الفعالة": document.getElementById(\'active_teams\').value || \'0\',
-        "عدد الفرق المعتمدة": document.getElementById(\'planned_teams\').value || \'0\',
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "القطاع": document.getElementById('handover_sector').value,
+        "نوع المناوبة": document.getElementById('handover_shift').value,
+        "التاريخ": document.getElementById('handover_date').value,
+        "الوقت من": document.getElementById('handover_time_from').value,
+        "الوقت إلى": document.getElementById('handover_time_to').value,
+        "كبير المسعفين المسلم": document.getElementById('handover_sender').value || '-',
+        "كبير المسعفين المستلم": document.getElementById('handover_receiver').value || '-',
+        "مساعد 1": document.getElementById('handover_assistant1').value || '-',
+        "مساعد 2": document.getElementById('handover_assistant2').value || '-',
+        "مساعد 3": document.getElementById('handover_assistant3').value || '-',
+        "مساعد 4": document.getElementById('handover_assistant4').value || '-',
+        "متوسط زمن الاستجابة": document.getElementById('avg_response').value || '0',
+        "متوسط زمن استجابة ECHO": document.getElementById('echo_response').value || '0',
+        "إجمالي البلاغات": document.getElementById('total_cases').value || '0',
+        "عدد الفرق الفعالة": document.getElementById('active_teams').value || '0',
+        "عدد الفرق المعتمدة": document.getElementById('planned_teams').value || '0',
         "أحداث طارئة": hasMethane,
-        "M-حادث جسيم": document.getElementById(\'h_methane_major\').value || \'-\' ,
-        "E-الموقع": document.getElementById(\'h_methane_location\').value || \'-\' ,
-        "T-نوع الحادث": document.getElementById(\'h_methane_type\').value || \'-\' ,
-        "H-المخاطر": document.getElementById(\'h_methane_hazards\').value || \'-\' ,
-        "A-الوصول": document.getElementById(\'h_methane_access\').value || \'-\' ,
-        "N-الإصابات": document.getElementById(\'h_methane_casualties\').value || \'-\' ,
-        "E-الخدمات": document.getElementById(\'h_methane_services\').value || \'-\' ,
-        "ملاحظات ميثان": document.getElementById(\'h_methane_notes\').value || \'-\' ,
-        "عدد مركبات الإسعاف": document.getElementById(\'handover_ambulance_count\').value || \'0\',
-        "عدد القولف": document.getElementById(\'handover_golf_count\').value || \'0\',
-        "عدد الاستجابة النوعية": document.getElementById(\'handover_special_response_count\').value || \'0\',
-        "عدد فرق التدخل السريع": document.getElementById(\'handover_rapid_response_count\').value || \'0\',
-        "العاملة": document.getElementById(\'working_vehicles\').value || \'0\',
-        "الاحتياط": document.getElementById(\'reserve_vehicles\').value || \'0\',
-        "الخارج عن الخدمة": document.getElementById(\'out_of_service\').value || \'0\',
-        "بلاغات الدعم اللوجستي": document.getElementById(\'logistic_reports\').value || \'0\',
-        "البلاغات المفتوحة": document.getElementById(\'open_logistic_reports\').value || \'0\',
-        "مواقع الانتشار": document.getElementById(\'deployment_sites\').value.trim() || \'لايوجد\',
-        "الوحدات المتعطلة ومواقعها": document.getElementById(\'faulty_units\').value.trim() || \'لايوجد\',
-        "نداء الفرقة 1": s1.call || \'\',
-        "توقيت العطل 1": s1.time || \'\',
-        "نوع العطل 1": s1.type || \'\',
-        "الإجراء المتبع 1": s1.action || \'\',
-        "العودة للخدمة 1": s1.back || \'\',
-        "لوحة المركبة 1": s1.plate || \'\',
-        "نداء الفرقة 2": s2.call || \'\',
-        "توقيت العطل 2": s2.time || \'\',
-        "نوع العطل 2": s2.type || \'\',
-        "الإجراء المتبع 2": s2.action || \'\',
-        "العودة للخدمة 2": s2.back || \'\',
-        "لوحة المركبة 2": s2.plate || \'\',
-        "نداء الفرقة 3": s3.call || \'\',
-        "توقيت العطل 3": s3.time || \'\',
-        "نوع العطل 3": s3.type || \'\',
-        "الإجراء المتبع 3": s3.action || \'\',
-        "العودة للخدمة 3": s3.back || \'\',
-        "لوحة المركبة 3": s3.plate || \'\',
-        "التحذيرات الجوية": document.getElementById(\'weather_warning\').value.trim() || \'لايوجد\',
-        "التحذيرات الأمنية": document.getElementById(\'security_warning\').value.trim() || \'لايوجد\',
-        "مواقع خطرة": document.getElementById(\'dangerous_sites\').value.trim() || \'لايوجد\',
-        "إصابات العاملين": document.getElementById(\'worker_injuries\').value.trim() || \'لايوجد\',
-        "إحاطات أخرى": document.getElementById(\'other_briefings\').value.trim() || \'لايوجد\',
-        "ملخص الأحداث": document.getElementById(\'events_summary\').value.trim() || \'لايوجد\',
-        "ملخص الموارد المطلوبة وتوزيعها": document.getElementById(\'resources_summary\').value.trim() || \'لايوجد\',
-        "ملاحظات عامة عن المناوبة": document.getElementById(\'handover_notes\').value.trim() || \'لايوجد\'
+        "M-حادث جسيم": document.getElementById('h_methane_major').value || '-',
+        "E-الموقع": document.getElementById('h_methane_location').value || '-',
+        "T-نوع الحادث": document.getElementById('h_methane_type').value || '-',
+        "H-المخاطر": document.getElementById('h_methane_hazards').value || '-',
+        "A-الوصول": document.getElementById('h_methane_access').value || '-',
+        "N-الإصابات": document.getElementById('h_methane_casualties').value || '-',
+        "E-الخدمات": document.getElementById('h_methane_services').value || '-',
+        "ملاحظات ميثان": document.getElementById('h_methane_notes').value || '-',
+        "عدد مركبات الإسعاف": document.getElementById('handover_ambulance_count').value || '0',
+        "عدد القولف": document.getElementById('handover_golf_count').value || '0',
+        "عدد الاستجابة النوعية": document.getElementById('handover_special_response_count').value || '0',
+        "العاملة": document.getElementById('working_vehicles').value || '0',
+        "الاحتياط": document.getElementById('reserve_vehicles').value || '0',
+        "الخارج عن الخدمة": document.getElementById('out_of_service').value || '0',
+        "بلاغات الدعم اللوجستي": document.getElementById('logistic_reports').value || '0',
+        "البلاغات المفتوحة": document.getElementById('open_logistic_reports').value || '0',
+        "مواقع الانتشار": document.getElementById('deployment_sites').value.trim() || 'لايوجد',
+        "الوحدات المتعطلة ومواقعها": document.getElementById('faulty_units').value.trim() || 'لايوجد',
+        "نداء الفرقة 1": s1.call || '',
+        "توقيت العطل 1": s1.time || '',
+        "نوع العطل 1": s1.type || '',
+        "الإجراء المتبع 1": s1.action || '',
+        "العودة للخدمة 1": s1.back || '',
+        "لوحة المركبة 1": s1.plate || '',
+        "نداء الفرقة 2": s2.call || '',
+        "توقيت العطل 2": s2.time || '',
+        "نوع العطل 2": s2.type || '',
+        "الإجراء المتبع 2": s2.action || '',
+        "العودة للخدمة 2": s2.back || '',
+        "لوحة المركبة 2": s2.plate || '',
+        "نداء الفرقة 3": s3.call || '',
+        "توقيت العطل 3": s3.time || '',
+        "نوع العطل 3": s3.type || '',
+        "الإجراء المتبع 3": s3.action || '',
+        "العودة للخدمة 3": s3.back || '',
+        "لوحة المركبة 3": s3.plate || '',
+        "التحذيرات الجوية": document.getElementById('weather_warning').value.trim() || 'لايوجد',
+        "التحذيرات الأمنية": document.getElementById('security_warning').value.trim() || 'لايوجد',
+        "مواقع خطرة": document.getElementById('dangerous_sites').value.trim() || 'لايوجد',
+        "إصابات العاملين": document.getElementById('worker_injuries').value.trim() || 'لايوجد',
+        "إحاطات أخرى": document.getElementById('other_briefings').value.trim() || 'لايوجد',
+        "ملخص الأحداث": document.getElementById('events_summary').value.trim() || 'لايوجد',
+        "ملخص الموارد المطلوبة وتوزيعها": document.getElementById('resources_summary').value.trim() || 'لايوجد',
+        "ملاحظات عامة عن المناوبة": document.getElementById('handover_notes').value.trim() || 'لايوجد'
       };
 
       row["الرسالة النهائية"] = buildHandoverMessage(row);
@@ -2790,10 +2750,6 @@ ${supportLines}
             </select>
           </td>
           <td><input type="number" id="stock_current_${index}" min="0" value="0" class="compact-number"></td>
-          <td><input type="number" id="stock_required_${index}" min="0" value="0" class="compact-number"></td>
-          <td><input type="number" id="stock_available_${index}" min="0" value="0" class="compact-number"></td>
-          <td><input type="number" id="stock_missing_${index}" min="0" value="0" class="compact-number"></td>
-          <td><input type="text" id="stock_note_${index}" placeholder="ملاحظات"></td>
         `;
         body.appendChild(row);
       });
@@ -2828,11 +2784,7 @@ ${supportLines}
           "الصنف": entry.item,
           "الحالة": status,
           "الكمية الحالية": current,
-          "الكمية المطلوبة": document.getElementById(`stock_required_${index}`).value || \'0\',
-          "الكمية المتوفرة": document.getElementById(`stock_available_${index}`).value || \'0\',
-          "الكمية الناقصة": document.getElementById(`stock_missing_${index}`).value || \'0\',
-          "ملاحظات الصنف": document.getElementById(`stock_note_${index}`).value.trim() || \'-\' ,
-          "ملاحظات": notes || \'-\'
+          "ملاحظات": notes || '-'
         };
       });
 
@@ -3006,53 +2958,57 @@ ${supportLines}
       });
     }
 
-async function loadDeploymentTemplate(){
-  const sector = document.getElementById(\'deploy_sector\').value;
-  const defaultShift = document.getElementById(\'deploy_shift\').value || \'الصباحية\';
-  const body = document.getElementById(\'deploymentTableBody\');
+   
+   
+   async function loadDeploymentTemplate(){
+      const sector = document.getElementById('deploy_sector').value;
+      const defaultShift = document.getElementById('deploy_shift').value || 'الصباحية';
+      const body = document.getElementById('deploymentTableBody');
 
-  body.innerHTML = \'\';
+      body.innerHTML = '';
+      if(!sector) return;
 
-  if(!sector) return;
+      let data = [];
+      try {
+          data = await fetchDeploymentFromSheet();
+      } catch(e) {
+          console.log('Error fetching from sheet, using static points');
+      }
 
-  let deploymentData = [];
-  try {
-    const fetchedData = await fetchDeploymentFromSheet();
-    deploymentData = fetchedData.filter(d => String(d[\"القطاع\"]).trim() === String(sector).trim());
-  } catch (e) {
-    console.error(\'Error fetching deployment data from sheet:\', e);
-  }
+      let items = data.filter(d => 
+          String(d["القطاع"]).trim() === String(sector).trim()
+      );
 
-  let itemsToDisplay = [];
-  if (deploymentData.length > 0) {
-    itemsToDisplay = deploymentData;
-  } else {
-    // Fallback to static data if no live data for the sector
-    itemsToDisplay = staticDeploymentPoints.filter(d => d.sector === sector).map((point, index) => ({
-      \"الرمز\": point.id,
-      \"نوع الآلية\": point.type,
-      \"مناوبة النقطة\": point.shift,
-      \"عدد الفرق الفعلي\": 1, // Default count
-      \"Latitude\": point.lat,
-      \"Longitude\": point.lng,
-      \"ملاحظة السجل\": \'\'
-    }));
-  }
+      // If no data in sheet for this sector, use static points
+      if (items.length === 0) {
+          console.log('No data in sheet for sector ' + sector + ', using static points');
+          items = staticDeploymentPoints.filter(p => p.sector === sector).map(p => ({
+              "الرمز": p.id,
+              "نوع الآلية": p.type,
+              "مناوبة النقطة": p.shift,
+              "عدد الفرق الفعلي": 1,
+              "Latitude": p.lat,
+              "Longitude": p.lng,
+              "ملاحظة السجل": ""
+          }));
+      }
 
-  itemsToDisplay.forEach((item, index) => {
-    body.insertAdjacentHTML(\'beforeend\', createDeploymentRowHTML({
-      code: item[\"الرمز\"] || `${sector}-${index + 1}`,
-      type: item[\"نوع الآلية\"] || \'مركبة إسعافية\',
-      shift: item[\"مناوبة النقطة\"] || defaultShift,
-      count: item[\"عدد الفرق الفعلي\"] || 1,
-      lat: item[\"Latitude\"] || \'\',
-      lng: item[\"Longitude\"] || \'\',
-      note: item[\"ملاحظة السجل\"] || \'\'
-    }));
-  });
+      items.forEach((item, index) => {
+        body.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
+          code: item["الرمز"] || `${sector}-${index + 1}`,
+          type: item["نوع الآلية"] || 'مركبة إسعافية',
+          shift: item["مناوبة النقطة"] || defaultShift,
+          count: item["عدد الفرق الفعلي"] || 1,
+          lat: item["Latitude"] || '',
+          lng: item["Longitude"] || '',
+          note: item["ملاحظة السجل"] || ''
+        }));
+      });
 
-  refreshDeploymentAdminMode();
-}
+      refreshDeploymentAdminMode();
+    }
+
+
     
 
     function addManualDeploymentRow(){
@@ -4942,10 +4898,106 @@ function updateDashboard(data){
 /* ═══════════════════════════════════════════
    تحديث ملخص عمليات الدعم في الداشبورد
    ═══════════════════════════════════════════ */
+
+
 async function updateSupportSummary() {
   try {
-    // جلب بيانات الدعم من Google Sheets
-   const response = await fetch(SCRIPT_URL + \'?action=getSupportData\');    let result = { data: [] };
+    const response = await fetch(SCRIPT_URL + '?action=getSupport');
+    let result = { data: [] };
+    
+    try {
+      const text = await response.text();
+      result = JSON.parse(text);
+    } catch (e) {
+      console.log('Error parsing support data, using local data');
+      result.data = window.supportPlanData || [];
+    }
+    
+    const dataArray = Array.isArray(result) ? result : (result.data || []);
+    
+    if (!dataArray || dataArray.length === 0) {
+      document.querySelector('#dashSupportTable tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم -</td></tr>';
+      return;
+    }
+
+    const supportMap = {};
+    dataArray.forEach(row => {
+      const type = row['النوع'] || row['نوع التدعيم'] || (row['القطاع المدعم له'] || row['النطاق المدعم له'] || 'غير محدد');
+      const date = row['التاريخ'] || '-';
+      const period = row['الفترة'] || row['الوقت'] || '-';
+      const key = `${type}|${date}|${period}`;
+      
+      if (!supportMap[key]) {
+        supportMap[key] = { type, date, period, count: 0, teams: 0 };
+      }
+      supportMap[key].count++;
+      supportMap[key].teams += parseInt(row['عدد الفرق'] || row['عدد الفرق المدعمة'] || 1) || 0;
+    });
+
+    const tbody = document.querySelector('#dashSupportTable tbody');
+    tbody.innerHTML = '';
+    Object.values(supportMap).slice(0, 10).forEach(item => {
+      tbody.innerHTML += `<tr>
+        <td style="font-weight:700">${item.type}</td>
+        <td>${item.count}</td>
+        <td>${item.teams}</td>
+        <td>${item.date}</td>
+        <td>${item.period}</td>
+      </tr>`;
+    });
+  } catch (err) {
+    console.error('Error in updateSupportSummary:', err);
+    document.querySelector('#dashSupportTable tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--danger)">- خطأ في تحميل البيانات -</td></tr>';
+  }
+}
+;
+    
+    try {
+      const text = await response.text();
+      result = JSON.parse(text);
+    } catch (e) {
+      console.log('Error parsing support data, using local data');
+      result.data = window.supportPlanData || [];
+    }
+    
+    const dataArray = Array.isArray(result) ? result : (result.data || []);
+    
+    if (!dataArray || dataArray.length === 0) {
+      document.querySelector('#dashSupportTable tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم -</td></tr>';
+      return;
+    }
+
+    const supportMap = {};
+    dataArray.forEach(row => {
+      const type = row['النوع'] || row['نوع التدعيم'] || (row['القطاع المدعم له'] || row['النطاق المدعم له'] || 'غير محدد');
+      const date = row['التاريخ'] || '-';
+      const period = row['الفترة'] || row['الوقت'] || '-';
+      const key = `${type}|${date}|${period}`;
+      
+      if (!supportMap[key]) {
+        supportMap[key] = { type, date, period, count: 0, teams: 0 };
+      }
+      supportMap[key].count++;
+      supportMap[key].teams += parseInt(row['عدد الفرق'] || row['عدد الفرق المدعمة'] || 1) || 0;
+    });
+
+    const tbody = document.querySelector('#dashSupportTable tbody');
+    tbody.innerHTML = '';
+    Object.values(supportMap).slice(0, 10).forEach(item => {
+      tbody.innerHTML += `<tr>
+        <td style="font-weight:700">${item.type}</td>
+        <td>${item.count}</td>
+        <td>${item.teams}</td>
+        <td>${item.date}</td>
+        <td>${item.period}</td>
+      </tr>`;
+    });
+  } catch (err) {
+    console.error('Error in updateSupportSummary:', err);
+    document.querySelector('#dashSupportTable tbody').innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--danger)">- خطأ في تحميل البيانات -</td></tr>';
+  }
+}
+;
     
     try {
       result = await response.json();
@@ -4961,30 +5013,12 @@ async function updateSupportSummary() {
 
     // تجميع البيانات حسب القطاع/النطاق والتاريخ والفترة
     const supportMap = {};
-    const dashboardDateFilter = document.getElementById(\'dashboard_date_filter\')?.value;
-    const dashboardSectorFilter = document.getElementById(\'dashboard_sector_filter\')?.value;
-    const dashboardShiftFilter = document.getElementById(\'dashboard_shift_filter\')?.value;
-
-    let filteredSupportData = result.data;
-
-    if (dashboardDateFilter) {
-      filteredSupportData = filteredSupportData.filter(row => row[\'التاريخ\'] === dashboardDateFilter);
-    }
-    if (dashboardSectorFilter && dashboardSectorFilter !== \'الكل\') {
-      filteredSupportData = filteredSupportData.filter(row => 
-        (row[\'القطاع المدعم منه\'] === dashboardSectorFilter || row[\'القطاع المدعم له\'] === dashboardSectorFilter)
-      );
-    }
-    if (dashboardShiftFilter && dashboardShiftFilter !== \'الكل\') {
-      filteredSupportData = filteredSupportData.filter(row => row[\'الفترة\'] === dashboardShiftFilter);
-    }
-
-    filteredSupportData.forEach(row => {
-      const type = row[\'النوع\'] || (row[\'نوع التدعيم\'] === \'داخل_النطاق\' ? 
-        (row[\'القطاع المدعم له\'] || \'بين القطاعات\') : 
-        (row[\'النطاق المدعم له\'] || \'بين النطاقات\'));
-      const date = row[\'التاريخ\'] || \'-\
-      const period = row[\'الفترة\'] || \'-\
+    result.data.forEach(row => {
+      const type = row['النوع'] || (row['نوع التدعيم'] === 'داخل_النطاق' ? 
+        (row['القطاع المدعم له'] || 'بين القطاعات') : 
+        (row['النطاق المدعم له'] || 'بين النطاقات'));
+      const date = row['التاريخ'] || '-';
+      const period = row['الفترة'] || '-';
       const key = `${type}|${date}|${period}`;
       
       if (!supportMap[key]) {
@@ -4997,7 +5031,7 @@ async function updateSupportSummary() {
         };
       }
       supportMap[key].count++;
-      supportMap[key].teams += parseInt(row[\'عدد الفرق\'] || row[\'عدد الفرق المدعمة\'] || 1);
+      supportMap[key].teams += parseInt(row['عدد الفرق'] || row['عدد الفرق المدعمة'] || 1);
     });
 
     // عرض البيانات في الجدول
@@ -5019,50 +5053,81 @@ async function updateSupportSummary() {
 }
 
 /* ─── جلب البيانات من Google Sheets وتحديث الخريطة والداشبورد ─── */
+
+
 async function loadLiveDeploymentData(){
-  let fetchedDeploymentData = [];
+  let liveData = [];
   try {
-    const data = await fetchDeploymentFromSheet();
-    if(data && data.length > 0){
-      fetchedDeploymentData = data.map(d => ({
-        id: d[\"الرمز\"] || d[\"اسم النقطة\"] || \'\',
-        sector: d[\"القطاع\"] || \'\',
-        type: d[\"نوع الآلية\"] || d[\"الالية المشغلة بالنقطة\"] || \'\',
-        teams: parseInt(d[\"عدد الفرق الفعلي\"] || d[\"عدد الفرق بالنقطة\"] || 1),
-        lat: parseFloat(d[\"Latitude\"] || 0),
-        lng: parseFloat(d[\"Longitude\"] || 0),
-        status: d[\"الحالة\"] || \'جاهز\',
-        shift: d[\"مناوبة النقطة\"] || d[\"العرض الزمني\"] || \'الصباحية\'
-      })).filter(d => d.lat && d.lng);
+    const sheetData = await fetchDeploymentFromSheet();
+    const statusMap = {};
+    
+    if(Array.isArray(sheetData)){
+      sheetData.forEach(d => {
+        const code = d["الرمز"] || d["اسم النقطة"];
+        if(code) statusMap[code] = d;
+      });
+    }
+
+    liveData = staticDeploymentPoints.map(p => {
+      const live = statusMap[p.id] || {};
+      return {
+        id: p.id,
+        sector: p.sector,
+        type: live["نوع الآلية"] || p.type,
+        teams: parseInt(live["عدد الفرق الفعلي"] || 1),
+        lat: p.lat,
+        lng: p.lng,
+        status: live["الحالة"] || "جاهز",
+        shift: live["مناوبة النقطة"] || p.shift
+      };
+    });
+  } catch(e) {
+    console.log('Error loading live data, using static defaults:', e);
+    liveData = staticDeploymentPoints.map(p => ({...p, teams: 1}));
+  }
+  
+  updateDashboard(liveData);
+  if(window.mapInstance) renderMapMarkers(liveData);
+  window.liveDeploymentData = liveData;
+}
+;
+    
+    if(Array.isArray(sheetData)){
+      sheetData.forEach(d => {
+        const code = d["الرمز"] || d["اسم النقطة"];
+        if(code) statusMap[code] = d;
+      });
+    }
+
+    liveData = staticDeploymentPoints.map(p => {
+      const live = statusMap[p.id] || {};
+      return {
+        id: p.id,
+        sector: p.sector,
+        type: live["نوع الآلية"] || p.type,
+        teams: parseInt(live["عدد الفرق الفعلي"] || 1),
+        lat: p.lat,
+        lng: p.lng,
+        status: live["الحالة"] || "جاهز",
+        shift: live["مناوبة النقطة"] || p.shift
+      };
+    });
+  } catch(e) {
+    console.log('Error loading live data, using static defaults:', e);
+    liveData = staticDeploymentPoints.map(p => ({...p, teams: 1}));
+  }
+  
+  updateDashboard(liveData);
+  if(window.mapInstance) renderMapMarkers(liveData);
+  window.liveDeploymentData = liveData;
+}
+)).filter(d => d.lat && d.lng);
     }
   } catch(e) {
-    console.error(\'Error fetching live deployment data:\', e);
+    console.log('استخدام البيانات الثابتة:', e);
   }
-
-  // Merge fetched data with static points, prioritizing fetched data
-  liveDeploymentData = staticDeploymentPoints.map(staticPoint => {
-    const liveMatch = fetchedDeploymentData.find(d => d.id === staticPoint.id);
-    return liveMatch ? { ...staticPoint, ...liveMatch } : { ...staticPoint, status: \'غير مخصص\' };
-  });
-
-  // Apply dashboard filters
-  const dateFilter = document.getElementById(\'dashboard_date_filter\')?.value;
-  const sectorFilter = document.getElementById(\'dashboard_sector_filter\')?.value;
-  const shiftFilter = document.getElementById(\'dashboard_shift_filter\')?.value;
-
-  let filteredData = liveDeploymentData;
-
-  if (sectorFilter && sectorFilter !== \'الكل\') {
-    filteredData = filteredData.filter(d => d.sector === sectorFilter);
-  }
-  if (shiftFilter && shiftFilter !== \'الكل\') {
-    filteredData = filteredData.filter(d => d.shift === shiftFilter);
-  }
-  // Date filter will be applied to support data, not deployment data directly
-
-  updateDashboard(filteredData);
-  if(mapInstance) renderMapMarkers(filteredData);
-  updateSupportSummary(); // Call updateSupportSummary here to ensure it uses the latest filters
+  updateDashboard(liveDeploymentData);
+  if(mapInstance) renderMapMarkers(liveDeploymentData);
 }
 
 // تحميل البيانات عند بدء التشغيل

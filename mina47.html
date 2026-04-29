@@ -1457,7 +1457,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxzkS1GrOC4IBKYQCD2APoK-6iIcGngUikW7zXseLK6JgnQd_pBxA_gX8LgYyoNBS-n2w/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxVFMFdh-oQFXC967n9pv2-YHA-_drp0QLHGAVgLmduxmmwgArMYXfgAESx-V08KRnmdg/exec';
 
     const deploymentPlanData = {
       "الجمرات": [
@@ -1819,15 +1819,13 @@ async function fetchDeploymentFromSheet(){
       else wrap.classList.add('hidden');
     }
 
-    function buildHandoverMessage(row){
+                function buildHandoverMessage(row){
       const sites = (row["مواقع الانتشار"] || 'لايوجد')
-        .split('
-')
+        .split('\\n')
         .map(s => s.trim())
         .filter(Boolean)
         .map(s => `• ${s}`)
-        .join('
-') || '• لايوجد';
+        .join('\\n') || '• لايوجد';
 
       const supportLines = [1,2,3].map(i => {
         const call = row[`نداء الفرقة ${i}`];
@@ -1837,89 +1835,15 @@ async function fetchDeploymentFromSheet(){
         const back = row[`العودة للخدمة ${i}`];
         const plate = row[`لوحة المركبة ${i}`];
         if (!call && !time && !type && !action && !back && !plate) return '';
-        return `• بند ${i}
-- نداء الفرقة: ${call || '-'}
-- توقيت العطل: ${time || '-'}
-- نوع العطل: ${type || '-'}
-- الإجراء المتبع: ${action || '-'}
-- العودة للخدمة: ${back || '-'}
-- لوحة المركبة: ${plate || '-'}`;
-      }).filter(Boolean).join('
-
-') || '• لايوجد';
+        return `• بند ${i}\\n- نداء الفرقة: ${call || '-'}\\n- توقيت العطل: ${time || '-'}\\n- نوع العطل: ${type || '-'}\\n- الإجراء المتبع: ${action || '-'}\\n- العودة للخدمة: ${back || '-'}\\n- لوحة المركبة: ${plate || '-'}`;
+      }).filter(Boolean).join('\\n\\n') || '• لايوجد';
 
       let methaneSection = '';
       if(row["أحداث طارئة"] === 'نعم'){
-        methaneSection = `
-🚨 بلاغ ميثان (METHANE) مدمج:
-• الحالة: ${row["M-حادث جسيم"] || '-'}
-• الموقع: ${row["E-الموقع"] || '-'}
-• النوع: ${row["T-نوع الحادث"] || '-'}
-• المخاطر: ${row["H-المخاطر"] || '-'}
-• الوصول: ${row["A-الوصول"] || '-'}
-• الإصابات: ${row["N-الإصابات"] || '-'}
-• الخدمات: ${row["E-الخدمات"] || '-'}
-• ملاحظات ميثان: ${row["ملاحظات ميثان"] || '-'}
-`;
+        methaneSection = `\\n🚨 بلاغ ميثان (METHANE) مدمج:\\n• الحالة: ${row["M-حادث جسيم"] || '-'}\\n• الموقع: ${row["E-الموقع"] || '-'}\\n• النوع: ${row["T-نوع الحادث"] || '-'}\\n• المخاطر: ${row["H-المخاطر"] || '-'}\\n• الوصول: ${row["A-الوصول"] || '-'}\\n• الإصابات: ${row["N-الإصابات"] || '-'}\\n• الخدمات: ${row["E-الخدمات"] || '-'}\\n• ملاحظات ميثان: ${row["ملاحظات ميثان"] || '-'}\\n`;
       }
 
-      return `📋 *نموذج تسليم مناوبة كبير المسعفين* 📋
-
-📍 *القطاع:* ${row["القطاع"] || '-'}
-🕘 *نوع المناوبة:* ${row["نوع المناوبة"] || '-'}
-📅 *التاريخ:* ${row["التاريخ"] || '-'}
-⏰ *الوقت:* من ${row["الوقت من"] || '-'} إلى ${row["الوقت إلى"] || '-'}
-
-👤 *كبير المسعفين المسلم:* ${row["كبير المسعفين المسلم"] || '-'}
-👤 *كبير المسعفين المستلم:* ${row["كبير المسعفين المستلم"] || '-'}
-👥 *المساعدون:* ${row["مساعد 1"]} | ${row["مساعد 2"]} | ${row["مساعد 3"]} | ${row["مساعد 4"]}
-
-📊 *ملخص الوضع التشغيلي:*
-• متوسط زمن الاستجابة: ${row["متوسط زمن الاستجابة"] || '0'}
-• عدد بلاغات ECHO: ${row["عدد بلاغات ECHO"] || '0'}
-• إجمالي البلاغات: ${row["إجمالي البلاغات"] || '0'}
-• إجمالي عدد الفرق: ${row["إجمالي عدد الفرق"] || '0'} (الأساسية: ${row["عدد الفرق الأساسية"] || '0'})
-${methaneSection}
-🚑 *الوحدات التشغيلية:*
-• مركبات إسعافية: ${row["عدد مركبات الإسعاف"] || '0'}
-• قولف: ${row["عدد القولف"] || '0'}
-• استجابة نوعية: ${row["عدد الاستجابة النوعية"] || '0'}
-• تدخل سريع: ${row["عدد فرق التدخل السريع"] || '0'}
-
-🚑 *المركبات والدعم اللوجستي:*
-• العاملة: ${row["العاملة"] || '0'}
-• الاحتياط: ${row["الاحتياط"] || '0'}
-• الخارج عن الخدمة: ${row["الخارج عن الخدمة"] || '0'}
-• بلاغات الدعم اللوجستي: ${row["بلاغات الدعم اللوجستي"] || '0'}
-• البلاغات المفتوحة: ${row["البلاغات المفتوحة"] || '0'}
-
-📍 *مواقع الانتشار:*
-${sites}
-
-🔧 *الوحدات المتعطلة ومواقعها:*
-• ${row["الوحدات المتعطلة ومواقعها"] || 'لايوجد'}
-
-🚚 *طلبات الدعم اللوجستي للمركبات:*
-${supportLines}
-
-🛡️ *إحاطات الصحة والسلامة:*
-• التحذيرات الجوية: ${row["التحذيرات الجوية"] || 'لايوجد'}
-• التحذيرات الأمنية: ${row["التحذيرات الأمنية"] || 'لايوجد'}
-• مواقع خطرة: ${row["مواقع خطرة"] || 'لايوجد'}
-• إصابات العاملين: ${row["إصابات العاملين"] || 'لايوجد'}
-• إحاطات أخرى: ${row["إحاطات أخرى"] || 'لايوجد'}
-
-📝 *ملخص الأحداث:*
-${row["ملخص الأحداث"] || 'لايوجد'}
-
-📦 *ملخص الموارد المطلوبة وتوزيعها:*
-${row["ملخص الموارد المطلوبة وتوزيعها"] || 'لايوجد'}
-
-📝 *ملاحظات عامة عن المناوبة:*
-${row["ملاحظات عامة عن المناوبة"] || 'لايوجد'}
-
-🕒 وقت الحفظ: ${row["وقت الحفظ"]}
-🔔 من منصة نطاق منى`;
+      return `📋 *نموذج تسليم مناوبة كبير المسعفين* 📋\\n\\n📍 *القطاع:* ${row["القطاع"] || '-'}\\n🕘 *نوع المناوبة:* ${row["نوع المناوبة"] || '-'}\\n📅 *التاريخ:* ${row["التاريخ"] || '-'}\\n⏰ *الوقت:* من ${row["الوقت من"] || '-'} إلى ${row["الوقت إلى"] || '-'}\\n\\n👤 *كبير المسعفين المسلم:* ${row["كبير المسعفين المسلم"] || '-'}\\n👤 *كبير المسعفين المستلم:* ${row["كبير المسعفين المستلم"] || '-'}\\n👥 *المساعدون:* ${row["مساعد 1"]} | ${row["مساعد 2"]} | ${row["مساعد 3"]} | ${row["مساعد 4"]}\\n\\n📊 *ملخص الوضع التشغيلي:\\n• متوسط زمن الاستجابة: ${row["متوسط زمن الاستجابة"] || '0'}\\n• عدد بلاغات ECHO: ${row["عدد بلاغات ECHO"] || '0'}\\n• إجمالي البلاغات: ${row["إجمالي البلاغات"] || '0'}\\n• إجمالي عدد الفرق: ${row["إجمالي عدد الفرق"] || '0'} (الأساسية: ${row["عدد الفرق الأساسية"] || '0'})\\n${methaneSection}\\n🚑 *الوحدات التشغيلية:\\n• مركبات إسعافية: ${row["عدد مركبات الإسعاف"] || '0'}\\n• قولف: ${row["عدد القولف"] || '0'}\\n• استجابة نوعية: ${row["عدد الاستجابة النوعية"] || '0'}\\n• تدخل سريع: ${row["عدد فرق التدخل السريع"] || '0'}\\n\\n🚑 *المركبات والدعم اللوجستي:\\n• العاملة: ${row["العاملة"] || '0'}\\n• الاحتياط: ${row["الاحتياط"] || '0'}\\n• الخارج عن الخدمة: ${row["الخارج عن الخدمة"] || '0'}\\n• بلاغات الدعم اللوجستي: ${row["بلاغات الدعم اللوجستي"] || '0'}\\n• البلاغات المفتوحة: ${row["البلاغات المفتوحة"] || '0'}\\n\\n📍 *مواقع الانتشار:\\n${sites}\\n\\n🔧 *الوحدات المتعطلة ومواقعها:\\n• ${row["الوحدات المتعطلة ومواقعها"] || 'لايوجد'}\\n\\n🚚 *طلبات الدعم اللوجستي للمركبات:\\n${supportLines}\\n\\n🛡️ *إحاطات الصحة والسلامة:\\n• التحذيرات الجوية: ${row["التحذيرات الجوية"] || 'لايوجد'}\\n• التحذيرات الأمنية: ${row["التحذيرات الأمنية"] || 'لايوجد'}\\n• مواقع خطرة: ${row["مواقع خطرة"] || 'لايوجد'}\\n• إصابات العاملين: ${row["إصابات العاملين"] || 'لايوجد'}\\n• إحاطات أخرى: ${row["إحاطات أخرى"] || 'لايوجد'}\\n\\n📝 *ملخص الأحداث:\\n${row["ملخص الأحداث"] || 'لايوجد'}\\n\\n📦 *ملخص الموارد المطلوبة وتوزيعها:\\n${row["ملخص الموارد المطلوبة وتوزيعها"] || 'لايوجد'}\\n\\n📝 *ملاحظات عامة عن المناوبة:\\n${row["ملاحظات عامة عن المناوبة"] || 'لايوجد'}\\n\\n🕒 وقت الحفظ: ${row["وقت الحفظ"]}\\n🔔 من منصة نطاق منى`;
     }
 
     function clearMethaneForm() {
@@ -2302,21 +2226,7 @@ function renderMapMarkers(data){
       iconAnchor: [14, 14]
     });
     const marker = L.marker([pt.lat, pt.lng], {icon}).addTo(mapInstance);
-    marker.bindPopup(`
-      <div style="font-family:Cairo,sans-serif;direction:rtl;min-width:200px">
-        <div style="font-weight:800;font-size:1rem;color:#c1121f;margin-bottom:6px">${pt.id}</div>
-        <table style="font-size:.82rem;width:100%">
-          <tr><td style="font-weight:700;padding:2px 8px">القطاع</td><td>${pt.sector}</td></tr>
-          <tr><td style="font-weight:700;padding:2px 8px">النوع</td><td>${pt.type}</td></tr>
-          <tr><td style="font-weight:700;padding:2px 8px">الحالة</td><td><span style="background:${color};color:#fff;padding:2px 8px;border-radius:10px;font-size:.75rem">${pt.status}</span></td></tr>
-          <tr><td style="font-weight:700;padding:2px 8px">الفرق</td><td>${pt.teams}</td></tr>
-          <tr><td style="font-weight:700;padding:2px 8px">المناوبة</td><td>${pt.shift || '-'}</td></tr>
-        </table>
-        <div style="margin-top:8px;text-align:center">
-          <a href="https://www.google.com/maps?q=${pt.lat},${pt.lng}" target="_blank" style="color:#0b5ed7;font-size:.8rem">فتح في Google Maps</a>
-        </div>
-      </div>
-    `);
+    marker.bindPopup(`\n      <div style="font-family:Cairo,sans-serif;direction:rtl;min-width:200px">\n        <div style="font-weight:800;font-size:1rem;color:#c1121f;margin-bottom:6px">${pt.id}</div>\n        <table style="font-size:.82rem;width:100%">\n          <tr><td style="font-weight:700;padding:2px 8px">القطاع</td><td>${pt.sector}</td></tr>\n          <tr><td style="font-weight:700;padding:2px 8px">النوع</td><td>${pt.type}</td></tr>\n          <tr><td style="font-weight:700;padding:2px 8px">الحالة</td><td><span style="background:${color};color:#fff;padding:2px 8px;border-radius:10px;font-size:.75rem">${pt.status}</span></td></tr>\n          <tr><td style="font-weight:700;padding:2px 8px">الفرق</td><td>${pt.teams}</td></tr>\n          <tr><td style="font-weight:700;padding:2px 8px">المناوبة</td><td>${pt.shift || '-'}</td></tr>\n        </table>\n        <div style="margin-top:8px;text-align:center">\n          <a href="https://www.google.com/maps?q=${pt.lat},${pt.lng}" target="_blank" style="color:#0b5ed7;font-size:.8rem">فتح في Google Maps</a>\n        </div>\n      </div>\n    `);
     mapMarkers.push(marker);
   });
   document.getElementById('mapPointCount').textContent = `النقاط المعروضة: ${data.length} من ${liveDeploymentData.length}`;
@@ -2414,14 +2324,7 @@ function updateDashboard(data){
     const s = pts.filter(d => d.status === 'مدعمة' || d.status === 'مدعم').length;
     const o = pts.filter(d => d.status === 'خارج الخدمة').length;
     const b = pts.filter(d => d.status === 'متعطلة' || d.status === 'موقوف').length;
-    sectorBody.innerHTML += `<tr>
-      <td style="font-weight:700">${sec}</td>
-      <td>${pts.length}</td>
-      <td><span class="status-badge ready">${r}</span></td>
-      <td><span class="status-badge supported">${s}</span></td>
-      <td><span class="status-badge oos">${o}</span></td>
-      <td><span class="status-badge broken">${b}</span></td>
-    </tr>`;
+    sectorBody.innerHTML += `<tr>\n      <td style="font-weight:700">${sec}</td>\n      <td>${pts.length}</td>\n      <td><span class="status-badge ready">${r}</span></td>\n      <td><span class="status-badge supported">${s}</span></td>\n      <td><span class="status-badge oos">${o}</span></td>\n      <td><span class="status-badge broken">${b}</span></td>\n    </tr>`;
   });
 
   // Type Table
@@ -2434,11 +2337,7 @@ function updateDashboard(data){
   const typeBody = document.querySelector('#dashTypeTable tbody');
   typeBody.innerHTML = '';
   Object.entries(types).sort((a,b) => b[1]-a[1]).forEach(([t,c]) => {
-    typeBody.innerHTML += `<tr>
-      <td style="font-weight:700">${getTypeIcon(t)} ${t}</td>
-      <td>${c}</td>
-      <td>${total ? Math.round(c/total*100) : 0}%</td>
-    </tr>`;
+    typeBody.innerHTML += `<tr>\n      <td style="font-weight:700">${getTypeIcon(t)} ${t}</td>\n      <td>${c}</td>\n      <td>${total ? Math.round(c/total*100) : 0}%</td>\n    </tr>`;
   });
 
   // Status Chart (simple visual bars)
@@ -2452,30 +2351,14 @@ function updateDashboard(data){
   chartEl.innerHTML = '';
   statuses.forEach(s => {
     const pct = total ? Math.round(s.count/total*100) : 0;
-    chartEl.innerHTML += `
-      <div style="text-align:center;min-width:80px">
-        <div style="font-size:1.6rem;font-weight:900;color:${s.color}">${s.count}</div>
-        <div style="font-size:.72rem;color:var(--muted);margin-bottom:4px">${s.name}</div>
-        <div style="background:var(--line);border-radius:6px;height:8px;overflow:hidden">
-          <div style="background:${s.color};height:100%;width:${pct}%;border-radius:6px;transition:width .5s"></div>
-        </div>
-        <div style="font-size:.7rem;color:var(--muted);margin-top:2px">${pct}%</div>
-      </div>
-    `;
+    chartEl.innerHTML += `\n      <div style="text-align:center;min-width:80px">\n        <div style="font-size:1.6rem;font-weight:900;color:${s.color}">${s.count}</div>\n        <div style="font-size:.72rem;color:var(--muted);margin-bottom:4px">${s.name}</div>\n        <div style="background:var(--line);border-radius:6px;height:8px;overflow:hidden">\n          <div style="background:${s.color};height:100%;width:${pct}%;border-radius:6px;transition:width .5s"></div>\n        </div>\n        <div style="font-size:.7rem;color:var(--muted);margin-top:2px">${pct}%</div>\n      </div>\n    `;
   });
 
   // Support Summary
   updateSupportSummary();
 
   // Last Update
-  document.getElementById('dashLastUpdate').innerHTML = `
-    <div style="font-size:.85rem;color:var(--success);font-weight:700">
-      <i class="fas fa-check-circle"></i> تم تحديث البيانات
-    </div>
-    <div style="font-size:.78rem;color:var(--muted);margin-top:4px">
-      ${new Date().toLocaleString('ar-SA')} | إجمالي ${total} نقطة
-    </div>
-  `;
+  document.getElementById('dashLastUpdate').innerHTML = `\n    <div style="font-size:.85rem;color:var(--success);font-weight:700">\n      <i class="fas fa-check-circle"></i> تم تحديث البيانات\n    </div>\n    <div style="font-size:.78rem;color:var(--muted);margin-top:4px">\n      ${new Date().toLocaleString('ar-SA')} | إجمالي ${total} نقطة\n    </div>\n  `;
 }
 
 /* ═══════════════════════════════════════════
@@ -2545,13 +2428,7 @@ async function updateSupportSummary() {
       tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم -</td></tr>';
     } else {
       items.forEach(item => {
-        tbody.innerHTML += `<tr>
-          <td style="font-weight:700">${item.type}</td>
-          <td>${item.count}</td>
-          <td>${item.teams}</td>
-          <td>${item.date}</td>
-          <td>${item.period}</td>
-        </tr>`;
+        tbody.innerHTML += `<tr>\n          <td style="font-weight:700">${item.type}</td>\n          <td>${item.count}</td>\n          <td>${item.teams}</td>\n          <td>${item.date}</td>\n          <td>${item.period}</td>\n        </tr>`;
       });
     }
   } catch (err) {
@@ -2564,77 +2441,76 @@ async function updateSupportSummary() {
 }
 
 /* ─── جلب البيانات من Google Sheets وتحديث الخريطة والداشبورد ─── */
-async function loadLiveDeploymentData(){
-  try {
-    const data = await fetchDeploymentFromSheet();
-    if(data && data.length > 0){
-      liveDeploymentData = data.map(d => ({
-        id: d["الرمز"] || d["اسم النقطة"] || '',
-        sector: d["القطاع"] || '',
-        type: d["نوع الآلية"] || d["الالية المشغلة بالنقطة"] || '',
-        teams: parseInt(d["عدد الفرق الفعلي"] || d["عدد الفرق بالنقطة"] || 1),
-        lat: parseFloat(d["Latitude"] || 0),
-        lng: parseFloat(d["Longitude"] || 0),
-        status: d["الحالة"] || 'جاهز',
-        shift: d["مناوبة النقطة"] || d["العرض الزمني"] || 'الصباحية'
-      })).filter(d => d.lat && d.lng);
+        async function loadLiveDeploymentData(){
+      try {
+        const data = await fetchDeploymentFromSheet();
+        if(data && data.length > 0){
+          liveDeploymentData = data.map(d => ({
+            id: d["الرمز"] || d["اسم النقطة"] || '',
+            sector: d["القطاع"] || '',
+            type: d["نوع الآلية"] || d["الالية المشغلة بالنقطة"] || '',
+            teams: parseInt(d["عدد الفرق الفعلي"] || d["عدد الفرق بالنقطة"] || 1),
+            lat: parseFloat(d["Latitude"] || 0),
+            lng: parseFloat(d["Longitude"] || 0),
+            status: d["الحالة"] || 'جاهز',
+            shift: d["مناوبة النقطة"] || d["العرض الزمني"] || 'الصباحية'
+          })).filter(d => d.lat && d.lng);
+        }
+      } catch(e) {
+        console.log('استخدام البيانات الثابتة:', e);
+      }
+      updateDashboard(liveDeploymentData);
+      if(mapInstance) renderMapMarkers(liveDeploymentData);
     }
-  } catch(e) {
-    console.log('استخدام البيانات الثابتة:', e);
-  }
-  updateDashboard(liveDeploymentData);
-  if(mapInstance) renderMapMarkers(liveDeploymentData);
-}
 
-// تحميل البيانات عند بدء التشغيل
+    // تحميل البيانات عند بدء التشغيل
 loadLiveDeploymentData();
 
 // تحديث تلقائي كل 3 دقائق
 setInterval(loadLiveDeploymentData, 180000);
 
 /* لتحميل النقاط الافتراضية للقطاع المختار */
-function loadDefaultDeploymentPoints(){
-  const sector = document.getElementById('deploy_sector').value;
-  const shift = document.getElementById('deploy_shift').value || 'الصباحية';
-  
-  if(!sector || sector === 'اختر القطاع'){
-    showAlert('deploymentAlert','error','يرجى اختيار قطاع أولاً');
-    return;
-  }
-  
-  const tbody = document.getElementById('deploymentTableBody');
-  if (!tbody) {
-    console.error('Table body not found');
-    return;
-  }
-  
-  tbody.innerHTML = '';
-  
-  // البحث عن النقاط التابعة للقطاع المختار
-  const sectorPoints = Object.entries(DEPLOYMENT_POINTS).filter(([code, point]) => point.sector === sector);
-  
-  if(sectorPoints.length === 0){
-    showAlert('deploymentAlert','warning','لا توجد نقاط افتراضية لهذا القطاع');
-    return;
-  }
-  
-  // إضافة كل نقطة إلى الجدول
-  sectorPoints.forEach(([code, point]) => {
-    const rowData = {
-      code: code,
-      type: point.unit_type || 'مركبة إسعافية',
-      shift: shift,
-      count: 1,
-      lat: point.lat || '',
-      lng: point.lng || '',
-      note: ''
-    };
-    tbody.insertAdjacentHTML('beforeend', createDeploymentRowHTML(rowData));
-  });
-  
-  showAlert('deploymentAlert','success',`تم تحميل ${sectorPoints.length} نقطة بنجاح لقطاع ${sector}`);
-}
-</script>
+        function loadDefaultDeploymentPoints(){
+      const sector = document.getElementById('deploy_sector').value;
+      const shift = document.getElementById('deploy_shift').value || 'الصباحية';
+      
+      if(!sector || sector === 'اختر القطاع'){
+        showAlert('deploymentAlert','error','يرجى اختيار قطاع أولاً');
+        return;
+      }
+      
+      const tbody = document.getElementById('deploymentTableBody');
+      if (!tbody) {
+        console.error('Table body not found');
+        return;
+      }
+      
+      tbody.innerHTML = '';
+      
+      const sectorPoints = Object.entries(DEPLOYMENT_POINTS).filter(([code, point]) => point.sector === sector);
+      
+      if(sectorPoints.length === 0){
+        showAlert('deploymentAlert','warning','لا توجد نقاط افتراضية لهذا القطاع');
+        return;
+      }
+      
+      sectorPoints.forEach(([code, point]) => {
+        const rowData = {
+          code: code,
+          type: point.unit_type || 'مركبة إسعافية',
+          shift: shift,
+          count: 1,
+          lat: point.lat || '',
+          lng: point.lng || '',
+          note: ''
+        };
+        tbody.insertAdjacentHTML('beforeend', createDeploymentRowHTML(rowData));
+      });
+      
+      showAlert('deploymentAlert','success',`تم تحميل ${sectorPoints.length} نقطة بنجاح لقطاع ${sector}`);
+    }
+
+    </script>
 <script>
 const DEPLOYMENT_POINTS = {
   "MH1": {

@@ -1467,7 +1467,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz4Gl8_UoQ5wkDFbUb94OsOupWzxUkyJt5dQj0DbHwOxHK0lMLAY3xE-hk5t6s78bv1XA/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygXkrELNwv4GJ-2cUqqlJTuEB_j4CD93CnLkqojuK2bcJszUz1FnD5ECchgQ653qcdDg/exec';
 
     const deploymentPlanData = {
       "الجمرات": [
@@ -1582,6 +1582,11 @@
       document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
       document.getElementById(targetId)?.classList.add('active');
       window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    function toggleShortageDetails(){
+      const hasShortage = document.getElementById("has_shortage").value;
+      document.getElementById("shortage_details_container").style.display = (hasShortage === "نعم") ? "block" : "none";
     }
 
     function toggleQuickLinks(){
@@ -2487,6 +2492,7 @@ const items = data.filter(d =>
       // تحديث الداشبورد والخريطة ديناميكياً بعد الحفظ
       setTimeout(() => {
         updateDashboard();
+    setInterval(updateDashboard, 60000);
         updateMapWithDeploymentData();
       }, 1000);
 

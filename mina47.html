@@ -438,6 +438,7 @@
     </div>
 
     <!-- ═══════ KPI Row ═══════ -->
+    <div id="missingSectorsAlert" style="display:none;background:#fff3cd;color:#856404;padding:15px;border-radius:10px;margin-bottom:20px;border:1px solid #ffeeba;font-weight:bold;text-align:center"></div>
     <div class="kpi-row">
       <div class="kpi-card"><div class="kpi-val" id="kpi_total">0</div><div class="kpi-label">إجمالي النقاط</div></div>
       <div class="kpi-card"><div class="kpi-val" id="kpi_ready" style="color:var(--success)">0</div><div class="kpi-label">جاهزة</div></div>
@@ -713,6 +714,7 @@
             <div class="field"><label for="employees_count">عدد الموظفين</label><input type="number" id="employees_count" min="0" value="0"></div>
             <div class="field"><label for="volunteers_count">عدد المتطوعين</label><input type="number" id="volunteers_count" min="0" value="0"></div>
             <div class="field"><label for="vehicles_count">عدد فرق المركبات الإسعافية</label><input type="number" id="vehicles_count" min="0" value="0"></div>
+            <div class="field"><label for="rapid_vehicles_count">عدد مركبات التدخل السريع</label><input type="number" id="rapid_vehicles_count" min="0" value="0"></div>
             <div class="field"><label for="golf_count">عدد فرق عربات القولف</label><input type="number" id="golf_count" min="0" value="0"></div>
             <div class="field"><label for="walking_count">عدد الفرق الراجلة</label><input type="number" id="walking_count" min="0" value="0"></div>
           </div>
@@ -790,8 +792,8 @@
             <div class="field"><label for="avg_response">متوسط زمن الاستجابة</label><input type="text" id="avg_response" placeholder="مثال: 10:09"></div>
             <div class="field"><label for="echo_response">متوسط زمن استجابة ECHO</label><input type="text" id="echo_response" placeholder="مثال: 00:55"></div>
             <div class="field"><label for="total_cases">إجمالي البلاغات</label><input type="number" id="total_cases" min="0" value="0"></div>
-            <div class="field"><label for="active_teams">عدد الفرق الفعالة</label><input type="number" id="active_teams" min="0" value="0"></div>
-            <div class="field"><label for="planned_teams">عدد الفرق المعتمدة</label><input type="number" id="planned_teams" min="0" value="0"></div>
+            <div class="field"><label for="active_teams">إجمالي عدد الفرق بما في ذلك التداخلية (اوفرلاب) والمدعمه</label><input type="number" id="active_teams" min="0" value="0"></div>
+            <div class="field"><label for="planned_teams">عدد الفرق الأساسية</label><input type="number" id="planned_teams" min="0" value="0"></div>
           </div>
         </div>
 
@@ -880,6 +882,10 @@
               <label for="handover_special_response_count">عدد الاستجابة النوعية</label>
               <input type="number" id="handover_special_response_count" min="0" value="0">
             </div>
+            <div class="field">
+              <label for="handover_rapid_count">عدد فرق التدخل السريع</label>
+              <input type="number" id="handover_rapid_count" min="0" value="0">
+            </div>
           </div>
         </div>
 
@@ -899,280 +905,17 @@
         <div class="section">
           <div class="section-title">طلبات الدعم اللوجستي للمركبات</div>
           <div class="section-body">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>البند</th>
-                    <th>نداء الفرقة</th>
-                    <th>توقيت العطل</th>
-                    <th>نوع العطل</th>
-                    <th>الإجراء المتبع</th>
-                    <th>العودة للخدمة</th>
-                    <th>لوحة المركبة</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td><input type="text" id="support_call_1"></td>
-                    <td><input type="time" id="support_time_1"></td>
-                    <td><input type="text" id="support_type_1"></td>
-                    <td><input type="text" id="support_action_1"></td>
-                    <td><input type="time" id="support_return_1"></td>
-                    <td><input type="text" id="support_plate_1"></td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td><input type="text" id="support_call_2"></td>
-                    <td><input type="time" id="support_time_2"></td>
-                    <td><input type="text" id="support_type_2"></td>
-                    <td><input type="text" id="support_action_2"></td>
-                    <td><input type="time" id="support_return_2"></td>
-                    <td><input type="text" id="support_plate_2"></td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td><input type="text" id="support_call_3"></td>
-                    <td><input type="time" id="support_time_3"></td>
-                    <td><input type="text" id="support_type_3"></td>
-                    <td><input type="text" id="support_action_3"></td>
-                    <td><input type="time" id="support_return_3"></td>
-                    <td><input type="text" id="support_plate_3"></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">إحاطات الصحة والسلامة</div>
-          <div class="section-body grid-2">
-            <div class="field"><label for="weather_warning">التحذيرات الجوية</label><input type="text" id="weather_warning" placeholder="مثال: لايوجد"></div>
-            <div class="field"><label for="security_warning">التحذيرات الأمنية</label><input type="text" id="security_warning" placeholder="مثال: لايوجد"></div>
-            <div class="field"><label for="dangerous_sites">مواقع خطرة</label><input type="text" id="dangerous_sites"></div>
-            <div class="field"><label for="worker_injuries">إصابات العاملين</label><input type="text" id="worker_injuries" placeholder="مثال: لايوجد"></div>
-            <div class="field"><label for="other_briefings">إحاطات أخرى</label><textarea id="other_briefings"></textarea></div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">ملخص الأحداث</div>
-          <div class="section-body">
-            <div class="field"><label for="events_summary">ملخص الأحداث</label><textarea id="events_summary"></textarea></div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">ملخص الموارد المطلوبة وتوزيعها</div>
-          <div class="section-body">
-            <div class="field"><label for="resources_summary">ملخص الموارد المطلوبة وتوزيعها</label><textarea id="resources_summary"></textarea></div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">ملاحظات عامة عن المناوبة</div>
-          <div class="section-body">
-            <div class="field"><label for="handover_notes">الملاحظات العامة</label><textarea id="handover_notes"></textarea></div>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button class="btn btn-success" onclick="sendHandoverMerged()"><i class="fas fa-paper-plane"></i> حفظ وإرسال</button>
-        </div>
-      </section>
-
-      <section class="panel" id="unitsCheckPanel">
-        <div class="panel-head">
-          <div>
-            <h3>تشييك الوحدة التشغيلية</h3>
-            <p>النموذج الميداني لتشييك الوحدة والطاقم والتجهيزات الطبية.</p>
-          </div>
-        </div>
-
-        <div id="unitCheckAlert" class="alert"></div>
-
-        <div class="section">
-          <div class="section-title">البيانات الأساسية</div>
-          <div class="section-body grid-3">
-            <div class="field"><label for="units_check_date">تاريخ التشييك</label><input type="date" id="units_check_date"></div>
-            <div class="field"><label for="units_check_time">وقت التشييك</label><input type="time" id="units_check_time"></div>
-
             <div class="field">
-              <label for="units_check_sector">القطاع</label>
-              <select id="units_check_sector">
-                <option value="" selected>اختر القطاع</option>
-                <option value="الجمرات">الجمرات</option>
-                <option value="القطارات">القطارات</option>
-                <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
-                <option value="بطن منى الشمالي">بطن منى الشمالي</option>
-                <option value="منى الجديد 1">منى الجديد 1</option>
-                <option value="منى الجديد 2">منى الجديد 2</option>
-                <option value="الشعيبين">الشعيبين</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="units_check_shift">فترة التشييك</label>
-              <select id="units_check_shift">
-                <option value="" selected>اختر الفترة</option>
-                <option value="الصباحية">الصباحية</option>
-                <option value="المسائية">المسائية</option>
-                <option value="اوفرلاب">اوفرلاب</option>
-              </select>
-            </div>
-
-            <div class="field"><label for="unit_call_sign">رمز / نداء الوحدة التشغيلية</label><input type="text" id="unit_call_sign"></div>
-
-            <div class="field">
-              <label for="unit_type">نوع الوحدة التشغيلية</label>
-              <select id="unit_type">
-                <option value="" selected>اختر النوع</option>
-                <option value="مركبة إسعافية">مركبة إسعافية</option>
-                <option value="قولف">قولف</option>
-                <option value="راجلة">راجلة</option>
-                <option value="دراجة نارية">دراجة نارية</option>
-                <option value="دراجة هوائية">دراجة هوائية</option>
-                <option value="سكوتر">سكوتر</option>
-                <option value="بولاريس">بولاريس</option>
-                <option value="أخرى">أخرى</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="checker_has_third_party">هل الفرقة تحتوي على طرف ثالث؟</label>
-              <select id="checker_has_third_party">
-                <option value="" selected>اختر</option>
-                <option value="نعم">نعم</option>
-                <option value="لا">لا</option>
-              </select>
-            </div>
-
-            <div class="field"><label for="crew1_name">اسم الطاقم الإسعافي 1</label><input type="text" id="crew1_name"></div>
-            <div class="field"><label for="crew2_name">اسم الطاقم الإسعافي 2</label><input type="text" id="crew2_name"></div>
-            <div class="field hidden" id="thirdCrewWrap"><label for="crew3_name">اسم الطاقم الإسعافي 3</label><input type="text" id="crew3_name"></div>
-          </div>
-        </div>
-
-        <div class="section hidden" id="ambulanceMechanicalWrap">
-          <div class="section-title">التشييك الميكانيكي - مركبة إسعافية</div>
-          <div class="section-body grid-2">
-            <div class="field"><label for="vehicle_plate_number">رقم اللوحة</label><input type="text" id="vehicle_plate_number"></div>
-            <div class="field">
-              <label for="vehicle_fuel_level">مستوى الوقود</label>
-              <select id="vehicle_fuel_level">
-                <option value="" selected>اختر المستوى</option>
-                <option value="ممتاز">ممتاز</option>
-                <option value="جيد">جيد</option>
-                <option value="متوسط">متوسط</option>
-                <option value="منخفض">منخفض</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="vehicle_ac_status">التكييف</label>
-              <select id="vehicle_ac_status">
-                <option value="" selected>اختر الحالة</option>
-                <option value="يعمل">يعمل</option>
-                <option value="لا يعمل">لا يعمل</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="vehicle_lights_status">الأضواء والأصوات التحذيرية</label>
-              <select id="vehicle_lights_status">
-                <option value="" selected>اختر الحالة</option>
-                <option value="سليمة">سليمة</option>
-                <option value="يوجد ملاحظة">يوجد ملاحظة</option>
-                <option value="لا تعمل">لا تعمل</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="section hidden" id="golfWrap">
-          <div class="section-title">تشييك القولف</div>
-          <div class="section-body grid-2">
-            <div class="field">
-              <label for="golf_charge_level">مستوى الشحن</label>
-              <select id="golf_charge_level">
-                <option value="" selected>اختر المستوى</option>
-                <option value="ممتاز">ممتاز</option>
-                <option value="جيد">جيد</option>
-                <option value="متوسط">متوسط</option>
-                <option value="منخفض">منخفض</option>
-              </select>
-            </div>
-            <div class="field"><label for="golf_notes">ملاحظات القولف</label><textarea id="golf_notes"></textarea></div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">التشييك الطبي</div>
-          <div class="section-body">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>الصنف الطبي</th>
-                    <th>الحالة</th>
-                    <th>العدد</th>
-                    <th>ملاحظات</th>
-                  </tr>
-                </thead>
-                <tbody id="medicalCheckTableBody"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">ملاحظات عامة</div>
-          <div class="section-body">
-            <div class="field"><label for="units_check_notes">الملاحظات</label><textarea id="units_check_notes"></textarea></div>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button class="btn btn-success" onclick="sendUnitsCheck()">حفظ وإرسال</button>
-        </div>
-      </section>
-
-      <section class="panel" id="stockPanel">
-        <div class="panel-head">
-          <div>
-            <h3>الخزن الاستراتيجي</h3>
-            <p>فحص حالة الأصناف وإظهار النقص مع الملاحظات التشغيلية.</p>
-          </div>
-        </div>
-
-        <div id="stockAlert" class="alert"></div>
-
-        <div class="section">
-          <div class="section-title">البيانات الأساسية</div>
-          <div class="section-body grid-4">
-            <div class="field"><label for="stock_date">تاريخ التشييك</label><input type="date" id="stock_date"></div>
-            <div class="field"><label for="stock_time">وقت التشييك</label><input type="time" id="stock_time"></div>
-            <div class="field"><label for="stock_checker">اسم القائم بالتشييك</label><input type="text" id="stock_checker"></div>
-            <div class="field"><label for="stock_location">موقع الخزن الاستراتيجي</label><input type="text" id="stock_location"></div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">الأجهزة الطبية والمستهلكات</div>
-          <div class="section-body">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>الفئة</th>
-                    <th>الصنف</th>
-                    <th>الحالة</th>
-                    <th>الكمية الحالية</th>
-                  </tr>
-                </thead>
-                <tbody id="strategicTableBody"></tbody>
-              </table>
-            </div>
+                <label>هل يوجد نواقص طبية؟</label>
+                <select id="has_shortage" onchange="toggleShortageDetails()">
+                  <option value="لا">لا</option>
+                  <option value="نعم">نعم</option>
+                </select>
+              </div>
+              <div class="field" id="shortage_details_container" style="display:none; margin-top:15px;">
+                <label>النواقص الطبية (اذكر عدد وأنواع الأصناف الناقصة)</label>
+                <textarea id="shortage_details" rows="4" placeholder="اكتب التفاصيل هنا..."></textarea>
+              </div>
 
             <div class="bullets-box">
               <div class="field">
@@ -1589,6 +1332,11 @@
       document.getElementById("shortage_details_container").style.display = (hasShortage === "نعم") ? "block" : "none";
     }
 
+    function toggleShortageDetails(){
+      const hasShortage = document.getElementById("has_shortage").value;
+      document.getElementById("shortage_details_container").style.display = (hasShortage === "نعم") ? "block" : "none";
+    }
+
     function toggleQuickLinks(){
       document.getElementById('quickLinks').classList.toggle('show');
     }
@@ -1692,15 +1440,11 @@ async function fetchDeploymentFromSheet(){
 
     function openWhatsApp(text){
       const encoded = encodeURIComponent(text);
-      // استخدام api.whatsapp.com كخيار أكثر استقراراً لجميع المنصات
-      const url = `https://api.whatsapp.com/send?text=${encoded}`;
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      const url = isIOS ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
       
-      // محاولة فتح الرابط في نافذة جديدة
       const win = window.open(url, '_blank');
-      
-      // إذا تم حظر النافذة المنبثقة، نقوم بتنبيه المستخدم أو تغيير الموقع الحالي
-      if (!win || win.closed || typeof win.closed === 'undefined') {
-        // خيار بديل في حال حظر النوافذ المنبثقة
+      if(!win || win.closed || typeof win.closed === 'undefined'){
         window.location.href = url;
       }
     }
@@ -1967,7 +1711,7 @@ ${supportLines}
         "مساعد 3": document.getElementById('handover_assistant3').value || '-',
         "مساعد 4": document.getElementById('handover_assistant4').value || '-',
         "متوسط زمن الاستجابة": document.getElementById('avg_response').value || '0',
-        "متوسط زمن استجابة ECHO": document.getElementById('echo_response').value || '0',
+        "عدد بلاغات ECHO": document.getElementById('echo_count').value || '0',
         "إجمالي البلاغات": document.getElementById('total_cases').value || '0',
         "عدد الفرق الفعالة": document.getElementById('active_teams').value || '0',
         "عدد الفرق المعتمدة": document.getElementById('planned_teams').value || '0',
@@ -1983,6 +1727,7 @@ ${supportLines}
         "عدد مركبات الإسعاف": document.getElementById('handover_ambulance_count').value || '0',
         "عدد القولف": document.getElementById('handover_golf_count').value || '0',
         "عدد الاستجابة النوعية": document.getElementById('handover_special_response_count').value || '0',
+        "عدد فرق التدخل السريع": document.getElementById('handover_rapid_count').value || '0',
         "العاملة": document.getElementById('working_vehicles').value || '0',
         "الاحتياط": document.getElementById('reserve_vehicles').value || '0',
         "الخارج عن الخدمة": document.getElementById('out_of_service').value || '0',
@@ -2177,34 +1922,26 @@ ${supportLines}
       const checker = document.getElementById('stock_checker').value.trim();
       const location = document.getElementById('stock_location').value.trim();
       const notes = document.getElementById('stock_notes').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
 
       if(!date || !time || !checker || !location){
         showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
         return;
       }
 
-      let shortageFound = false;
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails,
+        "ملاحظات": notes || '-'
+      };
 
-      const rows = stockItems.map((entry,index)=>{
-        const status = document.getElementById(`stock_status_${index}`).value;
-        const current = document.getElementById(`stock_current_${index}`).value || '0';
-        if(status === 'يوجد نقص') shortageFound = true;
-
-        return {
-          "وقت الحفظ": new Date().toLocaleString('ar-SA'),
-          "تاريخ التشييك": date,
-          "وقت التشييك": time,
-          "القائم بالتشييك": checker,
-          "موقع الخزن": location,
-          "الفئة": entry.category,
-          "الصنف": entry.item,
-          "الحالة": status,
-          "الكمية الحالية": current,
-          "ملاحظات": notes || '-'
-        };
-      });
-
-      const save = await saveToGoogleSheets('الخزن الاستراتيجي', rows);
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
       if(!save.success){
         showAlert('stockAlert','error','تعذر حفظ بيانات الخزن');
         return;
@@ -3069,6 +2806,17 @@ function updateDashboard(data){
   document.getElementById('kpi_supported').textContent = supported;
   document.getElementById('kpi_oos').textContent = oos;
   document.getElementById('kpi_broken').textContent = broken;
+
+  // تحديث القطاعات المتأخرة
+  const respondingSectors = [...new Set(data.map(r => r.sector))];
+  const missingSectors = sectors.filter(s => !respondingSectors.includes(s));
+  const alertEl = document.getElementById('missingSectorsAlert');
+  if(missingSectors.length > 0){
+    alertEl.style.display = 'block';
+    alertEl.innerText = '⚠️ قطاعات لم ترسل استجابات بعد: ' + missingSectors.join(' - ');
+  } else {
+    alertEl.style.display = 'none';
+  }
 
   // Sector Table
   const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];

@@ -223,51 +223,6 @@
     }
     .dash-table tr:hover td{background:rgba(11,94,215,.04)}
 
-    .status-badge{
-      display:inline-block;padding:2px 10px;
-      border-radius:20px;font-size:.72rem;font-weight:700;
-    }
-    .status-badge.ready{background:#d4edda;color:#155724}
-    .status-badge.supported{background:#cce5ff;color:#004085}
-    .status-badge.overlap{background:#fff3cd;color:#856404}
-    .status-badge.oos{background:#f8d7da;color:#721c24}
-    .status-badge.broken{background:#e2e3e5;color:#383d41}
-
-    /* ─── Map ─── */
-    #deploymentMap{
-      height:550px;border-radius:14px;
-      box-shadow:var(--shadow);
-      margin-bottom:18px;
-      z-index:1;
-    }
-    .map-filters{
-      background:var(--card);border-radius:14px;
-      padding:16px 20px;box-shadow:var(--shadow);
-      margin-bottom:18px;
-      display:flex;flex-wrap:wrap;gap:10px;
-      align-items:center;
-    }
-    .map-filters label{font-size:.8rem;font-weight:700;color:var(--muted)}
-    .map-filters select{
-      padding:6px 12px;border-radius:8px;
-      border:1px solid var(--line);
-      font-family:'Cairo',sans-serif;
-      font-size:.82rem;font-weight:600;
-      background:var(--soft);
-    }
-    .map-legend{
-      display:flex;flex-wrap:wrap;gap:12px;
-      margin-bottom:14px;
-    }
-    .map-legend .leg-item{
-      display:flex;align-items:center;gap:5px;
-      font-size:.76rem;font-weight:600;
-    }
-    .map-legend .leg-dot{
-      width:14px;height:14px;border-radius:50%;
-      border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.2);
-    }
-
     /* ─── Panels / Forms ─── */
     .panel{display:none;width:100%;min-height:calc(100vh - 100px)}
     .panel.active{display:block!important}
@@ -334,7 +289,6 @@
     .alert.warning{background:#fff3cd;color:#856404;border:1px solid #ffeeba}
 
     .helper{font-size:.75rem;color:var(--muted);margin-top:4px}
-    .hidden{display:none!important}
   </style>
 </head>
 <body>
@@ -379,10 +333,6 @@
           <div class="badge">حياكم الله</div>
         </div>
 
-        <div id="missingSectorsAlert" class="alert warning" style="display:none">
-          <i class="fas fa-exclamation-triangle"></i> <strong>تنبيه:</strong> القطاعات التي لم ترفع التقرير بعد: <span id="missingSectorsList"></span>
-        </div>
-
         <div class="kpi-row">
           <div class="kpi-card"><div class="kpi-val" id="kpiTotalUnits">0</div><div class="kpi-label">إجمالي النقاط</div></div>
           <div class="kpi-card" style="border-color:var(--success)"><div class="kpi-val" id="kpiReadyUnits" style="color:var(--success)">0</div><div class="kpi-label">جاهزة</div></div>
@@ -422,8 +372,7 @@
             <div class="field">
               <label for="scope">النطاق</label>
               <select id="scope">
-                <option value="" selected>اختر النطاق</option>
-                <option value="نطاق منى">نطاق منى</option>
+                <option value="نطاق منى" selected>نطاق منى</option>
               </select>
             </div>
 
@@ -523,7 +472,7 @@
         <div class="panel-head">
           <div>
             <h3>نموذج تسليم المناوبة</h3>
-            <p>النسخة الكاملة مع إدخال عدد الوحدات التشغيلية بدل علامة الصح.</p>
+            <p>النسخة الكاملة مع إدخال عدد الوحدات التشغيلية.</p>
           </div>
         </div>
 
@@ -574,7 +523,7 @@
             <div class="field"><label for="avg_response">متوسط زمن الاستجابة</label><input type="text" id="avg_response" placeholder="مثال: 10:09"></div>
             <div class="field"><label for="echo_count">عدد بلاغات ECHO</label><input type="number" id="echo_count" value="0"></div>
             <div class="field"><label for="total_cases">إجمالي البلاغات</label><input type="number" id="total_cases" min="0" value="0"></div>
-            <div class="field"><label for="active_teams">إجمالي عدد الفرق (بما في ذلك التداخلية والمدعمة)</label><input type="number" id="active_teams" min="0" value="0"></div>
+            <div class="field"><label for="active_teams">إجمالي عدد الفرق</label><input type="number" id="active_teams" min="0" value="0"></div>
             <div class="field"><label for="planned_teams">عدد الفرق الأساسية</label><input type="number" id="planned_teams" min="0" value="0"></div>
             <div class="field"><label for="handover_rapid_count">عدد فرق التدخل السريع</label><input type="number" id="handover_rapid_count" min="0" value="0"></div>
           </div>
@@ -583,7 +532,7 @@
         <div class="section">
           <div class="section-title">المركبات والدعم اللوجستي</div>
           <div class="section-body grid-2">
-            <div class="field"><label for="working_vehicles">عدد المركبات/الفرق العاملة</label><input type="number" id="working_vehicles" min="0" value="0"></div>
+            <div class="field"><label for="working_vehicles">عدد المركبات العاملة</label><input type="number" id="working_vehicles" min="0" value="0"></div>
             <div class="field"><label for="reserve_vehicles">الاحتياط</label><input type="number" id="reserve_vehicles" min="0" value="0"></div>
             <div class="field"><label for="out_of_service">الخارج عن الخدمة</label><input type="number" id="out_of_service" min="0" value="0"></div>
             <div class="field"><label for="logistic_reports">عدد بلاغات الدعم اللوجستي</label><input type="number" id="logistic_reports" min="0" value="0"></div>
@@ -638,7 +587,7 @@
         </div>
 
         <div class="section">
-          <div class="section-title">الطاقم القيادي (يظهر تلقائياً)</div>
+          <div class="section-title">الطاقم القيادي</div>
           <div class="section-body grid-2">
             <div class="field"><label for="crew_lead">كبير المسعفين</label><input type="text" id="crew_lead" readonly></div>
             <div class="field"><label for="crew_assistants">المساعدين</label><input type="text" id="crew_assistants" readonly></div>
@@ -719,10 +668,72 @@
         </div>
       </section>
 
-      <!-- Other Panels (Placeholders) -->
-      <section class="panel" id="deploymentPanel"><h3>خطة الانتشار</h3><p>قريباً...</p></section>
-      <section class="panel" id="mapsPanel"><h3>خرائط القطاع</h3><p>قريباً...</p></section>
-      <section class="panel" id="supportPlanPanel"><h3>خطة الدعم</h3><p>قريباً...</p></section>
+      <!-- Deployment Plan Panel -->
+      <section class="panel" id="deploymentPanel">
+        <div class="panel-head">
+          <div>
+            <h3>خطة الانتشار الميداني</h3>
+            <p>توزيع الفرق الإسعافية على النقاط المحددة في نطاق منى.</p>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">توزيع النقاط</div>
+          <div class="section-body">
+            <table class="dash-table">
+              <thead>
+                <tr><th>النقطة</th><th>القطاع</th><th>نوع الفرقة</th><th>الحالة</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>نقطة 101</td><td>الجمرات</td><td>مركبة إسعاف</td><td><span class="status-badge ready">نشط</span></td></tr>
+                <tr><td>نقطة 205</td><td>القطارات</td><td>فرقة راجلة</td><td><span class="status-badge ready">نشط</span></td></tr>
+                <tr><td>نقطة 310</td><td>بطن منى</td><td>عربة قولف</td><td><span class="status-badge ready">نشط</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Maps Panel -->
+      <section class="panel" id="mapsPanel">
+        <div class="panel-head">
+          <div>
+            <h3>خرائط القطاع</h3>
+            <p>الخرائط التفاعلية ومواقع النقاط الإسعافية.</p>
+          </div>
+        </div>
+        <div class="section">
+          <div id="deploymentMap" style="background:#f0f0f0; display:flex; align-items:center; justify-content:center;">
+            <p><i class="fas fa-map-marked-alt fa-3x" style="color:var(--primary)"></i><br>جاري تحميل الخريطة التفاعلية...</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Support Plan Panel -->
+      <section class="panel" id="supportPlanPanel">
+        <div class="panel-head">
+          <div>
+            <h3>خطة الدعم والإسناد</h3>
+            <p>إدارة فرق الدعم والتدخل السريع في حالات الطوارئ.</p>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">فرق الدعم المتاحة</div>
+          <div class="section-body grid-3">
+            <div class="kpi-card" style="border-color:var(--secondary)">
+              <div class="kpi-val">12</div>
+              <div class="kpi-label">فرقة تدخل سريع</div>
+            </div>
+            <div class="kpi-card" style="border-color:var(--warning)">
+              <div class="kpi-val">5</div>
+              <div class="kpi-label">فرق إسناد احتياطي</div>
+            </div>
+            <div class="kpi-card" style="border-color:var(--success)">
+              <div class="kpi-val">8</div>
+              <div class="kpi-label">فرق متطوعين</div>
+            </div>
+          </div>
+        </div>
+      </section>
 
     </main>
   </div>
@@ -749,7 +760,7 @@
       },
       "منى الجديد 1": {
         "الصباحية": { lead:"عبدالله صالح محمد الغامدي", assistants:["وليد حمود العنزي","فهد حمد الشمري","",""] },
-        "المسائية": { lead:"عبدالله باني العنزي", assistants:["سعدون فريح الشمري","","",""] }
+        "المسائية": { lead:"عبدالله باني العنزي", assistants:["سعدون فريح الشmري","","",""] }
       },
       "منى الجديد 2": {
         "الصباحية": { lead:"جاسم عبدالجواد جاسم الجريدان", assistants:["فيصل صقر المطيري","زياد سعيد الشهراني","",""] },
@@ -782,7 +793,6 @@
 
       // Initial Data Fetch
       fetchDashboardData();
-      setInterval(fetchDashboardData, 60000);
     });
 
     function fillTeamData() {
@@ -809,12 +819,9 @@
         document.getElementById('handover_assistant3').value = data.assistants[2] || '';
         document.getElementById('handover_assistant4').value = data.assistants[3] || '';
         
-        // Receiver (Opposite shift)
         const nextShift = (shift === 'الصباحية') ? 'المسائية' : 'الصباحية';
         const nextData = teamsData[sector]?.[nextShift];
-        if(nextData) {
-          document.getElementById('handover_receiver').value = nextData.lead;
-        }
+        if(nextData) document.getElementById('handover_receiver').value = nextData.lead;
       }
     }
 
@@ -837,41 +844,29 @@
       try {
         const res = await fetch(`${SCRIPT_URL}?action=getDashboard`);
         const data = await res.json();
-        updateDashboard(data);
-        updateMissingSectors(data.missingSectors);
+        if(data) {
+          document.getElementById('kpiTotalUnits').textContent = data.total || 0;
+          document.getElementById('kpiReadyUnits').textContent = data.ready || 0;
+          document.getElementById('kpiOutUnits').textContent = data.out || 0;
+          document.getElementById('kpiRapidUnits').textContent = data.rapid || 0;
+          
+          const tbody = document.querySelector('#dashSectorTable tbody');
+          tbody.innerHTML = '';
+          if(data.sectors) {
+            data.sectors.forEach(s => {
+              tbody.innerHTML += `<tr><td>${s.name}</td><td>${s.total}</td><td>${s.ready}</td><td>${s.support}</td><td>${s.out}</td><td>${s.faulty}</td></tr>`;
+            });
+          }
+        }
       } catch (e) { console.error("Dashboard Fetch Error:", e); }
     }
 
-    function updateDashboard(data) {
-      if(!data) return;
-      document.getElementById('kpiTotalUnits').textContent = data.total || 0;
-      document.getElementById('kpiReadyUnits').textContent = data.ready || 0;
-      document.getElementById('kpiOutUnits').textContent = data.out || 0;
-      document.getElementById('kpiRapidUnits').textContent = data.rapid || 0;
-      
-      const tbody = document.querySelector('#dashSectorTable tbody');
-      tbody.innerHTML = '';
-      if(data.sectors) {
-        data.sectors.forEach(s => {
-          tbody.innerHTML += `<tr><td>${s.name}</td><td>${s.total}</td><td>${s.ready}</td><td>${s.support}</td><td>${s.out}</td><td>${s.faulty}</td></tr>`;
-        });
-      }
-    }
-
-    function updateMissingSectors(missing) {
-      const alert = document.getElementById('missingSectorsAlert');
-      const list = document.getElementById('missingSectorsList');
-      if(missing && missing.length > 0) {
-        list.textContent = missing.join(' - ');
-        alert.style.display = 'block';
-      } else {
-        alert.style.display = 'none';
-      }
-    }
-
-    function openWhatsApp(text) {
-      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
-      window.open(url, '_blank') || (window.location.href = url);
+    function showAlert(id, type, msg) {
+      const el = document.getElementById(id);
+      el.className = `alert ${type}`;
+      el.textContent = msg;
+      el.style.display = 'block';
+      setTimeout(() => el.style.display = 'none', 5000);
     }
 
     async function saveToGoogleSheets(sheetName, rows) {
@@ -886,43 +881,26 @@
       } catch (e) { return { success: false }; }
     }
 
-    function showAlert(id, type, msg) {
-      const el = document.getElementById(id);
-      el.className = `alert ${type}`;
-      el.textContent = msg;
-      el.style.display = 'block';
-      setTimeout(() => el.style.display = 'none', 5000);
-    }
-
     async function sendGroundEMS() {
       const row = {
         "القطاع": document.getElementById('sector').value,
         "الفترة": document.getElementById('shift_time').value,
         "التاريخ": document.getElementById('shift_datetime').value,
         "كبير المسعفين": document.getElementById('ems_lead').value,
-        "مركبات التدخل السريع": document.getElementById('rapid_vehicles_count').value,
         "ملاحظات": document.getElementById('notes').value
       };
       const res = await saveToGoogleSheets('التحضير اليومي', [row]);
-      if(res.success) {
-        showAlert('dailyAlert', 'success', 'تم الحفظ بنجاح');
-        openWhatsApp(`تقرير التحضير اليومي - قطاع ${row["القطاع"]}\nمركبات التدخل السريع: ${row["مركبات التدخل السريع"]}`);
-      }
+      if(res.success) showAlert('dailyAlert', 'success', 'تم الحفظ بنجاح');
     }
 
     async function sendHandoverMerged() {
       const row = {
         "القطاع": document.getElementById('handover_sector').value,
         "بلاغات ECHO": document.getElementById('echo_count').value,
-        "الفرق الأساسية": document.getElementById('planned_teams').value,
-        "إجمالي الفرق": document.getElementById('active_teams').value,
-        "فرق التدخل السريع": document.getElementById('handover_rapid_count').value
+        "إجمالي الفرق": document.getElementById('active_teams').value
       };
       const res = await saveToGoogleSheets('تسليم المناوبة', [row]);
-      if(res.success) {
-        showAlert('handoverAlert', 'success', 'تم الحفظ بنجاح');
-        openWhatsApp(`تقرير تسليم المناوبة - قطاع ${row["القطاع"]}\nبلاغات ECHO: ${row["بلاغات ECHO"]}`);
-      }
+      if(res.success) showAlert('handoverAlert', 'success', 'تم الحفظ بنجاح');
     }
 
     async function sendUnitsCheck() {
@@ -931,9 +909,7 @@
         "العهد المستلمة": document.getElementById('custody_details').value
       };
       const res = await saveToGoogleSheets('العهد الشخصية للقطاعات', [row]);
-      if(res.success) {
-        showAlert('unitCheckAlert', 'success', 'تم الحفظ بنجاح');
-      }
+      if(res.success) showAlert('unitCheckAlert', 'success', 'تم الحفظ بنجاح');
     }
 
     async function sendStrategicStock() {
@@ -943,9 +919,7 @@
         "التفاصيل": document.getElementById('shortage_details').value
       };
       const res = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
-      if(res.success) {
-        showAlert('stockAlert', 'success', 'تم الحفظ بنجاح');
-      }
+      if(res.success) showAlert('stockAlert', 'success', 'تم الحفظ بنجاح');
     }
   </script>
 

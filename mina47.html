@@ -2918,19 +2918,27 @@ function updateDashboard(data){
   document.getElementById('kpi_broken').textContent = broken;
 
   // Sector Table
-  const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
+  const sectorStats = {
+    'الجمرات': 35,
+    'القطارات': 29,
+    'بطن منى الجنوبي': 21,
+    'بطن منى الشمالي': 26,
+    'الشعيبين': 9,
+    'منى الجديد 1': 12,
+    'منى الجديد 2': 16
+  };
   const sectorBody = document.querySelector('#dashSectorTable tbody');
   sectorBody.innerHTML = '';
-  sectors.forEach(sec => {
+  Object.entries(sectorStats).forEach(([sec, fixedTotal]) => {
     const pts = data.filter(d => d.sector === sec);
-const totalT = pts.reduce((acc, d) => acc + (parseInt(d.teams) || 0), 0);
+    const totalT = pts.reduce((acc, d) => acc + (parseInt(d.teams) || 0), 0);
     const r = pts.filter(d => d.status === 'جاهزة' || d.status === 'جاهز').reduce((acc, d) => acc + (parseInt(d.teams) || 0), 0);
     const s = pts.filter(d => d.status === 'مدعمة' || d.status === 'مدعم').length;
     const o = pts.filter(d => d.status === 'خارج الخدمة').length;
     const b = pts.filter(d => d.status === 'متعطلة' || d.status === 'موقوف').length;
     sectorBody.innerHTML += `<tr>
       <td style="font-weight:700">${sec}</td>
-      <td>${pts.length}</td>
+      <td>${fixedTotal}</td>
       <td>${totalT}</td>
       <td><span class="status-badge ready">${r}</span></td>
       <td><span class="status-badge supported">${s}</span></td>

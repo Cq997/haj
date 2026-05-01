@@ -413,12 +413,12 @@
       <li class="active" data-target="homePanel"><i class="fas fa-home"></i> الرئيسية</li>
       <li data-target="groundEMS"><i class="fas fa-clipboard-list"></i> التحضير اليومي</li>
       <li data-target="handoverPanel"><i class="fas fa-exchange-alt"></i> تسليم المناوبة</li>
-      <li data-target="unitsCheckPanel"><i class="fas fa-stethoscope"></i> العهد الشخصية للقطاعات</li>
+      <li data-target="unitsCheckPanel"><i class="fas fa-id-card"></i> العهد الشخصية للقطاعات</li>
       <li data-target="stockPanel"><i class="fas fa-boxes-stacked"></i> الخزن الاستراتيجي</li>
       <li data-target="deploymentPanel"><i class="fas fa-map-marked-alt"></i> خطة الانتشار</li>
       <li data-target="mapsPanel"><i class="fas fa-map"></i> خرائط النطاق</li>
       <li data-target="supportPlanPanel"><i class="fas fa-handshake"></i> خطة الدعم</li>
-    </ul>
+</ul>
 
     <div class="quick-toggle" onclick="toggleQuickLinks()">
       <i class="fas fa-bolt"></i> روابط سريعة
@@ -439,7 +439,10 @@
 
     <!-- ═══════ KPI Row ═══════ -->
     <div id="missingSectorsAlert" style="display:none;background:#fff3cd;color:#856404;padding:15px;border-radius:10px;margin-bottom:20px;border:1px solid #ffeeba;font-weight:bold;text-align:center"></div>
+    
+    <div id="missingSectorsAlert" style="display:none;background:#fff3cd;color:#856404;padding:15px;border-radius:10px;margin-bottom:20px;border:1px solid #ffeeba;font-weight:bold;text-align:center;box-shadow:var(--shadow);"></div>
     <div class="kpi-row">
+
       <div class="kpi-card"><div class="kpi-val" id="kpi_total">0</div><div class="kpi-label">إجمالي النقاط</div></div>
       <div class="kpi-card"><div class="kpi-val" id="kpi_ready" style="color:var(--success)">0</div><div class="kpi-label">جاهزة</div></div>
       <div class="kpi-card"><div class="kpi-val" id="kpi_supported" style="color:var(--secondary)">0</div><div class="kpi-label">مدعمة</div></div>
@@ -886,6 +889,10 @@
               <label for="handover_rapid_count">عدد فرق التدخل السريع</label>
               <input type="number" id="handover_rapid_count" min="0" value="0">
             </div>
+            <div class="field">
+              <label for="handover_rapid_count">عدد فرق التدخل السريع</label>
+              <input type="number" id="handover_rapid_count" min="0" value="0">
+            </div>
           </div>
         </div>
 
@@ -928,6 +935,100 @@
 
         <div class="actions">
           <button class="btn btn-success" onclick="sendStrategicStock()">حفظ وإرسال</button>
+        </div>
+      </section>
+
+      
+      <section class="panel" id="unitsCheckPanel">
+        <div class="panel-head">
+          <div>
+            <h3>نموذج العهد الشخصية للقطاعات</h3>
+            <p>تسجيل وتدقيق العهد الشخصية والطبية للفرق الإسعافية في القطاع.</p>
+          </div>
+        </div>
+        <div id="unitCheckAlert" class="alert"></div>
+        <div class="section">
+          <div class="section-title">البيانات الأساسية</div>
+          <div class="section-body grid-4">
+            <div class="field"><label for="units_check_date">التاريخ</label><input type="date" id="units_check_date"></div>
+            <div class="field"><label for="units_check_time">الوقت</label><input type="time" id="units_check_time"></div>
+            <div class="field">
+              <label for="units_check_sector">القطاع</label>
+              <select id="units_check_sector" onchange="fillUnitCallSigns()">
+                <option value="">اختر القطاع</option>
+                <option value="الجمرات">الجمرات</option>
+                <option value="القطارات">القطارات</option>
+                <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
+                <option value="بطن منى الشمالي">بطن منى الشمالي</option>
+                <option value="الشعيبين">الشعيبين</option>
+                <option value="منى الجديد 1">منى الجديد 1</option>
+                <option value="منى الجديد 2">منى الجديد 2</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="units_check_shift">الفترة</label>
+              <select id="units_check_shift">
+                <option value="الصباحية">صباحية</option>
+                <option value="المسائية">مسائية</option>
+                <option value="اوفرلاب">اوفرلاب</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">بيانات الطاقم والعهد</div>
+          <div class="section-body grid-3">
+            <div class="field">
+              <label for="unit_call_sign">رمز/نداء الوحدة</label>
+              <select id="unit_call_sign" onchange="autoFillCrewData()">
+                <option value="">اختر الرمز</option>
+              </select>
+            </div>
+            <div class="field"><label for="crew_lead">اسم كبير المسعفين</label><input type="text" id="crew_lead" readonly></div>
+            <div class="field"><label for="crew_assistants">المساعدين</label><input type="text" id="crew_assistants" readonly></div>
+            <div class="field"><label for="received_custody">العهد المستلمة</label><textarea id="received_custody" placeholder="اذكر العهد المستلمة بالتفصيل..."></textarea></div>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-success" onclick="sendUnitsCheck()">حفظ وإرسال العهد</button>
+        </div>
+      </section>
+
+      <section class="panel" id="stockPanel">
+        <div class="panel-head">
+          <div>
+            <h3>نموذج الخزن الاستراتيجي المطور</h3>
+            <p>متابعة توفر المخزون الاستراتيجي في المواقع المحددة.</p>
+          </div>
+        </div>
+        <div id="stockAlert" class="alert"></div>
+        <div class="section">
+          <div class="section-title">البيانات الأساسية</div>
+          <div class="section-body grid-4">
+            <div class="field"><label for="stock_date">تاريخ التشييك</label><input type="date" id="stock_date"></div>
+            <div class="field"><label for="stock_time">وقت التشييك</label><input type="time" id="stock_time"></div>
+            <div class="field"><label for="stock_checker">اسم القائم بالتشييك</label><input type="text" id="stock_checker"></div>
+            <div class="field"><label for="stock_location">موقع الخزن الاستراتيجي</label><input type="text" id="stock_location"></div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">حالة المخزون</div>
+          <div class="section-body">
+            <div class="field">
+              <label>هل يوجد نواقص طبية؟</label>
+              <select id="has_shortage" onchange="toggleShortageDetails()">
+                <option value="لا">لا (المخزون مكتمل)</option>
+                <option value="نعم">نعم (يوجد نواقص)</option>
+              </select>
+            </div>
+            <div class="field" id="shortage_details_container" style="display:none; margin-top:15px;">
+              <label>تفاصيل النواقص الطبية</label>
+              <textarea id="shortage_details" rows="5" placeholder="اذكر الأصناف والكميات الناقصة..."></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-success" onclick="sendStrategicStock()">حفظ وإرسال التقرير</button>
         </div>
       </section>
 
@@ -1044,74 +1145,10 @@
       </section>
 
       
-      <section class="panel" id="unitsCheckPanel">
-        <div class="panel-head">
-          <div>
-            <h3>نموذج العهد الشخصية للقطاعات</h3>
-            <p>تسجيل وتدقيق العهد الشخصية والطبية للفرق الإسعافية في القطاع.</p>
-          </div>
-        </div>
-        <div id="unitCheckAlert" class="alert"></div>
-        <div class="section">
-          <div class="section-title">البيانات الأساسية</div>
-          <div class="section-body grid-4">
-            <div class="field"><label for="units_check_date">التاريخ</label><input type="date" id="units_check_date"></div>
-            <div class="field"><label for="units_check_time">الوقت</label><input type="time" id="units_check_time"></div>
-            <div class="field"><label for="units_check_sector">القطاع</label><input type="text" id="units_check_sector" readonly></div>
-            <div class="field"><label for="units_check_shift">الفترة</label><input type="text" id="units_check_shift" readonly></div>
-          </div>
-        </div>
-        <div class="section">
-          <div class="section-title">بيانات الطاقم والوحدة</div>
-          <div class="section-body grid-3">
-            <div class="field"><label for="unit_call_sign">رمز/نداء الوحدة</label><input type="text" id="unit_call_sign"></div>
-            <div class="field"><label for="crew1_name">اسم المسعف 1</label><input type="text" id="crew1_name"></div>
-            <div class="field"><label for="crew2_name">اسم المسعف 2</label><input type="text" id="crew2_name"></div>
-          </div>
-        </div>
-        <div class="actions">
-          <button class="btn btn-success" onclick="sendUnitsCheck()">حفظ وإرسال العهد</button>
-        </div>
-      </section>
+      
     
       
-      <section class="panel" id="stockPanel">
-        <div class="panel-head">
-          <div>
-            <h3>نموذج الخزن الاستراتيجي المطور</h3>
-            <p>متابعة توفر المخزون الاستراتيجي في المواقع المحددة.</p>
-          </div>
-        </div>
-        <div id="stockAlert" class="alert"></div>
-        <div class="section">
-          <div class="section-title">البيانات الأساسية</div>
-          <div class="section-body grid-4">
-            <div class="field"><label for="stock_date">تاريخ التشييك</label><input type="date" id="stock_date"></div>
-            <div class="field"><label for="stock_time">وقت التشييك</label><input type="time" id="stock_time"></div>
-            <div class="field"><label for="stock_checker">اسم القائم بالتشييك</label><input type="text" id="stock_checker"></div>
-            <div class="field"><label for="stock_location">موقع الخزن الاستراتيجي</label><input type="text" id="stock_location"></div>
-          </div>
-        </div>
-        <div class="section">
-          <div class="section-title">حالة المخزون</div>
-          <div class="section-body">
-            <div class="field">
-              <label>هل يوجد نواقص طبية؟</label>
-              <select id="has_shortage" onchange="toggleShortageDetails()">
-                <option value="لا">لا (المخزون مكتمل)</option>
-                <option value="نعم">نعم (يوجد نواقص)</option>
-              </select>
-            </div>
-            <div class="field" id="shortage_details_container" style="display:none; margin-top:15px;">
-              <label>تفاصيل النواقص الطبية</label>
-              <textarea id="shortage_details" rows="5" placeholder="اذكر الأصناف والكميات الناقصة..."></textarea>
-            </div>
-          </div>
-        </div>
-        <div class="actions">
-          <button class="btn btn-success" onclick="sendStrategicStock()">حفظ وإرسال التقرير</button>
-        </div>
-      </section>
+      
     
       <section class="panel" id="mapsPanel">
         <div class="panel-head">
@@ -1279,11 +1316,45 @@
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    
+    
     function switchPanel(targetId){
       document.querySelectorAll('.panel').forEach(p => {
         p.classList.remove('active');
         p.style.display = 'none';
       });
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      const navItem = document.querySelector(`.nav li[data-target="${targetId}"]`);
+      if(navItem) navItem.classList.add('active');
+      if(window.innerWidth <= 1180) {
+        const sidebar = document.querySelector('.sidebar');
+        if(sidebar) sidebar.classList.remove('active');
+      }
+      window.scrollTo(0,0);
+    }
+);
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
+      if(window.innerWidth <= 1180) document.querySelector('.sidebar').classList.remove('active');
+      window.scrollTo(0,0);
+    }
+
+    document.querySelectorAll('.nav li[data-target]').forEach(li => {
+      li.addEventListener('click', function(){
+        switchPanel(this.getAttribute('data-target'));
+      });
+    });
+);
       const target = document.getElementById(targetId);
       if(target){
         target.classList.add('active');
@@ -1301,6 +1372,102 @@
         switchPanel(target);
       });
     });
+
+
+    function toggleShortageDetails(){
+      const hasShortage = document.getElementById("has_shortage").value;
+      const container = document.getElementById("shortage_details_container");
+      if(container) container.style.display = (hasShortage === "نعم") ? "block" : "none";
+    }
+
+    function openWhatsApp(text){
+      const encoded = encodeURIComponent(text);
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      const url = isIOS ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
+      const win = window.open(url, '_blank');
+      if(!win || win.closed || typeof win.closed === 'undefined') window.location.href = url;
+    }
+
+    async function sendStrategicStock(){
+      const date = document.getElementById('stock_date').value;
+      const time = document.getElementById('stock_time').value;
+      const checker = document.getElementById('stock_checker').value.trim();
+      const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
+
+      if(!date || !time || !checker || !location){
+        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
+        return;
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success) return showAlert('stockAlert','error','تعذر حفظ البيانات');
+      showAlert('stockAlert','success','تم الحفظ بنجاح');
+      let msg = `📦 *تقرير الخزن الاستراتيجي*\n📅 ${date}\n📍 ${location}\n⚠️ نواقص: ${hasShortage}`;
+      if(hasShortage === 'نعم') msg += `\n📝 التفاصيل: ${shortageDetails}`;
+      openWhatsApp(msg);
+    }
+
+    function fillUnitCallSigns(){
+      const sector = document.getElementById('units_check_sector').value;
+      const select = document.getElementById('unit_call_sign');
+      select.innerHTML = '<option value="">اختر الرمز</option>';
+      if(!sector) return;
+      // محاكاة جلب البيانات من خطة الانتشار
+      const points = [sector + "-1", sector + "-2", sector + "-3"];
+      points.forEach(p => select.innerHTML += `<option value="${p}">${p}</option>`);
+    }
+
+    function autoFillCrewData(){
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!callSign) return;
+      document.getElementById('crew_lead').value = "كبير مسعفين " + callSign;
+      document.getElementById('crew_assistants').value = "مساعد 1, مساعد 2";
+    }
+
+    async function sendUnitsCheck(){
+      const date = document.getElementById('units_check_date').value;
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!date || !callSign) return showAlert('unitCheckAlert','error','يرجى تعبئة البيانات');
+      
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "التاريخ": date,
+        "الرمز": callSign,
+        "كبير المسعفين": document.getElementById('crew_lead').value,
+        "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد": document.getElementById('received_custody').value
+      };
+      
+      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      if(!save.success) return showAlert('unitCheckAlert','error','تعذر الحفظ');
+      showAlert('unitCheckAlert','success','تم الحفظ بنجاح');
+      openWhatsApp(`🆔 *العهد الشخصية*\n📅 ${date}\n📟 الرمز: ${callSign}\n👤 المسؤول: ${row["كبير المسعفين"]}`);
+    }
+
+    function updateDashboardAlerts(data){
+      const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
+      const respondingSectors = [...new Set(data.map(r => r.sector))];
+      const missing = sectors.filter(s => !respondingSectors.includes(s));
+      const alertEl = document.getElementById('missingSectorsAlert');
+      if(missing.length > 0){
+        alertEl.style.display = 'block';
+        alertEl.innerText = '⚠️ قطاعات لم ترسل استجابات بعد: ' + missing.join(' - ');
+      } else {
+        alertEl.style.display = 'none';
+      }
+    }
 
 </script>
 <script>
@@ -3177,11 +3344,45 @@ function loadDefaultDeploymentPoints(){
   showAlert('deploymentAlert','success',`تم تحميل ${sectorPoints.length} نقطة بنجاح لقطاع ${sector}`);
 }
 
+    
+    
     function switchPanel(targetId){
       document.querySelectorAll('.panel').forEach(p => {
         p.classList.remove('active');
         p.style.display = 'none';
       });
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      const navItem = document.querySelector(`.nav li[data-target="${targetId}"]`);
+      if(navItem) navItem.classList.add('active');
+      if(window.innerWidth <= 1180) {
+        const sidebar = document.querySelector('.sidebar');
+        if(sidebar) sidebar.classList.remove('active');
+      }
+      window.scrollTo(0,0);
+    }
+);
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
+      if(window.innerWidth <= 1180) document.querySelector('.sidebar').classList.remove('active');
+      window.scrollTo(0,0);
+    }
+
+    document.querySelectorAll('.nav li[data-target]').forEach(li => {
+      li.addEventListener('click', function(){
+        switchPanel(this.getAttribute('data-target'));
+      });
+    });
+);
       const target = document.getElementById(targetId);
       if(target){
         target.classList.add('active');
@@ -3199,6 +3400,102 @@ function loadDefaultDeploymentPoints(){
         switchPanel(target);
       });
     });
+
+
+    function toggleShortageDetails(){
+      const hasShortage = document.getElementById("has_shortage").value;
+      const container = document.getElementById("shortage_details_container");
+      if(container) container.style.display = (hasShortage === "نعم") ? "block" : "none";
+    }
+
+    function openWhatsApp(text){
+      const encoded = encodeURIComponent(text);
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      const url = isIOS ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
+      const win = window.open(url, '_blank');
+      if(!win || win.closed || typeof win.closed === 'undefined') window.location.href = url;
+    }
+
+    async function sendStrategicStock(){
+      const date = document.getElementById('stock_date').value;
+      const time = document.getElementById('stock_time').value;
+      const checker = document.getElementById('stock_checker').value.trim();
+      const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
+
+      if(!date || !time || !checker || !location){
+        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
+        return;
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success) return showAlert('stockAlert','error','تعذر حفظ البيانات');
+      showAlert('stockAlert','success','تم الحفظ بنجاح');
+      let msg = `📦 *تقرير الخزن الاستراتيجي*\n📅 ${date}\n📍 ${location}\n⚠️ نواقص: ${hasShortage}`;
+      if(hasShortage === 'نعم') msg += `\n📝 التفاصيل: ${shortageDetails}`;
+      openWhatsApp(msg);
+    }
+
+    function fillUnitCallSigns(){
+      const sector = document.getElementById('units_check_sector').value;
+      const select = document.getElementById('unit_call_sign');
+      select.innerHTML = '<option value="">اختر الرمز</option>';
+      if(!sector) return;
+      // محاكاة جلب البيانات من خطة الانتشار
+      const points = [sector + "-1", sector + "-2", sector + "-3"];
+      points.forEach(p => select.innerHTML += `<option value="${p}">${p}</option>`);
+    }
+
+    function autoFillCrewData(){
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!callSign) return;
+      document.getElementById('crew_lead').value = "كبير مسعفين " + callSign;
+      document.getElementById('crew_assistants').value = "مساعد 1, مساعد 2";
+    }
+
+    async function sendUnitsCheck(){
+      const date = document.getElementById('units_check_date').value;
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!date || !callSign) return showAlert('unitCheckAlert','error','يرجى تعبئة البيانات');
+      
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "التاريخ": date,
+        "الرمز": callSign,
+        "كبير المسعفين": document.getElementById('crew_lead').value,
+        "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد": document.getElementById('received_custody').value
+      };
+      
+      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      if(!save.success) return showAlert('unitCheckAlert','error','تعذر الحفظ');
+      showAlert('unitCheckAlert','success','تم الحفظ بنجاح');
+      openWhatsApp(`🆔 *العهد الشخصية*\n📅 ${date}\n📟 الرمز: ${callSign}\n👤 المسؤول: ${row["كبير المسعفين"]}`);
+    }
+
+    function updateDashboardAlerts(data){
+      const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
+      const respondingSectors = [...new Set(data.map(r => r.sector))];
+      const missing = sectors.filter(s => !respondingSectors.includes(s));
+      const alertEl = document.getElementById('missingSectorsAlert');
+      if(missing.length > 0){
+        alertEl.style.display = 'block';
+        alertEl.innerText = '⚠️ قطاعات لم ترسل استجابات بعد: ' + missing.join(' - ');
+      } else {
+        alertEl.style.display = 'none';
+      }
+    }
 
 </script>
 <script>
@@ -4093,11 +4390,45 @@ const DEPLOYMENT_POINTS = {
   }
 };
 
+    
+    
     function switchPanel(targetId){
       document.querySelectorAll('.panel').forEach(p => {
         p.classList.remove('active');
         p.style.display = 'none';
       });
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      const navItem = document.querySelector(`.nav li[data-target="${targetId}"]`);
+      if(navItem) navItem.classList.add('active');
+      if(window.innerWidth <= 1180) {
+        const sidebar = document.querySelector('.sidebar');
+        if(sidebar) sidebar.classList.remove('active');
+      }
+      window.scrollTo(0,0);
+    }
+);
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
+      if(window.innerWidth <= 1180) document.querySelector('.sidebar').classList.remove('active');
+      window.scrollTo(0,0);
+    }
+
+    document.querySelectorAll('.nav li[data-target]').forEach(li => {
+      li.addEventListener('click', function(){
+        switchPanel(this.getAttribute('data-target'));
+      });
+    });
+);
       const target = document.getElementById(targetId);
       if(target){
         target.classList.add('active');
@@ -4115,6 +4446,102 @@ const DEPLOYMENT_POINTS = {
         switchPanel(target);
       });
     });
+
+
+    function toggleShortageDetails(){
+      const hasShortage = document.getElementById("has_shortage").value;
+      const container = document.getElementById("shortage_details_container");
+      if(container) container.style.display = (hasShortage === "نعم") ? "block" : "none";
+    }
+
+    function openWhatsApp(text){
+      const encoded = encodeURIComponent(text);
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      const url = isIOS ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
+      const win = window.open(url, '_blank');
+      if(!win || win.closed || typeof win.closed === 'undefined') window.location.href = url;
+    }
+
+    async function sendStrategicStock(){
+      const date = document.getElementById('stock_date').value;
+      const time = document.getElementById('stock_time').value;
+      const checker = document.getElementById('stock_checker').value.trim();
+      const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
+
+      if(!date || !time || !checker || !location){
+        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
+        return;
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success) return showAlert('stockAlert','error','تعذر حفظ البيانات');
+      showAlert('stockAlert','success','تم الحفظ بنجاح');
+      let msg = `📦 *تقرير الخزن الاستراتيجي*\n📅 ${date}\n📍 ${location}\n⚠️ نواقص: ${hasShortage}`;
+      if(hasShortage === 'نعم') msg += `\n📝 التفاصيل: ${shortageDetails}`;
+      openWhatsApp(msg);
+    }
+
+    function fillUnitCallSigns(){
+      const sector = document.getElementById('units_check_sector').value;
+      const select = document.getElementById('unit_call_sign');
+      select.innerHTML = '<option value="">اختر الرمز</option>';
+      if(!sector) return;
+      // محاكاة جلب البيانات من خطة الانتشار
+      const points = [sector + "-1", sector + "-2", sector + "-3"];
+      points.forEach(p => select.innerHTML += `<option value="${p}">${p}</option>`);
+    }
+
+    function autoFillCrewData(){
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!callSign) return;
+      document.getElementById('crew_lead').value = "كبير مسعفين " + callSign;
+      document.getElementById('crew_assistants').value = "مساعد 1, مساعد 2";
+    }
+
+    async function sendUnitsCheck(){
+      const date = document.getElementById('units_check_date').value;
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!date || !callSign) return showAlert('unitCheckAlert','error','يرجى تعبئة البيانات');
+      
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "التاريخ": date,
+        "الرمز": callSign,
+        "كبير المسعفين": document.getElementById('crew_lead').value,
+        "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد": document.getElementById('received_custody').value
+      };
+      
+      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      if(!save.success) return showAlert('unitCheckAlert','error','تعذر الحفظ');
+      showAlert('unitCheckAlert','success','تم الحفظ بنجاح');
+      openWhatsApp(`🆔 *العهد الشخصية*\n📅 ${date}\n📟 الرمز: ${callSign}\n👤 المسؤول: ${row["كبير المسعفين"]}`);
+    }
+
+    function updateDashboardAlerts(data){
+      const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
+      const respondingSectors = [...new Set(data.map(r => r.sector))];
+      const missing = sectors.filter(s => !respondingSectors.includes(s));
+      const alertEl = document.getElementById('missingSectorsAlert');
+      if(missing.length > 0){
+        alertEl.style.display = 'block';
+        alertEl.innerText = '⚠️ قطاعات لم ترسل استجابات بعد: ' + missing.join(' - ');
+      } else {
+        alertEl.style.display = 'none';
+      }
+    }
 
 </script>
 

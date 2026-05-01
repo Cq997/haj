@@ -413,12 +413,12 @@
       <li class="active" data-target="homePanel"><i class="fas fa-home"></i> الرئيسية</li>
       <li data-target="groundEMS"><i class="fas fa-clipboard-list"></i> التحضير اليومي</li>
       <li data-target="handoverPanel"><i class="fas fa-exchange-alt"></i> تسليم المناوبة</li>
-      <li data-target="unitsCheckPanel"><i class="fas fa-stethoscope"></i> تشييك الوحدات</li>
+      <li data-target="unitsCheckPanel"><i class="fas fa-id-card"></i> العهد الشخصية للقطاعات</li>
       <li data-target="stockPanel"><i class="fas fa-boxes-stacked"></i> الخزن الاستراتيجي</li>
       <li data-target="deploymentPanel"><i class="fas fa-map-marked-alt"></i> خطة الانتشار</li>
       <li data-target="mapsPanel"><i class="fas fa-map"></i> خرائط النطاق</li>
       <li data-target="supportPlanPanel"><i class="fas fa-handshake"></i> خطة الدعم</li>
-    </ul>
+</ul>
 
     <div class="quick-toggle" onclick="toggleQuickLinks()">
       <i class="fas fa-bolt"></i> روابط سريعة
@@ -438,7 +438,9 @@
     </div>
 
     <!-- ═══════ KPI Row ═══════ -->
+    <div id="missingSectorsAlert" style="display:none;background:#fff3cd;color:#856404;padding:15px;border-radius:10px;margin-bottom:20px;border:1px solid #ffeeba;font-weight:bold;text-align:center;box-shadow:var(--shadow);"></div>
     <div class="kpi-row">
+
       <div class="kpi-card"><div class="kpi-val" id="kpi_total">0</div><div class="kpi-label">إجمالي النقاط</div></div>
       <div class="kpi-card"><div class="kpi-val" id="kpi_ready" style="color:var(--success)">0</div><div class="kpi-label">جاهزة</div></div>
       <div class="kpi-card"><div class="kpi-val" id="kpi_supported" style="color:var(--secondary)">0</div><div class="kpi-label">مدعمة</div></div>
@@ -713,6 +715,9 @@
             <div class="field"><label for="employees_count">عدد الموظفين</label><input type="number" id="employees_count" min="0" value="0"></div>
             <div class="field"><label for="volunteers_count">عدد المتطوعين</label><input type="number" id="volunteers_count" min="0" value="0"></div>
             <div class="field"><label for="vehicles_count">عدد فرق المركبات الإسعافية</label><input type="number" id="vehicles_count" min="0" value="0"></div>
+            <div class="field"><label for="rapid_vehicles_count">عدد مركبات التدخل السريع</label><input type="number" id="rapid_vehicles_count" min="0" value="0"></div>
+            
+            
             <div class="field"><label for="golf_count">عدد فرق عربات القولف</label><input type="number" id="golf_count" min="0" value="0"></div>
             <div class="field"><label for="walking_count">عدد الفرق الراجلة</label><input type="number" id="walking_count" min="0" value="0"></div>
           </div>
@@ -788,98 +793,11 @@
           <div class="section-title">ملخص الوضع الراهن</div>
           <div class="section-body grid-3">
             <div class="field"><label for="avg_response">متوسط زمن الاستجابة</label><input type="text" id="avg_response" placeholder="مثال: 10:09"></div>
-            <div class="field"><label for="echo_response">متوسط زمن استجابة ECHO</label><input type="text" id="echo_response" placeholder="مثال: 00:55"></div>
+            <div class="field"><label for="echo_count">عدد بلاغات ECHO</label><input type="number" id="echo_count" value="0"></div>
             <div class="field"><label for="total_cases">إجمالي البلاغات</label><input type="number" id="total_cases" min="0" value="0"></div>
-            <div class="field"><label for="active_teams">عدد الفرق الفعالة</label><input type="number" id="active_teams" min="0" value="0"></div>
-            <div class="field"><label for="planned_teams">عدد الفرق المعتمدة</label><input type="number" id="planned_teams" min="0" value="0"></div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">ملخص بلاغات الأحداث الطارئة</div>
-          <div class="section-body">
-            <div class="field">
-              <label for="has_major_events">هل توجد أحداث طارئة خلال المناوبة؟</label>
-              <select id="has_major_events" onchange="toggleHandoverMethane()">
-                <option value="لا">لا</option>
-                <option value="نعم">نعم</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- METHANE Integrated Section -->
-        <div id="handoverMethaneWrap" class="hidden">
-          <div class="section">
-            <div class="section-title">تفاصيل رسالة ميثان (METHANE)</div>
-            <div class="section-body grid-2">
-              <div class="field">
-                <label for="h_methane_major">M - هل هو حادث جسيم؟</label>
-                <select id="h_methane_major">
-                  <option value="" selected>-- اختر --</option>
-                  <option value="نعم - حادث جسيم جداً">نعم - حادث جسيم جداً</option>
-                  <option value="نعم - حادث جسيم">نعم - حادث جسيم</option>
-                  <option value="لا - حادث عادي">لا - حادث عادي</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="h_methane_location">E - الموقع الدقيق</label>
-                <input type="text" id="h_methane_location" placeholder="اكتب الموقع الدقيق للحادث">
-              </div>
-              <div class="field">
-                <label for="h_methane_type">T - نوع الحادث</label>
-                <select id="h_methane_type">
-                  <option value="" selected>-- اختر نوع الحادث --</option>
-                  <option value="حادث مروري">حادث مروري</option>
-                  <option value="إصابة طبية">إصابة طبية</option>
-                  <option value="حريق">حريق</option>
-                  <option value="غرق">غرق</option>
-                  <option value="حادث سقوط">حادث سقوط</option>
-                  <option value="اختناق">اختناق</option>
-                  <option value="تسمم">تسمم</option>
-                  <option value="صدمة كهربائية">صدمة كهربائية</option>
-                  <option value="أخرى">أخرى</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="h_methane_hazards">H - المخاطر الموجودة</label>
-                <textarea id="h_methane_hazards" placeholder="اكتب المخاطر الموجودة في موقع الحادث"></textarea>
-              </div>
-              <div class="field">
-                <label for="h_methane_access">A - طرق الوصول والخروج</label>
-                <textarea id="h_methane_access" placeholder="اكتب أفضل طرق الوصول للموقع"></textarea>
-              </div>
-              <div class="field">
-                <label for="h_methane_casualties">N - عدد الإصابات ونوعها</label>
-                <textarea id="h_methane_casualties" placeholder="اكتب عدد الإصابات التقريبي وحالتها"></textarea>
-              </div>
-              <div class="field">
-                <label for="h_methane_services">E - الخدمات المطلوبة والموجودة</label>
-                <textarea id="h_methane_services" placeholder="اكتب الخدمات المتواجدة والمطلوبة (دفاع مدني، مرور، إلخ)"></textarea>
-              </div>
-              <div class="field">
-                <label for="h_methane_notes">ملاحظات إضافية للبلاغ</label>
-                <textarea id="h_methane_notes"></textarea>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">الوحدات التشغيلية</div>
-          <div class="section-body grid-3">
-            <div class="field">
-              <label for="handover_ambulance_count">عدد مركبات الإسعاف</label>
-              <input type="number" id="handover_ambulance_count" min="0" value="0">
-            </div>
-            <div class="field">
-              <label for="handover_golf_count">عدد القولف</label>
-              <input type="number" id="handover_golf_count" min="0" value="0">
-            </div>
-            <div class="field">
-              <label for="handover_special_response_count">عدد الاستجابة النوعية</label>
-              <input type="number" id="handover_special_response_count" min="0" value="0">
-            </div>
+            <div class="field"><label for="active_teams">إجمالي عدد الفرق بما في ذلك التداخلية (اوفرلاب) والمدعمه</label><input type="number" id="active_teams" min="0" value="0"></div>
+            <div class="field"><label for="planned_teams">عدد الفرق الأساسية</label><input type="number" id="planned_teams" min="0" value="0"></div>
+            <div class="field"><label for="handover_rapid_count">عدد فرق التدخل السريع</label><input type="number" id="handover_rapid_count" min="0" value="0"></div>
           </div>
         </div>
 
@@ -896,252 +814,16 @@
           </div>
         </div>
 
-        <div class="section">
-          <div class="section-title">طلبات الدعم اللوجستي للمركبات</div>
-          <div class="section-body">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>البند</th>
-                    <th>نداء الفرقة</th>
-                    <th>توقيت العطل</th>
-                    <th>نوع العطل</th>
-                    <th>الإجراء المتبع</th>
-                    <th>العودة للخدمة</th>
-                    <th>لوحة المركبة</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td><input type="text" id="support_call_1"></td>
-                    <td><input type="time" id="support_time_1"></td>
-                    <td><input type="text" id="support_type_1"></td>
-                    <td><input type="text" id="support_action_1"></td>
-                    <td><input type="time" id="support_return_1"></td>
-                    <td><input type="text" id="support_plate_1"></td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td><input type="text" id="support_call_2"></td>
-                    <td><input type="time" id="support_time_2"></td>
-                    <td><input type="text" id="support_type_2"></td>
-                    <td><input type="text" id="support_action_2"></td>
-                    <td><input type="time" id="support_return_2"></td>
-                    <td><input type="text" id="support_plate_2"></td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td><input type="text" id="support_call_3"></td>
-                    <td><input type="time" id="support_time_3"></td>
-                    <td><input type="text" id="support_type_3"></td>
-                    <td><input type="text" id="support_action_3"></td>
-                    <td><input type="time" id="support_return_3"></td>
-                    <td><input type="text" id="support_plate_3"></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">إحاطات الصحة والسلامة</div>
-          <div class="section-body grid-2">
-            <div class="field"><label for="weather_warning">التحذيرات الجوية</label><input type="text" id="weather_warning" placeholder="مثال: لايوجد"></div>
-            <div class="field"><label for="security_warning">التحذيرات الأمنية</label><input type="text" id="security_warning" placeholder="مثال: لايوجد"></div>
-            <div class="field"><label for="dangerous_sites">مواقع خطرة</label><input type="text" id="dangerous_sites"></div>
-            <div class="field"><label for="worker_injuries">إصابات العاملين</label><input type="text" id="worker_injuries" placeholder="مثال: لايوجد"></div>
-            <div class="field"><label for="other_briefings">إحاطات أخرى</label><textarea id="other_briefings"></textarea></div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">ملخص الأحداث</div>
-          <div class="section-body">
-            <div class="field"><label for="events_summary">ملخص الأحداث</label><textarea id="events_summary"></textarea></div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">ملخص الموارد المطلوبة وتوزيعها</div>
-          <div class="section-body">
-            <div class="field"><label for="resources_summary">ملخص الموارد المطلوبة وتوزيعها</label><textarea id="resources_summary"></textarea></div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">ملاحظات عامة عن المناوبة</div>
-          <div class="section-body">
-            <div class="field"><label for="handover_notes">الملاحظات العامة</label><textarea id="handover_notes"></textarea></div>
-          </div>
-        </div>
-
         <div class="actions">
-          <button class="btn btn-success" onclick="sendHandoverMerged()"><i class="fas fa-paper-plane"></i> حفظ وإرسال</button>
-        </div>
-      </section>
-
-      <section class="panel" id="unitsCheckPanel">
-        <div class="panel-head">
-          <div>
-            <h3>تشييك الوحدة التشغيلية</h3>
-            <p>النموذج الميداني لتشييك الوحدة والطاقم والتجهيزات الطبية.</p>
-          </div>
-        </div>
-
-        <div id="unitCheckAlert" class="alert"></div>
-
-        <div class="section">
-          <div class="section-title">البيانات الأساسية</div>
-          <div class="section-body grid-3">
-            <div class="field"><label for="units_check_date">تاريخ التشييك</label><input type="date" id="units_check_date"></div>
-            <div class="field"><label for="units_check_time">وقت التشييك</label><input type="time" id="units_check_time"></div>
-
-            <div class="field">
-              <label for="units_check_sector">القطاع</label>
-              <select id="units_check_sector">
-                <option value="" selected>اختر القطاع</option>
-                <option value="الجمرات">الجمرات</option>
-                <option value="القطارات">القطارات</option>
-                <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
-                <option value="بطن منى الشمالي">بطن منى الشمالي</option>
-                <option value="منى الجديد 1">منى الجديد 1</option>
-                <option value="منى الجديد 2">منى الجديد 2</option>
-                <option value="الشعيبين">الشعيبين</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="units_check_shift">فترة التشييك</label>
-              <select id="units_check_shift">
-                <option value="" selected>اختر الفترة</option>
-                <option value="الصباحية">الصباحية</option>
-                <option value="المسائية">المسائية</option>
-                <option value="اوفرلاب">اوفرلاب</option>
-              </select>
-            </div>
-
-            <div class="field"><label for="unit_call_sign">رمز / نداء الوحدة التشغيلية</label><input type="text" id="unit_call_sign"></div>
-
-            <div class="field">
-              <label for="unit_type">نوع الوحدة التشغيلية</label>
-              <select id="unit_type">
-                <option value="" selected>اختر النوع</option>
-                <option value="مركبة إسعافية">مركبة إسعافية</option>
-                <option value="قولف">قولف</option>
-                <option value="راجلة">راجلة</option>
-                <option value="دراجة نارية">دراجة نارية</option>
-                <option value="دراجة هوائية">دراجة هوائية</option>
-                <option value="سكوتر">سكوتر</option>
-                <option value="بولاريس">بولاريس</option>
-                <option value="أخرى">أخرى</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="checker_has_third_party">هل الفرقة تحتوي على طرف ثالث؟</label>
-              <select id="checker_has_third_party">
-                <option value="" selected>اختر</option>
-                <option value="نعم">نعم</option>
-                <option value="لا">لا</option>
-              </select>
-            </div>
-
-            <div class="field"><label for="crew1_name">اسم الطاقم الإسعافي 1</label><input type="text" id="crew1_name"></div>
-            <div class="field"><label for="crew2_name">اسم الطاقم الإسعافي 2</label><input type="text" id="crew2_name"></div>
-            <div class="field hidden" id="thirdCrewWrap"><label for="crew3_name">اسم الطاقم الإسعافي 3</label><input type="text" id="crew3_name"></div>
-          </div>
-        </div>
-
-        <div class="section hidden" id="ambulanceMechanicalWrap">
-          <div class="section-title">التشييك الميكانيكي - مركبة إسعافية</div>
-          <div class="section-body grid-2">
-            <div class="field"><label for="vehicle_plate_number">رقم اللوحة</label><input type="text" id="vehicle_plate_number"></div>
-            <div class="field">
-              <label for="vehicle_fuel_level">مستوى الوقود</label>
-              <select id="vehicle_fuel_level">
-                <option value="" selected>اختر المستوى</option>
-                <option value="ممتاز">ممتاز</option>
-                <option value="جيد">جيد</option>
-                <option value="متوسط">متوسط</option>
-                <option value="منخفض">منخفض</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="vehicle_ac_status">التكييف</label>
-              <select id="vehicle_ac_status">
-                <option value="" selected>اختر الحالة</option>
-                <option value="يعمل">يعمل</option>
-                <option value="لا يعمل">لا يعمل</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="vehicle_lights_status">الأضواء والأصوات التحذيرية</label>
-              <select id="vehicle_lights_status">
-                <option value="" selected>اختر الحالة</option>
-                <option value="سليمة">سليمة</option>
-                <option value="يوجد ملاحظة">يوجد ملاحظة</option>
-                <option value="لا تعمل">لا تعمل</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="section hidden" id="golfWrap">
-          <div class="section-title">تشييك القولف</div>
-          <div class="section-body grid-2">
-            <div class="field">
-              <label for="golf_charge_level">مستوى الشحن</label>
-              <select id="golf_charge_level">
-                <option value="" selected>اختر المستوى</option>
-                <option value="ممتاز">ممتاز</option>
-                <option value="جيد">جيد</option>
-                <option value="متوسط">متوسط</option>
-                <option value="منخفض">منخفض</option>
-              </select>
-            </div>
-            <div class="field"><label for="golf_notes">ملاحظات القولف</label><textarea id="golf_notes"></textarea></div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">التشييك الطبي</div>
-          <div class="section-body">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>الصنف الطبي</th>
-                    <th>الحالة</th>
-                    <th>العدد</th>
-                    <th>ملاحظات</th>
-                  </tr>
-                </thead>
-                <tbody id="medicalCheckTableBody"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">ملاحظات عامة</div>
-          <div class="section-body">
-            <div class="field"><label for="units_check_notes">الملاحظات</label><textarea id="units_check_notes"></textarea></div>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button class="btn btn-success" onclick="sendUnitsCheck()">حفظ وإرسال</button>
+          <button class="btn btn-success" onclick="sendHandoverMerged()"><i class="fas fa-paper-plane"></i> حفظ وإرسال التقرير</button>
         </div>
       </section>
 
       <section class="panel" id="stockPanel">
         <div class="panel-head">
           <div>
-            <h3>الخزن الاستراتيجي</h3>
-            <p>فحص حالة الأصناف وإظهار النقص مع الملاحظات التشغيلية.</p>
+            <h3>نموذج الخزن الاستراتيجي المطور</h3>
+            <p>متابعة توفر المخزون الاستراتيجي في المواقع المحددة.</p>
           </div>
         </div>
 
@@ -1158,33 +840,24 @@
         </div>
 
         <div class="section">
-          <div class="section-title">الأجهزة الطبية والمستهلكات</div>
+          <div class="section-title">حالة المخزون</div>
           <div class="section-body">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>الفئة</th>
-                    <th>الصنف</th>
-                    <th>الحالة</th>
-                    <th>الكمية الحالية</th>
-                  </tr>
-                </thead>
-                <tbody id="strategicTableBody"></tbody>
-              </table>
+            <div class="field">
+              <label>هل يوجد نواقص طبية؟</label>
+              <select id="has_shortage" onchange="toggleShortageDetails()">
+                <option value="لا">لا (المخزون مكتمل)</option>
+                <option value="نعم">نعم (يوجد نواقص)</option>
+              </select>
             </div>
-
-            <div class="bullets-box">
-              <div class="field">
-                <label for="stock_notes">ملاحظات الخزن</label>
-                <textarea id="stock_notes" placeholder="اكتب كل ملاحظة في سطر مستقل"></textarea>
-              </div>
+            <div class="field" id="shortage_details_container" style="display:none; margin-top:15px;">
+              <label>النواقص الطبية (اذكر عدد وأنواع الأصناف الناقصة)</label>
+              <textarea id="shortage_details" rows="5" placeholder="مثال: 10 مغذيات، 5 أطقم غيار..."></textarea>
             </div>
           </div>
         </div>
 
         <div class="actions">
-          <button class="btn btn-success" onclick="sendStrategicStock()">حفظ وإرسال</button>
+          <button class="btn btn-success" onclick="sendStrategicStock()">حفظ وإرسال التقرير</button>
         </div>
       </section>
 
@@ -1300,6 +973,12 @@
         </div>
       </section>
 
+      
+      
+    
+      
+      
+    
       <section class="panel" id="mapsPanel">
         <div class="panel-head">
           <div>
@@ -1465,9 +1144,454 @@
   </main>
 </div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    
+    
+    );
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      const navItem = document.querySelector(`.nav li[data-target="${targetId}"]`);
+      if(navItem) navItem.classList.add('active');
+      if(window.innerWidth <= 1180) {
+        const sidebar = document.querySelector('.sidebar');
+        if(sidebar) sidebar.classList.remove('active');
+      }
+      window.scrollTo(0,0);
+    }
+);
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
+      if(window.innerWidth <= 1180) document.querySelector('.sidebar').classList.remove('active');
+      window.scrollTo(0,0);
+    }
+
+    document.querySelectorAll('.nav li[data-target]').forEach(li => {
+      li.addEventListener('click', function(){
+        switchPanel(this.getAttribute('data-target'));
+      });
+    });
+);
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
+      if(window.innerWidth <= 1180) document.querySelector('.sidebar').classList.remove('active');
+      window.scrollTo(0,0);
+    }
+
+    document.querySelectorAll('.nav li[data-target]').forEach(li => {
+      li.addEventListener('click', () => {
+        const target = li.getAttribute('data-target');
+        switchPanel(target);
+      });
+    });
+
+
+    
+
+    
+
+    async function sendStrategicStock(){
+      const date = document.getElementById('stock_date').value;
+      const time = document.getElementById('stock_time').value;
+      const checker = document.getElementById('stock_checker').value.trim();
+      const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
+
+      if(!date || !time || !checker || !location){
+        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
+        return;
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success) return showAlert('stockAlert','error','تعذر حفظ البيانات');
+      showAlert('stockAlert','success','تم الحفظ بنجاح');
+      let msg = `📦 *تقرير الخزن الاستراتيجي*\n📅 ${date}\n📍 ${location}\n⚠️ نواقص: ${hasShortage}`;
+      if(hasShortage === 'نعم') msg += `\n📝 التفاصيل: ${shortageDetails}`;
+      openWhatsApp(msg);
+    }
+
+    function fillUnitCallSigns(){
+      const sector = document.getElementById('units_check_sector').value;
+      const select = document.getElementById('unit_call_sign');
+      select.innerHTML = '<option value="">اختر الرمز</option>';
+      if(!sector) return;
+      // محاكاة جلب البيانات من خطة الانتشار
+      const points = [sector + "-1", sector + "-2", sector + "-3"];
+      points.forEach(p => select.innerHTML += `<option value="${p}">${p}</option>`);
+    }
+
+    function autoFillCrewData(){
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!callSign) return;
+      document.getElementById('crew_lead').value = "كبير مسعفين " + callSign;
+      document.getElementById('crew_assistants').value = "مساعد 1, مساعد 2";
+    }
+
+    async function sendUnitsCheck(){
+      const date = document.getElementById('units_check_date').value;
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!date || !callSign) return showAlert('unitCheckAlert','error','يرجى تعبئة البيانات');
+      
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "التاريخ": date,
+        "الرمز": callSign,
+        "كبير المسعفين": document.getElementById('crew_lead').value,
+        "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد": document.getElementById('received_custody').value
+      };
+      
+      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      if(!save.success) return showAlert('unitCheckAlert','error','تعذر الحفظ');
+      showAlert('unitCheckAlert','success','تم الحفظ بنجاح');
+      openWhatsApp(`🆔 *العهد الشخصية*\n📅 ${date}\n📟 الرمز: ${callSign}\n👤 المسؤول: ${row["كبير المسعفين"]}`);
+    }
+
+    function updateDashboardAlerts(data){
+      const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
+      const respondingSectors = [...new Set(data.map(r => r.sector))];
+      const missing = sectors.filter(s => !respondingSectors.includes(s));
+      const alertEl = document.getElementById('missingSectorsAlert');
+      if(missing.length > 0){
+        alertEl.style.display = 'block';
+        alertEl.innerText = '⚠️ قطاعات لم ترسل استجابات بعد: ' + missing.join(' - ');
+      } else {
+        alertEl.style.display = 'none';
+      }
+    }
+
+
+    
+
+    function fillUnitCallSigns(){
+      const sector = document.getElementById('units_check_sector').value;
+      const select = document.getElementById('unit_call_sign');
+      select.innerHTML = '<option value="">اختر الرمز</option>';
+      if(!sector) return;
+      // محاكاة جلب البيانات من خطة الانتشار
+      const points = [sector + "-1", sector + "-2", sector + "-3"];
+      points.forEach(p => select.innerHTML += `<option value="${p}">${p}</option>`);
+    }
+
+    function autoFillCrewData(){
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!callSign) return;
+      document.getElementById('crew_lead').value = "كبير مسعفين " + callSign;
+      document.getElementById('crew_assistants').value = "مساعد 1, مساعد 2";
+    }
+
+    async function sendUnitsCheck(){
+      const date = document.getElementById('units_check_date').value;
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!date || !callSign) return showAlert('unitCheckAlert','error','يرجى تعبئة البيانات');
+      
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "التاريخ": date,
+        "الرمز": callSign,
+        "كبير المسعفين": document.getElementById('crew_lead').value,
+        "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد": document.getElementById('received_custody').value
+      };
+      
+      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      if(!save.success) return showAlert('unitCheckAlert','error','تعذر الحفظ');
+      showAlert('unitCheckAlert','success','تم الحفظ بنجاح');
+      openWhatsApp(`🆔 *العهد الشخصية*\n📅 ${date}\n📟 الرمز: ${callSign}\n👤 المسؤول: ${row["كبير المسعفين"]}`);
+    }
+
+    async function sendStrategicStock(){
+      const date = document.getElementById('stock_date').value;
+      const time = document.getElementById('stock_time').value;
+      const checker = document.getElementById('stock_checker').value.trim();
+      const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
+
+      if(!date || !time || !checker || !location){
+        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
+        return;
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success) return showAlert('stockAlert','error','تعذر حفظ البيانات');
+      showAlert('stockAlert','success','تم الحفظ بنجاح');
+      let msg = `📦 *تقرير الخزن الاستراتيجي*\n📅 ${date}\n📍 ${location}\n⚠️ نواقص: ${hasShortage}`;
+      if(hasShortage === 'نعم') msg += `\n📝 التفاصيل: ${shortageDetails}`;
+      openWhatsApp(msg);
+    }
+
+    
+
+
+    
+
+    function fillUnitCallSigns(){
+      const sector = document.getElementById('units_check_sector').value;
+      const select = document.getElementById('unit_call_sign');
+      select.innerHTML = '<option value="">اختر الرمز</option>';
+      if(!sector) return;
+      // محاكاة جلب البيانات من خطة الانتشار
+      const points = [sector + "-1", sector + "-2", sector + "-3"];
+      points.forEach(p => select.innerHTML += `<option value="${p}">${p}</option>`);
+    }
+
+    function autoFillCrewData(){
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!callSign) return;
+      document.getElementById('crew_lead').value = "كبير مسعفين " + callSign;
+      document.getElementById('crew_assistants').value = "مساعد 1, مساعد 2";
+    }
+
+    async function sendUnitsCheck(){
+      const date = document.getElementById('units_check_date').value;
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!date || !callSign) return showAlert('unitCheckAlert','error','يرجى تعبئة البيانات');
+      
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "التاريخ": date,
+        "الرمز": callSign,
+        "كبير المسعفين": document.getElementById('crew_lead').value,
+        "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد": document.getElementById('received_custody').value
+      };
+      
+      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      if(!save.success) return showAlert('unitCheckAlert','error','تعذر الحفظ');
+      showAlert('unitCheckAlert','success','تم الحفظ بنجاح');
+      openWhatsApp(`🆔 *العهد الشخصية*\n📅 ${date}\n📟 الرمز: ${callSign}\n👤 المسؤول: ${row["كبير المسعفين"]}`);
+    }
+
+    async function sendStrategicStock(){
+      const date = document.getElementById('stock_date').value;
+      const time = document.getElementById('stock_time').value;
+      const checker = document.getElementById('stock_checker').value.trim();
+      const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
+
+      if(!date || !time || !checker || !location){
+        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
+        return;
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success) return showAlert('stockAlert','error','تعذر حفظ البيانات');
+      showAlert('stockAlert','success','تم الحفظ بنجاح');
+      let msg = `📦 *تقرير الخزن الاستراتيجي*\n📅 ${date}\n📍 ${location}\n⚠️ نواقص: ${hasShortage}`;
+      if(hasShortage === 'نعم') msg += `\n📝 التفاصيل: ${shortageDetails}`;
+      openWhatsApp(msg);
+    }
+
+    
+
+
+    function toggleShortageDetails(){
+      const hasShortage = document.getElementById("has_shortage").value;
+      const container = document.getElementById("shortage_details_container");
+      if(container) container.style.display = (hasShortage === "نعم") ? "block" : "none";
+    }
+
+    function autoFillCrewData(){
+      const sector = document.getElementById('units_check_sector').value;
+      const shift = document.getElementById('units_check_shift').value;
+      if(!sector || !shift) return;
+      
+      // محاكاة جلب البيانات بناءً على القطاع والمناوبة
+      // في الواقع، يمكن جلب هذه البيانات من ورقة "الطاقم" أو "التحضير"
+      document.getElementById('crew_lead').value = "كبير مسعفي " + sector + " (" + shift + ")";
+      document.getElementById('crew_assistants').value = "مساعد 1, مساعد 2";
+    }
+
+    async function sendUnitsCheck(){
+      const sector = document.getElementById('units_check_sector').value;
+      const date = document.getElementById('units_check_date').value;
+      const shift = document.getElementById('units_check_shift').value;
+      
+      if(!sector || !date || !shift) return showAlert('unitCheckAlert','error','يرجى تعبئة البيانات الأساسية');
+      
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "القطاع": sector,
+        "التاريخ": date,
+        "المناوبة": shift,
+        "كبير المسعفين": document.getElementById('crew_lead').value,
+        "المساعدين": document.getElementById('crew_assistants').value,
+        "جهاز لوكس": document.getElementById('device_lux').value,
+        "جهاز ميندري": document.getElementById('device_mindray').value,
+        "جهاز لايف باك 15": document.getElementById('device_lifepak').value,
+        "جهاز لاسلكي": document.getElementById('device_radio').value,
+        "تابلت": document.getElementById('device_tablet').value,
+        "جهاز العلامات": document.getElementById('device_vitals').value
+      };
+      
+      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      if(!save.success) return showAlert('unitCheckAlert','error','تعذر الحفظ');
+      showAlert('unitCheckAlert','success','تم الحفظ بنجاح');
+      
+      let msg = `🆔 *العهد الشخصية للقطاعات*\n📍 القطاع: ${sector}\n📅 التاريخ: ${date}\n⏰ المناوبة: ${shift}\n👤 المسؤول: ${row["كبير المسعفين"]}`;
+      openWhatsApp(msg);
+    }
+
+    async function sendStrategicStock(){
+      const date = document.getElementById('stock_date').value;
+      const time = document.getElementById('stock_time').value;
+      const checker = document.getElementById('stock_checker').value.trim();
+      const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
+
+      if(!date || !time || !checker || !location){
+        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
+        return;
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success) return showAlert('stockAlert','error','تعذر حفظ البيانات');
+      showAlert('stockAlert','success','تم الحفظ بنجاح');
+      
+      let msg = `📦 *تقرير الخزن الاستراتيجي*\n📅 ${date}\n📍 ${location}\n⚠️ نواقص: ${hasShortage}`;
+      if(hasShortage === 'نعم') msg += `\n📝 التفاصيل: ${shortageDetails}`;
+      openWhatsApp(msg);
+    }
+
+
+    function toggleShortageDetails(){
+      const hasShortage = document.getElementById("has_shortage").value;
+      const container = document.getElementById("shortage_details_container");
+      if(container) container.style.display = (hasShortage === "نعم") ? "block" : "none";
+    }
+
+    function autoFillCrewData(){
+      const sector = document.getElementById('units_check_sector').value;
+      const shift = document.getElementById('units_check_shift').value;
+      if(!sector || !shift) return;
+      
+      const team = teamsData?.[sector]?.[shift];
+      document.getElementById('crew_lead').value = team?.lead || 'غير محدد';
+      document.getElementById('crew_assistants').value = (team?.assistants || []).join(', ') || 'لا يوجد';
+    }
+
+    async function sendUnitsCheck(){
+      const sector = document.getElementById('units_check_sector').value;
+      const date = document.getElementById('units_check_date').value;
+      const shift = document.getElementById('units_check_shift').value;
+      
+      if(!sector || !date || !shift) return showAlert('unitCheckAlert','error','يرجى تعبئة البيانات الأساسية');
+      
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "القطاع": sector,
+        "التاريخ": date,
+        "المناوبة": shift,
+        "كبير المسعفين": document.getElementById('crew_lead').value,
+        "المساعدين": document.getElementById('crew_assistants').value,
+        "جهاز لوكس": document.getElementById('device_lux').value,
+        "جهاز ميندري": document.getElementById('device_mindray').value,
+        "جهاز لايف باك 15": document.getElementById('device_lifepak').value,
+        "جهاز لاسلكي": document.getElementById('device_radio').value,
+        "تابلت": document.getElementById('device_tablet').value,
+        "جهاز العلامات": document.getElementById('device_vitals').value
+      };
+      
+      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      if(!save.success) return showAlert('unitCheckAlert','error','تعذر الحفظ');
+      showAlert('unitCheckAlert','success','تم الحفظ بنجاح');
+      
+      let msg = `🆔 *العهد الشخصية للقطاعات*\n📍 القطاع: ${sector}\n📅 التاريخ: ${date}\n⏰ المناوبة: ${shift}\n👤 المسؤول: ${row["كبير المسعفين"]}`;
+      openWhatsApp(msg);
+    }
+
+    async function sendStrategicStock(){
+      const date = document.getElementById('stock_date').value;
+      const time = document.getElementById('stock_time').value;
+      const checker = document.getElementById('stock_checker').value.trim();
+      const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
+
+      if(!date || !time || !checker || !location){
+        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
+        return;
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success) return showAlert('stockAlert','error','تعذر حفظ البيانات');
+      showAlert('stockAlert','success','تم الحفظ بنجاح');
+      
+      let msg = `📦 *تقرير الخزن الاستراتيجي*\n📅 ${date}\n📍 ${location}\n⚠️ نواقص: ${hasShortage}`;
+      if(hasShortage === 'نعم') msg += `\n📝 التفاصيل: ${shortageDetails}`;
+      openWhatsApp(msg);
+    }
+
+</script>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxzkS1GrOC4IBKYQCD2APoK-6iIcGngUikW7zXseLK6JgnQd_pBxA_gX8LgYyoNBS-n2w/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygXkrELNwv4GJ-2cUqqlJTuEB_j4CD93CnLkqojuK2bcJszUz1FnD5ECchgQ653qcdDg/exec';
 
     const deploymentPlanData = {
       "الجمرات": [
@@ -1584,6 +1708,10 @@
       window.scrollTo({top:0,behavior:'smooth'});
     }
 
+    
+
+    
+
     function toggleQuickLinks(){
       document.getElementById('quickLinks').classList.toggle('show');
     }
@@ -1685,19 +1813,7 @@ async function fetchDeploymentFromSheet(){
   }
 }
 
-    function openWhatsApp(text){
-      const encoded = encodeURIComponent(text);
-      // استخدام api.whatsapp.com كخيار أكثر استقراراً لجميع المنصات
-      const url = `https://api.whatsapp.com/send?text=${encoded}`;
-      
-      // محاولة فتح الرابط في نافذة جديدة
-      const win = window.open(url, '_blank');
-      
-      // إذا تم حظر النافذة المنبثقة، نقوم بتنبيه المستخدم أو تغيير الموقع الحالي
-      if (!win || win.closed || typeof win.closed === 'undefined') {
-        // خيار بديل في حال حظر النوافذ المنبثقة
-        window.location.href = url;
-      }
+    
     }
 
     const sectorSelect = document.getElementById('sector');
@@ -1762,6 +1878,7 @@ async function fetchDeploymentFromSheet(){
         "المركبات": document.getElementById('vehicles_count').value || 0,
         "القولف": document.getElementById('golf_count').value || 0,
         "الراجلة": document.getElementById('walking_count').value || 0,
+        "مركبات التدخل السريع": document.getElementById('rapid_vehicles_count').value || 0,
         "الملاحظات": document.getElementById('notes').value.trim() || 'لا توجد ملاحظات'
       };
 
@@ -1880,9 +1997,9 @@ async function fetchDeploymentFromSheet(){
 
 📊 *ملخص الوضع الراهن:*
 • متوسط زمن الاستجابة: ${row["متوسط زمن الاستجابة"] || '0'}
-• متوسط زمن استجابة ECHO: ${row["متوسط زمن استجابة ECHO"] || '0'}
+• عدد بلاغات ECHO: ${row["عدد بلاغات ECHO"] || '0'}
 • إجمالي البلاغات: ${row["إجمالي البلاغات"] || '0'}
-• عدد الفرق الفعالة: ${row["عدد الفرق الفعالة"] || '0'} من أصل ${row["عدد الفرق المعتمدة"] || '0'}
+• إجمالي الفرق: ${row["عدد الفرق الفعالة"] || '0'} (الأساسية: ${row["عدد الفرق الأساسية"] || '0'})
 ${methaneSection}
 🚑 *الوحدات التشغيلية:*
 • مركبات إسعافية: ${row["عدد مركبات الإسعاف"] || '0'}
@@ -1962,7 +2079,7 @@ ${supportLines}
         "مساعد 3": document.getElementById('handover_assistant3').value || '-',
         "مساعد 4": document.getElementById('handover_assistant4').value || '-',
         "متوسط زمن الاستجابة": document.getElementById('avg_response').value || '0',
-        "متوسط زمن استجابة ECHO": document.getElementById('echo_response').value || '0',
+        "عدد بلاغات ECHO": document.getElementById('echo_count').value || '0',
         "إجمالي البلاغات": document.getElementById('total_cases').value || '0',
         "عدد الفرق الفعالة": document.getElementById('active_teams').value || '0',
         "عدد الفرق المعتمدة": document.getElementById('planned_teams').value || '0',
@@ -1978,6 +2095,7 @@ ${supportLines}
         "عدد مركبات الإسعاف": document.getElementById('handover_ambulance_count').value || '0',
         "عدد القولف": document.getElementById('handover_golf_count').value || '0',
         "عدد الاستجابة النوعية": document.getElementById('handover_special_response_count').value || '0',
+        "عدد فرق التدخل السريع": document.getElementById('handover_rapid_count').value || '0',
         "العاملة": document.getElementById('working_vehicles').value || '0',
         "الاحتياط": document.getElementById('reserve_vehicles').value || '0',
         "الخارج عن الخدمة": document.getElementById('out_of_service').value || '0',
@@ -2118,7 +2236,7 @@ ${supportLines}
         "ملاحظات عامة": document.getElementById('units_check_notes').value.trim() || 'لا توجد ملاحظات'
       };
 
-      const save = await saveToGoogleSheets('تشييك الوحدات التشغيلية', [row]);
+      const save = await saveToGoogleSheets('العهد الشخصية للقطاعات التشغيلية', [row]);
       if(!save.success){
         showAlert('unitCheckAlert','error','تعذر حفظ بيانات التشييك');
         return;
@@ -2171,6 +2289,8 @@ ${supportLines}
       const time = document.getElementById('stock_time').value;
       const checker = document.getElementById('stock_checker').value.trim();
       const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
       const notes = document.getElementById('stock_notes').value.trim();
 
       if(!date || !time || !checker || !location){
@@ -2178,28 +2298,52 @@ ${supportLines}
         return;
       }
 
-      let shortageFound = false;
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد',
+        "ملاحظات": notes || '-'
+      };
 
-      const rows = stockItems.map((entry,index)=>{
-        const status = document.getElementById(`stock_status_${index}`).value;
-        const current = document.getElementById(`stock_current_${index}`).value || '0';
-        if(status === 'يوجد نقص') shortageFound = true;
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success){
+        showAlert('stockAlert','error','تعذر حفظ بيانات الخزن');
+        return;
+      }
 
-        return {
-          "وقت الحفظ": new Date().toLocaleString('ar-SA'),
-          "تاريخ التشييك": date,
-          "وقت التشييك": time,
-          "القائم بالتشييك": checker,
-          "موقع الخزن": location,
-          "الفئة": entry.category,
-          "الصنف": entry.item,
-          "الحالة": status,
-          "الكمية الحالية": current,
-          "ملاحظات": notes || '-'
-        };
-      });
+      showAlert('stockAlert','success','تم حفظ نموذج الخزن الاستراتيجي بنجاح');
 
-      const save = await saveToGoogleSheets('الخزن الاستراتيجي', rows);
+      let msg = `📦 *تقرير الخزن الاستراتيجي* 📦
+
+`;
+      msg += `📅 *التاريخ:* ${date}
+⏰ *الوقت:* ${time}
+👤 *المسؤول:* ${checker}
+📍 *الموقع:* ${location}
+`;
+      msg += `⚠️ *وجود نواقص:* ${hasShortage}
+`;
+      if(hasShortage === 'نعم') msg += `📝 *التفاصيل:* ${shortageDetails}
+`;
+      openWhatsApp(msg);
+    }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails,
+        "ملاحظات": notes || '-'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
       if(!save.success){
         showAlert('stockAlert','error','تعذر حفظ بيانات الخزن');
         return;
@@ -2487,6 +2631,7 @@ const items = data.filter(d =>
       // تحديث الداشبورد والخريطة ديناميكياً بعد الحفظ
       setTimeout(() => {
         updateDashboard();
+    setInterval(updateDashboard, 60000);
         updateMapWithDeploymentData();
       }, 1000);
 
@@ -3064,6 +3209,17 @@ function updateDashboard(data){
   document.getElementById('kpi_oos').textContent = oos;
   document.getElementById('kpi_broken').textContent = broken;
 
+  // تحديث القطاعات المتأخرة
+  const respondingSectors = [...new Set(data.map(r => r.sector))];
+  const missingSectors = sectors.filter(s => !respondingSectors.includes(s));
+  const alertEl = document.getElementById('missingSectorsAlert');
+  if(missingSectors.length > 0){
+    alertEl.style.display = 'block';
+    alertEl.innerText = '⚠️ قطاعات لم ترسل استجابات بعد: ' + missingSectors.join(' - ');
+  } else {
+    alertEl.style.display = 'none';
+  }
+
   // Sector Table
   const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
   const sectorBody = document.querySelector('#dashSectorTable tbody');
@@ -3250,7 +3406,7 @@ async function loadLiveDeploymentData(){
 loadLiveDeploymentData();
 
 // تحديث تلقائي كل 3 دقائق
-setInterval(loadLiveDeploymentData, 180000);
+setInterval(loadLiveDeploymentData, 60000);
 
 /* لتحميل النقاط الافتراضية للقطاع المختار */
 function loadDefaultDeploymentPoints(){
@@ -3294,6 +3450,451 @@ function loadDefaultDeploymentPoints(){
   
   showAlert('deploymentAlert','success',`تم تحميل ${sectorPoints.length} نقطة بنجاح لقطاع ${sector}`);
 }
+
+    
+    
+    );
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      const navItem = document.querySelector(`.nav li[data-target="${targetId}"]`);
+      if(navItem) navItem.classList.add('active');
+      if(window.innerWidth <= 1180) {
+        const sidebar = document.querySelector('.sidebar');
+        if(sidebar) sidebar.classList.remove('active');
+      }
+      window.scrollTo(0,0);
+    }
+);
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
+      if(window.innerWidth <= 1180) document.querySelector('.sidebar').classList.remove('active');
+      window.scrollTo(0,0);
+    }
+
+    document.querySelectorAll('.nav li[data-target]').forEach(li => {
+      li.addEventListener('click', function(){
+        switchPanel(this.getAttribute('data-target'));
+      });
+    });
+);
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
+      if(window.innerWidth <= 1180) document.querySelector('.sidebar').classList.remove('active');
+      window.scrollTo(0,0);
+    }
+
+    document.querySelectorAll('.nav li[data-target]').forEach(li => {
+      li.addEventListener('click', () => {
+        const target = li.getAttribute('data-target');
+        switchPanel(target);
+      });
+    });
+
+
+    
+
+    
+
+    async function sendStrategicStock(){
+      const date = document.getElementById('stock_date').value;
+      const time = document.getElementById('stock_time').value;
+      const checker = document.getElementById('stock_checker').value.trim();
+      const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
+
+      if(!date || !time || !checker || !location){
+        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
+        return;
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success) return showAlert('stockAlert','error','تعذر حفظ البيانات');
+      showAlert('stockAlert','success','تم الحفظ بنجاح');
+      let msg = `📦 *تقرير الخزن الاستراتيجي*\n📅 ${date}\n📍 ${location}\n⚠️ نواقص: ${hasShortage}`;
+      if(hasShortage === 'نعم') msg += `\n📝 التفاصيل: ${shortageDetails}`;
+      openWhatsApp(msg);
+    }
+
+    function fillUnitCallSigns(){
+      const sector = document.getElementById('units_check_sector').value;
+      const select = document.getElementById('unit_call_sign');
+      select.innerHTML = '<option value="">اختر الرمز</option>';
+      if(!sector) return;
+      // محاكاة جلب البيانات من خطة الانتشار
+      const points = [sector + "-1", sector + "-2", sector + "-3"];
+      points.forEach(p => select.innerHTML += `<option value="${p}">${p}</option>`);
+    }
+
+    function autoFillCrewData(){
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!callSign) return;
+      document.getElementById('crew_lead').value = "كبير مسعفين " + callSign;
+      document.getElementById('crew_assistants').value = "مساعد 1, مساعد 2";
+    }
+
+    async function sendUnitsCheck(){
+      const date = document.getElementById('units_check_date').value;
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!date || !callSign) return showAlert('unitCheckAlert','error','يرجى تعبئة البيانات');
+      
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "التاريخ": date,
+        "الرمز": callSign,
+        "كبير المسعفين": document.getElementById('crew_lead').value,
+        "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد": document.getElementById('received_custody').value
+      };
+      
+      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      if(!save.success) return showAlert('unitCheckAlert','error','تعذر الحفظ');
+      showAlert('unitCheckAlert','success','تم الحفظ بنجاح');
+      openWhatsApp(`🆔 *العهد الشخصية*\n📅 ${date}\n📟 الرمز: ${callSign}\n👤 المسؤول: ${row["كبير المسعفين"]}`);
+    }
+
+    function updateDashboardAlerts(data){
+      const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
+      const respondingSectors = [...new Set(data.map(r => r.sector))];
+      const missing = sectors.filter(s => !respondingSectors.includes(s));
+      const alertEl = document.getElementById('missingSectorsAlert');
+      if(missing.length > 0){
+        alertEl.style.display = 'block';
+        alertEl.innerText = '⚠️ قطاعات لم ترسل استجابات بعد: ' + missing.join(' - ');
+      } else {
+        alertEl.style.display = 'none';
+      }
+    }
+
+
+    
+
+    function fillUnitCallSigns(){
+      const sector = document.getElementById('units_check_sector').value;
+      const select = document.getElementById('unit_call_sign');
+      select.innerHTML = '<option value="">اختر الرمز</option>';
+      if(!sector) return;
+      // محاكاة جلب البيانات من خطة الانتشار
+      const points = [sector + "-1", sector + "-2", sector + "-3"];
+      points.forEach(p => select.innerHTML += `<option value="${p}">${p}</option>`);
+    }
+
+    function autoFillCrewData(){
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!callSign) return;
+      document.getElementById('crew_lead').value = "كبير مسعفين " + callSign;
+      document.getElementById('crew_assistants').value = "مساعد 1, مساعد 2";
+    }
+
+    async function sendUnitsCheck(){
+      const date = document.getElementById('units_check_date').value;
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!date || !callSign) return showAlert('unitCheckAlert','error','يرجى تعبئة البيانات');
+      
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "التاريخ": date,
+        "الرمز": callSign,
+        "كبير المسعفين": document.getElementById('crew_lead').value,
+        "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد": document.getElementById('received_custody').value
+      };
+      
+      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      if(!save.success) return showAlert('unitCheckAlert','error','تعذر الحفظ');
+      showAlert('unitCheckAlert','success','تم الحفظ بنجاح');
+      openWhatsApp(`🆔 *العهد الشخصية*\n📅 ${date}\n📟 الرمز: ${callSign}\n👤 المسؤول: ${row["كبير المسعفين"]}`);
+    }
+
+    async function sendStrategicStock(){
+      const date = document.getElementById('stock_date').value;
+      const time = document.getElementById('stock_time').value;
+      const checker = document.getElementById('stock_checker').value.trim();
+      const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
+
+      if(!date || !time || !checker || !location){
+        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
+        return;
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success) return showAlert('stockAlert','error','تعذر حفظ البيانات');
+      showAlert('stockAlert','success','تم الحفظ بنجاح');
+      let msg = `📦 *تقرير الخزن الاستراتيجي*\n📅 ${date}\n📍 ${location}\n⚠️ نواقص: ${hasShortage}`;
+      if(hasShortage === 'نعم') msg += `\n📝 التفاصيل: ${shortageDetails}`;
+      openWhatsApp(msg);
+    }
+
+    
+
+
+    
+
+    function fillUnitCallSigns(){
+      const sector = document.getElementById('units_check_sector').value;
+      const select = document.getElementById('unit_call_sign');
+      select.innerHTML = '<option value="">اختر الرمز</option>';
+      if(!sector) return;
+      // محاكاة جلب البيانات من خطة الانتشار
+      const points = [sector + "-1", sector + "-2", sector + "-3"];
+      points.forEach(p => select.innerHTML += `<option value="${p}">${p}</option>`);
+    }
+
+    function autoFillCrewData(){
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!callSign) return;
+      document.getElementById('crew_lead').value = "كبير مسعفين " + callSign;
+      document.getElementById('crew_assistants').value = "مساعد 1, مساعد 2";
+    }
+
+    async function sendUnitsCheck(){
+      const date = document.getElementById('units_check_date').value;
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!date || !callSign) return showAlert('unitCheckAlert','error','يرجى تعبئة البيانات');
+      
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "التاريخ": date,
+        "الرمز": callSign,
+        "كبير المسعفين": document.getElementById('crew_lead').value,
+        "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد": document.getElementById('received_custody').value
+      };
+      
+      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      if(!save.success) return showAlert('unitCheckAlert','error','تعذر الحفظ');
+      showAlert('unitCheckAlert','success','تم الحفظ بنجاح');
+      openWhatsApp(`🆔 *العهد الشخصية*\n📅 ${date}\n📟 الرمز: ${callSign}\n👤 المسؤول: ${row["كبير المسعفين"]}`);
+    }
+
+    async function sendStrategicStock(){
+      const date = document.getElementById('stock_date').value;
+      const time = document.getElementById('stock_time').value;
+      const checker = document.getElementById('stock_checker').value.trim();
+      const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
+
+      if(!date || !time || !checker || !location){
+        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
+        return;
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success) return showAlert('stockAlert','error','تعذر حفظ البيانات');
+      showAlert('stockAlert','success','تم الحفظ بنجاح');
+      let msg = `📦 *تقرير الخزن الاستراتيجي*\n📅 ${date}\n📍 ${location}\n⚠️ نواقص: ${hasShortage}`;
+      if(hasShortage === 'نعم') msg += `\n📝 التفاصيل: ${shortageDetails}`;
+      openWhatsApp(msg);
+    }
+
+    
+
+
+    function toggleShortageDetails(){
+      const hasShortage = document.getElementById("has_shortage").value;
+      const container = document.getElementById("shortage_details_container");
+      if(container) container.style.display = (hasShortage === "نعم") ? "block" : "none";
+    }
+
+    function autoFillCrewData(){
+      const sector = document.getElementById('units_check_sector').value;
+      const shift = document.getElementById('units_check_shift').value;
+      if(!sector || !shift) return;
+      
+      // محاكاة جلب البيانات بناءً على القطاع والمناوبة
+      // في الواقع، يمكن جلب هذه البيانات من ورقة "الطاقم" أو "التحضير"
+      document.getElementById('crew_lead').value = "كبير مسعفي " + sector + " (" + shift + ")";
+      document.getElementById('crew_assistants').value = "مساعد 1, مساعد 2";
+    }
+
+    async function sendUnitsCheck(){
+      const sector = document.getElementById('units_check_sector').value;
+      const date = document.getElementById('units_check_date').value;
+      const shift = document.getElementById('units_check_shift').value;
+      
+      if(!sector || !date || !shift) return showAlert('unitCheckAlert','error','يرجى تعبئة البيانات الأساسية');
+      
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "القطاع": sector,
+        "التاريخ": date,
+        "المناوبة": shift,
+        "كبير المسعفين": document.getElementById('crew_lead').value,
+        "المساعدين": document.getElementById('crew_assistants').value,
+        "جهاز لوكس": document.getElementById('device_lux').value,
+        "جهاز ميندري": document.getElementById('device_mindray').value,
+        "جهاز لايف باك 15": document.getElementById('device_lifepak').value,
+        "جهاز لاسلكي": document.getElementById('device_radio').value,
+        "تابلت": document.getElementById('device_tablet').value,
+        "جهاز العلامات": document.getElementById('device_vitals').value
+      };
+      
+      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      if(!save.success) return showAlert('unitCheckAlert','error','تعذر الحفظ');
+      showAlert('unitCheckAlert','success','تم الحفظ بنجاح');
+      
+      let msg = `🆔 *العهد الشخصية للقطاعات*\n📍 القطاع: ${sector}\n📅 التاريخ: ${date}\n⏰ المناوبة: ${shift}\n👤 المسؤول: ${row["كبير المسعفين"]}`;
+      openWhatsApp(msg);
+    }
+
+    async function sendStrategicStock(){
+      const date = document.getElementById('stock_date').value;
+      const time = document.getElementById('stock_time').value;
+      const checker = document.getElementById('stock_checker').value.trim();
+      const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
+
+      if(!date || !time || !checker || !location){
+        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
+        return;
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success) return showAlert('stockAlert','error','تعذر حفظ البيانات');
+      showAlert('stockAlert','success','تم الحفظ بنجاح');
+      
+      let msg = `📦 *تقرير الخزن الاستراتيجي*\n📅 ${date}\n📍 ${location}\n⚠️ نواقص: ${hasShortage}`;
+      if(hasShortage === 'نعم') msg += `\n📝 التفاصيل: ${shortageDetails}`;
+      openWhatsApp(msg);
+    }
+
+
+    function toggleShortageDetails(){
+      const hasShortage = document.getElementById("has_shortage").value;
+      const container = document.getElementById("shortage_details_container");
+      if(container) container.style.display = (hasShortage === "نعم") ? "block" : "none";
+    }
+
+    function autoFillCrewData(){
+      const sector = document.getElementById('units_check_sector').value;
+      const shift = document.getElementById('units_check_shift').value;
+      if(!sector || !shift) return;
+      
+      const team = teamsData?.[sector]?.[shift];
+      document.getElementById('crew_lead').value = team?.lead || 'غير محدد';
+      document.getElementById('crew_assistants').value = (team?.assistants || []).join(', ') || 'لا يوجد';
+    }
+
+    async function sendUnitsCheck(){
+      const sector = document.getElementById('units_check_sector').value;
+      const date = document.getElementById('units_check_date').value;
+      const shift = document.getElementById('units_check_shift').value;
+      
+      if(!sector || !date || !shift) return showAlert('unitCheckAlert','error','يرجى تعبئة البيانات الأساسية');
+      
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "القطاع": sector,
+        "التاريخ": date,
+        "المناوبة": shift,
+        "كبير المسعفين": document.getElementById('crew_lead').value,
+        "المساعدين": document.getElementById('crew_assistants').value,
+        "جهاز لوكس": document.getElementById('device_lux').value,
+        "جهاز ميندري": document.getElementById('device_mindray').value,
+        "جهاز لايف باك 15": document.getElementById('device_lifepak').value,
+        "جهاز لاسلكي": document.getElementById('device_radio').value,
+        "تابلت": document.getElementById('device_tablet').value,
+        "جهاز العلامات": document.getElementById('device_vitals').value
+      };
+      
+      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      if(!save.success) return showAlert('unitCheckAlert','error','تعذر الحفظ');
+      showAlert('unitCheckAlert','success','تم الحفظ بنجاح');
+      
+      let msg = `🆔 *العهد الشخصية للقطاعات*\n📍 القطاع: ${sector}\n📅 التاريخ: ${date}\n⏰ المناوبة: ${shift}\n👤 المسؤول: ${row["كبير المسعفين"]}`;
+      openWhatsApp(msg);
+    }
+
+    async function sendStrategicStock(){
+      const date = document.getElementById('stock_date').value;
+      const time = document.getElementById('stock_time').value;
+      const checker = document.getElementById('stock_checker').value.trim();
+      const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
+
+      if(!date || !time || !checker || !location){
+        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
+        return;
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success) return showAlert('stockAlert','error','تعذر حفظ البيانات');
+      showAlert('stockAlert','success','تم الحفظ بنجاح');
+      
+      let msg = `📦 *تقرير الخزن الاستراتيجي*\n📅 ${date}\n📍 ${location}\n⚠️ نواقص: ${hasShortage}`;
+      if(hasShortage === 'نعم') msg += `\n📝 التفاصيل: ${shortageDetails}`;
+      openWhatsApp(msg);
+    }
+
 </script>
 <script>
 const DEPLOYMENT_POINTS = {
@@ -4186,8 +4787,588 @@ const DEPLOYMENT_POINTS = {
     "lng": 39.8986349
   }
 };
+
+    
+    
+    );
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      const navItem = document.querySelector(`.nav li[data-target="${targetId}"]`);
+      if(navItem) navItem.classList.add('active');
+      if(window.innerWidth <= 1180) {
+        const sidebar = document.querySelector('.sidebar');
+        if(sidebar) sidebar.classList.remove('active');
+      }
+      window.scrollTo(0,0);
+    }
+);
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
+      if(window.innerWidth <= 1180) document.querySelector('.sidebar').classList.remove('active');
+      window.scrollTo(0,0);
+    }
+
+    document.querySelectorAll('.nav li[data-target]').forEach(li => {
+      li.addEventListener('click', function(){
+        switchPanel(this.getAttribute('data-target'));
+      });
+    });
+);
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
+      if(window.innerWidth <= 1180) document.querySelector('.sidebar').classList.remove('active');
+      window.scrollTo(0,0);
+    }
+
+    document.querySelectorAll('.nav li[data-target]').forEach(li => {
+      li.addEventListener('click', () => {
+        const target = li.getAttribute('data-target');
+        switchPanel(target);
+      });
+    });
+
+
+    
+
+    
+
+    async function sendStrategicStock(){
+      const date = document.getElementById('stock_date').value;
+      const time = document.getElementById('stock_time').value;
+      const checker = document.getElementById('stock_checker').value.trim();
+      const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
+
+      if(!date || !time || !checker || !location){
+        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
+        return;
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success) return showAlert('stockAlert','error','تعذر حفظ البيانات');
+      showAlert('stockAlert','success','تم الحفظ بنجاح');
+      let msg = `📦 *تقرير الخزن الاستراتيجي*\n📅 ${date}\n📍 ${location}\n⚠️ نواقص: ${hasShortage}`;
+      if(hasShortage === 'نعم') msg += `\n📝 التفاصيل: ${shortageDetails}`;
+      openWhatsApp(msg);
+    }
+
+    function fillUnitCallSigns(){
+      const sector = document.getElementById('units_check_sector').value;
+      const select = document.getElementById('unit_call_sign');
+      select.innerHTML = '<option value="">اختر الرمز</option>';
+      if(!sector) return;
+      // محاكاة جلب البيانات من خطة الانتشار
+      const points = [sector + "-1", sector + "-2", sector + "-3"];
+      points.forEach(p => select.innerHTML += `<option value="${p}">${p}</option>`);
+    }
+
+    function autoFillCrewData(){
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!callSign) return;
+      document.getElementById('crew_lead').value = "كبير مسعفين " + callSign;
+      document.getElementById('crew_assistants').value = "مساعد 1, مساعد 2";
+    }
+
+    async function sendUnitsCheck(){
+      const date = document.getElementById('units_check_date').value;
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!date || !callSign) return showAlert('unitCheckAlert','error','يرجى تعبئة البيانات');
+      
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "التاريخ": date,
+        "الرمز": callSign,
+        "كبير المسعفين": document.getElementById('crew_lead').value,
+        "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد": document.getElementById('received_custody').value
+      };
+      
+      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      if(!save.success) return showAlert('unitCheckAlert','error','تعذر الحفظ');
+      showAlert('unitCheckAlert','success','تم الحفظ بنجاح');
+      openWhatsApp(`🆔 *العهد الشخصية*\n📅 ${date}\n📟 الرمز: ${callSign}\n👤 المسؤول: ${row["كبير المسعفين"]}`);
+    }
+
+    function updateDashboardAlerts(data){
+      const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
+      const respondingSectors = [...new Set(data.map(r => r.sector))];
+      const missing = sectors.filter(s => !respondingSectors.includes(s));
+      const alertEl = document.getElementById('missingSectorsAlert');
+      if(missing.length > 0){
+        alertEl.style.display = 'block';
+        alertEl.innerText = '⚠️ قطاعات لم ترسل استجابات بعد: ' + missing.join(' - ');
+      } else {
+        alertEl.style.display = 'none';
+      }
+    }
+
+
+    
+
+    function fillUnitCallSigns(){
+      const sector = document.getElementById('units_check_sector').value;
+      const select = document.getElementById('unit_call_sign');
+      select.innerHTML = '<option value="">اختر الرمز</option>';
+      if(!sector) return;
+      // محاكاة جلب البيانات من خطة الانتشار
+      const points = [sector + "-1", sector + "-2", sector + "-3"];
+      points.forEach(p => select.innerHTML += `<option value="${p}">${p}</option>`);
+    }
+
+    function autoFillCrewData(){
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!callSign) return;
+      document.getElementById('crew_lead').value = "كبير مسعفين " + callSign;
+      document.getElementById('crew_assistants').value = "مساعد 1, مساعد 2";
+    }
+
+    async function sendUnitsCheck(){
+      const date = document.getElementById('units_check_date').value;
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!date || !callSign) return showAlert('unitCheckAlert','error','يرجى تعبئة البيانات');
+      
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "التاريخ": date,
+        "الرمز": callSign,
+        "كبير المسعفين": document.getElementById('crew_lead').value,
+        "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد": document.getElementById('received_custody').value
+      };
+      
+      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      if(!save.success) return showAlert('unitCheckAlert','error','تعذر الحفظ');
+      showAlert('unitCheckAlert','success','تم الحفظ بنجاح');
+      openWhatsApp(`🆔 *العهد الشخصية*\n📅 ${date}\n📟 الرمز: ${callSign}\n👤 المسؤول: ${row["كبير المسعفين"]}`);
+    }
+
+    async function sendStrategicStock(){
+      const date = document.getElementById('stock_date').value;
+      const time = document.getElementById('stock_time').value;
+      const checker = document.getElementById('stock_checker').value.trim();
+      const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
+
+      if(!date || !time || !checker || !location){
+        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
+        return;
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success) return showAlert('stockAlert','error','تعذر حفظ البيانات');
+      showAlert('stockAlert','success','تم الحفظ بنجاح');
+      let msg = `📦 *تقرير الخزن الاستراتيجي*\n📅 ${date}\n📍 ${location}\n⚠️ نواقص: ${hasShortage}`;
+      if(hasShortage === 'نعم') msg += `\n📝 التفاصيل: ${shortageDetails}`;
+      openWhatsApp(msg);
+    }
+
+    
+
+
+    
+
+    function fillUnitCallSigns(){
+      const sector = document.getElementById('units_check_sector').value;
+      const select = document.getElementById('unit_call_sign');
+      select.innerHTML = '<option value="">اختر الرمز</option>';
+      if(!sector) return;
+      // محاكاة جلب البيانات من خطة الانتشار
+      const points = [sector + "-1", sector + "-2", sector + "-3"];
+      points.forEach(p => select.innerHTML += `<option value="${p}">${p}</option>`);
+    }
+
+    function autoFillCrewData(){
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!callSign) return;
+      document.getElementById('crew_lead').value = "كبير مسعفين " + callSign;
+      document.getElementById('crew_assistants').value = "مساعد 1, مساعد 2";
+    }
+
+    async function sendUnitsCheck(){
+      const date = document.getElementById('units_check_date').value;
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!date || !callSign) return showAlert('unitCheckAlert','error','يرجى تعبئة البيانات');
+      
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "التاريخ": date,
+        "الرمز": callSign,
+        "كبير المسعفين": document.getElementById('crew_lead').value,
+        "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد": document.getElementById('received_custody').value
+      };
+      
+      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      if(!save.success) return showAlert('unitCheckAlert','error','تعذر الحفظ');
+      showAlert('unitCheckAlert','success','تم الحفظ بنجاح');
+      openWhatsApp(`🆔 *العهد الشخصية*\n📅 ${date}\n📟 الرمز: ${callSign}\n👤 المسؤول: ${row["كبير المسعفين"]}`);
+    }
+
+    async function sendStrategicStock(){
+      const date = document.getElementById('stock_date').value;
+      const time = document.getElementById('stock_time').value;
+      const checker = document.getElementById('stock_checker').value.trim();
+      const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
+
+      if(!date || !time || !checker || !location){
+        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
+        return;
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد'
+      };
+    
+    // --- Core Navigation System ---
+    function switchPanel(targetId){
+      console.log("Switching to:", targetId);
+      
+      // Hide all panels
+      const panels = document.querySelectorAll('.panel');
+      panels.forEach(p => {
+        p.classList.remove('active');
+        p.style.display = 'none';
+      });
+      
+      // Show target panel
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      
+      // Update sidebar active state
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      const navItem = document.querySelector(`.nav li[data-target="${targetId}"]`);
+      if(navItem) navItem.classList.add('active');
+      
+      // Mobile sidebar handling
+      if(window.innerWidth <= 1180) {
+        const sidebar = document.querySelector('.sidebar');
+        if(sidebar) sidebar.classList.remove('active');
+      }
+      
+      window.scrollTo(0,0);
+    }
+
+    // Initialize Navigation
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.nav li[data-target]').forEach(li => {
+        li.addEventListener('click', function(){
+          const target = this.getAttribute('data-target');
+          switchPanel(target);
+        });
+      });
+    });
+
+    // --- Strategic Stock Logic ---
+    function toggleShortageDetails(){
+      const hasShortage = document.getElementById("has_shortage").value;
+      const container = document.getElementById("shortage_details_container");
+      if(container) container.style.display = (hasShortage === "نعم") ? "block" : "none";
+    }
+
+    // --- WhatsApp Integration ---
+    
+    
+    function openWhatsApp(text){
+      const encoded = encodeURIComponent(text);
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      const url = isIOS ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
+      window.open(url, '_blank');
+    }
+
+
+
+    // --- Data Submission Handlers ---
+    async function sendStrategicStock(){
+      const date = document.getElementById('stock_date').value;
+      const time = document.getElementById('stock_time').value;
+      const checker = document.getElementById('stock_checker').value.trim();
+      const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
+
+      if(!date || !time || !checker || !location){
+        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
+        return;
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success) return showAlert('stockAlert','error','تعذر حفظ البيانات');
+      showAlert('stockAlert','success','تم الحفظ بنجاح');
+      
+      let msg = `📦 *تقرير الخزن الاستراتيجي*\n📅 ${date}\n📍 ${location}\n⚠️ نواقص: ${hasShortage}`;
+      if(hasShortage === 'نعم') msg += `\n📝 التفاصيل: ${shortageDetails}`;
+      openWhatsApp(msg);
+    }
+
+    function fillUnitCallSigns(){
+      const sector = document.getElementById('units_check_sector').value;
+      const select = document.getElementById('unit_call_sign');
+      if(!select) return;
+      select.innerHTML = '<option value="">اختر الرمز</option>';
+      if(!sector) return;
+      const points = [sector + "-1", sector + "-2", sector + "-3"];
+      points.forEach(p => select.innerHTML += `<option value="${p}">${p}</option>`);
+    }
+
+    function autoFillCrewData(){
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!callSign) return;
+      document.getElementById('crew_lead').value = "كبير مسعفين " + callSign;
+      document.getElementById('crew_assistants').value = "مساعد 1, مساعد 2";
+    }
+
+    async function sendUnitsCheck(){
+      const date = document.getElementById('units_check_date').value;
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!date || !callSign) return showAlert('unitCheckAlert','error','يرجى تعبئة البيانات');
+      
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "التاريخ": date,
+        "الرمز": callSign,
+        "كبير المسعفين": document.getElementById('crew_lead').value,
+        "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد": document.getElementById('received_custody').value
+      };
+      
+      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      if(!save.success) return showAlert('unitCheckAlert','error','تعذر الحفظ');
+      showAlert('unitCheckAlert','success','تم الحفظ بنجاح');
+      openWhatsApp(`🆔 *العهد الشخصية*\n📅 ${date}\n📟 الرمز: ${callSign}\n👤 المسؤول: ${row["كبير المسعفين"]}`);
+    }
+    
+    // --- Dashboard Alerts ---
+    function updateDashboardAlerts(data){
+      const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
+      const respondingSectors = [...new Set(data.map(r => r.sector))];
+      const missing = sectors.filter(s => !respondingSectors.includes(s));
+      const alertEl = document.getElementById('missingSectorsAlert');
+      if(alertEl){
+        if(missing.length > 0){
+          alertEl.style.display = 'block';
+          alertEl.innerText = '⚠️ قطاعات لم ترسل استجابات بعد: ' + missing.join(' - ');
+        } else {
+          alertEl.style.display = 'none';
+        }
+      }
+    }
+    
+
+    function toggleShortageDetails(){
+      const hasShortage = document.getElementById("has_shortage").value;
+      const container = document.getElementById("shortage_details_container");
+      if(container) container.style.display = (hasShortage === "نعم") ? "block" : "none";
+    }
+
+    function autoFillCrewData(){
+      const sector = document.getElementById('units_check_sector').value;
+      const shift = document.getElementById('units_check_shift').value;
+      if(!sector || !shift) return;
+      
+      // محاكاة جلب البيانات بناءً على القطاع والمناوبة
+      // في الواقع، يمكن جلب هذه البيانات من ورقة "الطاقم" أو "التحضير"
+      document.getElementById('crew_lead').value = "كبير مسعفي " + sector + " (" + shift + ")";
+      document.getElementById('crew_assistants').value = "مساعد 1, مساعد 2";
+    }
+
+    async function sendUnitsCheck(){
+      const sector = document.getElementById('units_check_sector').value;
+      const date = document.getElementById('units_check_date').value;
+      const shift = document.getElementById('units_check_shift').value;
+      
+      if(!sector || !date || !shift) return showAlert('unitCheckAlert','error','يرجى تعبئة البيانات الأساسية');
+      
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "القطاع": sector,
+        "التاريخ": date,
+        "المناوبة": shift,
+        "كبير المسعفين": document.getElementById('crew_lead').value,
+        "المساعدين": document.getElementById('crew_assistants').value,
+        "جهاز لوكس": document.getElementById('device_lux').value,
+        "جهاز ميندري": document.getElementById('device_mindray').value,
+        "جهاز لايف باك 15": document.getElementById('device_lifepak').value,
+        "جهاز لاسلكي": document.getElementById('device_radio').value,
+        "تابلت": document.getElementById('device_tablet').value,
+        "جهاز العلامات": document.getElementById('device_vitals').value
+      };
+      
+      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      if(!save.success) return showAlert('unitCheckAlert','error','تعذر الحفظ');
+      showAlert('unitCheckAlert','success','تم الحفظ بنجاح');
+      
+      let msg = `🆔 *العهد الشخصية للقطاعات*\n📍 القطاع: ${sector}\n📅 التاريخ: ${date}\n⏰ المناوبة: ${shift}\n👤 المسؤول: ${row["كبير المسعفين"]}`;
+      openWhatsApp(msg);
+    }
+
+    async function sendStrategicStock(){
+      const date = document.getElementById('stock_date').value;
+      const time = document.getElementById('stock_time').value;
+      const checker = document.getElementById('stock_checker').value.trim();
+      const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
+
+      if(!date || !time || !checker || !location){
+        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
+        return;
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success) return showAlert('stockAlert','error','تعذر حفظ البيانات');
+      showAlert('stockAlert','success','تم الحفظ بنجاح');
+      
+      let msg = `📦 *تقرير الخزن الاستراتيجي*\n📅 ${date}\n📍 ${location}\n⚠️ نواقص: ${hasShortage}`;
+      if(hasShortage === 'نعم') msg += `\n📝 التفاصيل: ${shortageDetails}`;
+      openWhatsApp(msg);
+    }
+
+
+    function toggleShortageDetails(){
+      const hasShortage = document.getElementById("has_shortage").value;
+      const container = document.getElementById("shortage_details_container");
+      if(container) container.style.display = (hasShortage === "نعم") ? "block" : "none";
+    }
+
+    function autoFillCrewData(){
+      const sector = document.getElementById('units_check_sector').value;
+      const shift = document.getElementById('units_check_shift').value;
+      if(!sector || !shift) return;
+      
+      const team = teamsData?.[sector]?.[shift];
+      document.getElementById('crew_lead').value = team?.lead || 'غير محدد';
+      document.getElementById('crew_assistants').value = (team?.assistants || []).join(', ') || 'لا يوجد';
+    }
+
+    async function sendUnitsCheck(){
+      const sector = document.getElementById('units_check_sector').value;
+      const date = document.getElementById('units_check_date').value;
+      const shift = document.getElementById('units_check_shift').value;
+      
+      if(!sector || !date || !shift) return showAlert('unitCheckAlert','error','يرجى تعبئة البيانات الأساسية');
+      
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "القطاع": sector,
+        "التاريخ": date,
+        "المناوبة": shift,
+        "كبير المسعفين": document.getElementById('crew_lead').value,
+        "المساعدين": document.getElementById('crew_assistants').value,
+        "جهاز لوكس": document.getElementById('device_lux').value,
+        "جهاز ميندري": document.getElementById('device_mindray').value,
+        "جهاز لايف باك 15": document.getElementById('device_lifepak').value,
+        "جهاز لاسلكي": document.getElementById('device_radio').value,
+        "تابلت": document.getElementById('device_tablet').value,
+        "جهاز العلامات": document.getElementById('device_vitals').value
+      };
+      
+      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      if(!save.success) return showAlert('unitCheckAlert','error','تعذر الحفظ');
+      showAlert('unitCheckAlert','success','تم الحفظ بنجاح');
+      
+      let msg = `🆔 *العهد الشخصية للقطاعات*\n📍 القطاع: ${sector}\n📅 التاريخ: ${date}\n⏰ المناوبة: ${shift}\n👤 المسؤول: ${row["كبير المسعفين"]}`;
+      openWhatsApp(msg);
+    }
+
+    async function sendStrategicStock(){
+      const date = document.getElementById('stock_date').value;
+      const time = document.getElementById('stock_time').value;
+      const checker = document.getElementById('stock_checker').value.trim();
+      const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
+
+      if(!date || !time || !checker || !location){
+        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
+        return;
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success) return showAlert('stockAlert','error','تعذر حفظ البيانات');
+      showAlert('stockAlert','success','تم الحفظ بنجاح');
+      
+      let msg = `📦 *تقرير الخزن الاستراتيجي*\n📅 ${date}\n📍 ${location}\n⚠️ نواقص: ${hasShortage}`;
+      if(hasShortage === 'نعم') msg += `\n📝 التفاصيل: ${shortageDetails}`;
+      openWhatsApp(msg);
+    }
+
 </script>
-
-
 </body>
 </html>

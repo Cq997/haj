@@ -176,10 +176,95 @@
         <div class="actions"><button class="btn btn-success" onclick="showAlert('dailyAlert')">حفظ وإرسال التقرير</button></div>
       </section>
 
+      <!-- تسليم المناوبة -->
       <section class="panel" id="handoverPanel">
-        <div class="hero"><h1>تسليم المناوبة</h1><p>سيتم تفعيله بالكامل في الخطوة التالية...</p></div>
+        <div class="hero">
+          <h1>نموذج تسليم المناوبة</h1>
+          <p>توثيق عملية تسليم واستلام العهد والمهام بين الفترات.</p>
+        </div>
+        <div id="handoverAlert" class="alert success">تم حفظ نموذج التسليم بنجاح</div>
+
+        <div class="section">
+          <div class="section-title">بيانات النطاق والقطاع</div>
+          <div class="section-body grid-3">
+            <div class="field">
+              <label>النطاق</label>
+              <select id="h_scope"><option value="نطاق منى">نطاق منى</option></select>
+            </div>
+            <div class="field">
+              <label for="h_sector">القطاع</label>
+              <select id="h_sector" onchange="fillHandoverData()">
+                <option value="" selected>اختر القطاع</option>
+                <option value="الجمرات">الجمرات</option>
+                <option value="القطارات">القطارات</option>
+                <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
+                <option value="بطن منى الشمالي">بطن منى الشمالي</option>
+                <option value="منى الجديد 1">منى الجديد 1</option>
+                <option value="منى الجديد 2">منى الجديد 2</option>
+                <option value="الشعيبين">الشعيبين</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="h_shift">الفترة المسلمة</label>
+              <select id="h_shift" onchange="fillHandoverData()">
+                <option value="" selected>اختر الفترة</option>
+                <option value="الصباحية">الصباحية</option>
+                <option value="المسائية">المسائية</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">القيادات (المسلم والمستلم)</div>
+          <div class="section-body grid-2">
+            <div class="field"><label>كبير المسعفين (المسلم)</label><input type="text" id="h_sender" readonly></div>
+            <div class="field"><label>كبير المسعفين (المستلم)</label><input type="text" id="h_receiver" readonly></div>
+            <div class="field"><label>مساعد المسلم 1</label><input type="text" id="h_s_ast1" readonly></div>
+            <div class="field"><label>مساعد المستلم 1</label><input type="text" id="h_r_ast1" readonly></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">إحصائيات المناوبة المسلمة</div>
+          <div class="section-body grid-3">
+            <div class="field"><label>إجمالي البلاغات</label><input type="number" id="h_total_calls" value="0"></div>
+            <div class="field"><label>حالات منقولة</label><input type="number" id="h_transported" value="0"></div>
+            <div class="field"><label>حالات معالجة بالموقع</label><input type="number" id="h_treated" value="0"></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">جاهزية العهد والأجهزة</div>
+          <div class="section-body grid-2">
+            <div class="field">
+              <label>حالة السيارات والآليات</label>
+              <select id="h_vehicles_status">
+                <option value="جاهزة">جاهزة بالكامل</option>
+                <option value="يوجد ملاحظات">يوجد ملاحظات</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>حالة الأجهزة الطبية</label>
+              <select id="h_devices_status">
+                <option value="جاهزة">جاهزة بالكامل</option>
+                <option value="يوجد ملاحظات">يوجد ملاحظات</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">ملاحظات التسليم</div>
+          <div class="section-body">
+            <div class="field"><label>ملاحظات إضافية</label><textarea id="h_notes" rows="3" placeholder="اكتب أي ملاحظات أو عوائق واجهتكم..."></textarea></div>
+          </div>
+        </div>
+
+        <div class="actions"><button class="btn btn-success" onclick="showAlert('handoverAlert')">إتمام عملية التسليم</button></div>
       </section>
 
+      <!-- العهد الشخصية -->
       <section class="panel" id="unitsCheckPanel">
         <div class="hero"><h1>العهد الشخصية</h1><p>سيتم تفعيله بالكامل في الخطوة التالية...</p></div>
       </section>
@@ -228,6 +313,22 @@
       document.getElementById('assistant2').value = data ? (data.assistants[1] || '') : '';
       document.getElementById('assistant3').value = data ? (data.assistants[2] || '') : '';
       document.getElementById('assistant4').value = data ? (data.assistants[3] || '') : '';
+    }
+
+    function fillHandoverData() {
+      const sector = document.getElementById('h_sector').value;
+      const senderShift = document.getElementById('h_shift').value;
+      if(!sector || !senderShift) return;
+
+      const receiverShift = (senderShift === 'الصباحية') ? 'المسائية' : 'الصباحية';
+      
+      const senderData = teamsData[sector]?.[senderShift];
+      const receiverData = teamsData[sector]?.[receiverShift];
+
+      document.getElementById('h_sender').value = senderData ? senderData.lead : '';
+      document.getElementById('h_receiver').value = receiverData ? receiverData.lead : '';
+      document.getElementById('h_s_ast1').value = senderData ? (senderData.assistants[0] || '') : '';
+      document.getElementById('h_r_ast1').value = receiverData ? (receiverData.assistants[0] || '') : '';
     }
 
     function showAlert(id) {

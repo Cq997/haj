@@ -816,6 +816,12 @@
             <div class="field"><label for="active_teams">إجمالي عدد الفرق بما في ذلك التداخلية (اوفرلاب) والمدعمه</label><input type="number" id="active_teams" min="0" value="0"></div>
             <div class="field"><label for="planned_teams">عدد الفرق الأساسية</label><input type="number" id="planned_teams" min="0" value="0"></div>
             <div class="field"><label for="handover_rapid_count">عدد فرق التدخل السريع</label><input type="number" id="handover_rapid_count" min="0" value="0"></div>
+</div>
+            <div class="field"><label for="echo_count">عدد بلاغات ECHO</label><input type="number" id="echo_count" value="0"></div>
+            <div class="field"><label for="total_cases">إجمالي البلاغات</label><input type="number" id="total_cases" min="0" value="0"></div>
+            <div class="field"><label for="active_teams">إجمالي عدد الفرق بما في ذلك التداخلية (اوفرلاب) والمدعمه</label><input type="number" id="active_teams" min="0" value="0"></div>
+            <div class="field"><label for="planned_teams">عدد الفرق الأساسية</label><input type="number" id="planned_teams" min="0" value="0"></div>
+            <div class="field"><label for="handover_rapid_count">عدد فرق التدخل السريع</label><input type="number" id="handover_rapid_count" min="0" value="0"></div>
           </div>
         </div>
 
@@ -963,6 +969,17 @@
           <div class="section-title">البيانات الأساسية</div>
           <div class="section-body grid-3">
             <div class="field"><label for="stock_date">التاريخ</label><input type="date" id="stock_date"></div>
+            <div class="field"><label for="stock_time">الوقت</label><input type="time" id="stock_time"></div>
+            <div class="field"><label for="stock_checker">القائم بالتشييك</label><input type="text" id="stock_checker"></div>
+            <div class="field"><label for="stock_location">موقع الخزن</label><input type="text" id="stock_location"></div>
+            <div class="field">
+              <label for="has_shortage">هل يوجد نواقص طبية؟</label>
+              <select id="has_shortage" onchange="toggleShortageDetails()">
+                <option value="لا">لا</option>
+                <option value="نعم">نعم</option>
+              </select>
+            </div>
+</div>
             <div class="field"><label for="stock_time">الوقت</label><input type="time" id="stock_time"></div>
             <div class="field"><label for="stock_checker">القائم بالتشييك</label><input type="text" id="stock_checker"></div>
             <div class="field"><label for="stock_location">موقع الخزن</label><input type="text" id="stock_location"></div>
@@ -1230,6 +1247,7 @@
       <div class="footer">منصة نطاق منى حج 1447 نسخة مطورة - علي 102459@srca</div>
   </main>
 </div>
+
 
 
 
@@ -2178,6 +2196,13 @@
       window.scrollTo(0,0);
     }
 
+    function switchMainTab(tabId, btn){
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.nav li[data-target]').forEach(li => {
         li.addEventListener('click', function(){
@@ -2186,6 +2211,7 @@
       });
       // Auto-refresh dashboard
       setInterval(fetchDeploymentFromSheet, 60000);
+      fetchDeploymentFromSheet();
     });
 
     function toggleShortageDetails(){
@@ -2285,8 +2311,8 @@
     }
 
     function updateDashboard(data){
-      // Original dashboard update logic would go here
       console.log("Dashboard updated with data:", data);
+      // Update KPI cards and tables here
     }
 
     function updateMissingSectors(data){

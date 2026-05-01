@@ -804,6 +804,12 @@
             <div class="field"><label for="active_teams">إجمالي عدد الفرق بما في ذلك التداخلية (اوفرلاب) والمدعمه</label><input type="number" id="active_teams" min="0" value="0"></div>
             <div class="field"><label for="planned_teams">عدد الفرق الأساسية</label><input type="number" id="planned_teams" min="0" value="0"></div>
             <div class="field"><label for="handover_rapid_count">عدد فرق التدخل السريع</label><input type="number" id="handover_rapid_count" min="0" value="0"></div>
+</div>
+            <div class="field"><label for="echo_count">عدد بلاغات ECHO</label><input type="number" id="echo_count" value="0"></div>
+            <div class="field"><label for="total_cases">إجمالي البلاغات</label><input type="number" id="total_cases" min="0" value="0"></div>
+            <div class="field"><label for="active_teams">إجمالي عدد الفرق بما في ذلك التداخلية (اوفرلاب) والمدعمه</label><input type="number" id="active_teams" min="0" value="0"></div>
+            <div class="field"><label for="planned_teams">عدد الفرق الأساسية</label><input type="number" id="planned_teams" min="0" value="0"></div>
+            <div class="field"><label for="handover_rapid_count">عدد فرق التدخل السريع</label><input type="number" id="handover_rapid_count" min="0" value="0"></div>
           </div>
         </div>
 
@@ -1339,6 +1345,7 @@
         "كبير المسعفين": document.getElementById('crew_lead').value,
         "المساعدين": document.getElementById('crew_assistants').value,
         "العهد المستلمة": document.getElementById("custody_details").value,
+        "العهد المستلمة": document.getElementById("custody_details").value,
         "العهد": document.getElementById('received_custody').value
       };
       
@@ -1392,6 +1399,7 @@
         "الرمز": callSign,
         "كبير المسعفين": document.getElementById('crew_lead').value,
         "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد المستلمة": document.getElementById("custody_details").value,
         "العهد المستلمة": document.getElementById("custody_details").value,
         "العهد": document.getElementById('received_custody').value
       };
@@ -1466,6 +1474,7 @@
         "الرمز": callSign,
         "كبير المسعفين": document.getElementById('crew_lead').value,
         "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد المستلمة": document.getElementById("custody_details").value,
         "العهد المستلمة": document.getElementById("custody_details").value,
         "العهد": document.getElementById('received_custody').value
       };
@@ -1541,6 +1550,7 @@
         "المناوبة": shift,
         "كبير المسعفين": document.getElementById('crew_lead').value,
         "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد المستلمة": document.getElementById("custody_details").value,
         "العهد المستلمة": document.getElementById("custody_details").value,
         "جهاز لوكس": document.getElementById('device_lux').value,
         "جهاز ميندري": document.getElementById('device_mindray').value,
@@ -1621,6 +1631,7 @@
         "المناوبة": shift,
         "كبير المسعفين": document.getElementById('crew_lead').value,
         "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد المستلمة": document.getElementById("custody_details").value,
         "العهد المستلمة": document.getElementById("custody_details").value,
         "جهاز لوكس": document.getElementById('device_lux').value,
         "جهاز ميندري": document.getElementById('device_mindray').value,
@@ -3601,6 +3612,7 @@ function loadDefaultDeploymentPoints(){
         "كبير المسعفين": document.getElementById('crew_lead').value,
         "المساعدين": document.getElementById('crew_assistants').value,
         "العهد المستلمة": document.getElementById("custody_details").value,
+        "العهد المستلمة": document.getElementById("custody_details").value,
         "العهد": document.getElementById('received_custody').value
       };
       
@@ -3654,6 +3666,7 @@ function loadDefaultDeploymentPoints(){
         "الرمز": callSign,
         "كبير المسعفين": document.getElementById('crew_lead').value,
         "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد المستلمة": document.getElementById("custody_details").value,
         "العهد المستلمة": document.getElementById("custody_details").value,
         "العهد": document.getElementById('received_custody').value
       };
@@ -3728,6 +3741,7 @@ function loadDefaultDeploymentPoints(){
         "الرمز": callSign,
         "كبير المسعفين": document.getElementById('crew_lead').value,
         "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد المستلمة": document.getElementById("custody_details").value,
         "العهد المستلمة": document.getElementById("custody_details").value,
         "العهد": document.getElementById('received_custody').value
       };
@@ -3803,6 +3817,7 @@ function loadDefaultDeploymentPoints(){
         "المناوبة": shift,
         "كبير المسعفين": document.getElementById('crew_lead').value,
         "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد المستلمة": document.getElementById("custody_details").value,
         "العهد المستلمة": document.getElementById("custody_details").value,
         "جهاز لوكس": document.getElementById('device_lux').value,
         "جهاز ميندري": document.getElementById('device_mindray').value,
@@ -3883,6 +3898,7 @@ function loadDefaultDeploymentPoints(){
         "المناوبة": shift,
         "كبير المسعفين": document.getElementById('crew_lead').value,
         "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد المستلمة": document.getElementById("custody_details").value,
         "العهد المستلمة": document.getElementById("custody_details").value,
         "جهاز لوكس": document.getElementById('device_lux').value,
         "جهاز ميندري": document.getElementById('device_mindray').value,
@@ -4943,6 +4959,7 @@ const DEPLOYMENT_POINTS = {
         "كبير المسعفين": document.getElementById('crew_lead').value,
         "المساعدين": document.getElementById('crew_assistants').value,
         "العهد المستلمة": document.getElementById("custody_details").value,
+        "العهد المستلمة": document.getElementById("custody_details").value,
         "العهد": document.getElementById('received_custody').value
       };
       
@@ -4996,6 +5013,7 @@ const DEPLOYMENT_POINTS = {
         "الرمز": callSign,
         "كبير المسعفين": document.getElementById('crew_lead').value,
         "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد المستلمة": document.getElementById("custody_details").value,
         "العهد المستلمة": document.getElementById("custody_details").value,
         "العهد": document.getElementById('received_custody').value
       };
@@ -5070,6 +5088,7 @@ const DEPLOYMENT_POINTS = {
         "الرمز": callSign,
         "كبير المسعفين": document.getElementById('crew_lead').value,
         "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد المستلمة": document.getElementById("custody_details").value,
         "العهد المستلمة": document.getElementById("custody_details").value,
         "العهد": document.getElementById('received_custody').value
       };
@@ -5159,6 +5178,8 @@ const DEPLOYMENT_POINTS = {
       const encoded = encodeURIComponent(text);
       const url = `https://wa.me/?text=${encoded}`;
       window.open(url, '_blank');
+    }`;
+      window.open(url, '_blank');
     }
 
 
@@ -5225,6 +5246,7 @@ const DEPLOYMENT_POINTS = {
         "كبير المسعفين": document.getElementById('crew_lead').value,
         "المساعدين": document.getElementById('crew_assistants').value,
         "العهد المستلمة": document.getElementById("custody_details").value,
+        "العهد المستلمة": document.getElementById("custody_details").value,
         "العهد": document.getElementById('received_custody').value
       };
       
@@ -5282,6 +5304,7 @@ const DEPLOYMENT_POINTS = {
         "المناوبة": shift,
         "كبير المسعفين": document.getElementById('crew_lead').value,
         "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد المستلمة": document.getElementById("custody_details").value,
         "العهد المستلمة": document.getElementById("custody_details").value,
         "جهاز لوكس": document.getElementById('device_lux').value,
         "جهاز ميندري": document.getElementById('device_mindray').value,
@@ -5362,6 +5385,7 @@ const DEPLOYMENT_POINTS = {
         "المناوبة": shift,
         "كبير المسعفين": document.getElementById('crew_lead').value,
         "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد المستلمة": document.getElementById("custody_details").value,
         "العهد المستلمة": document.getElementById("custody_details").value,
         "جهاز لوكس": document.getElementById('device_lux').value,
         "جهاز ميندري": document.getElementById('device_mindray').value,

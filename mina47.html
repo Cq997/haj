@@ -3246,11 +3246,9 @@ async function loadLiveDeploymentData(){
   if(mapInstance) renderMapMarkers(liveDeploymentData);
 }
 
-// تحميل البيانات عند بدء التشغيل
+// تحميل البيانات عند بدء التشغيل وتفعيل التحديث التلقائي كل 30 ثانية
 loadLiveDeploymentData();
-
-// تحديث تلقائي كل 3 دقائق
-setInterval(loadLiveDeploymentData, 180000);
+setInterval(loadLiveDeploymentData, 30000);
 
 /* لتحميل النقاط الافتراضية للقطاع المختار */
 function loadDefaultDeploymentPoints(){

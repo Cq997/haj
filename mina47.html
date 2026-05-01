@@ -1043,6 +1043,76 @@
         </div>
       </section>
 
+      
+      <section class="panel" id="unitsCheckPanel">
+        <div class="panel-head">
+          <div>
+            <h3>نموذج العهد الشخصية للقطاعات</h3>
+            <p>تسجيل وتدقيق العهد الشخصية والطبية للفرق الإسعافية في القطاع.</p>
+          </div>
+        </div>
+        <div id="unitCheckAlert" class="alert"></div>
+        <div class="section">
+          <div class="section-title">البيانات الأساسية</div>
+          <div class="section-body grid-4">
+            <div class="field"><label for="units_check_date">التاريخ</label><input type="date" id="units_check_date"></div>
+            <div class="field"><label for="units_check_time">الوقت</label><input type="time" id="units_check_time"></div>
+            <div class="field"><label for="units_check_sector">القطاع</label><input type="text" id="units_check_sector" readonly></div>
+            <div class="field"><label for="units_check_shift">الفترة</label><input type="text" id="units_check_shift" readonly></div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">بيانات الطاقم والوحدة</div>
+          <div class="section-body grid-3">
+            <div class="field"><label for="unit_call_sign">رمز/نداء الوحدة</label><input type="text" id="unit_call_sign"></div>
+            <div class="field"><label for="crew1_name">اسم المسعف 1</label><input type="text" id="crew1_name"></div>
+            <div class="field"><label for="crew2_name">اسم المسعف 2</label><input type="text" id="crew2_name"></div>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-success" onclick="sendUnitsCheck()">حفظ وإرسال العهد</button>
+        </div>
+      </section>
+    
+      
+      <section class="panel" id="stockPanel">
+        <div class="panel-head">
+          <div>
+            <h3>نموذج الخزن الاستراتيجي المطور</h3>
+            <p>متابعة توفر المخزون الاستراتيجي في المواقع المحددة.</p>
+          </div>
+        </div>
+        <div id="stockAlert" class="alert"></div>
+        <div class="section">
+          <div class="section-title">البيانات الأساسية</div>
+          <div class="section-body grid-4">
+            <div class="field"><label for="stock_date">تاريخ التشييك</label><input type="date" id="stock_date"></div>
+            <div class="field"><label for="stock_time">وقت التشييك</label><input type="time" id="stock_time"></div>
+            <div class="field"><label for="stock_checker">اسم القائم بالتشييك</label><input type="text" id="stock_checker"></div>
+            <div class="field"><label for="stock_location">موقع الخزن الاستراتيجي</label><input type="text" id="stock_location"></div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">حالة المخزون</div>
+          <div class="section-body">
+            <div class="field">
+              <label>هل يوجد نواقص طبية؟</label>
+              <select id="has_shortage" onchange="toggleShortageDetails()">
+                <option value="لا">لا (المخزون مكتمل)</option>
+                <option value="نعم">نعم (يوجد نواقص)</option>
+              </select>
+            </div>
+            <div class="field" id="shortage_details_container" style="display:none; margin-top:15px;">
+              <label>تفاصيل النواقص الطبية</label>
+              <textarea id="shortage_details" rows="5" placeholder="اذكر الأصناف والكميات الناقصة..."></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn btn-success" onclick="sendStrategicStock()">حفظ وإرسال التقرير</button>
+        </div>
+      </section>
+    
       <section class="panel" id="mapsPanel">
         <div class="panel-head">
           <div>
@@ -1208,7 +1278,31 @@
   </main>
 </div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    function switchPanel(targetId){
+      document.querySelectorAll('.panel').forEach(p => {
+        p.classList.remove('active');
+        p.style.display = 'none';
+      });
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
+      if(window.innerWidth <= 1180) document.querySelector('.sidebar').classList.remove('active');
+      window.scrollTo(0,0);
+    }
+
+    document.querySelectorAll('.nav li[data-target]').forEach(li => {
+      li.addEventListener('click', () => {
+        const target = li.getAttribute('data-target');
+        switchPanel(target);
+      });
+    });
+
+</script>
 <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygXkrELNwv4GJ-2cUqqlJTuEB_j4CD93CnLkqojuK2bcJszUz1FnD5ECchgQ653qcdDg/exec';
 
@@ -3082,6 +3176,30 @@ function loadDefaultDeploymentPoints(){
   
   showAlert('deploymentAlert','success',`تم تحميل ${sectorPoints.length} نقطة بنجاح لقطاع ${sector}`);
 }
+
+    function switchPanel(targetId){
+      document.querySelectorAll('.panel').forEach(p => {
+        p.classList.remove('active');
+        p.style.display = 'none';
+      });
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
+      if(window.innerWidth <= 1180) document.querySelector('.sidebar').classList.remove('active');
+      window.scrollTo(0,0);
+    }
+
+    document.querySelectorAll('.nav li[data-target]').forEach(li => {
+      li.addEventListener('click', () => {
+        const target = li.getAttribute('data-target');
+        switchPanel(target);
+      });
+    });
+
 </script>
 <script>
 const DEPLOYMENT_POINTS = {
@@ -3974,6 +4092,30 @@ const DEPLOYMENT_POINTS = {
     "lng": 39.8986349
   }
 };
+
+    function switchPanel(targetId){
+      document.querySelectorAll('.panel').forEach(p => {
+        p.classList.remove('active');
+        p.style.display = 'none';
+      });
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
+      if(window.innerWidth <= 1180) document.querySelector('.sidebar').classList.remove('active');
+      window.scrollTo(0,0);
+    }
+
+    document.querySelectorAll('.nav li[data-target]').forEach(li => {
+      li.addEventListener('click', () => {
+        const target = li.getAttribute('data-target');
+        switchPanel(target);
+      });
+    });
+
 </script>
 
 

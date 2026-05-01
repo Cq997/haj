@@ -413,7 +413,7 @@
       <li class="active" data-target="homePanel"><i class="fas fa-home"></i> الرئيسية</li>
       <li data-target="groundEMS"><i class="fas fa-clipboard-list"></i> التحضير اليومي</li>
       <li data-target="handoverPanel"><i class="fas fa-exchange-alt"></i> تسليم المناوبة</li>
-      <li data-target="unitsCheckPanel"><i class="fas fa-stethoscope"></i> تشييك الوحدات</li>
+      <li data-target="unitsCheckPanel"><i class="fas fa-stethoscope"></i> العهد الشخصية للقطاعات</li>
       <li data-target="stockPanel"><i class="fas fa-boxes-stacked"></i> الخزن الاستراتيجي</li>
       <li data-target="deploymentPanel"><i class="fas fa-map-marked-alt"></i> خطة الانتشار</li>
       <li data-target="mapsPanel"><i class="fas fa-map"></i> خرائط النطاق</li>
@@ -1868,7 +1868,7 @@ ${supportLines}
         "ملاحظات عامة": document.getElementById('units_check_notes').value.trim() || 'لا توجد ملاحظات'
       };
 
-      const save = await saveToGoogleSheets('تشييك الوحدات التشغيلية', [row]);
+      const save = await saveToGoogleSheets('العهد الشخصية للقطاعات التشغيلية', [row]);
       if(!save.success){
         showAlert('unitCheckAlert','error','تعذر حفظ بيانات التشييك');
         return;
@@ -1921,14 +1921,48 @@ ${supportLines}
       const time = document.getElementById('stock_time').value;
       const checker = document.getElementById('stock_checker').value.trim();
       const location = document.getElementById('stock_location').value.trim();
-      const notes = document.getElementById('stock_notes').value.trim();
       const hasShortage = document.getElementById('has_shortage').value;
       const shortageDetails = document.getElementById('shortage_details').value.trim();
+      const notes = document.getElementById('stock_notes').value.trim();
 
       if(!date || !time || !checker || !location){
         showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
         return;
       }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد',
+        "ملاحظات": notes || '-'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success){
+        showAlert('stockAlert','error','تعذر حفظ بيانات الخزن');
+        return;
+      }
+
+      showAlert('stockAlert','success','تم حفظ نموذج الخزن الاستراتيجي بنجاح');
+
+      let msg = `📦 *تقرير الخزن الاستراتيجي* 📦
+
+`;
+      msg += `📅 *التاريخ:* ${date}
+⏰ *الوقت:* ${time}
+👤 *المسؤول:* ${checker}
+📍 *الموقع:* ${location}
+`;
+      msg += `⚠️ *وجود نواقص:* ${hasShortage}
+`;
+      if(hasShortage === 'نعم') msg += `📝 *التفاصيل:* ${shortageDetails}
+`;
+      openWhatsApp(msg);
+    }
 
       const row = {
         "وقت الحفظ": new Date().toLocaleString('ar-SA'),

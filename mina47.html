@@ -439,7 +439,7 @@
 
     <!-- ═══════ KPI Row ═══════ -->
     <div class="kpi-row">
-      <div class="kpi-card"><div class="kpi-val" id="kpi_total">0</div><div class="kpi-label">إجمالي النقاط</div></div>
+      <div class="kpi-card"><div class="kpi-val" id="kpi_total">148</div><div class="kpi-label">إجمالي النقاط</div></div>
       <div class="kpi-card"><div class="kpi-val" id="kpi_ready" style="color:var(--success)">0</div><div class="kpi-label">إجمالي الفرق</div></div>
       <div class="kpi-card"><div class="kpi-val" id="kpi_active" style="color:#00b894">0</div><div class="kpi-label">جاهزة</div></div>
       <div class="kpi-card"><div class="kpi-val" id="kpi_supported" style="color:var(--secondary)">0</div><div class="kpi-label">مدعمة</div></div>
@@ -2903,7 +2903,7 @@ function resetDashboardFilters(){
 
 function updateDashboard(data){
   // KPIs
-  const total = data.length;
+  const total = 148;
   const totalTeams = data.reduce((acc, d) => acc + (parseInt(d.teams) || 0), 0);
   const ready = data.filter(d => d.status === 'جاهزة' || d.status === 'جاهز').reduce((acc, d) => acc + (parseInt(d.teams) || 0), 0);
   const supported = data.filter(d => d.status === 'مدعمة' || d.status === 'مدعم').length;

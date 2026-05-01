@@ -271,7 +271,6 @@
     /* ─── Panels / Forms ─── */
     .panel{display:none;width:100%;min-height:calc(100vh - 100px)}
     .panel.active{display:block!important}
-    .panel.active.hidden{display:block!important}
 
     .panel-head{
       display:flex;align-items:center;justify-content:space-between;
@@ -303,210 +302,97 @@
       padding:10px 14px;border-radius:10px;
       border:1px solid var(--line);
       font-family:'Cairo',sans-serif;
-      font-size:.88rem;transition:border .2s;
-      background:var(--soft);
+      font-size:.88rem;font-weight:600;
+      transition:border-color .2s;
     }
     .field input:focus,.field select:focus,.field textarea:focus{
-      outline:none;border-color:var(--secondary);
-      box-shadow:0 0 0 3px rgba(11,94,215,.1);
+      outline:none;border-color:var(--primary);
     }
-    .field textarea{min-height:80px;resize:vertical}
-    .field .helper{font-size:.72rem;color:var(--muted)}
-
-    .hidden{display:none!important}
-
-    .table-wrap{overflow-x:auto}
-    .table-wrap table{
-      width:100%;border-collapse:collapse;
-      font-size:.82rem;white-space:nowrap;
-    }
-    .table-wrap th{
-      background:var(--soft);padding:10px 12px;
-      text-align:right;font-weight:700;
-      border-bottom:2px solid var(--line);
-      position:sticky;top:0;
-    }
-    .table-wrap td{
-      padding:8px 12px;border-bottom:1px solid var(--line);
-    }
-    .table-wrap input,.table-wrap select{
-      padding:6px 8px;border-radius:6px;
-      border:1px solid var(--line);font-family:'Cairo',sans-serif;
-      font-size:.8rem;background:var(--soft);
-    }
-    .compact-number{width:70px;text-align:center}
-
-    .actions{
-      display:flex;flex-wrap:wrap;gap:10px;
-      padding:18px;
-    }
+    .field input[readonly]{background:var(--soft);cursor:not-allowed}
 
     .btn{
       display:inline-flex;align-items:center;gap:8px;
-      padding:10px 22px;border-radius:10px;
-      font-family:'Cairo',sans-serif;font-weight:700;
-      font-size:.88rem;border:none;cursor:pointer;
-      transition:all .2s;text-decoration:none;
+      padding:12px 24px;border-radius:10px;
+      font-weight:700;font-size:.9rem;cursor:pointer;
+      transition:all .2s;border:none;
+      font-family:'Cairo',sans-serif;
     }
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-primary:hover{background:var(--primary-dark);transform:translateY(-2px)}
     .btn-success{background:var(--success);color:#fff}
-    .btn-success:hover{background:#00a884}
+    .btn-success:hover{opacity:.9;transform:translateY(-2px)}
     .btn-outline{background:transparent;border:2px solid var(--line);color:var(--dark)}
     .btn-outline:hover{border-color:var(--primary);color:var(--primary)}
-    .btn-blue{background:var(--secondary);color:#fff}
-    .btn-blue:hover{background:var(--secondary-2)}
-    .btn-dark{background:var(--dark);color:#fff}
-    .btn-dark:hover{background:#1e293b}
-    .btn-danger{background:var(--danger);color:#fff;font-size:.78rem;padding:6px 14px}
-    .btn-danger:hover{background:#c0392b}
 
     .alert{
-      padding:12px 18px;border-radius:10px;
-      font-size:.85rem;font-weight:600;
-      display:none;margin-bottom:14px;
+      padding:14px 18px;border-radius:10px;
+      margin-bottom:18px;font-size:.88rem;font-weight:700;
+      display:none;
     }
-    .alert.success{background:#d4edda;color:#155724;display:block}
-    .alert.error{background:#f8d7da;color:#721c24;display:block}
+    .alert.success{background:#d4edda;color:#155724;border:1px solid #c3e6cb}
+    .alert.danger{background:#f8d7da;color:#721c24;border:1px solid #f5c6cb}
+    .alert.warning{background:#fff3cd;color:#856404;border:1px solid #ffeeba}
 
-    .split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-    .split .card{
-      background:var(--card);border-radius:14px;
-      padding:20px;box-shadow:var(--shadow);
-    }
-    .split .card h4{font-size:.95rem;font-weight:800;margin-bottom:10px}
-    .map-frame{width:100%;height:350px;border:none;border-radius:10px}
-    .note{font-size:.78rem;color:var(--muted);line-height:1.7}
-
-    .bullets-box{padding:14px 18px}
-
-    .leader-sign{
-      text-align:center;font-weight:800;
-      font-size:.95rem;color:var(--primary);
-      margin:30px 0 10px;
-    }
-    .footer{
-      text-align:center;font-size:.72rem;
-      color:var(--muted);padding-bottom:20px;
-    }
-
-    @media(max-width:768px){
-      .kpi-row{grid-template-columns:repeat(2,1fr)}
-      .dash-grid{grid-template-columns:1fr}
-      .split{grid-template-columns:1fr}
-      #deploymentMap{height:350px}
-      .map-filters{flex-direction:column}
-    }
+    .helper{font-size:.75rem;color:var(--muted);margin-top:4px}
+    .hidden{display:none!important}
   </style>
 </head>
 <body>
 
-<button class="mobile-btn" id="mobileBtn"><i class="fas fa-bars"></i></button>
+  <button class="mobile-btn" id="mobileBtn"><i class="fas fa-bars"></i></button>
 
-<div class="layout">
-  <aside class="sidebar" id="sidebar">
-    <div class="brand">
-      <img src="logo.png" alt="شعار نطاق منى">
-      <h2>منصة نطاق منى</h2>
-      <p>حج 1447هـ - نسخة مطورة</p>
-    </div>
-
-    
-        <ul class="nav">
-          <li class="active" data-target="homePanel"><i class="fas fa-chart-line"></i> لوحة القائد</li>
-          <li data-target="groundEMS"><i class="fas fa-ambulance"></i> التحضير اليومي</li>
-          <li data-target="handoverPanel"><i class="fas fa-exchange-alt"></i> تسليم المناوبة</li>
-          <li data-target="unitsCheckPanel"><i class="fas fa-clipboard-check"></i> العهد الشخصية للقطاعات</li>
-          <li data-target="stockPanel"><i class="fas fa-boxes-stacked"></i> الخزن الاستراتيجي</li>
-          <li data-target="deploymentPanel"><i class="fas fa-map-location-dot"></i> خطة الانتشار</li>
-          <li data-target="sectorMapsPanel"><i class="fas fa-map"></i> خرائط القطاع</li>
-          <li data-target="supportPlanPanel"><i class="fas fa-handshake-angle"></i> خطة الدعم</li>
-        </ul>
-
-
-    <div class="quick-toggle" onclick="toggleQuickLinks()">
-      <i class="fas fa-bolt"></i> روابط سريعة
-    </div>
-    <div class="quick-links" id="quickLinks">
-      <a id="dashboardLinkTop" href="#" target="_blank"><i class="fas fa-tv"></i> لوحة القائد</a>
-      <a href="https://www.google.com/maps/d/viewer?mid=15jPyMtPR5xmD0hZpE7g2-B1J0rSosvM&ll=21.41679955004633%2C39.873667103872805&z=15" target="_blank"><i class="fas fa-map"></i> خريطة Google</a>
-    </div>
-  </aside>
-
-  <main>
-    <!-- ═══════ Hero ═══════ -->
-    <div class="hero">
-      <h1>منصة نطاق منى</h1>
-      <p>نظام إدارة العمليات الإسعافية الميدانية لموسم حج 1447هـ</p>
-      <span class="badge"><i class="fas fa-shield-halved"></i> حياكم الله</span>
-    </div>
-
-    <!-- ═══════ KPI Row ═══════ -->
-    <div id="missingSectorsAlert" style="display:none;background:#fff3cd;color:#856404;padding:15px;border-radius:10px;margin-bottom:20px;border:1px solid #ffeeba;font-weight:bold;text-align:center;box-shadow:var(--shadow);"></div>
-    <div class="kpi-row">
-
-      <div class="kpi-card"><div class="kpi-val" id="kpi_total">0</div><div class="kpi-label">إجمالي النقاط</div></div>
-      <div class="kpi-card"><div class="kpi-val" id="kpi_ready" style="color:var(--success)">0</div><div class="kpi-label">جاهزة</div></div>
-      <div class="kpi-card"><div class="kpi-val" id="kpi_supported" style="color:var(--secondary)">0</div><div class="kpi-label">مدعمة</div></div>
-      <div class="kpi-card"><div class="kpi-val" id="kpi_oos" style="color:var(--danger)">0</div><div class="kpi-label">خارج الخدمة</div></div>
-      <div class="kpi-card"><div class="kpi-val" id="kpi_broken" style="color:var(--muted)">0</div><div class="kpi-label">متعطلة</div></div>
-      <div class="kpi-card"><div class="kpi-val" id="kpi_sectors">7</div><div class="kpi-label">القطاعات</div></div>
-    </div>
-
-    <!-- ═══════ Home Panel ═══════ -->
-    <section class="panel active" id="homePanel">
-
-      <!-- Main Tabs: Dashboard / Map -->
-      <div class="main-tabs">
-        <button class="tab-btn active" onclick="switchMainTab('tabDashboard',this)"><i class="fas fa-chart-pie"></i> الداشبورد</button>
-        <button class="tab-btn" onclick="switchMainTab('tabMap',this)"><i class="fas fa-map-location-dot"></i> الخريطة التفاعلية</button>
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <img src="https://srca.org.sa/img/logo.png" alt="SRCA Logo">
+        <h2>منصة نطاق منى</h2>
+        <p>حج 1447هـ - نسخة مطورة</p>
       </div>
 
-      <!-- ── Tab: Dashboard ── -->
-      <div class="tab-content active" id="tabDashboard">
-        
-        <!-- Dashboard Filters -->
-        <div class="map-filters" style="margin-bottom: 20px; background: var(--card); padding: 15px; border-radius: 12px; box-shadow: var(--shadow);">
-          <div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center; width: 100%;">
-            <div class="field" style="flex: 1; min-width: 150px;">
-              <label><i class="fas fa-calendar-day"></i> التاريخ</label>
-              <input type="date" id="dashFilterDate" onchange="applyDashboardFilters()">
-            </div>
-            <div class="field" style="flex: 1; min-width: 120px;">
-              <label><i class="fas fa-clock"></i> الوقت</label>
-              <input type="time" id="dashFilterTime" onchange="applyDashboardFilters()">
-            </div>
-            <div class="field" style="flex: 1; min-width: 150px;">
-              <label><i class="fas fa-layer-group"></i> القطاع</label>
-              <select id="dashFilterSector" onchange="applyDashboardFilters()">
-                <option value="الكل">الكل</option>
-                <option value="الجمرات">الجمرات</option>
-                <option value="القطارات">القطارات</option>
-                <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
-                <option value="بطن منى الشمالي">بطن منى الشمالي</option>
-                <option value="الشعيبين">الشعيبين</option>
-                <option value="منى الجديد 1">منى الجديد 1</option>
-                <option value="منى الجديد 2">منى الجديد 2</option>
-              </select>
-            </div>
-            <div class="field" style="flex: 1; min-width: 150px;">
-              <label><i class="fas fa-clock"></i> فترة المناوبة</label>
-              <select id="dashFilterShift" onchange="applyDashboardFilters()">
-                <option value="الكل">الكل</option>
-                <option value="الصباحية">الصباحية</option>
-                <option value="المسائية">المسائية</option>
-                <option value="اوفرلاب">اوفرلاب</option>
-              </select>
-            </div>
-            <div style="display: flex; align-items: flex-end; padding-bottom: 4px;">
-              <button class="btn btn-outline" onclick="resetDashboardFilters()" style="padding: 8px 15px; font-size: 0.8rem;">
-                <i class="fas fa-undo"></i> إعادة ضبط
-              </button>
-            </div>
-          </div>
+      <ul class="nav">
+        <li class="active" data-target="homePanel"><i class="fas fa-chart-line"></i> لوحة القائد</li>
+        <li data-target="groundEMS"><i class="fas fa-truck-medical"></i> التحضير اليومي</li>
+        <li data-target="handoverPanel"><i class="fas fa-exchange-alt"></i> تسليم المناوبة</li>
+        <li data-target="unitsCheckPanel"><i class="fas fa-clipboard-check"></i> العهد الشخصية للقطاعات</li>
+        <li data-target="stockPanel"><i class="fas fa-boxes-stacked"></i> الخزن الاستراتيجي</li>
+        <li data-target="deploymentPanel"><i class="fas fa-map-location-dot"></i> خطة الانتشار</li>
+        <li data-target="mapsPanel"><i class="fas fa-map"></i> خرائط القطاع</li>
+        <li data-target="supportPlanPanel"><i class="fas fa-handshake-angle"></i> خطة الدعم</li>
+      </ul>
+
+      <div class="quick-toggle" onclick="document.getElementById('quickLinks').classList.toggle('show')">
+        <i class="fas fa-link"></i> روابط سريعة
+      </div>
+      <div class="quick-links" id="quickLinks">
+        <a href="#" target="_blank"><i class="fas fa-file-excel"></i> شيت البيانات</a>
+        <a href="#" target="_blank"><i class="fas fa-location-arrow"></i> تتبع الفرق</a>
+      </div>
+    </aside>
+
+    <main>
+      <!-- Home Panel -->
+      <section class="panel active" id="homePanel">
+        <div class="hero">
+          <img src="https://srca.org.sa/img/logo.png" alt="SRCA" style="max-width:120px;margin-bottom:10px">
+          <h1>منصة نطاق منى</h1>
+          <p>نظام إدارة العمليات الإسعافية الميدانية لموسم حج 1447هـ</p>
+          <div class="badge">حياكم الله</div>
+        </div>
+
+        <div id="missingSectorsAlert" class="alert warning" style="display:none">
+          <i class="fas fa-exclamation-triangle"></i> <strong>تنبيه:</strong> القطاعات التي لم ترفع التقرير بعد: <span id="missingSectorsList"></span>
+        </div>
+
+        <div class="kpi-row">
+          <div class="kpi-card"><div class="kpi-val" id="kpiTotalUnits">0</div><div class="kpi-label">إجمالي النقاط</div></div>
+          <div class="kpi-card" style="border-color:var(--success)"><div class="kpi-val" id="kpiReadyUnits" style="color:var(--success)">0</div><div class="kpi-label">جاهزة</div></div>
+          <div class="kpi-card" style="border-color:var(--secondary)"><div class="kpi-val" id="kpiRapidUnits" style="color:var(--secondary)">0</div><div class="kpi-label">مدعمة</div></div>
+          <div class="kpi-card" style="border-color:var(--danger)"><div class="kpi-val" id="kpiOutUnits" style="color:var(--danger)">0</div><div class="kpi-label">خارج الخدمة</div></div>
+          <div class="kpi-card" style="border-color:var(--muted)"><div class="kpi-val" id="kpiBrokenUnits" style="color:var(--muted)">0</div><div class="kpi-label">متعطلة</div></div>
+          <div class="kpi-card" style="border-color:var(--dark)"><div class="kpi-val">7</div><div class="kpi-label">القطاعات</div></div>
         </div>
 
         <div class="dash-grid">
-
-          <!-- Sector Summary -->
           <div class="dash-card">
             <h4><i class="fas fa-layer-group"></i> ملخص القطاعات</h4>
             <table class="dash-table" id="dashSectorTable">
@@ -516,118 +402,10 @@
               <tbody></tbody>
             </table>
           </div>
-
-          <!-- Type Summary -->
-          <div class="dash-card">
-            <h4><i class="fas fa-truck-medical"></i> ملخص أنواع الوحدات</h4>
-            <table class="dash-table" id="dashTypeTable">
-              <thead>
-                <tr><th>نوع الوحدة</th><th>العدد</th><th>النسبة</th></tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-
-          <!-- Status Overview -->
-          <div class="dash-card">
-            <h4><i class="fas fa-signal"></i> نظرة عامة على الحالات</h4>
-            <div id="dashStatusChart" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding:10px 0">
-            </div>
-          </div>
-
-          <!-- Support Summary -->
-          <div class="dash-card">
-            <h4><i class="fas fa-handshake"></i> ملخص عمليات الدعم</h4>
-            <table class="dash-table" id="dashSupportTable">
-              <thead>
-                <tr><th>النوع</th><th>العدد</th><th>عدد الفرق</th><th>التاريخ</th><th>الفترة</th></tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-
-          <!-- Latest Activity -->
-          <div class="dash-card">
-            <h4><i class="fas fa-clock-rotate-left"></i> آخر تحديث</h4>
-            <div id="dashLastUpdate" style="text-align:center;padding:20px;font-size:.9rem;color:var(--muted)">
-              <i class="fas fa-spinner fa-spin"></i> جاري تحميل البيانات...
-            </div>
-          </div>
-
         </div>
-      </div>
+      </section>
 
-      <!-- ── Tab: Map ── -->
-      <div class="tab-content" id="tabMap">
-
-        <!-- Map Legend -->
-        <div class="map-legend">
-          <div class="leg-item"><div class="leg-dot" style="background:#00b894"></div> جاهز</div>
-          <div class="leg-item"><div class="leg-dot" style="background:#0b5ed7"></div> مدعم</div>
-          <div class="leg-item"><div class="leg-dot" style="background:#fdcb6e"></div> اوفرلاب</div>
-          <div class="leg-item"><div class="leg-dot" style="background:#d63031"></div> خارج الخدمة</div>
-          <div class="leg-item"><div class="leg-dot" style="background:#636e72"></div> متعطلة</div>
-          <div class="leg-item"><div class="leg-dot" style="background:#6c5ce7"></div> تدخل سريع</div>
-        </div>
-
-        <!-- Map Filters -->
-        <div class="map-filters">
-          <div>
-            <label>القطاع</label>
-            <select id="mapFilterSector" onchange="applyMapFilters()">
-              <option value="الكل">الكل</option>
-              <option value="الجمرات">الجمرات</option>
-              <option value="القطارات">القطارات</option>
-              <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
-              <option value="بطن منى الشمالي">بطن منى الشمالي</option>
-              <option value="الشعيبين">الشعيبين</option>
-              <option value="منى الجديد 1">منى الجديد 1</option>
-              <option value="منى الجديد 2">منى الجديد 2</option>
-            </select>
-          </div>
-          <div>
-            <label>الحالة</label>
-            <select id="mapFilterStatus" onchange="applyMapFilters()">
-              <option value="الكل">الكل</option>
-              <option value="جاهز">جاهز</option>
-              <option value="مدعم">مدعم</option>
-              <option value="اوفرلاب">اوفرلاب</option>
-              <option value="خارج الخدمة">خارج الخدمة</option>
-              <option value="متعطلة">متعطلة</option>
-            </select>
-          </div>
-          <div>
-            <label>نوع الوحدة</label>
-            <select id="mapFilterType" onchange="applyMapFilters()">
-              <option value="الكل">الكل</option>
-              <option value="مركبة اسعافية">مركبة إسعافية</option>
-              <option value="قولف">قولف</option>
-              <option value="راجلة">راجلة</option>
-              <option value="تدخل سريع">تدخل سريع</option>
-            </select>
-          </div>
-          <div>
-            <label>المناوبة</label>
-            <select id="mapFilterShift" onchange="applyMapFilters()">
-              <option value="الكل">الكل</option>
-              <option value="الصباحية">الصباحية</option>
-              <option value="المسائية">المسائية</option>
-              <option value="اوفرلاب">اوفرلاب</option>
-            </select>
-          </div>
-          <button class="btn btn-outline" onclick="resetMapFilters()" style="padding:6px 16px;font-size:.8rem"><i class="fas fa-rotate-left"></i> إعادة تعيين</button>
-        </div>
-
-        <!-- Map Container -->
-        <div id="deploymentMap"></div>
-
-        <div style="text-align:center;margin-top:10px">
-          <span id="mapPointCount" style="font-size:.85rem;font-weight:700;color:var(--muted)">النقاط المعروضة: 0</span>
-        </div>
-      </div>
-
-     </section>
-
+      <!-- Daily Prep Panel -->
       <section class="panel" id="groundEMS">
         <div class="panel-head">
           <div>
@@ -651,7 +429,7 @@
 
             <div class="field">
               <label for="sector">القطاع</label>
-              <select id="sector">
+              <select id="sector" onchange="fillTeamData()">
                 <option value="" selected>اختر القطاع</option>
                 <option value="الجمرات">الجمرات</option>
                 <option value="القطارات">القطارات</option>
@@ -670,7 +448,7 @@
           <div class="section-body grid-2">
             <div class="field">
               <label for="shift_time">فترة المناوبة</label>
-              <select id="shift_time">
+              <select id="shift_time" onchange="fillTeamData()">
                 <option value="" selected>اختر الفترة</option>
                 <option value="الصباحية">الصباحية</option>
                 <option value="المسائية">المسائية</option>
@@ -718,8 +496,6 @@
             <div class="field"><label for="volunteers_count">عدد المتطوعين</label><input type="number" id="volunteers_count" min="0" value="0"></div>
             <div class="field"><label for="vehicles_count">عدد فرق المركبات الإسعافية</label><input type="number" id="vehicles_count" min="0" value="0"></div>
             <div class="field"><label for="rapid_vehicles_count">عدد مركبات التدخل السريع</label><input type="number" id="rapid_vehicles_count" min="0" value="0"></div>
-            
-            
             <div class="field"><label for="golf_count">عدد فرق عربات القولف</label><input type="number" id="golf_count" min="0" value="0"></div>
             <div class="field"><label for="walking_count">عدد الفرق الراجلة</label><input type="number" id="walking_count" min="0" value="0"></div>
           </div>
@@ -742,6 +518,7 @@
         </div>
       </section>
 
+      <!-- Handover Panel -->
       <section class="panel" id="handoverPanel">
         <div class="panel-head">
           <div>
@@ -757,7 +534,7 @@
           <div class="section-body grid-3">
             <div class="field">
               <label for="handover_sector">القطاع</label>
-              <select id="handover_sector">
+              <select id="handover_sector" onchange="fillHandoverTeamData()">
                 <option value="" selected>اختر القطاع</option>
                 <option value="الجمرات">الجمرات</option>
                 <option value="القطارات">القطارات</option>
@@ -771,7 +548,7 @@
 
             <div class="field">
               <label for="handover_shift">نوع المناوبة</label>
-              <select id="handover_shift">
+              <select id="handover_shift" onchange="fillHandoverTeamData()">
                 <option value="" selected>اختر الفترة</option>
                 <option value="الصباحية">الصباحية</option>
                 <option value="المسائية">المسائية</option>
@@ -797,31 +574,7 @@
             <div class="field"><label for="avg_response">متوسط زمن الاستجابة</label><input type="text" id="avg_response" placeholder="مثال: 10:09"></div>
             <div class="field"><label for="echo_count">عدد بلاغات ECHO</label><input type="number" id="echo_count" value="0"></div>
             <div class="field"><label for="total_cases">إجمالي البلاغات</label><input type="number" id="total_cases" min="0" value="0"></div>
-            <div class="field"><label for="active_teams">إجمالي عدد الفرق بما في ذلك التداخلية (اوفرلاب) والمدعمه</label><input type="number" id="active_teams" min="0" value="0"></div>
-            <div class="field"><label for="planned_teams">عدد الفرق الأساسية</label><input type="number" id="planned_teams" min="0" value="0"></div>
-            <div class="field"><label for="handover_rapid_count">عدد فرق التدخل السريع</label><input type="number" id="handover_rapid_count" min="0" value="0"></div>
-</div>
-            <div class="field"><label for="echo_count">عدد بلاغات ECHO</label><input type="number" id="echo_count" value="0"></div>
-            <div class="field"><label for="total_cases">إجمالي البلاغات</label><input type="number" id="total_cases" min="0" value="0"></div>
-            <div class="field"><label for="active_teams">إجمالي عدد الفرق بما في ذلك التداخلية (اوفرلاب) والمدعمه</label><input type="number" id="active_teams" min="0" value="0"></div>
-            <div class="field"><label for="planned_teams">عدد الفرق الأساسية</label><input type="number" id="planned_teams" min="0" value="0"></div>
-            <div class="field"><label for="handover_rapid_count">عدد فرق التدخل السريع</label><input type="number" id="handover_rapid_count" min="0" value="0"></div>
-</div>
-            <div class="field"><label for="echo_count">عدد بلاغات ECHO</label><input type="number" id="echo_count" value="0"></div>
-            <div class="field"><label for="total_cases">إجمالي البلاغات</label><input type="number" id="total_cases" min="0" value="0"></div>
-            <div class="field"><label for="active_teams">إجمالي عدد الفرق بما في ذلك التداخلية (اوفرلاب) والمدعمه</label><input type="number" id="active_teams" min="0" value="0"></div>
-            <div class="field"><label for="planned_teams">عدد الفرق الأساسية</label><input type="number" id="planned_teams" min="0" value="0"></div>
-            <div class="field"><label for="handover_rapid_count">عدد فرق التدخل السريع</label><input type="number" id="handover_rapid_count" min="0" value="0"></div>
-</div>
-            <div class="field"><label for="echo_count">عدد بلاغات ECHO</label><input type="number" id="echo_count" value="0"></div>
-            <div class="field"><label for="total_cases">إجمالي البلاغات</label><input type="number" id="total_cases" min="0" value="0"></div>
-            <div class="field"><label for="active_teams">إجمالي عدد الفرق بما في ذلك التداخلية (اوفرلاب) والمدعمه</label><input type="number" id="active_teams" min="0" value="0"></div>
-            <div class="field"><label for="planned_teams">عدد الفرق الأساسية</label><input type="number" id="planned_teams" min="0" value="0"></div>
-            <div class="field"><label for="handover_rapid_count">عدد فرق التدخل السريع</label><input type="number" id="handover_rapid_count" min="0" value="0"></div>
-</div>
-            <div class="field"><label for="echo_count">عدد بلاغات ECHO</label><input type="number" id="echo_count" value="0"></div>
-            <div class="field"><label for="total_cases">إجمالي البلاغات</label><input type="number" id="total_cases" min="0" value="0"></div>
-            <div class="field"><label for="active_teams">إجمالي عدد الفرق بما في ذلك التداخلية (اوفرلاب) والمدعمه</label><input type="number" id="active_teams" min="0" value="0"></div>
+            <div class="field"><label for="active_teams">إجمالي عدد الفرق (بما في ذلك التداخلية والمدعمة)</label><input type="number" id="active_teams" min="0" value="0"></div>
             <div class="field"><label for="planned_teams">عدد الفرق الأساسية</label><input type="number" id="planned_teams" min="0" value="0"></div>
             <div class="field"><label for="handover_rapid_count">عدد فرق التدخل السريع</label><input type="number" id="handover_rapid_count" min="0" value="0"></div>
           </div>
@@ -845,7 +598,7 @@
         </div>
       </section>
 
-      
+      <!-- Custody Panel -->
       <section class="panel" id="unitsCheckPanel">
         <div class="panel-head">
           <div>
@@ -915,6 +668,7 @@
         </div>
       </section>
 
+      <!-- Strategic Stock Panel -->
       <section class="panel" id="stockPanel">
         <div class="panel-head">
           <div>
@@ -931,7 +685,15 @@
             <div class="field"><label for="stock_date">تاريخ التشييك</label><input type="date" id="stock_date"></div>
             <div class="field"><label for="stock_time">وقت التشييك</label><input type="time" id="stock_time"></div>
             <div class="field"><label for="stock_checker">اسم القائم بالتشييك</label><input type="text" id="stock_checker"></div>
-            <div class="field"><label for="stock_location">موقع الخزن الاستراتيجي</label><input type="text" id="stock_location"></div>
+            <div class="field">
+              <label for="stock_location">موقع الخزن الاستراتيجي</label>
+              <select id="stock_location">
+                <option value="" selected>اختر الموقع</option>
+                <option value="مستودع الجمرات">مستودع الجمرات</option>
+                <option value="مستودع منى 1">مستودع منى 1</option>
+                <option value="مستودع منى 2">مستودع منى 2</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -939,324 +701,33 @@
           <div class="section-title">حالة المخزون</div>
           <div class="section-body">
             <div class="field">
-              <label>هل يوجد نواقص طبية؟</label>
-              <select id="has_shortage" onchange="toggleShortageDetails()">
-                <option value="لا">لا (المخزون مكتمل)</option>
-                <option value="نعم">نعم (يوجد نواقص)</option>
-              </select>
-            </div>
-            <div class="field" id="shortage_details_container" style="display:none; margin-top:15px;">
-              <label>النواقص الطبية (اذكر عدد وأنواع الأصناف الناقصة)</label>
-              <textarea id="shortage_details" rows="5" placeholder="مثال: 10 مغذيات، 5 أطقم غيار..."></textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button class="btn btn-success" onclick="sendStrategicStock()">حفظ وإرسال التقرير</button>
-        </div>
-      </section>
-
-      <section class="panel" id="deploymentPanel">
-        <div class="panel-head">
-          <div>
-            <h3>خطة الانتشار</h3>
-            <p>جميع نقاط القطاع تظهر حسب الملف، وتبقى ظاهرة سواء اخترت صباحية أو مسائية أو اوفرلاب، مع إمكانية تعديل النوع والوقت والحذف والإضافة وقبول التدعيم.</p>
-          </div>
-        </div>
-
-        <div id="deploymentAlert" class="alert"></div>
-
-        <div class="section">
-          <div class="section-title">البيانات الأساسية</div>
-          <div class="section-body grid-3">
-            <div class="field"><label for="stock_date">التاريخ</label><input type="date" id="stock_date"></div>
-            <div class="field"><label for="stock_time">الوقت</label><input type="time" id="stock_time"></div>
-            <div class="field"><label for="stock_checker">القائم بالتشييك</label><input type="text" id="stock_checker"></div>
-            <div class="field"><label for="stock_location">موقع الخزن</label><input type="text" id="stock_location"></div>
-            <div class="field">
-              <label for="has_shortage">هل يوجد نواقص طبية؟</label>
+              <label for="has_shortage">هل يوجد نواقص؟</label>
               <select id="has_shortage" onchange="toggleShortageDetails()">
                 <option value="لا">لا</option>
                 <option value="نعم">نعم</option>
               </select>
             </div>
-</div>
-            <div class="field"><label for="stock_time">الوقت</label><input type="time" id="stock_time"></div>
-            <div class="field"><label for="stock_checker">القائم بالتشييك</label><input type="text" id="stock_checker"></div>
-            <div class="field"><label for="stock_location">موقع الخزن</label><input type="text" id="stock_location"></div>
-            <div class="field">
-              <label for="has_shortage">هل يوجد نواقص طبية؟</label>
-              <select id="has_shortage" onchange="toggleShortageDetails()">
-                <option value="لا">لا</option>
-                <option value="نعم">نعم</option>
-              </select>
-            </div>
-</div>
-
-            <div class="field">
-              <label for="deploy_shift">العرض الزمني</label>
-              <select id="deploy_shift">
-                <option value="" selected>اختر</option>
-                <option value="الصباحية">صباحية</option>
-                <option value="المسائية">مسائية</option>
-                <option value="اوفرلاب">اوفرلاب</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="deploy_role">صفة مدخل البيانات</label>
-              <select id="deploy_role">
-                <option value="" selected>اختر الصفة</option>
-                <option value="كبير مسعفين">كبير مسعفين</option>
-                <option value="مساعد كبير مسعفين">مساعد كبير مسعفين</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="deploy_lead_name">اسم كبير المسعفين المدخل للبيانات</label>
-              <input type="text" id="deploy_lead_name">
-            </div>
-
-            <div class="field">
-              <label for="deploy_current_lead">اسم كبير المسعفين المناوب</label>
-              <input type="text" id="deploy_current_lead">
-            </div>
-
-            <div class="field"><label for="deploy_assistant1_auto">مساعد 1</label><input type="text" id="deploy_assistant1_auto"></div>
-            <div class="field"><label for="deploy_assistant2_auto">مساعد 2</label><input type="text" id="deploy_assistant2_auto"></div>
-            <div class="field"><label for="deploy_assistant3_auto">مساعد 3</label><input type="text" id="deploy_assistant3_auto"></div>
-            <div class="field"><label for="deploy_assistant4_auto">مساعد 4</label><input type="text" id="deploy_assistant4_auto"></div>
-
-            <div class="field"><label for="deployment_date">التاريخ</label><input type="date" id="deployment_date"></div>
-            <div class="field"><label for="deployment_time">الوقت</label><input type="time" id="deployment_time"></div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">جدول نقاط الانتشار</div>
-          <div class="section-body">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>الرمز</th>
-                    <th>نوع الوحدة</th>
-                    <th>المناوبة</th>
-                    <th>وقت البداية</th>
-                    <th>وقت النهاية</th>
-                    <th>الحالة</th>
-                    <th>عدد الفرق</th>
-                    <th>Latitude</th>
-                    <th>Longitude</th>
-                    <th>الخريطة</th>
-                    <th>نوع التدعيم</th>
-                    <th>جهة التدعيم</th>
-                    <th>ملاحظات السجل</th>
-                    <th>إجراء</th>
-                  </tr>
-                </thead>
-                <tbody id="deploymentTableBody"></tbody>
-              </table>
-            </div>
-
-            <div class="actions">
-              <button class="btn btn-primary" onclick="loadDefaultDeploymentPoints()" style="margin-left:10px;"><i class="fas fa-download"></i> تحميل النقاط الافتراضية للقطاع</button>
-              <button class="btn btn-outline" onclick="addManualDeploymentRow()"><i class="fas fa-plus"></i> إضافة صف جديد</button>
-            </div>
-
-            <div class="bullets-box">
-              <div class="field">
-                <label for="deployment_notes">ملاحظات خطة الانتشار</label>
-                <textarea id="deployment_notes" placeholder="اكتب كل ملاحظة في سطر مستقل"></textarea>
-              </div>
+            <div class="field" id="shortage_details_container" style="display:none;margin-top:14px">
+              <label for="shortage_details">تفاصيل النواقص</label>
+              <textarea id="shortage_details" rows="4" placeholder="اكتب النواقص هنا..."></textarea>
             </div>
           </div>
         </div>
 
         <div class="actions">
-          <button class="btn btn-success" onclick="sendDeploymentPlanSmart()">حفظ وإرسال خطة الانتشار</button>
+          <button class="btn btn-success" onclick="sendStrategicStock()">حفظ وإرسال</button>
         </div>
       </section>
 
-      
-      
-    
-      
-      
-    
-      <section class="panel" id="mapsPanel">
-        <div class="panel-head">
-          <div>
-            <h3>خرائط نطاق منى</h3>
-            <p>الخريطة الميدانية المباشرة مع إمكانية فتح لوحة القائد في نافذة مستقلة.</p>
-          </div>
-        </div>
+      <!-- Other Panels (Placeholders) -->
+      <section class="panel" id="deploymentPanel"><h3>خطة الانتشار</h3><p>قريباً...</p></section>
+      <section class="panel" id="mapsPanel"><h3>خرائط القطاع</h3><p>قريباً...</p></section>
+      <section class="panel" id="supportPlanPanel"><h3>خطة الدعم</h3><p>قريباً...</p></section>
 
-        <div class="split">
-          <div class="card">
-            <h4>الخريطة المباشرة</h4>
-           <iframe class="map-frame" id="mapFrame"></iframe>
-          </div>
+    </main>
+  </div>
 
-          <div class="card">
-            <h4>خيارات سريعة</h4>
-            <p>يمكنك فتح الخريطة مباشرة أو الانتقال إلى لوحة القائد الشاملة.</p>
-            <div class="actions">
-              <a class="btn btn-blue" href="https://www.google.com/maps/d/viewer?mid=15jPyMtPR5xmD0hZpE7g2-B1J0rSosvM&ll=21.41679955004633%2C39.873667103872805&z=15" target="_blank"><i class="fas fa-map"></i> فتح الخريطة</a>
-              <a class="btn btn-dark" id="dashboardLinkMap" href="#" target="_blank"><i class="fas fa-tv"></i> فتح لوحة القائد</a>
-            </div>
-            <div class="note" style="margin-top:14px">
-              لوحة القائد تفتح في نافذة مستقلة من رابط الـ Web App وتعرض الإجماليات، التفاصيل، التنبيهات، والخريطة الحية.
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Support Plan Panel -->
-      <section id="supportPlanPanel" class="panel hidden">
-        <div class="panel-head">
-          <div>
-            <h3>خطة الدعم</h3>
-            <p>تسجيل عمليات الدعم والتدعيم بين النطاقات المختلفة أو داخل نطاق منى</p>
-          </div>
-        </div>
-
-        <div id="supportPlanAlert" class="alert"></div>
-
-        <div class="section">
-          <div class="section-title">بيانات الدعم الأساسية</div>
-          <div class="section-body grid-2">
-            <div class="field">
-              <label for="support_date">التاريخ</label>
-              <input type="date" id="support_date">
-            </div>
-            <div class="field">
-              <label for="support_time">الوقت</label>
-              <input type="time" id="support_time">
-            </div>
-            <div class="field">
-              <label for="support_teams_count">عدد الفرق المدعمة</label>
-              <input type="number" id="support_teams_count" min="1" value="1">
-            </div>
-            <div class="field">
-              <label for="support_type">نوع التدعيم</label>
-              <select id="support_type" onchange="toggleSupportTypeFields()">
-                <option value="" selected>-- اختر نوع التدعيم --</option>
-                <option value="داخل_النطاق">داخل النطاق (بين قطاعات منى)</option>
-                <option value="خارج_النطاق">خارج النطاق (بين النطاقات الأخرى)</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- داخل النطاق -->
-        <div id="internalSupportWrap" class="hidden">
-          <div class="section">
-            <div class="section-title">تفاصيل التدعيم داخل النطاق</div>
-            <div class="section-body grid-2">
-              <div class="field">
-                <label for="support_from_sector">القطاع المدعم منه</label>
-                <select id="support_from_sector">
-                  <option value="" selected>-- اختر القطاع --</option>
-                  <option value="الجمرات">الجمرات</option>
-                  <option value="القطارات">القطارات</option>
-                  <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
-                  <option value="بطن منى الشمالي">بطن منى الشمالي</option>
-                  <option value="الشعيبين">الشعيبين</option>
-                  <option value="منى الجديد 1">منى الجديد 1</option>
-                  <option value="منى الجديد 2">منى الجديد 2</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="support_to_sector">القطاع المدعم له</label>
-                <select id="support_to_sector">
-                  <option value="" selected>-- اختر القطاع --</option>
-                  <option value="الجمرات">الجمرات</option>
-                  <option value="القطارات">القطارات</option>
-                  <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
-                  <option value="بطن منى الشمالي">بطن منى الشمالي</option>
-                  <option value="الشعيبين">الشعيبين</option>
-                  <option value="منى الجديد 1">منى الجديد 1</option>
-                  <option value="منى الجديد 2">منى الجديد 2</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- خارج النطاق -->
-        <div id="externalSupportWrap" class="hidden">
-          <div class="section">
-            <div class="section-title">تفاصيل التدعيم خارج النطاق</div>
-            <div class="section-body grid-2">
-              <div class="field">
-                <label for="support_from_zone">النطاق المدعم منه</label>
-                <select id="support_from_zone">
-                  <option value="" selected>-- اختر النطاق --</option>
-                  <option value="الحرم المكي">الحرم المكي</option>
-                  <option value="العاصمة المقدسة">العاصمة المقدسة</option>
-                  <option value="عرفات">عرفات</option>
-                  <option value="مزدلفة">مزدلفة</option>
-                  <option value="منى">منى</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="support_to_zone">النطاق المدعم له</label>
-                <select id="support_to_zone">
-                  <option value="" selected>-- اختر النطاق --</option>
-                  <option value="الحرم المكي">الحرم المكي</option>
-                  <option value="العاصمة المقدسة">العاصمة المقدسة</option>
-                  <option value="عرفات">عرفات</option>
-                  <option value="مزدلفة">مزدلفة</option>
-                  <option value="منى">منى</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- معلومات إضافية -->
-        <div class="section">
-          <div class="section-title">معلومات إضافية</div>
-          <div class="section-body grid-2">
-            <div class="field">
-              <label for="support_arrival_time">وقت حضور الفرق المدعمة</label>
-              <input type="time" id="support_arrival_time">
-            </div>
-            <div class="field">
-              <label for="support_entry_name">اسم مدخل البيانات</label>
-              <input type="text" id="support_entry_name" placeholder="أدخل اسمك">
-            </div>
-            <div class="field full-width">
-              <label for="support_notes">الملاحظات</label>
-              <textarea id="support_notes" placeholder="أي ملاحظات إضافية عن الدعم المقدم"></textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button class="btn btn-success" onclick="sendSupportPlan()">
-            <i class="fas fa-paper-plane"></i> حفظ وإرسال
-          </button>
-          <button class="btn btn-outline" onclick="clearSupportPlanForm()">
-            <i class="fas fa-eraser"></i> مسح الحقول
-          </button>
-        </div>
-      </section>
-
-      <div class="leader-sign">قائد نطاق منى / فهد أحمد الشمري</div>
-      <div class="footer">منصة نطاق منى حج 1447 نسخة مطورة - علي 102459@srca</div>
-  </main>
-</div>
-
-
-
-
-
-
-
-<script>
+  <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxzkS1GrOC4IBKYQCD2APoK-6iIcGngUikW7zXseLK6JgnQd_pBxA_gX8LgYyoNBS-n2w/exec';
 
     const teamsData = {
@@ -1335,7 +806,15 @@
         document.getElementById('handover_sender').value = data.lead;
         document.getElementById('handover_assistant1').value = data.assistants[0] || '';
         document.getElementById('handover_assistant2').value = data.assistants[1] || '';
-        // For receiver, we might need the other shift or leave it for manual entry
+        document.getElementById('handover_assistant3').value = data.assistants[2] || '';
+        document.getElementById('handover_assistant4').value = data.assistants[3] || '';
+        
+        // Receiver (Opposite shift)
+        const nextShift = (shift === 'الصباحية') ? 'المسائية' : 'الصباحية';
+        const nextData = teamsData[sector]?.[nextShift];
+        if(nextData) {
+          document.getElementById('handover_receiver').value = nextData.lead;
+        }
       }
     }
 
@@ -1468,7 +947,7 @@
         showAlert('stockAlert', 'success', 'تم الحفظ بنجاح');
       }
     }
-</script>
+  </script>
 
 </body>
 </html>

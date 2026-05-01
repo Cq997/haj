@@ -1341,11 +1341,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
     
     
-    function switchPanel(targetId){
-      document.querySelectorAll('.panel').forEach(p => {
-        p.classList.remove('active');
-        p.style.display = 'none';
-      });
+    );
       const target = document.getElementById(targetId);
       if(target){
         target.classList.add('active');
@@ -1397,19 +1393,9 @@
     });
 
 
-    function toggleShortageDetails(){
-      const hasShortage = document.getElementById("has_shortage").value;
-      const container = document.getElementById("shortage_details_container");
-      if(container) container.style.display = (hasShortage === "نعم") ? "block" : "none";
-    }
+    
 
-    function openWhatsApp(text){
-      const encoded = encodeURIComponent(text);
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-      const url = isIOS ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
-      const win = window.open(url, '_blank');
-      if(!win || win.closed || typeof win.closed === 'undefined') window.location.href = url;
-    }
+    
 
     async function sendStrategicStock(){
       const date = document.getElementById('stock_date').value;
@@ -1493,11 +1479,7 @@
     }
 
 
-    function toggleShortageDetails(){
-      const hasShortage = document.getElementById("has_shortage").value;
-      const container = document.getElementById("shortage_details_container");
-      if(container) container.style.display = (hasShortage === "نعم") ? "block" : "none";
-    }
+    
 
     function fillUnitCallSigns(){
       const sector = document.getElementById('units_check_sector').value;
@@ -1567,20 +1549,10 @@
       openWhatsApp(msg);
     }
 
-    function openWhatsApp(text){
-      const encoded = encodeURIComponent(text);
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-      const url = isIOS ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
-      const win = window.open(url, '_blank');
-      if(!win || win.closed || typeof win.closed === 'undefined') window.location.href = url;
-    }
+    
 
 
-    function toggleShortageDetails(){
-      const hasShortage = document.getElementById("has_shortage").value;
-      const container = document.getElementById("shortage_details_container");
-      if(container) container.style.display = (hasShortage === "نعم") ? "block" : "none";
-    }
+    
 
     function fillUnitCallSigns(){
       const sector = document.getElementById('units_check_sector').value;
@@ -1650,13 +1622,7 @@
       openWhatsApp(msg);
     }
 
-    function openWhatsApp(text){
-      const encoded = encodeURIComponent(text);
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-      const url = isIOS ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
-      const win = window.open(url, '_blank');
-      if(!win || win.closed || typeof win.closed === 'undefined') window.location.href = url;
-    }
+    
 
 </script>
 <script>
@@ -1777,15 +1743,9 @@
       window.scrollTo({top:0,behavior:'smooth'});
     }
 
-    function toggleShortageDetails(){
-      const hasShortage = document.getElementById("has_shortage").value;
-      document.getElementById("shortage_details_container").style.display = (hasShortage === "نعم") ? "block" : "none";
-    }
+    
 
-    function toggleShortageDetails(){
-      const hasShortage = document.getElementById("has_shortage").value;
-      document.getElementById("shortage_details_container").style.display = (hasShortage === "نعم") ? "block" : "none";
-    }
+    
 
     function toggleQuickLinks(){
       document.getElementById('quickLinks').classList.toggle('show');
@@ -1888,15 +1848,7 @@ async function fetchDeploymentFromSheet(){
   }
 }
 
-    function openWhatsApp(text){
-      const encoded = encodeURIComponent(text);
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-      const url = isIOS ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
-      
-      const win = window.open(url, '_blank');
-      if(!win || win.closed || typeof win.closed === 'undefined'){
-        window.location.href = url;
-      }
+    
     }
 
     const sectorSelect = document.getElementById('sector');
@@ -3535,11 +3487,7 @@ function loadDefaultDeploymentPoints(){
 
     
     
-    function switchPanel(targetId){
-      document.querySelectorAll('.panel').forEach(p => {
-        p.classList.remove('active');
-        p.style.display = 'none';
-      });
+    );
       const target = document.getElementById(targetId);
       if(target){
         target.classList.add('active');
@@ -3591,19 +3539,9 @@ function loadDefaultDeploymentPoints(){
     });
 
 
-    function toggleShortageDetails(){
-      const hasShortage = document.getElementById("has_shortage").value;
-      const container = document.getElementById("shortage_details_container");
-      if(container) container.style.display = (hasShortage === "نعم") ? "block" : "none";
-    }
+    
 
-    function openWhatsApp(text){
-      const encoded = encodeURIComponent(text);
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-      const url = isIOS ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
-      const win = window.open(url, '_blank');
-      if(!win || win.closed || typeof win.closed === 'undefined') window.location.href = url;
-    }
+    
 
     async function sendStrategicStock(){
       const date = document.getElementById('stock_date').value;
@@ -3687,11 +3625,7 @@ function loadDefaultDeploymentPoints(){
     }
 
 
-    function toggleShortageDetails(){
-      const hasShortage = document.getElementById("has_shortage").value;
-      const container = document.getElementById("shortage_details_container");
-      if(container) container.style.display = (hasShortage === "نعم") ? "block" : "none";
-    }
+    
 
     function fillUnitCallSigns(){
       const sector = document.getElementById('units_check_sector').value;
@@ -3761,20 +3695,10 @@ function loadDefaultDeploymentPoints(){
       openWhatsApp(msg);
     }
 
-    function openWhatsApp(text){
-      const encoded = encodeURIComponent(text);
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-      const url = isIOS ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
-      const win = window.open(url, '_blank');
-      if(!win || win.closed || typeof win.closed === 'undefined') window.location.href = url;
-    }
+    
 
 
-    function toggleShortageDetails(){
-      const hasShortage = document.getElementById("has_shortage").value;
-      const container = document.getElementById("shortage_details_container");
-      if(container) container.style.display = (hasShortage === "نعم") ? "block" : "none";
-    }
+    
 
     function fillUnitCallSigns(){
       const sector = document.getElementById('units_check_sector').value;
@@ -3844,13 +3768,7 @@ function loadDefaultDeploymentPoints(){
       openWhatsApp(msg);
     }
 
-    function openWhatsApp(text){
-      const encoded = encodeURIComponent(text);
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-      const url = isIOS ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
-      const win = window.open(url, '_blank');
-      if(!win || win.closed || typeof win.closed === 'undefined') window.location.href = url;
-    }
+    
 
 </script>
 <script>
@@ -4747,11 +4665,7 @@ const DEPLOYMENT_POINTS = {
 
     
     
-    function switchPanel(targetId){
-      document.querySelectorAll('.panel').forEach(p => {
-        p.classList.remove('active');
-        p.style.display = 'none';
-      });
+    );
       const target = document.getElementById(targetId);
       if(target){
         target.classList.add('active');
@@ -4803,19 +4717,9 @@ const DEPLOYMENT_POINTS = {
     });
 
 
-    function toggleShortageDetails(){
-      const hasShortage = document.getElementById("has_shortage").value;
-      const container = document.getElementById("shortage_details_container");
-      if(container) container.style.display = (hasShortage === "نعم") ? "block" : "none";
-    }
+    
 
-    function openWhatsApp(text){
-      const encoded = encodeURIComponent(text);
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-      const url = isIOS ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
-      const win = window.open(url, '_blank');
-      if(!win || win.closed || typeof win.closed === 'undefined') window.location.href = url;
-    }
+    
 
     async function sendStrategicStock(){
       const date = document.getElementById('stock_date').value;
@@ -4899,11 +4803,7 @@ const DEPLOYMENT_POINTS = {
     }
 
 
-    function toggleShortageDetails(){
-      const hasShortage = document.getElementById("has_shortage").value;
-      const container = document.getElementById("shortage_details_container");
-      if(container) container.style.display = (hasShortage === "نعم") ? "block" : "none";
-    }
+    
 
     function fillUnitCallSigns(){
       const sector = document.getElementById('units_check_sector').value;
@@ -4973,20 +4873,10 @@ const DEPLOYMENT_POINTS = {
       openWhatsApp(msg);
     }
 
-    function openWhatsApp(text){
-      const encoded = encodeURIComponent(text);
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-      const url = isIOS ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
-      const win = window.open(url, '_blank');
-      if(!win || win.closed || typeof win.closed === 'undefined') window.location.href = url;
-    }
+    
 
 
-    function toggleShortageDetails(){
-      const hasShortage = document.getElementById("has_shortage").value;
-      const container = document.getElementById("shortage_details_container");
-      if(container) container.style.display = (hasShortage === "نعم") ? "block" : "none";
-    }
+    
 
     function fillUnitCallSigns(){
       const sector = document.getElementById('units_check_sector').value;
@@ -5056,14 +4946,42 @@ const DEPLOYMENT_POINTS = {
       openWhatsApp(msg);
     }
 
+    
+
+
+    function switchPanel(targetId){
+      console.log("Switching to:", targetId);
+      document.querySelectorAll('.panel').forEach(p => {
+        p.classList.remove('active');
+        p.style.display = 'none';
+      });
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      const navItem = document.querySelector(`.nav li[data-target="${targetId}"]`);
+      if(navItem) navItem.classList.add('active');
+      if(window.innerWidth <= 1180) {
+        const sidebar = document.querySelector('.sidebar');
+        if(sidebar) sidebar.classList.remove('active');
+      }
+      window.scrollTo(0,0);
+    }
+
+    function toggleShortageDetails(){
+      const hasShortage = document.getElementById("has_shortage").value;
+      const container = document.getElementById("shortage_details_container");
+      if(container) container.style.display = (hasShortage === "نعم") ? "block" : "none";
+    }
+
     function openWhatsApp(text){
       const encoded = encodeURIComponent(text);
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
       const url = isIOS ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
-      const win = window.open(url, '_blank');
-      if(!win || win.closed || typeof win.closed === 'undefined') window.location.href = url;
+      window.open(url, '_blank');
     }
-
 </script>
 
 

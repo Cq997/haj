@@ -3228,16 +3228,29 @@ async function loadLiveDeploymentData(){
   try {
     const data = await fetchDeploymentFromSheet();
     if(data && data.length > 0){
-      liveDeploymentData = data.map(d => ({
-        id: d["الرمز"] || d["اسم النقطة"] || '',
-        sector: d["القطاع"] || '',
-        type: d["نوع الآلية"] || d["الالية المشغلة بالنقطة"] || '',
-        teams: parseInt(d["عدد الفرق الفعلي"] || d["عدد الفرق بالنقطة"] || 1),
-        lat: parseFloat(d["Latitude"] || 0),
-        lng: parseFloat(d["Longitude"] || 0),
-        status: d["الحالة"] || 'جاهز',
-        shift: d["مناوبة النقطة"] || d["العرض الزمني"] || 'الصباحية'
-      })).filter(d => d.lat && d.lng);
+      // منطق اختيار آخر إدخال زمني لكل رمز نقطة
+      const latestPointsMap = new Map();
+      
+      data.forEach(d => {
+        const id = d["الرمز"] || d["اسم النقطة"] || '';
+        if (!id) return;
+        
+        // إذا كانت النقطة موجودة مسبقاً، نقوم بتحديثها بآخر إدخال (بافتراض أن البيانات تأتي مرتبة زمنياً من الشيت)
+        // أو يمكننا إضافة فحص للتاريخ إذا كان متوفراً في البيانات
+        latestPointsMap.set(id, {
+          id: id,
+          sector: d["القطاع"] || '',
+          type: d["نوع الآلية"] || d["الالية المشغلة بالنقطة"] || '',
+          teams: parseInt(d["عدد الفرق الفعلي"] || d["عدد الفرق بالنقطة"] || 1),
+          lat: parseFloat(d["Latitude"] || 0),
+          lng: parseFloat(d["Longitude"] || 0),
+          status: d["الحالة"] || 'جاهز',
+          shift: d["مناوبة النقطة"] || d["العرض الزمني"] || 'الصباحية',
+          timestamp: d["وقت الحفظ"] || d["التاريخ"] || ''
+        });
+      });
+
+      liveDeploymentData = Array.from(latestPointsMap.values()).filter(d => d.lat && d.lng);
     }
   } catch(e) {
     console.log('استخدام البيانات الثابتة:', e);

@@ -64,6 +64,7 @@
 
     .grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
     .grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+    .grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
 
     .field{display:flex;flex-direction:column;gap:4px}
     .field label{font-size:.82rem;font-weight:700;color:var(--muted)}
@@ -78,7 +79,7 @@
       font-weight:700;font-size:.9rem;cursor:pointer;transition:all .2s;border:none;font-family:'Cairo',sans-serif;
     }
     .btn-success{background:var(--success);color:#fff}
-    .btn-outline{background:transparent;border:2px solid var(--line);color:var(--dark)}
+    .btn-primary{background:var(--primary);color:#fff}
 
     .alert{padding:14px 18px;border-radius:10px;margin-bottom:18px;font-size:.88rem;font-weight:700;display:none}
     .alert.success{background:#d4edda;color:#155724;border:1px solid #c3e6cb}
@@ -91,7 +92,7 @@
       <div class="brand">
         <img src="https://srca.org.sa/img/logo.png" alt="SRCA Logo">
         <h2>منصة نطاق منى</h2>
-        <p>حج 1447هـ - المرحلة الأولى</p>
+        <p>حج 1447هـ - المرحلة الثانية</p>
       </div>
       <ul class="nav">
         <li class="active" data-target="groundEMS"><i class="fas fa-truck-medical"></i> التحضير اليومي</li>
@@ -101,14 +102,13 @@
     </aside>
 
     <main>
+      <!-- التحضير اليومي -->
       <section class="panel active" id="groundEMS">
         <div class="hero">
           <h1>نموذج التحضير اليومي</h1>
-          <p>المرحلة الأولى: تفعيل قاعدة البيانات الكاملة والتعبئة التلقائية.</p>
+          <p>تعبئة بيانات الطاقة التشغيلية والقيادات للقطاع.</p>
         </div>
-
         <div id="dailyAlert" class="alert success">تم الحفظ بنجاح</div>
-
         <div class="section">
           <div class="section-title">بيانات القطاع والمناوبة</div>
           <div class="section-body grid-2">
@@ -135,9 +135,8 @@
             </div>
           </div>
         </div>
-
         <div class="section">
-          <div class="section-title">الطاقم القيادي (تعبئة تلقائية)</div>
+          <div class="section-title">الطاقم القيادي</div>
           <div class="section-body grid-2">
             <div class="field"><label>كبير مسعفي القطاع</label><input type="text" id="ems_lead" readonly></div>
             <div class="field"><label>مساعد 1</label><input type="text" id="assistant1" readonly></div>
@@ -146,18 +145,121 @@
             <div class="field"><label>مساعد 4</label><input type="text" id="assistant4" readonly></div>
           </div>
         </div>
-
-        <div class="actions">
-          <button class="btn btn-success" onclick="showAlert('dailyAlert')">حفظ البيانات</button>
+        <div class="section">
+          <div class="section-title">الطاقة التشغيلية</div>
+          <div class="section-body grid-4">
+            <div class="field"><label>عدد الوحدات</label><input type="number" id="op_units" value="0"></div>
+            <div class="field"><label>عدد الموظفين</label><input type="number" id="op_staff" value="0"></div>
+            <div class="field"><label>عدد المتطوعين</label><input type="number" id="op_volunteers" value="0"></div>
+            <div class="field"><label>مركبات الإسعاف</label><input type="number" id="op_ambulances" value="0"></div>
+          </div>
         </div>
+        <div class="actions"><button class="btn btn-success" onclick="showAlert('dailyAlert')">حفظ وإرسال</button></div>
       </section>
 
+      <!-- تسليم المناوبة -->
       <section class="panel" id="handoverPanel">
-        <div class="hero"><h1>تسليم المناوبة</h1><p>سيتم تفعيله في المرحلة الثانية...</p></div>
+        <div class="hero">
+          <h1>نموذج تسليم المناوبة</h1>
+          <p>تسليم العهد والوضع الراهن بين الفترات.</p>
+        </div>
+        <div id="handoverAlert" class="alert success">تم حفظ التسليم بنجاح</div>
+        <div class="section">
+          <div class="section-title">بيانات التسليم</div>
+          <div class="section-body grid-2">
+            <div class="field">
+              <label for="h_sector">القطاع</label>
+              <select id="h_sector" onchange="fillHandoverData()">
+                <option value="" selected>اختر القطاع</option>
+                <option value="الجمرات">الجمرات</option>
+                <option value="القطارات">القطارات</option>
+                <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
+                <option value="بطن منى الشمالي">بطن منى الشمالي</option>
+                <option value="منى الجديد 1">منى الجديد 1</option>
+                <option value="منى الجديد 2">منى الجديد 2</option>
+                <option value="الشعيبين">الشعيبين</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="h_shift">المناوبة الحالية (المسلمة)</label>
+              <select id="h_shift" onchange="fillHandoverData()">
+                <option value="" selected>اختر المناوبة</option>
+                <option value="الصباحية">الصباحية</option>
+                <option value="المسائية">المسائية</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">الأطراف المعنية</div>
+          <div class="section-body grid-2">
+            <div class="field"><label>كبير المسعفين (المسلم)</label><input type="text" id="h_sender" readonly></div>
+            <div class="field"><label>كبير المسعفين (المستلم)</label><input type="text" id="h_receiver" readonly></div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">ملخص البلاغات والوضع</div>
+          <div class="section-body grid-3">
+            <div class="field"><label>إجمالي البلاغات</label><input type="number" id="h_total_cases" value="0"></div>
+            <div class="field"><label>بلاغات ECHO</label><input type="number" id="h_echo" value="0"></div>
+            <div class="field"><label>متوسط زمن الاستجابة</label><input type="text" id="h_avg_time" placeholder="00:00"></div>
+          </div>
+        </div>
+        <div class="actions"><button class="btn btn-primary" onclick="showAlert('handoverAlert')">إتمام التسليم</button></div>
       </section>
 
+      <!-- العهد الشخصية -->
       <section class="panel" id="unitsCheckPanel">
-        <div class="hero"><h1>العهد الشخصية</h1><p>سيتم تفعيله في المرحلة الثانية...</p></div>
+        <div class="hero">
+          <h1>نموذج العهد الشخصية</h1>
+          <p>جرد الأجهزة والعهد الطبية للقطاع.</p>
+        </div>
+        <div id="custodyAlert" class="alert success">تم حفظ العهد بنجاح</div>
+        <div class="section">
+          <div class="section-title">بيانات القطاع</div>
+          <div class="section-body grid-2">
+            <div class="field">
+              <label for="c_sector">القطاع</label>
+              <select id="c_sector" onchange="fillCustodyData()">
+                <option value="" selected>اختر القطاع</option>
+                <option value="الجمرات">الجمرات</option>
+                <option value="القطارات">القطارات</option>
+                <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
+                <option value="بطن منى الشمالي">بطن منى الشمالي</option>
+                <option value="منى الجديد 1">منى الجديد 1</option>
+                <option value="منى الجديد 2">منى الجديد 2</option>
+                <option value="الشعيبين">الشعيبين</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="c_shift">المناوبة</label>
+              <select id="c_shift" onchange="fillCustodyData()">
+                <option value="" selected>اختر المناوبة</option>
+                <option value="الصباحية">الصباحية</option>
+                <option value="المسائية">المسائية</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">القيادة المستلمة</div>
+          <div class="section-body grid-2">
+            <div class="field"><label>كبير المسعفين</label><input type="text" id="c_lead" readonly></div>
+            <div class="field"><label>المساعدين</label><input type="text" id="c_assistants" readonly></div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-title">الأجهزة والعهد</div>
+          <div class="section-body grid-3">
+            <div class="field"><label>جهاز لوكس</label><input type="number" id="dev_lux" value="0"></div>
+            <div class="field"><label>جهاز ميندري</label><input type="number" id="dev_mindray" value="0"></div>
+            <div class="field"><label>جهاز لاسلكي</label><input type="number" id="dev_radio" value="0"></div>
+            <div class="field"><label>تابلت</label><input type="number" id="dev_tablet" value="0"></div>
+            <div class="field"><label>جهاز العلامات</label><input type="number" id="dev_vitals" value="0"></div>
+            <div class="field"><label>لايف باك 15</label><input type="number" id="dev_lp15" value="0"></div>
+          </div>
+        </div>
+        <div class="actions"><button class="btn btn-success" onclick="showAlert('custodyAlert')">حفظ العهد</button></div>
       </section>
     </main>
   </div>
@@ -198,12 +300,30 @@
       const sector = document.getElementById('sector').value;
       const shift = document.getElementById('shift_time').value;
       const data = teamsData[sector]?.[shift];
-      
       document.getElementById('ems_lead').value = data ? data.lead : '';
       document.getElementById('assistant1').value = data ? (data.assistants[0] || '') : '';
       document.getElementById('assistant2').value = data ? (data.assistants[1] || '') : '';
       document.getElementById('assistant3').value = data ? (data.assistants[2] || '') : '';
       document.getElementById('assistant4').value = data ? (data.assistants[3] || '') : '';
+    }
+
+    function fillHandoverData() {
+      const sector = document.getElementById('h_sector').value;
+      const shift = document.getElementById('h_shift').value;
+      const data = teamsData[sector]?.[shift];
+      document.getElementById('h_sender').value = data ? data.lead : '';
+      
+      const nextShift = (shift === 'الصباحية') ? 'المسائية' : 'الصباحية';
+      const nextData = teamsData[sector]?.[nextShift];
+      document.getElementById('h_receiver').value = nextData ? nextData.lead : '';
+    }
+
+    function fillCustodyData() {
+      const sector = document.getElementById('c_sector').value;
+      const shift = document.getElementById('c_shift').value;
+      const data = teamsData[sector]?.[shift];
+      document.getElementById('c_lead').value = data ? data.lead : '';
+      document.getElementById('c_assistants').value = data ? data.assistants.filter(a => a).join(' - ') : '';
     }
 
     function showAlert(id) {

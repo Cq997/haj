@@ -441,6 +441,7 @@
     <div class="kpi-row">
       <div class="kpi-card"><div class="kpi-val" id="kpi_total">0</div><div class="kpi-label">إجمالي النقاط</div></div>
       <div class="kpi-card"><div class="kpi-val" id="kpi_ready" style="color:var(--success)">0</div><div class="kpi-label">إجمالي الفرق</div></div>
+      <div class="kpi-card"><div class="kpi-val" id="kpi_active" style="color:#00b894">0</div><div class="kpi-label">جاهزة</div></div>
       <div class="kpi-card"><div class="kpi-val" id="kpi_supported" style="color:var(--secondary)">0</div><div class="kpi-label">مدعمة</div></div>
       <div class="kpi-card"><div class="kpi-val" id="kpi_oos" style="color:var(--danger)">0</div><div class="kpi-label">خارج الخدمة</div></div>
       <div class="kpi-card"><div class="kpi-val" id="kpi_broken" style="color:var(--muted)">0</div><div class="kpi-label">متعطلة</div></div>
@@ -507,7 +508,7 @@
             <h4><i class="fas fa-layer-group"></i> ملخص القطاعات</h4>
             <table class="dash-table" id="dashSectorTable">
               <thead>
-                <tr><th>القطاع</th><th>إجمالي</th><th>إجمالي الفرق</th><th>مدعمة</th><th>خارج</th><th>متعطلة</th></tr>
+                <tr><th>القطاع</th><th>إجمالي</th><th>إجمالي الفرق</th><th>جاهزة</th><th>مدعمة</th><th>خارج</th><th>متعطلة</th></tr>
               </thead>
               <tbody></tbody>
             </table>
@@ -3053,13 +3054,15 @@ function resetDashboardFilters(){
 function updateDashboard(data){
   // KPIs
   const total = data.length;
-  const ready = data.reduce((acc, d) => acc + (parseInt(d.teams) || 0), 0);
+  const totalTeams = data.reduce((acc, d) => acc + (parseInt(d.teams) || 0), 0);
+  const ready = data.filter(d => d.status === 'جاهزة' || d.status === 'جاهز').reduce((acc, d) => acc + (parseInt(d.teams) || 0), 0);
   const supported = data.filter(d => d.status === 'مدعمة' || d.status === 'مدعم').length;
   const oos = data.filter(d => d.status === 'خارج الخدمة').length;
   const broken = data.filter(d => d.status === 'متعطلة' || d.status === 'موقوف').length;
 
   document.getElementById('kpi_total').textContent = total;
-  document.getElementById('kpi_ready').textContent = ready;
+  document.getElementById('kpi_ready').textContent = totalTeams;
+  document.getElementById('kpi_active').textContent = ready;
   document.getElementById('kpi_supported').textContent = supported;
   document.getElementById('kpi_oos').textContent = oos;
   document.getElementById('kpi_broken').textContent = broken;
@@ -3070,13 +3073,15 @@ function updateDashboard(data){
   sectorBody.innerHTML = '';
   sectors.forEach(sec => {
     const pts = data.filter(d => d.sector === sec);
-    const r = pts.reduce((acc, d) => acc + (parseInt(d.teams) || 0), 0);
+const totalT = pts.reduce((acc, d) => acc + (parseInt(d.teams) || 0), 0);
+    const r = pts.filter(d => d.status === 'جاهزة' || d.status === 'جاهز').reduce((acc, d) => acc + (parseInt(d.teams) || 0), 0);
     const s = pts.filter(d => d.status === 'مدعمة' || d.status === 'مدعم').length;
     const o = pts.filter(d => d.status === 'خارج الخدمة').length;
     const b = pts.filter(d => d.status === 'متعطلة' || d.status === 'موقوف').length;
     sectorBody.innerHTML += `<tr>
       <td style="font-weight:700">${sec}</td>
       <td>${pts.length}</td>
+      <td>${totalT}</td>
       <td><span class="status-badge ready">${r}</span></td>
       <td><span class="status-badge supported">${s}</span></td>
       <td><span class="status-badge oos">${o}</span></td>

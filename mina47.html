@@ -79,7 +79,6 @@
       font-weight:700;font-size:.9rem;cursor:pointer;transition:all .2s;border:none;font-family:'Cairo',sans-serif;
     }
     .btn-success{background:var(--success);color:#fff}
-    .btn-primary{background:var(--primary);color:#fff}
 
     .alert{padding:14px 18px;border-radius:10px;margin-bottom:18px;font-size:.88rem;font-weight:700;display:none}
     .alert.success{background:#d4edda;color:#155724;border:1px solid #c3e6cb}
@@ -92,7 +91,7 @@
       <div class="brand">
         <img src="https://srca.org.sa/img/logo.png" alt="SRCA Logo">
         <h2>منصة نطاق منى</h2>
-        <p>حج 1447هـ - نسخة مطورة</p>
+        <p>حج 1447هـ - النسخة الكاملة</p>
       </div>
       <ul class="nav">
         <li class="active" data-target="groundEMS"><i class="fas fa-truck-medical"></i> التحضير اليومي</li>
@@ -106,7 +105,7 @@
       <section class="panel active" id="groundEMS">
         <div class="hero">
           <h1>نموذج التحضير اليومي</h1>
-          <p>تعبئة بيانات الطاقة التشغيلية والقيادات للقطاع.</p>
+          <p>نظام إدارة العمليات الإسعافية الميدانية - نطاق منى</p>
         </div>
         <div id="dailyAlert" class="alert success">تم الحفظ بنجاح</div>
         
@@ -142,7 +141,7 @@
         </div>
 
         <div class="section">
-          <div class="section-title">معلومات المناوبة</div>
+          <div class="section-title">معلومات المناوبة والقيادات</div>
           <div class="section-body grid-2">
             <div class="field"><label>التاريخ والوقت</label><input type="datetime-local" id="shift_datetime"></div>
             <div class="field"><label>اسم كبير مسعفي القطاع</label><input type="text" id="ems_lead" readonly></div>
@@ -177,12 +176,10 @@
         <div class="actions"><button class="btn btn-success" onclick="showAlert('dailyAlert')">حفظ وإرسال التقرير</button></div>
       </section>
 
-      <!-- تسليم المناوبة -->
       <section class="panel" id="handoverPanel">
         <div class="hero"><h1>تسليم المناوبة</h1><p>سيتم تفعيله بالكامل في الخطوة التالية...</p></div>
       </section>
 
-      <!-- العهد الشخصية -->
       <section class="panel" id="unitsCheckPanel">
         <div class="hero"><h1>العهد الشخصية</h1><p>سيتم تفعيله بالكامل في الخطوة التالية...</p></div>
       </section>
@@ -225,6 +222,7 @@
       const sector = document.getElementById('sector').value;
       const shift = document.getElementById('shift_time').value;
       const data = teamsData[sector]?.[shift];
+      
       document.getElementById('ems_lead').value = data ? data.lead : '';
       document.getElementById('assistant1').value = data ? (data.assistants[0] || '') : '';
       document.getElementById('assistant2').value = data ? (data.assistants[1] || '') : '';

@@ -1137,7 +1137,7 @@
           </div>
         </div>
 
-        <div id="unitCheckAlert" class="alert"></div>
+        <div id="peUnitsAlert" class="alert"></div>
 
         <div class="section">
           <div class="section-title">البيانات الأساسية</div>
@@ -2157,47 +2157,14 @@ ${supportLines}
       openWhatsApp(row["الرسالة النهائية"]);
     }
 
-    document.getElementById('checker_has_third_party').addEventListener('change', toggleThirdCrewField);
-    document.getElementById('unit_type').addEventListener('change', toggleUnitTypeFields);
+    
+    
 
-    function toggleThirdCrewField(){
-      const hasThird = document.getElementById('checker_has_third_party').value;
-      const wrap = document.getElementById('thirdCrewWrap');
-      if(hasThird === 'نعم') wrap.classList.remove('hidden');
-      else{
-        wrap.classList.add('hidden');
-        document.getElementById('crew3_name').value = '';
-      }
-    }
+    
 
-    function toggleUnitTypeFields(){
-      const unitType = document.getElementById('unit_type').value;
-      document.getElementById('ambulanceMechanicalWrap').classList.add('hidden');
-      document.getElementById('golfWrap').classList.add('hidden');
+    
 
-      if(unitType === 'مركبة إسعافية') document.getElementById('ambulanceMechanicalWrap').classList.remove('hidden');
-      if(unitType === 'قولف') document.getElementById('golfWrap').classList.remove('hidden');
-    }
-
-    function buildMedicalCheckTable(){
-      const medicalBody = document.getElementById('medicalCheckTableBody');
-      medicalBody.innerHTML = '';
-      medicalItemsData.forEach((item,index)=>{
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${item}</td>
-          <td>
-            <select id="medical_status_${index}">
-              <option value="متوفر">متوفر</option>
-              <option value="غير متوفر">غير متوفر</option>
-            </select>
-          </td>
-          <td><input type="number" id="medical_count_${index}" min="0" value="0" class="compact-number"></td>
-          <td><input type="text" id="medical_note_${index}" placeholder="ملاحظات"></td>
-        `;
-        medicalBody.appendChild(row);
-      });
-    }
+    
 
     async function sendPersonalEquipmentUnits(){
       const required = ['pe_sector_units','pe_date_units','pe_shift_units'];
@@ -2889,7 +2856,7 @@ ${row["ملاحظات إضافية"]}
       if (alertBox) alertBox.style.display = 'none';
     }
 
-buildMedicalCheckTable();
+
 buildStrategicTable();
 setDashboardLinks();
 setMapLink();

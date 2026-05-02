@@ -1768,20 +1768,20 @@ function setMapLink(){
 📤 إرسال البيانات للشيت
 ***********************/async function saveToGoogleSheets(action, formData){
   try {
-    const params = new URLSearchParams();
-    params.append('action', action);
-    for (const key in formData) {
-      params.append(key, formData[key]);
-    }
+    // إعداد البيانات للإرسال بتنسيق JSON لضمان الدقة العالية
+    const payload = {
+      action: action,
+      ...formData
+    };
 
     const response = await fetch(SCRIPT_URL, {
       method: 'POST',
-      mode: 'no-cors', // ضروري لتجنب مشاكل CORS مع Google Apps Script
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: params.toString()
+      mode: 'no-cors', 
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
     });
     
-    // في وضع no-cors لا يمكننا قراءة الاستجابة، لذا نفترض النجاح إذا لم يحدث خطأ في الشبكة
+    // في وضع no-cors، المتصفح لا يسمح بقراءة الاستجابة، لذا نعتمد على عدم وجود خطأ في الشبكة
     return { success: true };
 
   } catch(err){

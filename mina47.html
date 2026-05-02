@@ -1766,29 +1766,29 @@ function setMapLink(){
 
 /***********************
 📤 إرسال البيانات للشيت
-***********************/
-async function saveToGoogleSheets(sheetName, rows){
-
-  try{
+***********************/async function saveToGoogleSheets(action, formData){
+  try {
+    const params = new URLSearchParams();
+    params.append('action', action);
+    for (const key in formData) {
+      params.append(key, formData[key]);
+    }
 
     const response = await fetch(SCRIPT_URL, {
       method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        sheetName: sheetName,
-        rows: rows
-      })
+      mode: 'no-cors', // ضروري لتجنب مشاكل CORS مع Google Apps Script
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params.toString()
     });
     
-    // In no-cors mode, we can't read the response, so we assume success if no error
-    return { success: true, message: "تم إرسال البيانات بنجاح" };
+    // في وضع no-cors لا يمكننا قراءة الاستجابة، لذا نفترض النجاح إذا لم يحدث خطأ في الشبكة
+    return { success: true };
 
-  } catch (error) {
-
-    return {
-      success:false,
-      message:"خطأ في الاتصال بالسيرفر"
+  } catch(err){
+    console.error("Sheet Save Error:", err);
+    return { success: false, message: err.toString() };
+  }
+}بالسيرفر"
     };
   }
 }
@@ -1901,7 +1901,7 @@ async function fetchDeploymentFromSheet(){
         "الملاحظات": document.getElementById('notes').value.trim() || 'لا توجد ملاحظات'
       };
 
-      const save = await saveToGoogleSheets('التحضير اليومي', [row]);
+      const save = await saveToGoogleSheets('submitDailyPreparation', row);
       if(!save.success){
         showAlert('dailyAlert','error','تعذر حفظ البيانات');
         return;
@@ -2167,7 +2167,7 @@ ${supportLines}
 
       row["الرسالة النهائية"] = buildHandoverMessage(row);
 
-      const save = await saveToGoogleSheets('تسليم المناوبة', [row]);
+      const save = await saveToGoogleSheets('submitHandover', row);
       if(!save.success){
         showAlert('handoverAlert','error','تعذر حفظ بيانات تسليم المناوبة');
         return;
@@ -2226,7 +2226,7 @@ ${supportLines}
         "ملاحظات جهاز قياس العلامات الحيوية": document.getElementById('pe_units_vital_notes').value || '-'
       };
 
-      const save = await saveToGoogleSheets('العهد الشخصية للقطاعات', [row]);
+      const save = await saveToGoogleSheets('submitPersonalEquipmentUnits', row);
       if(!save.success){
         showAlert('peUnitsAlert','error','تعذر حفظ بيانات العهد الشخصية للقطاعات');
         return;
@@ -2291,7 +2291,7 @@ ${supportLines}
         "ملاحظات جهاز قياس العلامات الحيوية": document.getElementById('pe_vital_notes').value || '-'
       };
 
-      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      const save = await saveToGoogleSheets('submitPersonalEquipment', row);
       if(!save.success){
         showAlert('personalEquipmentAlert','error','تعذر حفظ بيانات العهد الشخصية');
         return;
@@ -2330,7 +2330,7 @@ ${supportLines}
         "النقص الطبية": document.getElementById('stock_medical_shortages').value.trim() || '-'
       };
 
-      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      const save = await saveToGoogleSheets('submitStrategicStock', row);
       if(!save.success){
         showAlert('stockAlert','error','تعذر حفظ بيانات الخزن');
         return;
@@ -2618,9 +2618,15 @@ const items = data.filter(d =>
         };
       });
 
-      const save = await saveToGoogleSheets('خطة الانتشار', rows);
-      if(!save.success){
-        showAlert('deploymentAlert','error','تعذر حفظ خطة الانتشار');
+      // إرسال كل صف على حدة لضمان التوافق مع السكريبت المحدث
+      let allSaved = true;
+      for (const row of rows) {
+        const save = await saveToGoogleSheets('submitDeploymentPlan', row);
+        if (!save.success) allSaved = false;
+      }
+
+      if(!allSaved){
+        showAlert('deploymentAlert','error','حدث خطأ أثناء حفظ بعض بيانات خطة الانتشار');
         return;
       }
 
@@ -2691,7 +2697,7 @@ const items = data.filter(d =>
 
       row["الرسالة النهائية"] = buildMethaneMessage(row);
 
-      const save = await saveToGoogleSheets('رسائل ميثان', [row]);
+      const save = await saveToGoogleSheets('submitMethane', row);
       if (!save.success) {
         showAlert('methaneAlert', 'error', 'تعذر حفظ رسالة ميثان');
         return;
@@ -2817,7 +2823,7 @@ ${row["ملاحظات إضافية"]}
         row['النطاق المدعم له'] = toZone;
       }
 
-      const save = await saveToGoogleSheets('خطة الدعم', [row]);
+      const save = await saveToGoogleSheets('submitSupportPlan', row);
       if (!save.success) {
         showAlert('supportPlanAlert', 'error', 'تعذر حفظ خطة الدعم');
         return;

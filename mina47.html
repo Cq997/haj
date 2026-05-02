@@ -1768,20 +1768,20 @@ function setMapLink(){
 📤 إرسال البيانات للشيت
 ***********************/async function saveToGoogleSheets(action, formData){
   try {
-    // إعداد البيانات للإرسال بتنسيق JSON لضمان الدقة العالية
-    const payload = {
-      action: action,
-      ...formData
-    };
+    // استخدام URLSearchParams لضمان التوافق التام مع سكريبت قوقل وتجاوز قيود CORS
+    const params = new URLSearchParams();
+    params.append('action', action);
+    for (const key in formData) {
+      params.append(key, formData[key]);
+    }
 
-    const response = await fetch(SCRIPT_URL, {
+    await fetch(SCRIPT_URL, {
       method: 'POST',
-      mode: 'no-cors', 
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params.toString()
     });
     
-    // في وضع no-cors، المتصفح لا يسمح بقراءة الاستجابة، لذا نعتمد على عدم وجود خطأ في الشبكة
     return { success: true };
 
   } catch(err){

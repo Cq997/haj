@@ -1,12 +1,9 @@
 /**
  * منصة نطاق منى - Google Apps Script
- * النسخة الاحترافية الكاملة (النهائية)
- * تدعم كافة النماذج، جلب البيانات، والتقارير التلقائية
+ * النسخة الإصلاحية النهائية (v2.0)
+ * معالجة ذكية للبيانات لتجاوز قيود المتصفح (CORS) وضمان الحفظ
  */
 
-const SCRIPT_PROPERTIES = PropertiesService.getScriptProperties();
-
-// إعداد القائمة في قوقل شيت
 function onOpen() {
   const ui = SpreadsheetApp.getUi();
   ui.createMenu('منصة نطاق منى')
@@ -14,14 +11,12 @@ function onOpen() {
     .addToUi();
 }
 
-// دالة إعداد الأوراق والعناوين لضمان مطابقتها للمنصة
 function setupSheetsRTL() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const sheetsConfig = {
     'التحضير اليومي': ["وقت الحفظ", "النطاق", "القطاع", "الفترة", "التاريخ والوقت", "كبير المسعفين", "مساعد1", "مساعد2", "مساعد3", "مساعد4", "الوحدات التشغيلية", "مقدمي الخدمة", "الموظفين", "المتطوعين", "المركبات", "القولف", "الراجلة", "الملاحظات"],
     'تسليم المناوبة': ["وقت الحفظ", "القطاع", "نوع المناوبة", "التاريخ", "الوقت من", "الوقت إلى", "كبير المسعفين المسلم", "كبير المسعفين المستلم", "مساعد 1", "مساعد 2", "مساعد 3", "مساعد 4", "متوسط زمن الاستجابة", "متوسط زمن استجابة ECHO", "إجمالي البلاغات", "عدد الفرق الفعالة", "عدد الفرق المعتمدة", "أحداث طارئة", "M-حادث جسيم", "E-الموقع", "T-نوع الحادث", "H-المخاطر", "A-الوصول", "N-الإصابات", "E-الخدمات", "ملاحظات ميثان", "عدد مركبات الإسعاف", "عدد القولف", "عدد الاستجابة النوعية", "عدد فرق التدخل السريع", "العاملة", "الاحتياط", "الخارج عن الخدمة", "بلاغات الدعم اللوجستي", "البلاغات المفتوحة", "مواقع الانتشار", "الوحدات المتعطلة ومواقعها", "نداء الفرقة 1", "توقيت العطل 1", "نوع العطل 1", "الإجراء المتبع 1", "العودة للخدمة 1", "لوحة المركبة 1", "نداء الفرقة 2", "توقيت العطل 2", "نوع العطل 2", "الإجراء المتبع 2", "العودة للخدمة 2", "لوحة المركبة 2", "نداء الفرقة 3", "توقيت العطل 3", "نوع العطل 3", "الإجراء المتبع 3", "العودة للخدمة 3", "لوحة المركبة 3", "التحذيرات الجوية", "التحذيرات الأمنية", "مواقع خطرة", "إصابات العاملين", "إحاطات أخرى", "ملخص الأحداث", "ملخص الموارد المطلوبة وتوزيعها", "ملاحظات عامة عن المناوبة", "الرسالة النهائية"],
     'العهد الشخصية للقطاعات': ["وقت الحفظ", "القطاع", "التاريخ", "فترة المناوبة", "كبير المسعفين", "مساعد 1", "مساعد 2", "مساعد 3", "مساعد 4", "عدد جهاز لوكس", "حالة جهاز لوكس", "ملاحظات جهاز لوكس", "عدد جهاز ميندري", "حالة جهاز ميندري", "ملاحظات جهاز ميندري", "عدد جهاز لايف باك", "حالة جهاز لايف باك", "ملاحظات جهاز لايف باك", "عدد جهاز اللاسلكي", "حالة جهاز اللاسلكي", "ملاحظات جهاز اللاسلكي", "عدد جهاز لوحي (تابلت)", "حالة جهاز لوحي (تابلت)", "ملاحظات جهاز لوحي (تابلت)", "عدد جهاز قياس العلامات الحيوية", "حالة جهاز قياس العلامات الحيوية", "ملاحظات جهاز قياس العلامات الحيوية"],
-    'العهد الشخصية': ["وقت الحفظ", "القطاع", "التاريخ", "فترة المناوبة", "كبير المسعفين", "مساعد 1", "مساعد 2", "مساعد 3", "مساعد 4", "عدد جهاز لوكس", "حالة جهاز لوكس", "ملاحظات جهاز لوكس", "عدد جهاز ميندري", "حالة جهاز ميندري", "ملاحظات جهاز ميندري", "عدد جهاز لايف باك", "حالة جهاز لايف باك", "ملاحظات جهاز لايف باك", "عدد جهاز اللاسلكي", "حالة جهاز اللاسلكي", "ملاحظات جهاز اللاسلكي", "عدد جهاز لوحي (تابلت)", "حالة جهاز لوحي (تابلت)", "ملاحظات جهاز لوحي (تابلت)", "عدد جهاز قياس العلامات الحيوية", "حالة جهاز قياس العلامات الحيوية", "ملاحظات جهاز قياس العلامات الحيوية"],
     'الخزن الاستراتيجي': ["وقت الحفظ", "التاريخ", "الوقت", "القائم بالتشييك", "موقع الخزن", "هل يوجد نقص طبي", "النقص الطبية"],
     'رسائل ميثان': ["وقت الحفظ", "القطاع", "اسم المبلغ", "رقم التواصل", "M - حادث جسيم", "E - الموقع", "T - نوع الحادث", "H - المخاطر", "A - الوصول والمغادرة", "N - الإصابات", "E - الخدمات الإسعافية المطلوبة", "ملاحظات إضافية", "الرسالة النهائية"],
     'خطة الدعم': ["التاريخ", "الوقت", "عدد الفرق", "نوع التدعيم", "وقت الحضور", "اسم مدخل البيانات", "الملاحظات", "القطاع المدعم منه", "القطاع المدعم له", "النطاق المدعم منه", "النطاق المدعم له"],
@@ -37,10 +32,8 @@ function setupSheetsRTL() {
       sheet.getRange(1, 1, 1, sheetsConfig[name].length).setFontWeight("bold").setBackground("#f3f3f3");
     }
   });
-  return "تم إعداد الأوراق بنجاح";
 }
 
-// معالجة طلبات POST (حفظ البيانات)
 function doPost(e) {
   const lock = LockService.getScriptLock();
   lock.waitLock(30000);
@@ -49,14 +42,20 @@ function doPost(e) {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     let data = {};
     
-    // دعم JSON و Form Parameters
+    // معالجة ذكية: إذا وصلت البيانات كـ JSON أو كـ Text أو كـ Parameters
     if (e.postData && e.postData.contents) {
       try {
         data = JSON.parse(e.postData.contents);
       } catch (err) {
-        data = e.parameter;
+        // محاولة فك تشفير البيانات إذا وصلت كـ URL Encoded داخل contents
+        const decoded = decodeURIComponent(e.postData.contents);
+        const pairs = decoded.split('&');
+        pairs.forEach(pair => {
+          const [key, value] = pair.split('=');
+          data[key] = value;
+        });
       }
-    } else {
+    } else if (e.parameter && Object.keys(e.parameter).length > 0) {
       data = e.parameter;
     }
 
@@ -65,7 +64,6 @@ function doPost(e) {
       'submitDailyPreparation': 'التحضير اليومي',
       'submitHandover': 'تسليم المناوبة',
       'submitPersonalEquipmentUnits': 'العهد الشخصية للقطاعات',
-      'submitPersonalEquipment': 'العهد الشخصية',
       'submitStrategicStock': 'الخزن الاستراتيجي',
       'submitMethane': 'رسائل ميثان',
       'submitSupportPlan': 'خطة الدعم',
@@ -83,51 +81,44 @@ function doPost(e) {
 
     const rowData = headers.map(header => {
       if (header === "وقت الحفظ") return timestamp;
-      return data[header] !== undefined ? data[header] : "";
+      // تنظيف البيانات من أي رموز زائدة ناتجة عن فك التشفير
+      let val = data[header] !== undefined ? data[header] : "";
+      if (typeof val === 'string') val = val.replace(/\+/g, ' ');
+      return val;
     });
 
     sheet.appendRow(rowData);
 
-    return ContentService.createTextOutput(JSON.stringify({ "success": true, "message": "تم الحفظ بنجاح" }))
+    return ContentService.createTextOutput(JSON.stringify({ "success": true }))
       .setMimeType(ContentService.MimeType.JSON);
 
   } catch (error) {
-    return ContentService.createTextOutput(JSON.stringify({ "success": false, "message": error.toString() }))
+    return ContentService.createTextOutput(JSON.stringify({ "success": false, "error": error.toString() }))
       .setMimeType(ContentService.MimeType.JSON);
   } finally {
     lock.releaseLock();
   }
 }
 
-// معالجة طلبات GET (جلب البيانات)
 function doGet(e) {
   const action = e.parameter.action;
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   
-  try {
-    if (action === 'getDeployment') {
-      const sheet = ss.getSheetByName('خطة الانتشار');
-      if (!sheet) return createJsonResponse([]);
-      return createJsonResponse(getSheetDataAsJson(sheet));
-    }
-    
-    if (action === 'getSupportData' || action === 'getSupport') {
-      const sheet = ss.getSheetByName('خطة الدعم');
-      if (!sheet) return createJsonResponse({data: []});
-      return createJsonResponse({data: getSheetDataAsJson(sheet)});
-    }
-
-    if (action === 'getDashboardData') {
-      return createJsonResponse(calculateDashboardStats(ss));
-    }
-
-    return ContentService.createTextOutput("منصة نطاق منى تعمل بنجاح");
-  } catch (err) {
-    return createJsonResponse({error: err.toString()});
+  if (action === 'getDeployment') {
+    const sheet = ss.getSheetByName('خطة الانتشار');
+    if (!sheet) return createJsonResponse([]);
+    return createJsonResponse(getSheetDataAsJson(sheet));
   }
+  
+  if (action === 'getSupportData') {
+    const sheet = ss.getSheetByName('خطة الدعم');
+    if (!sheet) return createJsonResponse({data: []});
+    return createJsonResponse({data: getSheetDataAsJson(sheet)});
+  }
+
+  return ContentService.createTextOutput("Platform Active");
 }
 
-// دوال مساعدة
 function getSheetDataAsJson(sheet) {
   const data = sheet.getDataRange().getValues();
   if (data.length < 2) return [];
@@ -142,16 +133,4 @@ function getSheetDataAsJson(sheet) {
 function createJsonResponse(data) {
   return ContentService.createTextOutput(JSON.stringify(data))
     .setMimeType(ContentService.MimeType.JSON);
-}
-
-function calculateDashboardStats(ss) {
-  // دالة متقدمة لحساب إحصائيات الداشبورد من الأوراق المختلفة
-  const prepSheet = ss.getSheetByName('التحضير اليومي');
-  const deploySheet = ss.getSheetByName('خطة الانتشار');
-  
-  // يمكن توسيع هذه الدالة لحساب الأرقام الفعلية بناءً على آخر التحديثات
-  return {
-    "lastUpdate": new Date().toLocaleString("ar-SA"),
-    "status": "active"
-  };
 }

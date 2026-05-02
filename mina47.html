@@ -991,22 +991,19 @@
       <section class="panel" id="unitsCheckPanel">
         <div class="panel-head">
           <div>
-            <h3>تشييك الوحدة التشغيلية</h3>
-            <p>النموذج الميداني لتشييك الوحدة والطاقم والتجهيزات الطبية.</p>
+            <h3>نموذج العهد الشخصية للقطاعات</h3>
+            <p>نموذج لتوثيق العهد الشخصية للأجهزة الطبية للقطاعات المختلفة.
           </div>
         </div>
 
         <div id="unitCheckAlert" class="alert"></div>
 
-        <div class="section">
+                <div class="section">
           <div class="section-title">البيانات الأساسية</div>
           <div class="section-body grid-3">
-            <div class="field"><label for="units_check_date">تاريخ التشييك</label><input type="date" id="units_check_date"></div>
-            <div class="field"><label for="units_check_time">وقت التشييك</label><input type="time" id="units_check_time"></div>
-
             <div class="field">
               <label for="units_check_sector">القطاع</label>
-              <select id="units_check_sector">
+              <select id="units_check_sector" onchange="fillCheifAndAssistants()">
                 <option value="" selected>اختر القطاع</option>
                 <option value="الجمرات">الجمرات</option>
                 <option value="القطارات">القطارات</option>
@@ -1018,9 +1015,11 @@
               </select>
             </div>
 
+            <div class="field"><label for="units_check_date">التاريخ</label><input type="date" id="units_check_date"></div>
+
             <div class="field">
-              <label for="units_check_shift">فترة التشييك</label>
-              <select id="units_check_shift">
+              <label for="units_check_shift">المناوبة</label>
+              <select id="units_check_shift" onchange="fillCheifAndAssistants()">
                 <option value="" selected>اختر الفترة</option>
                 <option value="الصباحية">الصباحية</option>
                 <option value="المسائية">المسائية</option>
@@ -1028,103 +1027,69 @@
               </select>
             </div>
 
-            <div class="field"><label for="unit_call_sign">رمز / نداء الوحدة التشغيلية</label><input type="text" id="unit_call_sign"></div>
-
-            <div class="field">
-              <label for="unit_type">نوع الوحدة التشغيلية</label>
-              <select id="unit_type">
-                <option value="" selected>اختر النوع</option>
-                <option value="مركبة إسعافية">مركبة إسعافية</option>
-                <option value="قولف">قولف</option>
-                <option value="راجلة">راجلة</option>
-                <option value="دراجة نارية">دراجة نارية</option>
-                <option value="دراجة هوائية">دراجة هوائية</option>
-                <option value="سكوتر">سكوتر</option>
-                <option value="بولاريس">بولاريس</option>
-                <option value="أخرى">أخرى</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="checker_has_third_party">هل الفرقة تحتوي على طرف ثالث؟</label>
-              <select id="checker_has_third_party">
-                <option value="" selected>اختر</option>
-                <option value="نعم">نعم</option>
-                <option value="لا">لا</option>
-              </select>
-            </div>
-
-            <div class="field"><label for="crew1_name">اسم الطاقم الإسعافي 1</label><input type="text" id="crew1_name"></div>
-            <div class="field"><label for="crew2_name">اسم الطاقم الإسعافي 2</label><input type="text" id="crew2_name"></div>
-            <div class="field hidden" id="thirdCrewWrap"><label for="crew3_name">اسم الطاقم الإسعافي 3</label><input type="text" id="crew3_name"></div>
+            <div class="field"><label for="chief_paramedic">كبير المسعفين</label><input type="text" id="chief_paramedic" readonly></div>
+            <div class="field"><label for="assistant1_name">مساعد 1</label><input type="text" id="assistant1_name" readonly></div>
+            <div class="field"><label for="assistant2_name">مساعد 2</label><input type="text" id="assistant2_name" readonly></div>
+            <div class="field"><label for="assistant3_name">مساعد 3</label><input type="text" id="assistant3_name" readonly></div>
+            <div class="field"><label for="assistant4_name">مساعد 4</label><input type="text" id="assistant4_name" readonly></div>
           </div>
         </div>
 
-        <div class="section hidden" id="ambulanceMechanicalWrap">
-          <div class="section-title">التشييك الميكانيكي - مركبة إسعافية</div>
-          <div class="section-body grid-2">
-            <div class="field"><label for="vehicle_plate_number">رقم اللوحة</label><input type="text" id="vehicle_plate_number"></div>
-            <div class="field">
-              <label for="vehicle_fuel_level">مستوى الوقود</label>
-              <select id="vehicle_fuel_level">
-                <option value="" selected>اختر المستوى</option>
-                <option value="ممتاز">ممتاز</option>
-                <option value="جيد">جيد</option>
-                <option value="متوسط">متوسط</option>
-                <option value="منخفض">منخفض</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="vehicle_ac_status">التكييف</label>
-              <select id="vehicle_ac_status">
-                <option value="" selected>اختر الحالة</option>
-                <option value="يعمل">يعمل</option>
-                <option value="لا يعمل">لا يعمل</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="vehicle_lights_status">الأضواء والأصوات التحذيرية</label>
-              <select id="vehicle_lights_status">
-                <option value="" selected>اختر الحالة</option>
-                <option value="سليمة">سليمة</option>
-                <option value="يوجد ملاحظة">يوجد ملاحظة</option>
-                <option value="لا تعمل">لا تعمل</option>
-              </select>
-            </div>
-          </div>
-        </div>
+        
 
-        <div class="section hidden" id="golfWrap">
-          <div class="section-title">تشييك القولف</div>
-          <div class="section-body grid-2">
-            <div class="field">
-              <label for="golf_charge_level">مستوى الشحن</label>
-              <select id="golf_charge_level">
-                <option value="" selected>اختر المستوى</option>
-                <option value="ممتاز">ممتاز</option>
-                <option value="جيد">جيد</option>
-                <option value="متوسط">متوسط</option>
-                <option value="منخفض">منخفض</option>
-              </select>
-            </div>
-            <div class="field"><label for="golf_notes">ملاحظات القولف</label><textarea id="golf_notes"></textarea></div>
-          </div>
-        </div>
+        
 
         <div class="section">
-          <div class="section-title">التشييك الطبي</div>
+          <div class="section-title">العهد الأساسية</div>
           <div class="section-body">
             <div class="table-wrap">
               <table>
                 <thead>
                   <tr>
-                    <th>الصنف الطبي</th>
-                    <th>الحالة</th>
+                    <th>الجهاز</th>
                     <th>العدد</th>
+                    <th>التوفر</th>
                     <th>ملاحظات</th>
                   </tr>
                 </thead>
-                <tbody id="medicalCheckTableBody"></tbody>
+                <tbody>
+                  <tr>
+                    <td>جهاز لوكس</td>
+                    <td><input type="number" id="lux_count" min="0" value="0"></td>
+                    <td><select id="lux_available"><option value="">اختر</option><option value="متوفر">متوفر</option><option value="غير متوفر">غير متوفر</option></select></td>
+                    <td><input type="text" id="lux_notes"></td>
+                  </tr>
+                  <tr>
+                    <td>جهاز ميندري</td>
+                    <td><input type="number" id="mindray_count" min="0" value="0"></td>
+                    <td><select id="mindray_available"><option value="">اختر</option><option value="متوفر">متوفر</option><option value="غير متوفر">غير متوفر</option></select></td>
+                    <td><input type="text" id="mindray_notes"></td>
+                  </tr>
+                  <tr>
+                    <td>جهاز لايف باك 15</td>
+                    <td><input type="number" id="lifepak_count" min="0" value="0"></td>
+                    <td><select id="lifepak_available"><option value="">اختر</option><option value="متوفر">متوفر</option><option value="غير متوفر">غير متوفر</option></select></td>
+                    <td><input type="text" id="lifepak_notes"></td>
+                  </tr>
+                  <tr>
+                    <td>جهاز اتصال لاسلكي</td>
+                    <td><input type="number" id="radio_count" min="0" value="0"></td>
+                    <td><select id="radio_available"><option value="">اختر</option><option value="متوفر">متوفر</option><option value="غير متوفر">غير متوفر</option></select></td>
+                    <td><input type="text" id="radio_notes"></td>
+                  </tr>
+                  <tr>
+                    <td>المسعف الإلكتروني (تابلت)</td>
+                    <td><input type="number" id="tablet_count" min="0" value="0"></td>
+                    <td><select id="tablet_available"><option value="">اختر</option><option value="متوفر">متوفر</option><option value="غير متوفر">غير متوفر</option></select></td>
+                    <td><input type="text" id="tablet_notes"></td>
+                  </tr>
+                  <tr>
+                    <td>جهاز قياس العلامات الحيوية</td>
+                    <td><input type="number" id="vitals_count" min="0" value="0"></td>
+                    <td><select id="vitals_available"><option value="">اختر</option><option value="متوفر">متوفر</option><option value="غير متوفر">غير متوفر</option></select></td>
+                    <td><input type="text" id="vitals_notes"></td>
+                  </tr>
+                </tbody>
               </table>
             </div>
           </div>
@@ -3175,6 +3140,68 @@ function loadDefaultDeploymentPoints(){
 </script>
 <script>
 const DEPLOYMENT_POINTS = {};
+
+// Function to fill chief and assistants based on sector and shift
+function fillCheifAndAssistants() {
+  const sector = document.getElementById('units_check_sector').value;
+  const shift = document.getElementById('units_check_shift').value;
+  
+  if (!sector || !shift) {
+    document.getElementById('chief_paramedic').value = '';
+    document.getElementById('assistant1_name').value = '';
+    document.getElementById('assistant2_name').value = '';
+    document.getElementById('assistant3_name').value = '';
+    document.getElementById('assistant4_name').value = '';
+    return;
+  }
+  
+  const teamData = {
+    'الجمرات': {
+      'الصباحية': { chief: 'راكان منصور الحصيني', assistants: ['محمد عبدالله الشمري', 'فهد محمد العتيبي', 'سلطان علي الدوسري', 'عبدالرحمن سعد الحربي'] },
+      'المسائية': { chief: 'محمد عبدالکريم إبراهيم الدعيجي', assistants: ['أحمد فهد الزهراني', 'علي محمد الغامدي', 'خالد سعود الأحمري', 'ياسر حسن الشهري'] },
+      'اوفرلاب': { chief: 'عمر خالد الحميدي', assistants: ['محمود أحمد الجهني', 'سامي علي الحربي', 'نواف محمد الشمري', 'تركي سعد الدوسري'] }
+    },
+    'القطارات': {
+      'الصباحية': { chief: 'سعود محمد الهاجري', assistants: ['ناصر علي الدعيجي', 'مشاري فهد الشمري', 'عبدالعزيز سعود الحربي', 'محمد حسن الغامدي'] },
+      'المسائية': { chief: 'فيصل أحمد الزهراني', assistants: ['عبدالله محمد الشهري', 'سالم علي الأحمري', 'حمد سعود الحميدي', 'جاسم خالد الجهني'] },
+      'اوفرلاب': { chief: 'خالد محمود الهاجري', assistants: ['علي عمر الدعيجي', 'محمد فهد الشمري', 'سعود عبدالعزيز الحربي', 'أحمد حسن الغامدي'] }
+    },
+    'بطن منى الجنوبي': {
+      'الصباحية': { chief: 'يوسف علي الزهراني', assistants: ['محمد سعود الشهري', 'عبدالرحمن فهد الأحمري', 'ناصر خالد الحميدي', 'مشاري أحمد الجهني'] },
+      'المسائية': { chief: 'محمود محمد الهاجري', assistants: ['علي سعود الدعيجي', 'فهد عمر الشمري', 'حمد محمود الحربي', 'سالم علي الغامدي'] },
+      'اوفرلاب': { chief: 'عبدالله أحمد الزهراني', assistants: ['سعود محمد الشهري', 'محمد فهد الأحمري', 'خالد علي الحميدي', 'عمر سعود الجهني'] }
+    },
+    'بطن منى الشمالي': {
+      'الصباحية': { chief: 'أحمد محمد الهاجري', assistants: ['علي فهد الدعيجي', 'محمود سعود الشمري', 'نواف عمر الحربي', 'تركي خالد الغامدي'] },
+      'المسائية': { chief: 'سعود علي الزهراني', assistants: ['محمد أحمد الشهري', 'عبدالعزيز محمود الأحمري', 'ياسر فهد الحميدي', 'حسن سعود الجهني'] },
+      'اوفرلاب': { chief: 'فيصل محمد الهاجري', assistants: ['خالد علي الدعيجي', 'سالم محمود الشمري', 'عمر عبدالعزيز الحربي', 'محمد فهد الغامدي'] }
+    },
+    'منى الجديد 1': {
+      'الصباحية': { chief: 'عبدالرحمن محمد الزهراني', assistants: ['علي سعود الشهري', 'محمد خالد الأحمري', 'فهد أحمد الحميدي', 'سعود محمود الجهني'] },
+      'المسائية': { chief: 'خالد أحمد الهاجري', assistants: ['محمود علي الدعيجي', 'عمر فهد الشمري', 'سالم محمد الحربي', 'ناصر عبدالعزيز الغامدي'] },
+      'اوفرلاب': { chief: 'محمد سعود الزهراني', assistants: ['علي محمود الشهري', 'فهد محمد الأحمري', 'حمد خالد الحميدي', 'أحمد علي الجهني'] }
+    },
+    'منى الجديد 2': {
+      'الصباحية': { chief: 'سعود فهد الهاجري', assistants: ['محمد علي الدعيجي', 'خالد محمود الشمري', 'عبدالعزيز أحمد الحربي', 'محمود سعود الغامدي'] },
+      'المسائية': { chief: 'علي محمد الزهراني', assistants: ['فهد خالد الشهري', 'سالم عمر الأحمري', 'عمر محمد الحميدي', 'ياسر فهد الجهني'] },
+      'اوفرلاب': { chief: 'محمد أحمد الهاجري', assistants: ['علي فهد الدعيجي', 'خالد سعود الشمري', 'محمود عبدالعزيز الحربي', 'سعود علي الغامدي'] }
+    },
+    'الشعيبين': {
+      'الصباحية': { chief: 'عبدالله علي الزهراني', assistants: ['محمد فهد الشهري', 'أحمد خالد الأحمري', 'سعود محمود الحميدي', 'علي عمر الجهني'] },
+      'المسائية': { chief: 'فهد محمد الهاجري', assistants: ['خالد علي الدعيجي', 'محمود سعود الشمري', 'عمر أحمد الحربي', 'سالم فهد الغامدي'] },
+      'اوفرلاب': { chief: 'محمد خالد الزهراني', assistants: ['علي أحمد الشهري', 'فهد سعود الأحمري', 'حمد محمود الحميدي', 'عبدالعزيز علي الجهني'] }
+    }
+  };
+  
+  if (teamData[sector] && teamData[sector][shift]) {
+    const team = teamData[sector][shift];
+    document.getElementById('chief_paramedic').value = team.chief;
+    document.getElementById('assistant1_name').value = team.assistants[0] || '';
+    document.getElementById('assistant2_name').value = team.assistants[1] || '';
+    document.getElementById('assistant3_name').value = team.assistants[2] || '';
+    document.getElementById('assistant4_name').value = team.assistants[3] || '';
+  }
+}
 </script>
 
 

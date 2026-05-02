@@ -1165,6 +1165,11 @@
                 <option value="اوفرلاب">اوفرلاب</option>
               </select>
             </div>
+            <div class="field"><label for="pe_units_lead">كبير المسعفين</label><input type="text" id="pe_units_lead" readonly></div>
+            <div class="field"><label for="pe_units_assistant1">مساعد 1</label><input type="text" id="pe_units_assistant1" readonly></div>
+            <div class="field"><label for="pe_units_assistant2">مساعد 2</label><input type="text" id="pe_units_assistant2" readonly></div>
+            <div class="field"><label for="pe_units_assistant3">مساعد 3</label><input type="text" id="pe_units_assistant3" readonly></div>
+            <div class="field"><label for="pe_units_assistant4">مساعد 4</label><input type="text" id="pe_units_assistant4" readonly></div>
           </div>
         </div>
 
@@ -1924,7 +1929,22 @@ async function fetchDeploymentFromSheet(){
     }
 
     document.getElementById('handover_sector').addEventListener('change', fillHandoverTeamData);
-    document.getElementById('handover_shift').addEventListener('change', fillHandoverTeamData);
+    document.getElementById("handover_shift").addEventListener("change", fillHandoverTeamData);
+
+    document.getElementById("pe_sector_units").addEventListener("change", fillPersonalEquipmentUnitsTeamData);
+    document.getElementById("pe_shift_units").addEventListener("change", fillPersonalEquipmentUnitsTeamData);
+
+    function fillPersonalEquipmentUnitsTeamData(){
+      const sector = document.getElementById("pe_sector_units").value;
+      const shift = document.getElementById("pe_shift_units").value;
+      const team = teamsData?.[sector]?.[shift];
+
+      document.getElementById("pe_units_lead").value = team?.lead || "";
+      document.getElementById("pe_units_assistant1").value = team?.assistants?.[0] || "";
+      document.getElementById("pe_units_assistant2").value = team?.assistants?.[1] || "";
+      document.getElementById("pe_units_assistant3").value = team?.assistants?.[2] || "";
+      document.getElementById("pe_units_assistant4").value = team?.assistants?.[3] || "";
+    }
 
     function fillHandoverTeamData(){
       const sector = document.getElementById('handover_sector').value;
@@ -2180,7 +2200,12 @@ ${supportLines}
         "وقت الحفظ": new Date().toLocaleString('ar-SA'),
         "القطاع": document.getElementById('pe_sector_units').value,
         "التاريخ": document.getElementById('pe_date_units').value,
-        "فترة المناوبة": document.getElementById('pe_shift_units').value,
+        "فترة المناوبة": document.getElementById("pe_shift_units").value,
+        "كبير المسعفين": document.getElementById("pe_units_lead").value,
+        "مساعد 1": document.getElementById("pe_units_assistant1").value,
+        "مساعد 2": document.getElementById("pe_units_assistant2").value,
+        "مساعد 3": document.getElementById("pe_units_assistant3").value,
+        "مساعد 4": document.getElementById("pe_units_assistant4").value,
         "عدد جهاز لوكس": document.getElementById('pe_units_lucas_count').value || '0',
         "حالة جهاز لوكس": document.getElementById('pe_units_lucas_status').value || '-',
         "ملاحظات جهاز لوكس": document.getElementById('pe_units_lucas_notes').value || '-',

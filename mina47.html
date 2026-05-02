@@ -789,10 +789,10 @@
           <div class="section-title">ملخص الوضع الراهن</div>
           <div class="section-body grid-3">
             <div class="field"><label for="avg_response">متوسط زمن الاستجابة</label><input type="text" id="avg_response" placeholder="مثال: 10:09"></div>
-            <div class="field"><label for="echo_response">متوسط زمن استجابة ECHO</label><input type="text" id="echo_response" placeholder="مثال: 00:55"></div>
+            <div class="field"><label for="echo_reports_count">عدد بلاغات ECHO</label><input type="number" id="echo_reports_count" min="0" value="0"></div>
             <div class="field"><label for="total_cases">إجمالي البلاغات</label><input type="number" id="total_cases" min="0" value="0"></div>
-            <div class="field"><label for="active_teams">عدد الفرق الفعالة</label><input type="number" id="active_teams" min="0" value="0"></div>
-            <div class="field"><label for="planned_teams">عدد الفرق المعتمدة</label><input type="number" id="planned_teams" min="0" value="0"></div>
+            <div class="field"><label for="active_teams">إجمالي عدد الفرق بما في ذلك التداخلية (اوفرلاب) والمدعمة</label><input type="number" id="active_teams" min="0" value="0"></div>
+            <div class="field"><label for="planned_teams">عدد الفرق الأساسية</label><input type="number" id="planned_teams" min="0" value="0"></div>
           </div>
         </div>
 
@@ -880,6 +880,10 @@
             <div class="field">
               <label for="handover_special_response_count">عدد الاستجابة النوعية</label>
               <input type="number" id="handover_special_response_count" min="0" value="0">
+            </div>
+            <div class="field">
+              <label for="handover_rapid_response_teams">عدد فرق التدخل السريع</label>
+              <input type="number" id="handover_rapid_response_teams" min="0" value="0">
             </div>
           </div>
         </div>

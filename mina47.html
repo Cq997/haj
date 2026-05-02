@@ -987,6 +987,148 @@
         </div>
       </section>
 
+      <section class="panel" id="personalEquipmentPanel">
+        <div class="panel-head">
+          <div>
+            <h3>العهد الشخصية</h3>
+            <p>تسجيل الأجهزة الطبية الأساسية لكل قطاع وفترة مناوبة.</p>
+          </div>
+        </div>
+
+        <div id="personalEquipmentAlert" class="alert"></div>
+
+        <div class="section">
+          <div class="section-title">البيانات الأساسية</div>
+          <div class="section-body grid-3">
+            <div class="field">
+              <label for="pe_sector">القطاع</label>
+              <select id="pe_sector">
+                <option value="" selected>اختر القطاع</option>
+                <option value="الجمرات">الجمرات</option>
+                <option value="القطارات">القطارات</option>
+                <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
+                <option value="بطن منى الشمالي">بطن منى الشمالي</option>
+                <option value="منى الجديد 1">منى الجديد 1</option>
+                <option value="منى الجديد 2">منى الجديد 2</option>
+                <option value="الشعيبين">الشعيبين</option>
+              </select>
+            </div>
+            <div class="field"><label for="pe_date">التاريخ</label><input type="date" id="pe_date"></div>
+            <div class="field">
+              <label for="pe_shift">فترة المناوبة</label>
+              <select id="pe_shift">
+                <option value="" selected>اختر الفترة</option>
+                <option value="الصباحية">الصباحية</option>
+                <option value="المسائية">المسائية</option>
+                <option value="اوفرلاب">اوفرلاب</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">الأجهزة الأساسية</div>
+          <div class="section-body">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>الجهاز</th>
+                    <th>العدد</th>
+                    <th>الحالة</th>
+                    <th>ملاحظات</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>LUCAS</td>
+                    <td><input type="number" id="pe_lucas_count" min="0" value="0"></td>
+                    <td>
+                      <select id="pe_lucas_status">
+                        <option value="" selected>-- اختر --</option>
+                        <option value="جاهز">جاهز</option>
+                        <option value="معطل">معطل</option>
+                        <option value="صيانة">صيانة</option>
+                      </select>
+                    </td>
+                    <td><input type="text" id="pe_lucas_notes" placeholder="ملاحظات"></td>
+                  </tr>
+                  <tr>
+                    <td>Mindray</td>
+                    <td><input type="number" id="pe_mindray_count" min="0" value="0"></td>
+                    <td>
+                      <select id="pe_mindray_status">
+                        <option value="" selected>-- اختر --</option>
+                        <option value="جاهز">جاهز</option>
+                        <option value="معطل">معطل</option>
+                        <option value="صيانة">صيانة</option>
+                      </select>
+                    </td>
+                    <td><input type="text" id="pe_mindray_notes" placeholder="ملاحظات"></td>
+                  </tr>
+                  <tr>
+                    <td>Lifepak 15</td>
+                    <td><input type="number" id="pe_lifepak_count" min="0" value="0"></td>
+                    <td>
+                      <select id="pe_lifepak_status">
+                        <option value="" selected>-- اختر --</option>
+                        <option value="جاهز">جاهز</option>
+                        <option value="معطل">معطل</option>
+                        <option value="صيانة">صيانة</option>
+                      </select>
+                    </td>
+                    <td><input type="text" id="pe_lifepak_notes" placeholder="ملاحظات"></td>
+                  </tr>
+                  <tr>
+                    <td>Wireless</td>
+                    <td><input type="number" id="pe_wireless_count" min="0" value="0"></td>
+                    <td>
+                      <select id="pe_wireless_status">
+                        <option value="" selected>-- اختر --</option>
+                        <option value="جاهز">جاهز</option>
+                        <option value="معطل">معطل</option>
+                        <option value="صيانة">صيانة</option>
+                      </select>
+                    </td>
+                    <td><input type="text" id="pe_wireless_notes" placeholder="ملاحظات"></td>
+                  </tr>
+                  <tr>
+                    <td>Tablet</td>
+                    <td><input type="number" id="pe_tablet_count" min="0" value="0"></td>
+                    <td>
+                      <select id="pe_tablet_status">
+                        <option value="" selected>-- اختر --</option>
+                        <option value="جاهز">جاهز</option>
+                        <option value="معطل">معطل</option>
+                        <option value="صيانة">صيانة</option>
+                      </select>
+                    </td>
+                    <td><input type="text" id="pe_tablet_notes" placeholder="ملاحظات"></td>
+                  </tr>
+                  <tr>
+                    <td>Vital Signs Monitor</td>
+                    <td><input type="number" id="pe_vital_count" min="0" value="0"></td>
+                    <td>
+                      <select id="pe_vital_status">
+                        <option value="" selected>-- اختر --</option>
+                        <option value="جاهز">جاهز</option>
+                        <option value="معطل">معطل</option>
+                        <option value="صيانة">صيانة</option>
+                      </select>
+                    </td>
+                    <td><input type="text" id="pe_vital_notes" placeholder="ملاحظات"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-success" onclick="sendPersonalEquipment()"><i class="fas fa-paper-plane"></i> حفظ وإرسال</button>
+        </div>
+      </section>
+
       <section class="panel" id="unitsCheckPanel">
         <div class="panel-head">
           <div>
@@ -2168,6 +2310,50 @@ ${supportLines}
         `;
         body.appendChild(row);
       });
+    }
+
+    async function sendPersonalEquipment(){
+      const required = ['pe_sector','pe_date','pe_shift'];
+      for (const id of required){
+        const el = document.getElementById(id);
+        if (!el || !String(el.value).trim()){
+          showAlert('personalEquipmentAlert','error','يرجى تعبئة البيانات الأساسية لنموذج العهد الشخصية');
+          return;
+        }
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "القطاع": document.getElementById('pe_sector').value,
+        "التاريخ": document.getElementById('pe_date').value,
+        "فترة المناوبة": document.getElementById('pe_shift').value,
+        "عدد LUCAS": document.getElementById('pe_lucas_count').value || '0',
+        "حالة LUCAS": document.getElementById('pe_lucas_status').value || '-',
+        "ملاحظات LUCAS": document.getElementById('pe_lucas_notes').value || '-',
+        "عدد Mindray": document.getElementById('pe_mindray_count').value || '0',
+        "حالة Mindray": document.getElementById('pe_mindray_status').value || '-',
+        "ملاحظات Mindray": document.getElementById('pe_mindray_notes').value || '-',
+        "عدد Lifepak 15": document.getElementById('pe_lifepak_count').value || '0',
+        "حالة Lifepak 15": document.getElementById('pe_lifepak_status').value || '-',
+        "ملاحظات Lifepak 15": document.getElementById('pe_lifepak_notes').value || '-',
+        "عدد Wireless": document.getElementById('pe_wireless_count').value || '0',
+        "حالة Wireless": document.getElementById('pe_wireless_status').value || '-',
+        "ملاحظات Wireless": document.getElementById('pe_wireless_notes').value || '-',
+        "عدد Tablet": document.getElementById('pe_tablet_count').value || '0',
+        "حالة Tablet": document.getElementById('pe_tablet_status').value || '-',
+        "ملاحظات Tablet": document.getElementById('pe_tablet_notes').value || '-',
+        "عدد Vital Signs Monitor": document.getElementById('pe_vital_count').value || '0',
+        "حالة Vital Signs Monitor": document.getElementById('pe_vital_status').value || '-',
+        "ملاحظات Vital Signs Monitor": document.getElementById('pe_vital_notes').value || '-'
+      };
+
+      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      if(!save.success){
+        showAlert('personalEquipmentAlert','error','تعذر حفظ بيانات العهد الشخصية');
+        return;
+      }
+
+      showAlert('personalEquipmentAlert','success','تم حفظ نموذج العهد الشخصية بنجاح');
     }
 
     async function sendStrategicStock(){

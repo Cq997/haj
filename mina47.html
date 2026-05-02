@@ -1604,7 +1604,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzGxjLrjaM43H5R6zvc7v0VgbVyIIYyj1lM8l4pbdC1UoQAGYXwB1tk0Eo2V7k-Nz7wfQ/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwbxQv_LXkFfiu2oYYsK_tkHy7WxlLDmLWoM63W5eANCrv2cb0aFFL641Xm0zqVPfJM-A/exec';
 
     const deploymentPlanData = {
       "الجمرات": [
@@ -1824,8 +1824,8 @@ async function fetchDeploymentFromSheet(){
 
     function openWhatsApp(text){
       const encoded = encodeURIComponent(text);
-      // استخدام api.whatsapp.com كخيار أكثر استقراراً لجميع المنصات
-      const url = `https://api.whatsapp.com/send?text=${encoded}`;
+      const phone = "966559000970";
+      const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encoded}`;
       
       // محاولة فتح الرابط في نافذة جديدة
       const win = window.open(url, '_blank');

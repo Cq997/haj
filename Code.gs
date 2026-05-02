@@ -1,7 +1,7 @@
 /**
  * منصة نطاق منى - Google Apps Script
- * النسخة الإصلاحية النهائية (v2.0)
- * معالجة ذكية للبيانات لتجاوز قيود المتصفح (CORS) وضمان الحفظ
+ * النسخة الاحترافية النهائية المتكاملة (v3.0)
+ * دعم كامل للداشبورد، الخريطة، والواتساب السريع
  */
 
 function onOpen() {
@@ -19,7 +19,7 @@ function setupSheetsRTL() {
     'العهد الشخصية للقطاعات': ["وقت الحفظ", "القطاع", "التاريخ", "فترة المناوبة", "كبير المسعفين", "مساعد 1", "مساعد 2", "مساعد 3", "مساعد 4", "عدد جهاز لوكس", "حالة جهاز لوكس", "ملاحظات جهاز لوكس", "عدد جهاز ميندري", "حالة جهاز ميندري", "ملاحظات جهاز ميندري", "عدد جهاز لايف باك", "حالة جهاز لايف باك", "ملاحظات جهاز لايف باك", "عدد جهاز اللاسلكي", "حالة جهاز اللاسلكي", "ملاحظات جهاز اللاسلكي", "عدد جهاز لوحي (تابلت)", "حالة جهاز لوحي (تابلت)", "ملاحظات جهاز لوحي (تابلت)", "عدد جهاز قياس العلامات الحيوية", "حالة جهاز قياس العلامات الحيوية", "ملاحظات جهاز قياس العلامات الحيوية"],
     'الخزن الاستراتيجي': ["وقت الحفظ", "التاريخ", "الوقت", "القائم بالتشييك", "موقع الخزن", "هل يوجد نقص طبي", "النقص الطبية"],
     'رسائل ميثان': ["وقت الحفظ", "القطاع", "اسم المبلغ", "رقم التواصل", "M - حادث جسيم", "E - الموقع", "T - نوع الحادث", "H - المخاطر", "A - الوصول والمغادرة", "N - الإصابات", "E - الخدمات الإسعافية المطلوبة", "ملاحظات إضافية", "الرسالة النهائية"],
-    'خطة الدعم': ["التاريخ", "الوقت", "عدد الفرق", "نوع التدعيم", "وقت الحضور", "اسم مدخل البيانات", "الملاحظات", "القطاع المدعم منه", "القطاع المدعم له", "النطاق المدعم منه", "النطاق المدعم له"],
+    'خطة الدعم': ["وقت الحفظ", "التاريخ", "الوقت", "عدد الفرق", "نوع التدعيم", "وقت الحضور", "اسم مدخل البيانات", "الملاحظات", "القطاع المدعم منه", "القطاع المدعم له", "النطاق المدعم منه", "النطاق المدعم له"],
     'خطة الانتشار': ["وقت الحفظ", "القطاع", "التاريخ", "الوقت", "اسم مدخل البيانات", "اسم كبير المسعفين المناوب", "أسماء المساعدين", "الرمز", "نوع الآلية", "مناوبة النقطة", "وقت البداية", "وقت النهاية", "الحالة", "عدد الفرق الفعلي", "Latitude", "Longitude", "رابط النقطة", "نوع التدعيم", "جهة التدعيم", "ملاحظة السجل", "ملاحظات عامة"]
   };
   
@@ -27,10 +27,8 @@ function setupSheetsRTL() {
     let sheet = ss.getSheetByName(name);
     if (!sheet) sheet = ss.insertSheet(name);
     sheet.setRightToLeft(true);
-    if (sheet.getLastColumn() === 0) {
-      sheet.getRange(1, 1, 1, sheetsConfig[name].length).setValues([sheetsConfig[name]]);
-      sheet.getRange(1, 1, 1, sheetsConfig[name].length).setFontWeight("bold").setBackground("#f3f3f3");
-    }
+    sheet.getRange(1, 1, 1, sheetsConfig[name].length).setValues([sheetsConfig[name]]);
+    sheet.getRange(1, 1, 1, sheetsConfig[name].length).setFontWeight("bold").setBackground("#f3f3f3");
   });
 }
 
@@ -42,12 +40,10 @@ function doPost(e) {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     let data = {};
     
-    // معالجة ذكية: إذا وصلت البيانات كـ JSON أو كـ Text أو كـ Parameters
     if (e.postData && e.postData.contents) {
       try {
         data = JSON.parse(e.postData.contents);
       } catch (err) {
-        // محاولة فك تشفير البيانات إذا وصلت كـ URL Encoded داخل contents
         const decoded = decodeURIComponent(e.postData.contents);
         const pairs = decoded.split('&');
         pairs.forEach(pair => {
@@ -81,7 +77,6 @@ function doPost(e) {
 
     const rowData = headers.map(header => {
       if (header === "وقت الحفظ") return timestamp;
-      // تنظيف البيانات من أي رموز زائدة ناتجة عن فك التشفير
       let val = data[header] !== undefined ? data[header] : "";
       if (typeof val === 'string') val = val.replace(/\+/g, ' ');
       return val;
@@ -106,20 +101,24 @@ function doGet(e) {
   
   if (action === 'getDeployment') {
     const sheet = ss.getSheetByName('خطة الانتشار');
-    if (!sheet) return createJsonResponse([]);
     return createJsonResponse(getSheetDataAsJson(sheet));
   }
   
-  if (action === 'getSupportData') {
+  if (action === 'getSupport') {
     const sheet = ss.getSheetByName('خطة الدعم');
-    if (!sheet) return createJsonResponse({data: []});
     return createJsonResponse({data: getSheetDataAsJson(sheet)});
   }
 
-  return ContentService.createTextOutput("Platform Active");
+  if (action === 'getDailyStats') {
+    const sheet = ss.getSheetByName('التحضير اليومي');
+    return createJsonResponse(getSheetDataAsJson(sheet));
+  }
+
+  return ContentService.createTextOutput("Platform Active - v3.0");
 }
 
 function getSheetDataAsJson(sheet) {
+  if (!sheet) return [];
   const data = sheet.getDataRange().getValues();
   if (data.length < 2) return [];
   const headers = data.shift();

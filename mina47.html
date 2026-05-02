@@ -1824,8 +1824,7 @@ async function fetchDeploymentFromSheet(){
 
     function openWhatsApp(text){
       const encoded = encodeURIComponent(text);
-      const phone = "966559000970";
-      const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encoded}`;
+      const url = `https://api.whatsapp.com/send?text=${encoded}`;
       
       // محاولة فتح الرابط في نافذة جديدة
       const win = window.open(url, '_blank');

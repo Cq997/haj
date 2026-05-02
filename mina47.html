@@ -2003,63 +2003,34 @@ async function fetchDeploymentFromSheet(){
 • الحالة: ${row["M-حادث جسيم"] || '-'}
 • الموقع: ${row["E-الموقع"] || '-'}
 • النوع: ${row["T-نوع الحادث"] || '-'}
-• المخاطر: ${row["H-المخاطر"] || '-'}
-• الوصول: ${row["A-الوصول"] || '-'}
-• الإصابات: ${row["N-الإصابات"] || '-'}
-• الخدمات: ${row["E-الخدمات"] || '-'}
-• ملاحظات ميثان: ${row["ملاحظات ميثان"] || '-'}
-`;
-      }
-
-      return `📋 *نموذج تسليم مناوبة كبير المسعفين* 📋
-
+• المخاطر: ${row["H-المخ      return `🏥 *تقرير تسليم المناوبة* 🏥
+━━━━━━━━━━━━━━━━━━━━━━━━━━
 📍 *القطاع:* ${row["القطاع"] || '-'}
 🕘 *نوع المناوبة:* ${row["نوع المناوبة"] || '-'}
 📅 *التاريخ:* ${row["التاريخ"] || '-'}
 ⏰ *الوقت:* من ${row["الوقت من"] || '-'} إلى ${row["الوقت إلى"] || '-'}
 
-👤 *كبير المسعفين المسلم:* ${row["كبير المسعفين المسلم"] || '-'}
-👤 *كبير المسعفين المستلم:* ${row["كبير المسعفين المستلم"] || '-'}
+👨‍⚕️ *كبير المسعفين المسلم:* ${row["كبير المسعفين المسلم"] || '-'}
+👨‍⚕️ *كبير المسعفين المستلم:* ${row["كبير المسعفين المستلم"] || '-'}
 👥 *المساعدون:* ${row["مساعد 1"]} | ${row["مساعد 2"]} | ${row["مساعد 3"]} | ${row["مساعد 4"]}
 
 📊 *ملخص الوضع الراهن:*
 • متوسط زمن الاستجابة: ${row["متوسط زمن الاستجابة"] || '0'}
-• متوسط زمن استجابة ECHO: ${row["متوسط زمن استجابة ECHO"] || '0'}
 • إجمالي البلاغات: ${row["إجمالي البلاغات"] || '0'}
-• عدد الفرق الفعالة: ${row["عدد الفرق الفعالة"] || '0'} من أصل ${row["عدد الفرق المعتمدة"] || '0'}
+• الفرق الفعالة: ${row["عدد الفرق الفعالة"] || '0'} من أصل ${row["عدد الفرق المعتمدة"] || '0'}
 ${methaneSection}
-🚑 *الوحدات التشغيلية:*
-• مركبات إسعافية: ${row["عدد مركبات الإسعاف"] || '0'}
-• قولف: ${row["عدد القولف"] || '0'}
-• استجابة نوعية: ${row["عدد الاستجابة النوعية"] || '0'}
-
 🚑 *المركبات والدعم اللوجستي:*
 • العاملة: ${row["العاملة"] || '0'}
 • الاحتياط: ${row["الاحتياط"] || '0'}
 • الخارج عن الخدمة: ${row["الخارج عن الخدمة"] || '0'}
-• بلاغات الدعم اللوجستي: ${row["بلاغات الدعم اللوجستي"] || '0'}
-• البلاغات المفتوحة: ${row["البلاغات المفتوحة"] || '0'}
 
 📍 *مواقع الانتشار:*
 ${sites}
 
-🔧 *الوحدات المتعطلة ومواقعها:*
-• ${row["الوحدات المتعطلة ومواقعها"] || 'لايوجد'}
-
-🚚 *طلبات الدعم اللوجستي للمركبات:*
-${supportLines}
-
-🛡️ *إحاطات الصحة والسلامة:*
-• التحذيرات الجوية: ${row["التحذيرات الجوية"] || 'لايوجد'}
-• التحذيرات الأمنية: ${row["التحذيرات الأمنية"] || 'لايوجد'}
-• مواقع خطرة: ${row["مواقع خطرة"] || 'لايوجد'}
-• إصابات العاملين: ${row["إصابات العاملين"] || 'لايوجد'}
-• إحاطات أخرى: ${row["إحاطات أخرى"] || 'لايوجد'}
-
 📝 *ملخص الأحداث:*
 • ${row["ملخص الأحداث"] || 'لايوجد'}
-
-📦 *ملخص الموارد المطلوبة وتوزيعها:*
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ تم الحفظ بنجاح`;ارد المطلوبة وتوزيعها:*
 • ${row["ملخص الموارد المطلوبة وتوزيعها"] || 'لايوجد'}
 
 📌 *ملاحظات عامة عن المناوبة:*
@@ -2099,26 +2070,26 @@ ${supportLines}
         "التاريخ": document.getElementById('handover_date').value,
         "الوقت من": document.getElementById('handover_time_from').value,
         "الوقت إلى": document.getElementById('handover_time_to').value,
-        "handover_sender": document.getElementById('handover_sender').value,
-        "handover_receiver": document.getElementById('handover_receiver').value,
-        "handover_assistant1": document.getElementById('handover_assistant1').value,
-        "handover_assistant2": document.getElementById('handover_assistant2').value,
-        "handover_assistant3": document.getElementById('handover_assistant3').value,
-        "handover_assistant4": document.getElementById('handover_assistant4').value,
+        "كبير المسعفين المسلم": document.getElementById('handover_sender').value,
+        "كبير المسعفين المستلم": document.getElementById('handover_receiver').value,
+        "مساعد 1": document.getElementById('handover_assistant1').value,
+        "مساعد 2": document.getElementById('handover_assistant2').value,
+        "مساعد 3": document.getElementById('handover_assistant3').value,
+        "مساعد 4": document.getElementById('handover_assistant4').value,
         "متوسط زمن الاستجابة": document.getElementById('handover_avg_response').value || '0',
         "متوسط زمن استجابة ECHO": document.getElementById('handover_echo_response').value || '0',
         "إجمالي البلاغات": document.getElementById('handover_total_calls').value || '0',
         "عدد الفرق الفعالة": document.getElementById('handover_active_teams').value || '0',
         "عدد الفرق المعتمدة": document.getElementById('handover_approved_teams').value || '0',
         "أحداث طارئة": hasMethane,
-        "h_methane_major": document.getElementById('h_methane_major').value || '-',
-        "h_methane_location": document.getElementById('h_methane_location').value || '-',
-        "h_methane_type": document.getElementById('h_methane_type').value || '-',
-        "h_methane_hazards": document.getElementById('h_methane_hazards').value || '-',
-        "h_methane_access": document.getElementById('h_methane_access').value || '-',
-        "h_methane_number": document.getElementById('h_methane_number').value || '-',
-        "h_methane_emergency": document.getElementById('h_methane_emergency').value || '-',
-        "h_methane_notes": document.getElementById('h_methane_notes').value || '-',
+        "M-حادث جسيم": document.getElementById('h_methane_major').value || '-',
+        "E-الموقع": document.getElementById('h_methane_location').value || '-',
+        "T-نوع الحادث": document.getElementById('h_methane_type').value || '-',
+        "H-المخاطر": document.getElementById('h_methane_hazards').value || '-',
+        "A-الوصول": document.getElementById('h_methane_access').value || '-',
+        "N-الإصابات": document.getElementById('h_methane_number').value || '-',
+        "E-الخدمات": document.getElementById('h_methane_emergency').value || '-',
+        "ملاحظات ميثان": document.getElementById('h_methane_notes').value || '-',
         "عدد مركبات الإسعاف": document.getElementById('handover_ambulance_count').value || '0',
         "عدد القولف": document.getElementById('handover_golf_count').value || '0',
         "عدد الاستجابة النوعية": document.getElementById('handover_quality_count').value || '0',
@@ -2228,33 +2199,24 @@ ${supportLines}
       showAlert('peUnitsAlert','success','تم حفظ نموذج العهد الشخصية للقطاعات بنجاح');
       
       // إرسال رسالة واتساب احترافية
-      let msg = `📋 *نموذج العهد الشخصية للقطاعات* 📋\n\n`;
-      msg += `🏥 *القطاع:* ${row["القطاع"]}\n`;
+      let msg = `🏥 *تقرير العهد الشخصية للقطاعات* 🏥\n`;
+      msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+      msg += `📍 *القطاع:* ${row["القطاع"]}\n`;
       msg += `📅 *التاريخ:* ${row["التاريخ"]}\n`;
       msg += `⏰ *فترة المناوبة:* ${row["فترة المناوبة"]}\n\n`;
-      msg += `👤 *الفريق الطبي:*\n`;
+      msg += `👨‍⚕️ *الفريق الطبي:*\n`;
       msg += `• كبير المسعفين: ${row["كبير المسعفين"]}\n`;
       msg += `• المساعدون: ${row["مساعد 1"]} | ${row["مساعد 2"]} | ${row["مساعد 3"]} | ${row["مساعد 4"]}\n\n`;
       msg += `🔧 *الأجهزة الطبية:*\n`;
-      msg += `🏥 *جهاز لوكس (LUCAS):*\n`;
-      msg += `• العدد: ${row["عدد جهاز لوكس"]} | الحالة: ${row["حالة جهاز لوكس"]}\n`;
-      msg += `• ملاحظات: ${row["ملاحظات جهاز لوكس"]}\n\n`;
-      msg += `📊 *جهاز ميندري (Mindray):*\n`;
-      msg += `• العدد: ${row["عدد جهاز ميندري"]} | الحالة: ${row["حالة جهاز ميندري"]}\n`;
-      msg += `• ملاحظات: ${row["ملاحظات جهاز ميندري"]}\n\n`;
-      msg += `⚡ *جهاز لايف باك (LifePak):*\n`;
-      msg += `• العدد: ${row["عدد جهاز لايف باك"]} | الحالة: ${row["حالة جهاز لايف باك"]}\n`;
-      msg += `• ملاحظات: ${row["ملاحظات جهاز لايف باك"]}\n\n`;
-      msg += `📡 *جهاز اللاسلكي (Radio):*\n`;
-      msg += `• العدد: ${row["عدد جهاز اللاسلكي"]} | الحالة: ${row["حالة جهاز اللاسلكي"]}\n`;
-      msg += `• ملاحظات: ${row["ملاحظات جهاز اللاسلكي"]}\n\n`;
-      msg += `📱 *الجهاز اللوحي (Tablet):*\n`;
-      msg += `• العدد: ${row["عدد جهاز لوحي (تابلت)"]} | الحالة: ${row["حالة جهاز لوحي (تابلت)"]}\n`;
-      msg += `• ملاحظات: ${row["ملاحظات جهاز لوحي (تابلت)"]}\n\n`;
-      msg += `❤️ *جهاز قياس العلامات الحيوية (Vital Signs):*\n`;
-      msg += `• العدد: ${row["عدد جهاز قياس العلامات الحيوية"]} | الحالة: ${row["حالة جهاز قياس العلامات الحيوية"]}\n`;
-      msg += `• ملاحظات: ${row["ملاحظات جهاز قياس العلامات الحيوية"]}\n\n`;
-      msg += `✅ تم إرسال البيانات بنجاح`;
+      msg += `🔴 *جهاز لوكس (LUCAS):* ${row["حالة جهاز لوكس"]}\n`;
+      msg += `🟢 *جهاز ميندري (Mindray):* ${row["حالة جهاز ميندري"]}\n`;
+      msg += `🟡 *جهاز لايف باك (LifePak):* ${row["حالة جهاز لايف باك"]}\n`;
+      msg += `📡 *جهاز اللاسلكي (Radio):* ${row["حالة جهاز اللاسلكي"]}\n`;
+      msg += `📱 *جهاز لوحي (Tablet):* ${row["حالة جهاز لوحي (تابلت)"]}\n`;
+      msg += `💓 *قياس العلامات:* ${row["حالة جهاز قياس العلامات الحيوية"]}\n\n`;
+      msg += `📝 *ملاحظات:* ${row["ملاحظات جهاز لوكس"]}\n`;
+      msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+      msg += `✅ تم الحفظ بنجاح`;
       openWhatsApp(msg);
     }
 
@@ -3377,8 +3339,7 @@ async function updateSupportSummary() {
   }
 }
 
-/* ─── جلب البيانات من Google Sheets وتحديث الخريطة والداشبورد ─── */
-async function loadLiveDeploymentData(){
+/* ─── جلب البيانات من Google Sheets وتحديثasync function loadLiveDeploymentData(){
   let liveData = [];
   try {
     const sheetData = await fetchDeploymentFromSheet();
@@ -3432,14 +3393,11 @@ async function loadLiveDeploymentData(){
   });
 }
 
-// تفعيل التحديث التلقائي كل دقيقتين
-setInterval(loadLiveDeploymentData, 120000);
+// تفعيل التحديث التلقائي كل 30 ثانية لضمان السرعة
+setInterval(loadLiveDeploymentData, 30000);
 
 // تحميل البيانات عند بدء التشغيل
 loadLiveDeploymentData();
-
-// تحديث تلقائي كل 3 دقائق
-setInterval(loadLiveDeploymentData, 180000);
 
 /* لتحميل النقاط الافتراضية للقطاع المختار */
 function loadDefaultDeploymentPoints(){
@@ -3452,22 +3410,13 @@ function loadDefaultDeploymentPoints(){
   }
   
   const tbody = document.getElementById('deploymentTableBody');
-  if (!tbody) {
-    console.error('Table body not found');
-    return;
-  }
+  if (!tbody) return;
   
   tbody.innerHTML = '';
   
   // البحث عن النقاط التابعة للقطاع المختار
   const sectorPoints = Object.entries(DEPLOYMENT_POINTS).filter(([code, point]) => point.sector === sector);
   
-  if(sectorPoints.length === 0){
-    showAlert('deploymentAlert','warning','لا توجد نقاط افتراضية لهذا القطاع');
-    return;
-  }
-  
-  // إضافة كل نقطة إلى الجدول
   sectorPoints.forEach(([code, point]) => {
     const rowData = {
       code: code,

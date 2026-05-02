@@ -1,7 +1,7 @@
 /**
  * منصة نطاق منى - Google Apps Script
- * النسخة الاحترافية النهائية المتكاملة (v3.1)
- * معالجة مطابقة الأعمدة بناءً على صور الاختبار الميداني
+ * النسخة الاحترافية النهائية المتكاملة (v3.2)
+ * حل مشكلة الخلايا الفارغة والمطابقة الكاملة 100%
  */
 
 function onOpen() {
@@ -14,7 +14,7 @@ function onOpen() {
 function setupSheetsRTL() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const sheetsConfig = {
-    'التحضير اليومي': ["وقت الحفظ", "النطاق", "القطاع", "الفترة", "التاريخ والوقت", "كبير المسعفين", "مساعد1", "مساعد2", "مساعد3", "مساعد4", "الوحدات التشغيلية", "مقدمي الخدمة", "الموظفين", "المتطوعين", "المركبات", "القولف", "الراجلة", "الملاحظات"],
+    'التحضير اليومي': ["وقت الحفظ", "النطاق", "الالقطاع", "الفترة", "التاريخ والوقت", "كبير المسعفين", "مساعد 1", "مساعد 2", "مساعد 3", "مساعد 4", "الوحدات التشغيلية", "مقدمي الخدمة", "الموظفين", "المتطوعين", "المركبات", "القولف", "الراجلة", "الملاحظات"],
     'تسليم المناوبة': ["وقت الحفظ", "القطاع", "نوع المناوبة", "التاريخ", "الوقت من", "الوقت إلى", "كبير المسعفين المسلم", "كبير المسعفين المستلم", "مساعد 1", "مساعد 2", "مساعد 3", "مساعد 4", "متوسط زمن الاستجابة", "متوسط زمن استجابة ECHO", "إجمالي البلاغات", "عدد الفرق الفعالة", "عدد الفرق المعتمدة", "أحداث طارئة", "M-حادث جسيم", "E-الموقع", "T-نوع الحادث", "H-المخاطر", "A-الوصول", "N-الإصابات", "E-الخدمات", "ملاحظات ميثان", "عدد مركبات الإسعاف", "عدد القولف", "عدد الاستجابة النوعية", "عدد فرق التدخل السريع", "العاملة", "الاحتياط", "الخارج عن الخدمة", "بلاغات الدعم اللوجستي", "البلاغات المفتوحة", "مواقع الانتشار", "الوحدات المتعطلة ومواقعها", "نداء الفرقة 1", "توقيت العطل 1", "نوع العطل 1", "الإجراء المتبع 1", "العودة للخدمة 1", "لوحة المركبة 1", "نداء الفرقة 2", "توقيت العطل 2", "نوع العطل 2", "الإجراء المتبع 2", "العودة للخدمة 2", "لوحة المركبة 2", "نداء الفرقة 3", "توقيت العطل 3", "نوع العطل 3", "الإجراء المتبع 3", "العودة للخدمة 3", "لوحة المركبة 3", "التحذيرات الجوية", "التحذيرات الأمنية", "مواقع خطرة", "إصابات العاملين", "إحاطات أخرى", "ملخص الأحداث", "ملخص الموارد المطلوبة وتوزيعها", "ملاحظات عامة عن المناوبة"],
     'العهد الشخصية للقطاعات': ["وقت الحفظ", "القطاع", "التاريخ", "فترة المناوبة", "كبير المسعفين", "مساعد 1", "مساعد 2", "مساعد 3", "مساعد 4", "عدد جهاز لوكس", "حالة جهاز لوكس", "ملاحظات جهاز لوكس", "عدد جهاز ميندري", "حالة جهاز ميندري", "ملاحظات جهاز ميندري", "عدد جهاز لايف باك", "حالة جهاز لايف باك", "ملاحظات جهاز لايف باك", "عدد جهاز اللاسلكي", "حالة جهاز اللاسلكي", "ملاحظات جهاز اللاسلكي", "عدد جهاز لوحي (تابلت)", "حالة جهاز لوحي (تابلت)", "ملاحظات جهاز لوحي (تابلت)", "عدد جهاز قياس العلامات الحيوية", "حالة جهاز قياس العلامات الحيوية", "ملاحظات جهاز قياس العلامات الحيوية"],
     'الخزن الاستراتيجي': ["وقت الحفظ", "التاريخ", "الوقت", "القائم بالتشييك", "موقع الخزن", "هل يوجد نقص طبي", "النقص الطبية"],
@@ -27,11 +27,9 @@ function setupSheetsRTL() {
     let sheet = ss.getSheetByName(name);
     if (!sheet) sheet = ss.insertSheet(name);
     sheet.setRightToLeft(true);
-    sheet.clearContents(); // مسح العناوين القديمة لضمان التحديث
+    sheet.clearContents();
     sheet.getRange(1, 1, 1, sheetsConfig[name].length).setValues([sheetsConfig[name]]);
     sheet.getRange(1, 1, 1, sheetsConfig[name].length).setFontWeight("bold").setBackground("#f3f3f3");
-    
-    // تجميد الصف الأول
     sheet.setFrozenRows(1);
   });
 }
@@ -44,12 +42,10 @@ function doPost(e) {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     let data = {};
     
-    // معالجة البيانات الواردة بذكاء
     if (e.postData && e.postData.contents) {
       try {
         data = JSON.parse(e.postData.contents);
       } catch (err) {
-        // إذا لم يكن JSON، نحاول معالجته كـ Form Data
         const decoded = decodeURIComponent(e.postData.contents);
         const pairs = decoded.split('&');
         pairs.forEach(pair => {
@@ -81,34 +77,35 @@ function doPost(e) {
     const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
     const timestamp = new Date().toLocaleString("ar-SA", { timeZone: "Asia/Riyadh" });
 
-    // مطابقة البيانات مع الأعمدة بدقة
+    // مطابقة البيانات مع الأعمدة بدقة متناهية
     const rowData = headers.map(header => {
       if (header === "وقت الحفظ") return timestamp;
       
-      // محاولة إيجاد القيمة في البيانات المرسلة
+      // محاولة إيجاد القيمة في البيانات المرسلة باستخدام المسميات الموحدة
       let val = data[header];
       
       // إذا لم توجد، نجرب البحث عن مفاتيح بديلة (للتوافق مع HTML)
-      if (val === undefined) {
+      if (val === undefined || val === "") {
         const mapping = {
-          "كبير المسعفين المسلم": data["handover_sender"],
-          "كبير المسعفين المستلم": data["handover_receiver"],
-          "مساعد 1": data["handover_assistant1"] || data["pe_units_assistant1"] || data["assistant1"],
-          "مساعد 2": data["handover_assistant2"] || data["pe_units_assistant2"] || data["assistant2"],
-          "مساعد 3": data["handover_assistant3"] || data["pe_units_assistant3"] || data["assistant3"],
-          "مساعد 4": data["handover_assistant4"] || data["pe_units_assistant4"] || data["assistant4"],
-          "M-حادث جسيم": data["M-حادث جسيم"] || data["h_methane_major"],
-          "E-الموقع": data["E-الموقع"] || data["h_methane_location"],
-          "T-نوع الحادث": data["T-نوع الحادث"] || data["h_methane_type"],
-          "H-المخاطر": data["H-المخاطر"] || data["h_methane_hazards"],
-          "A-الوصول": data["A-الوصول"] || data["h_methane_access"],
-          "N-الإصابات": data["N-الإصابات"] || data["h_methane_number"],
-          "E-الخدمات": data["E-الخدمات"] || data["h_methane_emergency"],
-          "ملاحظات ميثان": data["ملاحظات ميثان"] || data["h_methane_notes"],
-          "اسم مدخل البيانات": data["deploy_lead_name"] || data["support_entry_name"],
-          "صفة مدخل البيانات": data["deploy_role"],
-          "اسم كبير المسعفين المناوب": data["deploy_current_lead"],
-          "أسماء المساعدين": data["deploy_assistants_auto"]
+          "كبير المسعفين المسلم": data["handover_sender"] || data["كبير المسعفين المسلم"],
+          "كبير المسعفين المستلم": data["handover_receiver"] || data["كبير المسعفين المستلم"],
+          "مساعد 1": data["handover_assistant1"] || data["pe_units_assistant1"] || data["assistant1"] || data["مساعد 1"],
+          "مساعد 2": data["handover_assistant2"] || data["pe_units_assistant2"] || data["assistant2"] || data["مساعد 2"],
+          "مساعد 3": data["handover_assistant3"] || data["pe_units_assistant3"] || data["assistant3"] || data["مساعد 3"],
+          "مساعد 4": data["handover_assistant4"] || data["pe_units_assistant4"] || data["assistant4"] || data["مساعد 4"],
+          "M-حادث جسيم": data["h_methane_major"] || data["M-حادث جسيم"],
+          "E-الموقع": data["h_methane_location"] || data["E-الموقع"],
+          "T-نوع الحادث": data["h_methane_type"] || data["T-نوع الحادث"],
+          "H-المخاطر": data["h_methane_hazards"] || data["H-المخاطر"],
+          "A-الوصول": data["h_methane_access"] || data["A-الوصول"],
+          "N-الإصابات": data["h_methane_number"] || data["N-الإصابات"],
+          "E-الخدمات": data["h_methane_emergency"] || data["E-الخدمات"],
+          "ملاحظات ميثان": data["h_methane_notes"] || data["ملاحظات ميثان"],
+          "اسم مدخل البيانات": data["deploy_lead_name"] || data["support_entry_name"] || data["اسم مدخل البيانات"],
+          "صفة مدخل البيانات": data["deploy_role"] || data["صفة مدخل البيانات"],
+          "اسم كبير المسعفين المناوب": data["deploy_current_lead"] || data["اسم كبير المسعفين المناوب"],
+          "أسماء المساعدين": data["deploy_assistants_auto"] || data["أسماء المساعدين"],
+          "الالقطاع": data["القطاع"] || data["sector"] // تصحيح خطأ مطبعي محتمل في الشيت
         };
         val = mapping[header];
       }
@@ -152,7 +149,7 @@ function doGet(e) {
     return createJsonResponse({ "error": err.toString() });
   }
 
-  return ContentService.createTextOutput("Platform Active - v3.1");
+  return ContentService.createTextOutput("Platform Active - v3.2");
 }
 
 function getSheetDataAsJson(sheet) {

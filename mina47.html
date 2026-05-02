@@ -1435,34 +1435,6 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxzkS1GrOC4IBKYQCD2APoK-6iIcGngUikW7zXseLK6JgnQd_pBxA_gX8LgYyoNBS-n2w/exec';
-
-    const deploymentPlanData = {
-      "الجمرات": [
-        {id: "J-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", lat:"21.4220", lng:"39.8760"},
-        {id: "J-2", type: "فريق طبي", time: "08:30", status: "جاهز", support: "لا يوجد", lat:"21.4230", lng:"39.8770"}
-      ],
-      "القطارات": [
-        {id: "T-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", lat:"21.4200", lng:"39.8800"},
-        {id: "T-2", type: "فريق طبي", time: "08:30", status: "جاهز", support: "لا يوجد", lat:"21.4210", lng:"39.8810"}
-      ],
-      "بطن منى الجنوبي": [
-        {id: "S-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", lat:"21.4160", lng:"39.8750"}
-      ],
-      "بطن منى الشمالي": [
-        {id: "N-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", lat:"21.4270", lng:"39.8740"}
-      ],
-      "الشعيبين": [
-        {id: "SH-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", lat:"21.4300", lng:"39.8700"}
-      ],
-      "منى الجديد 1": [
-        {id: "ND1-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", lat:"21.4180", lng:"39.8850"}
-      ],
-      "منى الجديد 2": [
-        {id: "ND2-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", lat:"21.4190", lng:"39.8860"}
-      ]
-    };
-
     window.teamsData = {
       "الجمرات": {
         "الصباحية": { lead:"راكان منصور الحصيني", assistants:["فواز حميد الظفيري","تركي أحمد عبدالله الغامدي","محمد علي عبدالله القحطاني","فيصل جري المطيري"] },
@@ -1493,6 +1465,34 @@
         "المسائية": { lead:"فواز فهد الأشجعي", assistants:["علي سلامة العنزي","مبارك محسن العجمي","",""] }
       }
     };
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxzkS1GrOC4IBKYQCD2APoK-6iIcGngUikW7zXseLK6JgnQd_pBxA_gX8LgYyoNBS-n2w/exec';
+
+    const deploymentPlanData = {
+      "الجمرات": [
+        {id: "J-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", lat:"21.4220", lng:"39.8760"},
+        {id: "J-2", type: "فريق طبي", time: "08:30", status: "جاهز", support: "لا يوجد", lat:"21.4230", lng:"39.8770"}
+      ],
+      "القطارات": [
+        {id: "T-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", lat:"21.4200", lng:"39.8800"},
+        {id: "T-2", type: "فريق طبي", time: "08:30", status: "جاهز", support: "لا يوجد", lat:"21.4210", lng:"39.8810"}
+      ],
+      "بطن منى الجنوبي": [
+        {id: "S-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", lat:"21.4160", lng:"39.8750"}
+      ],
+      "بطن منى الشمالي": [
+        {id: "N-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", lat:"21.4270", lng:"39.8740"}
+      ],
+      "الشعيبين": [
+        {id: "SH-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", lat:"21.4300", lng:"39.8700"}
+      ],
+      "منى الجديد 1": [
+        {id: "ND1-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", lat:"21.4180", lng:"39.8850"}
+      ],
+      "منى الجديد 2": [
+        {id: "ND2-1", type: "مركبة إسعافية", time: "08:00", status: "جاهز", support: "لا يوجد", lat:"21.4190", lng:"39.8860"}
+      ]
+    };
+
 
     const medicalItemsData = [
       "جهاز لوكس","جهاز صدمات خارجي AED","جهاز تنفس صناعي","جهاز لايف باك","جهاز ميندري","جهاز قياس العلامات الحيوية",

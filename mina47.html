@@ -413,7 +413,7 @@
       <li class="active" data-target="homePanel"><i class="fas fa-home"></i> الرئيسية</li>
       <li data-target="groundEMS"><i class="fas fa-clipboard-list"></i> التحضير اليومي</li>
       <li data-target="handoverPanel"><i class="fas fa-exchange-alt"></i> تسليم المناوبة</li>
-      <li data-target="unitsCheckPanel"><i class="fas fa-stethoscope"></i> تشييك الوحدات</li>
+      <li data-target="unitsCheckPanel"><i class="fas fa-stethoscope"></i> العهد الشخصية للقطاعات</li>
       <li data-target="stockPanel"><i class="fas fa-boxes-stacked"></i> الخزن الاستراتيجي</li>
       <li data-target="deploymentPanel"><i class="fas fa-map-marked-alt"></i> خطة الانتشار</li>
       <li data-target="mapsPanel"><i class="fas fa-map"></i> خرائط النطاق</li>
@@ -1132,8 +1132,8 @@
       <section class="panel" id="unitsCheckPanel">
         <div class="panel-head">
           <div>
-            <h3>تشييك الوحدة التشغيلية</h3>
-            <p>النموذج الميداني لتشييك الوحدة والطاقم والتجهيزات الطبية.</p>
+            <h3>العهد الشخصية للقطاعات</h3>
+            <p>تسجيل الأجهزة الطبية الأساسية لكل قطاع وفترة مناوبة.</p>
           </div>
         </div>
 
@@ -1142,12 +1142,9 @@
         <div class="section">
           <div class="section-title">البيانات الأساسية</div>
           <div class="section-body grid-3">
-            <div class="field"><label for="units_check_date">تاريخ التشييك</label><input type="date" id="units_check_date"></div>
-            <div class="field"><label for="units_check_time">وقت التشييك</label><input type="time" id="units_check_time"></div>
-
             <div class="field">
-              <label for="units_check_sector">القطاع</label>
-              <select id="units_check_sector">
+              <label for="pe_sector_units">القطاع</label>
+              <select id="pe_sector_units">
                 <option value="" selected>اختر القطاع</option>
                 <option value="الجمرات">الجمرات</option>
                 <option value="القطارات">القطارات</option>
@@ -1158,128 +1155,119 @@
                 <option value="الشعيبين">الشعيبين</option>
               </select>
             </div>
-
+            <div class="field"><label for="pe_date_units">التاريخ</label><input type="date" id="pe_date_units"></div>
             <div class="field">
-              <label for="units_check_shift">فترة التشييك</label>
-              <select id="units_check_shift">
+              <label for="pe_shift_units">فترة المناوبة</label>
+              <select id="pe_shift_units">
                 <option value="" selected>اختر الفترة</option>
                 <option value="الصباحية">الصباحية</option>
                 <option value="المسائية">المسائية</option>
                 <option value="اوفرلاب">اوفرلاب</option>
               </select>
             </div>
-
-            <div class="field"><label for="unit_call_sign">رمز / نداء الوحدة التشغيلية</label><input type="text" id="unit_call_sign"></div>
-
-            <div class="field">
-              <label for="unit_type">نوع الوحدة التشغيلية</label>
-              <select id="unit_type">
-                <option value="" selected>اختر النوع</option>
-                <option value="مركبة إسعافية">مركبة إسعافية</option>
-                <option value="قولف">قولف</option>
-                <option value="راجلة">راجلة</option>
-                <option value="دراجة نارية">دراجة نارية</option>
-                <option value="دراجة هوائية">دراجة هوائية</option>
-                <option value="سكوتر">سكوتر</option>
-                <option value="بولاريس">بولاريس</option>
-                <option value="أخرى">أخرى</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="checker_has_third_party">هل الفرقة تحتوي على طرف ثالث؟</label>
-              <select id="checker_has_third_party">
-                <option value="" selected>اختر</option>
-                <option value="نعم">نعم</option>
-                <option value="لا">لا</option>
-              </select>
-            </div>
-
-            <div class="field"><label for="crew1_name">اسم الطاقم الإسعافي 1</label><input type="text" id="crew1_name"></div>
-            <div class="field"><label for="crew2_name">اسم الطاقم الإسعافي 2</label><input type="text" id="crew2_name"></div>
-            <div class="field hidden" id="thirdCrewWrap"><label for="crew3_name">اسم الطاقم الإسعافي 3</label><input type="text" id="crew3_name"></div>
-          </div>
-        </div>
-
-        <div class="section hidden" id="ambulanceMechanicalWrap">
-          <div class="section-title">التشييك الميكانيكي - مركبة إسعافية</div>
-          <div class="section-body grid-2">
-            <div class="field"><label for="vehicle_plate_number">رقم اللوحة</label><input type="text" id="vehicle_plate_number"></div>
-            <div class="field">
-              <label for="vehicle_fuel_level">مستوى الوقود</label>
-              <select id="vehicle_fuel_level">
-                <option value="" selected>اختر المستوى</option>
-                <option value="ممتاز">ممتاز</option>
-                <option value="جيد">جيد</option>
-                <option value="متوسط">متوسط</option>
-                <option value="منخفض">منخفض</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="vehicle_ac_status">التكييف</label>
-              <select id="vehicle_ac_status">
-                <option value="" selected>اختر الحالة</option>
-                <option value="يعمل">يعمل</option>
-                <option value="لا يعمل">لا يعمل</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="vehicle_lights_status">الأضواء والأصوات التحذيرية</label>
-              <select id="vehicle_lights_status">
-                <option value="" selected>اختر الحالة</option>
-                <option value="سليمة">سليمة</option>
-                <option value="يوجد ملاحظة">يوجد ملاحظة</option>
-                <option value="لا تعمل">لا تعمل</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="section hidden" id="golfWrap">
-          <div class="section-title">تشييك القولف</div>
-          <div class="section-body grid-2">
-            <div class="field">
-              <label for="golf_charge_level">مستوى الشحن</label>
-              <select id="golf_charge_level">
-                <option value="" selected>اختر المستوى</option>
-                <option value="ممتاز">ممتاز</option>
-                <option value="جيد">جيد</option>
-                <option value="متوسط">متوسط</option>
-                <option value="منخفض">منخفض</option>
-              </select>
-            </div>
-            <div class="field"><label for="golf_notes">ملاحظات القولف</label><textarea id="golf_notes"></textarea></div>
           </div>
         </div>
 
         <div class="section">
-          <div class="section-title">التشييك الطبي</div>
+          <div class="section-title">الأجهزة الأساسية</div>
           <div class="section-body">
             <div class="table-wrap">
               <table>
                 <thead>
                   <tr>
-                    <th>الصنف الطبي</th>
-                    <th>الحالة</th>
+                    <th>الجهاز</th>
                     <th>العدد</th>
+                    <th>الحالة</th>
                     <th>ملاحظات</th>
                   </tr>
                 </thead>
-                <tbody id="medicalCheckTableBody"></tbody>
+                <tbody>
+                  <tr>
+                    <td>LUCAS</td>
+                    <td><input type="number" id="pe_units_lucas_count" min="0" value="0"></td>
+                    <td>
+                      <select id="pe_units_lucas_status">
+                        <option value="" selected>-- اختر --</option>
+                        <option value="جاهز">جاهز</option>
+                        <option value="معطل">معطل</option>
+                        <option value="صيانة">صيانة</option>
+                      </select>
+                    </td>
+                    <td><input type="text" id="pe_units_lucas_notes" placeholder="ملاحظات"></td>
+                  </tr>
+                  <tr>
+                    <td>Mindray</td>
+                    <td><input type="number" id="pe_units_mindray_count" min="0" value="0"></td>
+                    <td>
+                      <select id="pe_units_mindray_status">
+                        <option value="" selected>-- اختر --</option>
+                        <option value="جاهز">جاهز</option>
+                        <option value="معطل">معطل</option>
+                        <option value="صيانة">صيانة</option>
+                      </select>
+                    </td>
+                    <td><input type="text" id="pe_units_mindray_notes" placeholder="ملاحظات"></td>
+                  </tr>
+                  <tr>
+                    <td>Lifepak 15</td>
+                    <td><input type="number" id="pe_units_lifepak_count" min="0" value="0"></td>
+                    <td>
+                      <select id="pe_units_lifepak_status">
+                        <option value="" selected>-- اختر --</option>
+                        <option value="جاهز">جاهز</option>
+                        <option value="معطل">معطل</option>
+                        <option value="صيانة">صيانة</option>
+                      </select>
+                    </td>
+                    <td><input type="text" id="pe_units_lifepak_notes" placeholder="ملاحظات"></td>
+                  </tr>
+                  <tr>
+                    <td>Wireless</td>
+                    <td><input type="number" id="pe_units_wireless_count" min="0" value="0"></td>
+                    <td>
+                      <select id="pe_units_wireless_status">
+                        <option value="" selected>-- اختر --</option>
+                        <option value="جاهز">جاهز</option>
+                        <option value="معطل">معطل</option>
+                        <option value="صيانة">صيانة</option>
+                      </select>
+                    </td>
+                    <td><input type="text" id="pe_units_wireless_notes" placeholder="ملاحظات"></td>
+                  </tr>
+                  <tr>
+                    <td>Tablet</td>
+                    <td><input type="number" id="pe_units_tablet_count" min="0" value="0"></td>
+                    <td>
+                      <select id="pe_units_tablet_status">
+                        <option value="" selected>-- اختر --</option>
+                        <option value="جاهز">جاهز</option>
+                        <option value="معطل">معطل</option>
+                        <option value="صيانة">صيانة</option>
+                      </select>
+                    </td>
+                    <td><input type="text" id="pe_units_tablet_notes" placeholder="ملاحظات"></td>
+                  </tr>
+                  <tr>
+                    <td>Vital Signs Monitor</td>
+                    <td><input type="number" id="pe_units_vital_count" min="0" value="0"></td>
+                    <td>
+                      <select id="pe_units_vital_status">
+                        <option value="" selected>-- اختر --</option>
+                        <option value="جاهز">جاهز</option>
+                        <option value="معطل">معطل</option>
+                        <option value="صيانة">صيانة</option>
+                      </select>
+                    </td>
+                    <td><input type="text" id="pe_units_vital_notes" placeholder="ملاحظات"></td>
+                  </tr>
+                </tbody>
               </table>
             </div>
           </div>
         </div>
 
-        <div class="section">
-          <div class="section-title">ملاحظات عامة</div>
-          <div class="section-body">
-            <div class="field"><label for="units_check_notes">الملاحظات</label><textarea id="units_check_notes"></textarea></div>
-          </div>
-        </div>
-
         <div class="actions">
-          <button class="btn btn-success" onclick="sendUnitsCheck()">حفظ وإرسال</button>
+          <button class="btn btn-success" onclick="sendPersonalEquipmentUnits()"><i class="fas fa-paper-plane"></i> حفظ وإرسال</button>
         </div>
       </section>
 
@@ -2211,82 +2199,48 @@ ${supportLines}
       });
     }
 
-    async function sendUnitsCheck(){
-      const required = ['units_check_date','units_check_time','units_check_sector','units_check_shift','unit_call_sign','unit_type','checker_has_third_party','crew1_name','crew2_name'];
-      for(const id of required){
+    async function sendPersonalEquipmentUnits(){
+      const required = ['pe_sector_units','pe_date_units','pe_shift_units'];
+      for (const id of required){
         const el = document.getElementById(id);
-        if(!el || !String(el.value).trim()){
-          showAlert('unitCheckAlert','error','يرجى تعبئة جميع الحقول الأساسية');
+        if (!el || !String(el.value).trim()){
+          showAlert('peUnitsAlert','error','يرجى تعبئة البيانات الأساسية لنموذج العهد الشخصية للقطاعات');
           return;
         }
       }
 
-      const hasThird = document.getElementById('checker_has_third_party').value;
-      if(hasThird === 'نعم' && !document.getElementById('crew3_name').value.trim()){
-        showAlert('unitCheckAlert','error','يرجى إدخال اسم الطاقم الإسعافي الثالث');
-        return;
-      }
-
-      const unitType = document.getElementById('unit_type').value;
-      let specificCheck = '';
-
-      if(unitType === 'مركبة إسعافية'){
-        specificCheck = `رقم اللوحة=${document.getElementById('vehicle_plate_number').value.trim() || '-'} | مستوى الوقود=${document.getElementById('vehicle_fuel_level').value || '-'} | التكييف=${document.getElementById('vehicle_ac_status').value || '-'} | الأضواء والأصوات=${document.getElementById('vehicle_lights_status').value || '-'}`;
-      } else if(unitType === 'قولف'){
-        specificCheck = `مستوى الشحن=${document.getElementById('golf_charge_level').value || '-'} | ملاحظات القولف=${document.getElementById('golf_notes').value.trim() || '-'}`;
-      } else {
-        specificCheck = 'لا يوجد تشييك خاص إضافي لهذا النوع';
-      }
-
-      const medicalSummary = medicalItemsData.map((item,index)=>{
-        const status = document.getElementById(`medical_status_${index}`).value;
-        const count = document.getElementById(`medical_count_${index}`).value || '0';
-        const note = document.getElementById(`medical_note_${index}`).value.trim() || '-';
-        return `${item}: الحالة=${status}, العدد=${count}, الملاحظات=${note}`;
-      });
-
       const row = {
         "وقت الحفظ": new Date().toLocaleString('ar-SA'),
-        "تاريخ التشييك": document.getElementById('units_check_date').value,
-        "وقت التشييك": document.getElementById('units_check_time').value,
-        "القطاع": document.getElementById('units_check_sector').value,
-        "الفترة": document.getElementById('units_check_shift').value,
-        "رمز/نداء الوحدة": document.getElementById('unit_call_sign').value.trim(),
-        "نوع الوحدة التشغيلية": unitType,
-        "هل يوجد طرف ثالث": hasThird,
-        "اسم الطاقم 1": document.getElementById('crew1_name').value.trim(),
-        "اسم الطاقم 2": document.getElementById('crew2_name').value.trim(),
-        "اسم الطاقم 3": document.getElementById('crew3_name').value.trim() || '-',
-        "التشييك الخاص بالوحدة": specificCheck,
-        "ملخص التشييك الطبي": medicalSummary.join(' || '),
-        "ملاحظات عامة": document.getElementById('units_check_notes').value.trim() || 'لا توجد ملاحظات'
+        "القطاع": document.getElementById('pe_sector_units').value,
+        "التاريخ": document.getElementById('pe_date_units').value,
+        "فترة المناوبة": document.getElementById('pe_shift_units').value,
+        "عدد LUCAS": document.getElementById('pe_units_lucas_count').value || '0',
+        "حالة LUCAS": document.getElementById('pe_units_lucas_status').value || '-',
+        "ملاحظات LUCAS": document.getElementById('pe_units_lucas_notes').value || '-',
+        "عدد Mindray": document.getElementById('pe_units_mindray_count').value || '0',
+        "حالة Mindray": document.getElementById('pe_units_mindray_status').value || '-',
+        "ملاحظات Mindray": document.getElementById('pe_units_mindray_notes').value || '-',
+        "عدد Lifepak 15": document.getElementById('pe_units_lifepak_count').value || '0',
+        "حالة Lifepak 15": document.getElementById('pe_units_lifepak_status').value || '-',
+        "ملاحظات Lifepak 15": document.getElementById('pe_units_lifepak_notes').value || '-',
+        "عدد Wireless": document.getElementById('pe_units_wireless_count').value || '0',
+        "حالة Wireless": document.getElementById('pe_units_wireless_status').value || '-',
+        "ملاحظات Wireless": document.getElementById('pe_units_wireless_notes').value || '-',
+        "عدد Tablet": document.getElementById('pe_units_tablet_count').value || '0',
+        "حالة Tablet": document.getElementById('pe_units_tablet_status').value || '-',
+        "ملاحظات Tablet": document.getElementById('pe_units_tablet_notes').value || '-',
+        "عدد Vital Signs Monitor": document.getElementById('pe_units_vital_count').value || '0',
+        "حالة Vital Signs Monitor": document.getElementById('pe_units_vital_status').value || '-',
+        "ملاحظات Vital Signs Monitor": document.getElementById('pe_units_vital_notes').value || '-'
       };
 
-      const save = await saveToGoogleSheets('تشييك الوحدات التشغيلية', [row]);
+      const save = await saveToGoogleSheets('العهد الشخصية للقطاعات', [row]);
       if(!save.success){
-        showAlert('unitCheckAlert','error','تعذر حفظ بيانات التشييك');
+        showAlert('peUnitsAlert','error','تعذر حفظ بيانات العهد الشخصية للقطاعات');
         return;
       }
 
-      showAlert('unitCheckAlert','success','تم حفظ نموذج التشييك بنجاح');
-
-      let msg = `🩺 *نموذج تشييك الوحدة التشغيلية* 🩺\n\n`;
-      msg += `📍 *القطاع:* ${row["القطاع"]}\n`;
-      msg += `🕘 *الفترة:* ${row["الفترة"]}\n`;
-      msg += `📅 *التاريخ:* ${row["تاريخ التشييك"]} | ${row["وقت التشييك"]}\n\n`;
-      msg += `🚑 *بيانات الوحدة:* \n`;
-      msg += `• النداء: ${row["رمز/نداء الوحدة"]}\n`;
-      msg += `• النوع: ${row["نوع الوحدة التشغيلية"]}\n`;
-      msg += `• طرف ثالث: ${row["هل يوجد طرف ثالث"]}\n\n`;
-      msg += `👥 *الطاقم:* \n`;
-      msg += `• 1: ${row["اسم الطاقم 1"]}\n`;
-      msg += `• 2: ${row["اسم الطاقم 2"]}\n`;
-      msg += `• 3: ${row["اسم الطاقم 3"]}\n\n`;
-      msg += `✅ *حالة التشييك:* \n`;
-      msg += `• تشييك الوحدة: ${row["التشييك الخاص بالوحدة"]}\n`;
-      msg += `• التشييك الطبي: ${row["ملخص التشييك الطبي"]}\n\n`;
-      msg += `📝 *الملاحظات:* \n${row["ملاحظات عامة"]}`;
-      openWhatsApp(msg);
+      showAlert('peUnitsAlert','success','تم حفظ نموذج العهد الشخصية للقطاعات بنجاح');
     }
 
     function buildStrategicTable(){

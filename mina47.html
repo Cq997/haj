@@ -1463,7 +1463,7 @@
       ]
     };
 
-    const teamsData = {
+    window.teamsData = {
       "الجمرات": {
         "الصباحية": { lead:"راكان منصور الحصيني", assistants:["فواز حميد الظفيري","تركي أحمد عبدالله الغامدي","محمد علي عبدالله القحطاني","فيصل جري المطيري"] },
         "المسائية": { lead:"محمد عبدالکريم إبراهيم الدعيجي", assistants:["عبدالله علي القحطاني","عبدالعزيز محمد الجهني","أحمد عبدالرحمن التركستاني",""] }
@@ -1674,7 +1674,7 @@ async function fetchDeploymentFromSheet(){
     function fillTeamData(){
       const sector = sectorSelect.value;
       const shift = shiftTimeSelect.value;
-      const team = teamsData?.[sector]?.[shift];
+      const team = window.teamsData?.[sector]?.[shift];
       document.getElementById('ems_lead').value = team?.lead || '';
       document.getElementById('assistant1').value = team?.assistants?.[0] || '';
       document.getElementById('assistant2').value = team?.assistants?.[1] || '';

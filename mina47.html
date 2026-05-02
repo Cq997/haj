@@ -1304,27 +1304,25 @@
         </div>
 
         <div class="section">
-          <div class="section-title">الأجهزة الطبية والمستهلكات</div>
-          <div class="section-body">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>الفئة</th>
-                    <th>الصنف</th>
-                    <th>الحالة</th>
-                    <th>الكمية الحالية</th>
-                  </tr>
-                </thead>
-                <tbody id="strategicTableBody"></tbody>
-              </table>
+          <div class="section-title">النقص الطبي</div>
+          <div class="section-body grid-2">
+            <div class="field">
+              <label for="stock_has_shortage">هل هناك نقص طبي؟</label>
+              <select id="stock_has_shortage" onchange="toggleMedicalShortages()">
+                <option value="" selected>-- اختر --</option>
+                <option value="نعم">نعم</option>
+                <option value="لا">لا</option>
+              </select>
             </div>
+          </div>
+        </div>
 
-            <div class="bullets-box">
-              <div class="field">
-                <label for="stock_notes">ملاحظات الخزن</label>
-                <textarea id="stock_notes" placeholder="اكتب كل ملاحظة في سطر مستقل"></textarea>
-              </div>
+        <div class="section" id="medicalShortagesWrap" style="display:none;">
+          <div class="section-title">النقص الطبية</div>
+          <div class="section-body">
+            <div class="field">
+              <label for="stock_medical_shortages">قائمة الأصناف الناقصة والكميات</label>
+              <textarea id="stock_medical_shortages" placeholder="اكتب اسم الصنف والكمية الناقصة (مثال: مرهم الحروق - 5 عبوات)"></textarea>
             </div>
           </div>
         </div>
@@ -2361,47 +2359,55 @@ ${supportLines}
       const time = document.getElementById('stock_time').value;
       const checker = document.getElementById('stock_checker').value.trim();
       const location = document.getElementById('stock_location').value.trim();
-      const notes = document.getElementById('stock_notes').value.trim();
+      const hasShortage = document.getElementById('stock_has_shortage').value;
 
-      if(!date || !time || !checker || !location){
+      if(!date || !time || !checker || !location || !hasShortage){
         showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
         return;
       }
 
-      let shortageFound = false;
+      if(hasShortage === 'نعم'){
+        const shortages = document.getElementById('stock_medical_shortages').value.trim();
+        if(!shortages){
+          showAlert('stockAlert','error','يرجى ملء قائمة النقص الطبية');
+          return;
+        }
+      }
 
-      const rows = stockItems.map((entry,index)=>{
-        const status = document.getElementById(`stock_status_${index}`).value;
-        const current = document.getElementById(`stock_current_${index}`).value || '0';
-        if(status === 'يوجد نقص') shortageFound = true;
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نقص طبي": hasShortage,
+        "النقص الطبية": document.getElementById('stock_medical_shortages').value.trim() || '-'
+      };
 
-        return {
-          "وقت الحفظ": new Date().toLocaleString('ar-SA'),
-          "تاريخ التشييك": date,
-          "وقت التشييك": time,
-          "القائم بالتشييك": checker,
-          "موقع الخزن": location,
-          "الفئة": entry.category,
-          "الصنف": entry.item,
-          "الحالة": status,
-          "الكمية الحالية": current,
-          "ملاحظات": notes || '-'
-        };
-      });
-
-      const save = await saveToGoogleSheets('الخزن الاستراتيجي', rows);
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
       if(!save.success){
         showAlert('stockAlert','error','تعذر حفظ بيانات الخزن');
         return;
       }
 
-      if(shortageFound) showAlert('stockAlert','error','تم الحفظ مع تنبيه: يوجد نقص في بعض الأصناف');
+      if(hasShortage === 'نعم') showAlert('stockAlert','warning','تم الحفظ مع تنبيه: يوجد نقص طبي');
       else showAlert('stockAlert','success','تم حفظ نموذج الخزن الاستراتيجي بنجاح');
 
       let msg = `📦 تقرير الخزن الاستراتيجي\n\n`;
       msg += `📅 ${date}\n⏰ ${time}\n👤 ${checker}\n📍 ${location}\n`;
-      if(shortageFound) msg += `\n⚠ يوجد نقص في بعض الأصناف`;
+      msg += `\n❓ هل يوجد نقص: ${hasShortage}`;
+      if(hasShortage === 'نعم') msg += `\n\n📄 النقص الطبية:\n${document.getElementById('stock_medical_shortages').value.trim()}`;
       openWhatsApp(msg);
+    }
+
+    function toggleMedicalShortages(){
+      const hasShortage = document.getElementById('stock_has_shortage').value;
+      const wrap = document.getElementById('medicalShortagesWrap');
+      if(hasShortage === 'نعم') wrap.style.display = 'block';
+      else{
+        wrap.style.display = 'none';
+        document.getElementById('stock_medical_shortages').value = '';
+      }
     }
 
     document.getElementById('deploy_sector').addEventListener('change', handleDeploymentContextChange);

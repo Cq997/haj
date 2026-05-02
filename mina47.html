@@ -1128,27 +1128,25 @@
         </div>
 
         <div class="section">
-          <div class="section-title">الأجهزة الطبية والمستهلكات</div>
+          <div class="section-title">الحالة الطبية</div>
           <div class="section-body">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>الفئة</th>
-                    <th>الصنف</th>
-                    <th>الحالة</th>
-                    <th>الكمية الحالية</th>
-                  </tr>
-                </thead>
-                <tbody id="strategicTableBody"></tbody>
-              </table>
+            <div class="field">
+              <label for="stock_medical_deficiency">هل يوجد نواقص طبية؟</label>
+              <select id="stock_medical_deficiency" onchange="toggleMedicalDeficiencyField()">
+                <option value="" selected>اختر</option>
+                <option value="لا">لا</option>
+                <option value="نعم">نعم</option>
+              </select>
             </div>
 
-            <div class="bullets-box">
-              <div class="field">
-                <label for="stock_notes">ملاحظات الخزن</label>
-                <textarea id="stock_notes" placeholder="اكتب كل ملاحظة في سطر مستقل"></textarea>
-              </div>
+            <div class="field" id="stock_medical_notes_wrap" style="display:none;">
+              <label for="stock_notes">ملاحظات عامة</label>
+              <textarea id="stock_notes" placeholder="اكتب الملاحظات هنا"></textarea>
+            </div>
+
+            <div class="field" id="stock_medical_deficiencies_wrap" style="display:none;">
+              <label for="stock_medical_deficiencies">النواقص الطبية</label>
+              <textarea id="stock_medical_deficiencies" placeholder="اكتب كل صنف ناقص مع العدد والملاحظات في سطر مستقل&#10;مثال:&#10;- 50 وحدة من الشاش الطبي - نقص حرج&#10;- 20 زجاجة محلول ملحي - نقص عادي"></textarea>
             </div>
           </div>
         </div>
@@ -3200,6 +3198,26 @@ function fillCheifAndAssistants() {
     document.getElementById('assistant2_name').value = team.assistants[1] || '';
     document.getElementById('assistant3_name').value = team.assistants[2] || '';
     document.getElementById('assistant4_name').value = team.assistants[3] || '';
+  }
+}
+
+// Function to toggle medical deficiency fields
+function toggleMedicalDeficiencyField() {
+  const deficiency = document.getElementById('stock_medical_deficiency').value;
+  const notesWrap = document.getElementById('stock_medical_notes_wrap');
+  const deficienciesWrap = document.getElementById('stock_medical_deficiencies_wrap');
+  
+  if (deficiency === 'لا') {
+    notesWrap.style.display = 'block';
+    deficienciesWrap.style.display = 'none';
+    document.getElementById('stock_medical_deficiencies').value = '';
+  } else if (deficiency === 'نعم') {
+    notesWrap.style.display = 'none';
+    deficienciesWrap.style.display = 'block';
+    document.getElementById('stock_notes').value = '';
+  } else {
+    notesWrap.style.display = 'none';
+    deficienciesWrap.style.display = 'none';
   }
 }
 </script>

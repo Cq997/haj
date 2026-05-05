@@ -37,8 +37,8 @@ content = activate_panel_pattern.sub(correct_activate_panel_func, content)
 def fix_nav_items_onclick(match):
     # Extract the data-target value
     data_target = match.group(1)
-    # Construct the correct onclick attribute
-    onclick_attr = f"onclick=\"activatePanel(\\'{data_target}\\' )\""
+    # Construct the correct onclick attribute, passing the data-target as a string
+    onclick_attr = f"onclick=\"activatePanel(\\\'{data_target}\\\' )\""
     # Return the data-target and the new onclick attribute
     return f"data-target=\"{data_target}\" {onclick_attr}"
 
@@ -56,7 +56,7 @@ def fix_dom_listener(match):
     body = match.group(2)
     
     # Remove any existing panel display logic to avoid duplicates
-    body = re.sub(r"document\.querySelectorAll\(\'\.panel\'\)\.forEach\(panel => \{.*?\}\);", "", body, flags=re.DOTALL)
+    body = re.sub(r"document\.querySelectorAll\(\'\\.panel\'\)\.forEach\(panel => \{.*?\}\);", "", body, flags=re.DOTALL)
     body = re.sub(r"const homePanel = document\.getElementById\(\'homePanel\'\);.*?\}", "", body, flags=re.DOTALL)
     
     initial_logic = """

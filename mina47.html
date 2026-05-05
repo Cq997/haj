@@ -1712,10 +1712,6 @@
         if(window.innerWidth <= 1180) sidebar.classList.remove('active');
       });
     });
-
-    function activatePanel(targetId){
-      document.querySelectorAll('.nav li').forEach(i => i.classList.remove('active'));
-      document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
       document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
       document.getElementById(targetId)?.classList.add('active');
       window.scrollTo({top:0,behavior:'smooth'});
@@ -1897,8 +1893,8 @@ async function fetchDeploymentFromSheet(){
         "المتطوعين": document.getElementById('volunteers_count').value || 0,
         "المركبات": document.getElementById('vehicles_count').value || 0,
         "القولف": document.getElementById('golf_count').value || 0,
-        "الراجلة": document.getElementById('walking_count').value || 0,
-        "الملاحظات": document.getElementById('notes').value.trim() || 'لا توجد ملاحظات'
+        "الراجلة": document.getElementById(\'walking_count\').value || 0,
+        "مركبات التدخل السريع": document.getElementById(\'rapid_response_vehicles\').value || 0,       "الملاحظات": document.getElementById('notes').value.trim() || 'لا توجد ملاحظات'
       };
 
       const save = await saveToGoogleSheets('submitDailyPreparation', row);
@@ -1922,10 +1918,11 @@ async function fetchDeploymentFromSheet(){
       msg += `🚑 *توزيع الآليات:* \n`;
       msg += `• المركبات الإسعافية: ${row["المركبات"]}\n`;
       msg += `• عربات القولف: ${row["القولف"]}\n`;
+      msg += `• مركبات التدخل السريع: ${row["مركبات التدخل السريع"]}\n`;
       msg += `• الفرق الراجلة: ${row["الراجلة"]}\n\n`;
       msg += `📝 *الملاحظات:* \n${row["الملاحظات"]}`;
-      // TODO: Replace 'YOUR_WHATSAPP_NUMBER' with the actual WhatsApp number
-      const whatsappNumber = '9665xxxxxxxx'; // Placeholder number
+      // TODO: Replace '9665xxxxxxxx' with the actual WhatsApp number
+      const whatsappNumber = '9665xxxxxxxx'; // Placeholder number, replace with actual number
       openWhatsApp(whatsappNumber, msg);
     }
 
@@ -2103,42 +2100,7 @@ ${supportLines}
 
       const row = {
         "وقت الحفظ": new Date().toLocaleString('ar-SA'),
-        "القطاع": document.getElementById('handover_sector').value,
-        "نوع المناوبة": document.getElementById('handover_shift').value,
-        "التاريخ": document.getElementById('handover_date').value,
-        "الوقت من": document.getElementById('handover_time_from').value,
-        "الوقت إلى": document.getElementById('handover_time_to').value,
-        "كبير المسعفين المسلم": document.getElementById('handover_sender').value || '-',
-        "كبير المسعفين المستلم": document.getElementById('handover_receiver').value || '-',
-        "مساعد 1": document.getElementById('handover_assistant1').value || '-',
-        "مساعد 2": document.getElementById('handover_assistant2').value || '-',
-        "مساعد 3": document.getElementById('handover_assistant3').value || '-',
-        "مساعد 4": document.getElementById('handover_assistant4').value || '-',
-        "متوسط زمن الاستجابة": document.getElementById('avg_response').value || '0',
-        "متوسط زمن استجابة ECHO": document.getElementById('echo_response').value || '0',
-        "إجمالي البلاغات": document.getElementById('total_cases').value || '0',
-        "عدد الفرق الفعالة": document.getElementById('active_teams').value || '0',
-        "عدد الفرق المعتمدة": document.getElementById('planned_teams').value || '0',
-        "أحداث طارئة": hasMethane,
-        "M-حادث جسيم": document.getElementById('h_methane_major').value || '-',
-        "E-الموقع": document.getElementById('h_methane_location').value || '-',
-        "T-نوع الحادث": document.getElementById('h_methane_type').value || '-',
-        "H-المخاطر": document.getElementById('h_methane_hazards').value || '-',
-        "A-الوصول": document.getElementById('h_methane_access').value || '-',
-        "N-الإصابات": document.getElementById('h_methane_casualties').value || '-',
-        "E-الخدمات": document.getElementById('h_methane_services').value || '-',
-        "ملاحظات ميثان": document.getElementById('h_methane_notes').value || '-',
-        "عدد مركبات الإسعاف": document.getElementById('handover_ambulance_count').value || '0',
-        "عدد القولف": document.getElementById('handover_golf_count').value || '0',
-        "عدد الاستجابة النوعية": document.getElementById('handover_special_response_count').value || '0',
-        "عدد فرق التدخل السريع": document.getElementById('handover_rapid_response_count').value || '0',
-        "العاملة": document.getElementById('working_vehicles').value || '0',
-        "الاحتياط": document.getElementById('reserve_vehicles').value || '0',
-        "الخارج عن الخدمة": document.getElementById('out_of_service').value || '0',
-        "بلاغات الدعم اللوجستي": document.getElementById('logistic_reports').value || '0',
-        "البلاغات المفتوحة": document.getElementById('open_logistic_reports').value || '0',
-        "مواقع الانتشار": document.getElementById('deployment_sites').value.trim() || 'لايوجد',
-        "الوحدات المتعطلة ومواقعها": document.getElementById('faulty_units').value.trim() || 'لايوجد',
+        "القطاع": document.getElementById(\'handover_sector\').value,\n        "نوع المناوبة": document.getElementById(\'handover_shift\').value,\n        "التاريخ": document.getElementById(\'handover_date\').value,\n        "الوقت من": document.getElementById(\'handover_time_from\').value,\n        "الوقت إلى": document.getElementById(\'handover_time_to\').value,\n        "كبير المسعفين المسلم": document.getElementById(\'handover_sender\').value || \'-\',\n        "كبير المسعفين المستلم": document.getElementById(\'handover_receiver\').value || \'-\',\n        "مساعد 1": document.getElementById(\'handover_assistant1\').value || \'-\',\n        "مساعد 2": document.getElementById(\'handover_assistant2\').value || \'-\',\n        "مساعد 3": document.getElementById(\'handover_assistant3\').value || \'-\',\n        "مساعد 4": document.getElementById(\'handover_assistant4\').value || \'-\',\n        "متوسط زمن الاستجابة": document.getElementById(\'avg_response\').value || \'0\',\n        "عدد بلاغات ECHO": document.getElementById(\'echo_response\').value || \'0\',\n        "إجمالي البلاغات": document.getElementById(\'total_cases\').value || \'0\',\n        "إجمالي عدد الفرق بما في ذلك التداخلية (اوفرلاب) والمدعمه": document.getElementById(\'active_teams\').value || \'0\',\n        "عدد الفرق الأساسية": document.getElementById(\'planned_teams\').value || \'0\',\n        "أحداث طارئة": hasMethane,\n        "M-حادث جسيم": document.getElementById(\'h_methane_major\').value || \'-\\,\n        "E-الموقع": document.getElementById(\'h_methane_location\').value || \'-\\,\n        "T-نوع الحادث": document.getElementById(\'h_methane_type\').value || \'-\\,\n        "H-المخاطر": document.getElementById(\'h_methane_hazards\').value || \'-\\,\n        "A-الوصول": document.getElementById(\'h_methane_access\').value || \'-\\,\n        "N-الإصابات": document.getElementById(\'h_methane_casualties\').value || \'-\\,\n        "E-الخدمات": document.getElementById(\'h_methane_services\').value || \'-\\,\n        "ملاحظات ميثان": document.getElementById(\'h_methane_notes\').value || \'-  "عدد القولف": document.getElementById(\'handover_golf_count\').value || \'0\',\n        "عدد الاستجابة النوعية": document.getElementById(\'handover_special_response_count\').value || \'0\',\n        "عدد فرق التدخل السريع": document.getElementById(\'handover_rapid_response_count\').value || \'0\',\n        "العاملة": document.getElementById(\'working_vehicles\').value || \'0\',\n        "الاحتياط": document.getElementById(\'reserve_vehicles\').value || \'0\',\n        "الخارج عن الخدمة": document.getElementById(\'out_of_service\').value || \'0\',\n        "بلاغات الدعم اللوجستي": document.getElementById(\'logistic_reports\').value || \'0\",\n        "البلاغات المفتوحة": document.getElementById(\'open_logistic_reports\').value || \'0\',\n        "مواقع الانتشار": document.getElementById(\'deployment_sites\').value.trim() || \'لايوجد\',       "الوحدات المتعطلة ومواقعها": document.getElementById('faulty_units').value.trim() || 'لايوجد',
         "نداء الفرقة 1": s1.call || '',
         "توقيت العطل 1": s1.time || '',
         "نوع العطل 1": s1.type || '',
@@ -2167,7 +2129,7 @@ ${supportLines}
         "ملاحظات عامة عن المناوبة": document.getElementById('handover_notes').value.trim() || 'لايوجد'
       };
 
-      row["الرسالة النهائية"] = buildHandoverMessage(row);
+      const message = `🚨 *بلاغ METHANE - قطاع ${row["القطاع"]}* 🚨\n\n;
 
       const save = await saveToGoogleSheets('submitHandover', row);
       if(!save.success){
@@ -2176,7 +2138,9 @@ ${supportLines}
       }
 
       showAlert('handoverAlert','success','تم حفظ نموذج تسليم المناوبة بنجاح');
-      openWhatsApp(row["الرسالة النهائية"]);
+      // TODO: Replace '9665xxxxxxxx' with the actual WhatsApp number
+      const whatsappNumber = '9665xxxxxxxx'; // Placeholder number, replace with actual number
+      openWhatsApp(whatsappNumber, message);
     }
 
     
@@ -2200,42 +2164,15 @@ ${supportLines}
 
       const row = {
         "وقت الحفظ": new Date().toLocaleString('ar-SA'),
-        "القطاع": document.getElementById('pe_sector_units').value,
-        "التاريخ": document.getElementById('pe_date_units').value,
-        "فترة المناوبة": document.getElementById("pe_shift_units").value,
-        "كبير المسعفين": document.getElementById("pe_units_lead").value,
-        "مساعد 1": document.getElementById("pe_units_assistant1").value,
-        "مساعد 2": document.getElementById("pe_units_assistant2").value,
-        "مساعد 3": document.getElementById("pe_units_assistant3").value,
-        "مساعد 4": document.getElementById("pe_units_assistant4").value,
-        "عدد جهاز لوكس": document.getElementById('pe_units_lucas_count').value || '0',
-        "حالة جهاز لوكس": document.getElementById('pe_units_lucas_status').value || '-',
-        "ملاحظات جهاز لوكس": document.getElementById('pe_units_lucas_notes').value || '-',
-        "عدد جهاز ميندري": document.getElementById('pe_units_mindray_count').value || '0',
-        "حالة جهاز ميندري": document.getElementById('pe_units_mindray_status').value || '-',
-        "ملاحظات جهاز ميندري": document.getElementById('pe_units_mindray_notes').value || '-',
-        "عدد جهاز لايف باك": document.getElementById('pe_units_lifepak_count').value || '0',
-        "حالة جهاز لايف باك": document.getElementById('pe_units_lifepak_status').value || '-',
-        "ملاحظات جهاز لايف باك": document.getElementById('pe_units_lifepak_notes').value || '-',
-        "عدد جهاز اللاسلكي": document.getElementById('pe_units_wireless_count').value || '0',
-        "حالة جهاز اللاسلكي": document.getElementById('pe_units_wireless_status').value || '-',
-        "ملاحظات جهاز اللاسلكي": document.getElementById('pe_units_wireless_notes').value || '-',
-        "عدد جهاز لوحي (تابلت)": document.getElementById('pe_units_tablet_count').value || '0',
-        "حالة جهاز لوحي (تابلت)": document.getElementById('pe_units_tablet_status').value || '-',
-        "ملاحظات جهاز لوحي (تابلت)": document.getElementById('pe_units_tablet_notes').value || '-',
-        "عدد جهاز قياس العلامات الحيوية": document.getElementById('pe_units_vital_count').value || '0',
-        "حالة جهاز قياس العلامات الحيوية": document.getElementById('pe_units_vital_status').value || '-',
-        "ملاحظات جهاز قياس العلامات الحيوية": document.getElementById('pe_units_vital_notes').value || '-'
-      };
+        "القطاع": document.getElementById('pe_sector_units').        "تاريخ التشييك": document.getElementById(\'pe_date_units\').value,\n        "وقت التشييك": document.getElementById(\'pe_time_units\').value,\n        "القطاع": document.getElementById(\'pe_sector_units\').value,\n        "الفترة": document.getElementById("pe_shift_units").value,\n        "كبير المسعفين": document.getElementById("pe_units_lead").value,\n        "المساعدين": `${document.getElementById("pe_units_assistant1").value || \'-\'} | ${document.getElementById("pe_units_assistant2").value || \'-\'} | ${document.getElementById("pe_units_assistant3").value || \'-\'} | ${document.getElementById("pe_units_assistant4").value || \'-        "جهاز لوكس": `العدد: ${document.getElementById(\'pe_units_lucas_count\').value || \'0\'}, الحالة: ${document.getElementById(\'pe_units_lucas_status\').value || \'-\'}, ملاحظات: ${document.getElementById(\'pe_units_lucas_notes\').value || \        "جهاز ميندري": `العدد: ${document.getElementById(\'pe_units_mindray_count\').value || \'0\'}, الحالة: ${document.getElementById(\'pe_units_mindray_status\').value || \'-\'}, ملاحظات: ${document.getElementById(\'pe_units_mindray_notes\').value || \'-\'}`,    "ملاحظات جهاز ميندري": document.getElementById('pe_units_mindray_notes').value |        "جهاز لايف باك 15": `العدد: ${document.getElementById(\'pe_units_lifepak_count\').value || \'0\'}, الحالة: ${document.getElementById(\'pe_units_lifepak_status\').value || \'-\'}, ملاحظات: ${document.getElementById(\'pe_units_lifepak_notes\').value || \'-       "جهاز اتصال لاسلكي": `العدد: ${document.getElementById(\'pe_units_wireless_count\').value || \'0\'}, الحالة: ${document.getElementById(\'pe_units_wireless_status\').value || \'-\'}, ملاحظات: ${document.getElementById(\'pe_units_wireless_notes\').value ||     "المسعف الالكتروني(تابلت)": `العدد: ${document.getElementById(\'pe_units_tablet_count\').value || \'0\'}, الحالة: ${document.getElementById(\'pe_units_tablet_status\').value || \'-\'}, ملاحظات: ${document.getElementById(\'pe_units_tablet_notes\').value || \'-\  "جهاز قياس العلامات الحيوية": `العدد: ${document.getElementById(\'pe_units_vital_count\').value || \'0\'}, الحالة: ${document.getElementById(\'pe_units_vital_status\').value || \'-\'}, ملاحظات: ${document.getElementById(\'pe_units_vital_notes\').value || \'-\'}`,
+   };
 
       const save = await saveToGoogleSheets('submitPersonalEquipmentUnits', row);
       if(!save.success){
         showAlert('peUnitsAlert','error','تعذر حفظ بيانات العهد الشخصية للقطاعات');
         return;
-      }
-
-      showAlert('peUnitsAlert','success','تم حفظ نموذج العهد الشخصية للقطاعات بنجاح');
-    }
+          showAlert(\'peUnitsAlert\',\'success\',\'تم حفظ نموذج العهد الشخصية للقطاعات بنجاح\');\n\n      let msg = `🛡️ *منصة نطاق منى – العهد الشخصية للقطاعات* 🛡️\n\n`;\n      msg += `📍 *القطاع:* ${row[\"القطاع\"]}\n`;\n      msg += `🗓️ *التاريخ:* ${row[\"التاريخ\"]}\n`;\n      msg += `🕘 *فترة المناوبة:* ${row[\"فترة المناوبة\"]}\n\n`;\n      msg += `👤 *كبير المسعفين:* ${row[\"كبير المسعفين\"]}\n`;\n      msg += `👥 *المساعدون:* ${row[\"مساعد 1\"]} | ${row[\"مساعد 2\"]} | ${row[\"مساعد 3\"]} | ${row[\"مساعد 4\"]}\n\n`;\n      msg += `*بيانات الأجهزة:*
+`;\n      msg += `• ${row[\"جهاز لوكس\"]}\n`;\n      msg += `• ${row[\"جهاز ميندري\"]}\n`;\n      msg += `• ${row[\"جهاز لايف باك 15\"]}\n`;\n      msg += `• ${row[\"جهاز اتصال لاسلكي\"]}\n`;\n      msg += `• ${row[\"المسعف الالكتروني(تابلت)\"]}\n`;\n      msg += `• ${row[\"جهاز قياس العلامات الحيوية\"]}\n\n`;\n\n      const whatsappNumber = \'966500000000\'; // رقم واتساب افتراضي، يرجى استبداله بالرقم الفعلي\n      openWhatsApp(whatsappNumber, msg);    }
 
     function buildStrategicTable(){
       const body = document.getElementById('strategicTableBody');
@@ -2277,9 +2214,7 @@ ${supportLines}
         "حالة جهاز لوكس": document.getElementById('pe_lucas_status').value || '-',
         "ملاحظات جهاز لوكس": document.getElementById('pe_lucas_notes').value || '-',
         "عدد جهاز ميندري": document.getElementById('pe_mindray_count').value || '0',
-        "حالة جهاز ميندري": document.getElementById('pe_mindray_status').value || '-',
-        "ملاحظات جهاز ميندري": document.getElementById('pe_mindray_notes').value || '-',
-        "عدد جهاز لايف باك": document.getElementById('pe_lifepak_count').value || '0',
+        "حالة جهاز ميندري": document.getElementById('pe_mindray_status').value |       "عدد جهاز لايف باك": document.getElementById('pe_lifepak_count').value || '0',
         "حالة جهاز لايف باك": document.getElementById('pe_lifepak_status').value || '-',
         "ملاحظات جهاز لايف باك": document.getElementById('pe_lifepak_notes').value || '-',
         "عدد جهاز اللاسلكي": document.getElementById('pe_wireless_count').value || '0',
@@ -2345,8 +2280,8 @@ ${supportLines}
       msg += `📅 ${date}\n⏰ ${time}\n👤 ${checker}\n📍 ${location}\n`;
       msg += `\n❓ هل يوجد نقص: ${hasShortage}`;
       if(hasShortage === 'نعم') msg += `\n\n📄 النقص الطبية:\n${document.getElementById('stock_medical_shortages').value.trim()}`;
-      // TODO: Replace 'YOUR_WHATSAPP_NUMBER' with the actual WhatsApp number
-      const whatsappNumber = '9665xxxxxxxx'; // Placeholder number
+      // TODO: Replace '9665xxxxxxxx' with the actual WhatsApp number
+      const whatsappNumber = '9665xxxxxxxx'; // Placeholder number, replace with actual number
       openWhatsApp(whatsappNumber, msg);
     }
 
@@ -2504,39 +2439,55 @@ ${supportLines}
       });
     }
 
+   
    async function loadDeploymentTemplate(){
+      const sector = document.getElementById('deploy_sector').value;
+      const defaultShift = document.getElementById('deploy_shift').value || 'الصباحية';
+      const body = document.getElementById('deploymentTableBody');
 
-  const sector = document.getElementById('deploy_sector').value;
-  const defaultShift = document.getElementById('deploy_shift').value || 'الصباحية';
-  const body = document.getElementById('deploymentTableBody');
+      body.innerHTML = '';
+      if(!sector) return;
 
-  body.innerHTML = '';
+      let data = [];
+      try {
+          data = await fetchDeploymentFromSheet();
+      } catch(e) {
+          console.log('Error fetching from sheet, using static points');
+      }
 
-  if(!sector) {
-    body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#999;">اختر القطاع لعرض النقاط</td></tr>';
-    return;
-  }
+      let items = data.filter(d => 
+          String(d["القطاع"]).trim() === String(sector).trim()
+      );
 
-  const data = await fetchDeploymentFromSheet();
+      // If no data in sheet for this sector, use static points
+      if (items.length === 0) {
+          console.log('No data in sheet for sector ' + sector + ', using static points');
+          items = staticDeploymentPoints.filter(p => p.sector === sector).map(p => ({
+              "الرمز": p.id,
+              "نوع الآلية": p.type,
+              "مناوبة النقطة": p.shift,
+              "عدد الفرق الفعلي": 1,
+              "Latitude": p.lat,
+              "Longitude": p.lng,
+              "ملاحظة السجل": ""
+          }));
+      }
 
-const items = data.filter(d => 
-  String(d["القطاع"]).trim() === String(sector).trim()
-);
+      items.forEach((item, index) => {
+        body.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
+          code: item["الرمز"] || `${sector}-${index + 1}`,
+          type: item["نوع الآلية"] || 'مركبة إسعافية',
+          shift: item["مناوبة النقطة"] || defaultShift,
+          count: item["عدد الفرق الفعلي"] || 1,
+          lat: item["Latitude"] || '',
+          lng: item["Longitude"] || '',
+          note: item["ملاحظة السجل"] || ''
+        }));
+      });
 
-  items.forEach((item, index) => {
-    body.insertAdjacentHTML('beforeend', createDeploymentRowHTML({
-      code: item["الرمز"] || `${sector}-${index + 1}`,
-      type: item["نوع الآلية"] || 'مركبة إسعافية',
-      shift: item["مناوبة النقطة"] || defaultShift,
-      count: item["عدد الفرق الفعلي"] || 1,
-      lat: item["Latitude"] || '',
-      lng: item["Longitude"] || '',
-      note: item["ملاحظة السجل"] || ''
-    }));
-  });
+      refreshDeploymentAdminMode();
+    }
 
-  refreshDeploymentAdminMode();
-}
     
 
     function addManualDeploymentRow(){
@@ -2663,8 +2614,8 @@ const items = data.filter(d =>
       msg += `• متعطلة: ${statusCounts["متعطلة"] || 0}\n`;
 
       if(notes) msg += `\n📝 *ملاحظات:* \n${notes}`;
-      // TODO: Replace 'YOUR_WHATSAPP_NUMBER' with the actual WhatsApp number
-      const whatsappNumber = '9665xxxxxxxx'; // Placeholder number
+      // TODO: Replace '9665xxxxxxxx' with the actual WhatsApp number
+      const whatsappNumber = '9665xxxxxxxx'; // Placeholder number, replace with actual number
       openWhatsApp(whatsappNumber, msg);
     }
 
@@ -2698,42 +2649,21 @@ const items = data.filter(d =>
         "A - الوصول والمغادرة": access || 'غير محدد',
         "N - الإصابات": casualties || 'غير محدد',
         "E - الخدمات الإسعافية المطلوبة": services || 'غير محدد',
-        "ملاحظات إضافية": notes || '-'
+        "ملاحظات إضافية": notes || 'لا توجد'
       };
 
-      row["الرسالة النهائية"] = buildMethaneMessage(row);
+      const message = `🚨 رسالة ميثان - تبليغ حادث جسيم\n\n📍 القطاع: ${row["القطاع"]}\n👤 المبلغ: ${row["اسم المبلغ"]}\n📞 التواصل: ${row["رقم التواصل"]}\n\n⚠️ M - حادث جسيم: ${row["M - حادث جسيم"]}\n📍 E - الموقع: ${row["E - الموقع"]}\n🔴 T - نوع الحادث: ${row["T - نوع الحادث"]}\n⚡ H - المخاطر: ${row["H - المخاطر"]}\n🚪 A - الوصول والمغادرة: ${row["A - الوصول والمغادرة"]}\n🤕 N - الإصابات: ${row["N - الإصابات"]}\n🚑 E - الخدمات الإسعافية المطلوبة: ${row["E - الخدمات الإسعافية المطلوبة"]}\n📝 ملاحظات إضافية: ${row["ملاحظات إضافية"]}`;
 
-      const save = await saveToGoogleSheets('submitMethane', row);
+      const save = await saveToGoogleSheets("submitMethane", row);
       if (!save.success) {
-        showAlert('methaneAlert', 'error', 'تعذر حفظ رسالة ميثان');
+        showAlert("methaneAlert", "error", "تعذر حفظ رسالة ميثان");
         return;
       }
 
-      showAlert('methaneAlert', 'success', 'تم حفظ رسالة ميثان بنجاح');
-      openWhatsApp(row["الرسالة النهائية"]);
+      showAlert("methaneAlert", "success", "تم حفظ رسالة ميثان بنجاح");
+      const whatsappNumber = "9665xxxxxxxx"; // Placeholder number, replace with actual number
+      openWhatsApp(whatsappNumber, message);
       clearMethaneForm();
-    }
-
-    function buildMethaneMessage(row) {
-      return `🚨 رسالة ميثان - تبليغ حادث جسيم
-
-📍 القطاع: ${row["القطاع"]}
-👤 المبلغ: ${row["اسم المبلغ"]}
-📞 التواصل: ${row["رقم التواصل"]}
-
-⚠️ M - حادث جسيم: ${row["M - حادث جسيم"]}
-📍 E - الموقع: ${row["E - الموقع"]}
-🔴 T - نوع الحادث: ${row["T - نوع الحادث"]}
-⚡ H - المخاطر: ${row["H - المخاطر"]}
-🚪 A - الوصول والمغادرة: ${row["A - الوصول والمغادرة"]}
-👥 N - الإصابات: ${row["N - الإصابات"]}
-🚑 E - الخدمات الإسعافية المطلوبة: ${row["E - الخدمات الإسعافية المطلوبة"]}
-
-📝 ملاحظات إضافية:
-${row["ملاحظات إضافية"]}
-
-🕒 وقت البلاغ: ${row["وقت الحفظ"]}
-🔔 من منصة نطاق منى`;
     }
 
     function clearMethaneForm() {
@@ -2758,9 +2688,7 @@ ${row["ملاحظات إضافية"]}
 
       const alertBox = document.getElementById('methaneAlert');
       if (alertBox) alertBox.style.display = 'none';
-    }
-
-    // ═══════════════════════════════════════════
+    }════════════════════════════════════
     // دوال نموذج خطة الدعم
     // ═══════════════════════════════════════════
 
@@ -2868,8 +2796,8 @@ ${row["ملاحظات إضافية"]}
       console.log(\'Calling openWhatsApp...\');
       // Assuming a default WhatsApp number for now, or it should be retrieved from somewhere
       // For now, I will use a placeholder. The user needs to provide the actual number.
-      // TODO: Replace 'YOUR_WHATSAPP_NUMBER' with the actual WhatsApp number
-      const whatsappNumber = '9665xxxxxxxx'; // Placeholder number
+      // TODO: Replace '9665xxxxxxxx' with the actual WhatsApp number
+      const whatsappNumber = '9665xxxxxxxx'; // Placeholder number, replace with actual number
       openWhatsApp(whatsappNumber, msg);
       clearSupportPlanForm();
     }
@@ -3387,20 +3315,43 @@ async function updateSupportSummary() {
 }
 
 /* ─── جلب البيانات من Google Sheets وتحديث الخريطة والداشبورد ─── */
+
 async function loadLiveDeploymentData(){
+  let liveData = [];
   try {
-    const data = await fetchDeploymentFromSheet();
-    if(data && data.length > 0){
-      liveDeploymentData = data.map(d => ({
-        id: d["الرمز"] || d["اسم النقطة"] || '',
-        sector: d["القطاع"] || '',
-        type: d["نوع الآلية"] || d["الالية المشغلة بالنقطة"] || '',
-        teams: parseInt(d["عدد الفرق الفعلي"] || d["عدد الفرق بالنقطة"] || 1),
-        lat: parseFloat(d["Latitude"] || 0),
-        lng: parseFloat(d["Longitude"] || 0),
-        status: d["الحالة"] || 'جاهز',
-        shift: d["مناوبة النقطة"] || d["العرض الزمني"] || 'الصباحية'
-      })).filter(d => d.lat && d.lng);
+    const sheetData = await fetchDeploymentFromSheet();
+    const statusMap = {};
+    
+    if(Array.isArray(sheetData)){
+      sheetData.forEach(d => {
+        const code = d["الرمز"] || d["اسم النقطة"];
+        if(code) statusMap[code] = d;
+      });
+    }
+
+    liveData = staticDeploymentPoints.map(p => {
+      const live = statusMap[p.id] || {};
+      return {
+        id: p.id,
+        sector: p.sector,
+        type: live["نوع الآلية"] || p.type,
+        teams: parseInt(live["عدد الفرق الفعلي"] || 1),
+        lat: p.lat,
+        lng: p.lng,
+        status: live["الحالة"] || "جاهز",
+        shift: live["مناوبة النقطة"] || p.shift
+      };
+    });
+  } catch(e) {
+    console.log('Error loading live data, using static defaults:', e);
+    liveData = staticDeploymentPoints.map(p => ({...p, teams: 1}));
+  }
+  
+  updateDashboard(liveData);
+  if(window.mapInstance) renderMapMarkers(liveData);
+  window.liveDeploymentData = liveData;
+}
+)).filter(d => d.lat && d.lng);
     }
   } catch(e) {
     console.log('استخدام البيانات الثابتة:', e);
@@ -4349,8 +4300,1153 @@ const DEPLOYMENT_POINTS = {
     "lng": 39.8986349
   }
 };
+
+    // ============================================
+    // نظام الملاحة والتحكم في اللوحات
+    // ================================    function activatePanel(panelId) {
+        console.log(\'Activating panel:\', panelId);
+        
+        // 1. إخفاء جميع اللوحات
+        const allPanels = document.querySelectorAll(\'\.panel\');
+        allPanels.forEach(p => {
+            p.style.display = \'none\';
+            p.classList.remove(\'active\');
+        });
+        
+        // 2. إظهار اللوحة المطلوبة
+        const target = document.getElementById(panelId);
+        if (target) {
+            target.style.display = \'block\';
+            target.classList.add(\'active\');
+            window.scrollTo({ top: 0, behavior: \'smooth\' });
+        } else {
+            console.error(\'Panel not found:\', panelId);
+        }
+
+        // 3. تحديث حالة عناصر التنقل (nav items)
+        document.querySelectorAll(\'\.nav li\').forEach(li => li.classList.remove(\'active\'));
+        document.querySelector(`.nav li[data-target="${panelId}"]`)?.classList.add(\'active\');
+        
+        // 4. إغلاق القائمة الجانبية في الجوال
+        const sidebar = document.querySelector(\'\.sidebar\');
+        if (window.innerWidth <= 1180 && sidebar.classList.contains(\'active\')) {
+            sidebar.classList.remove(\'active\');
+        }
+    } window.activatePanel = activatePanel;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM fully loaded and parsed');
+        
+        // إعداد الحالة الأولية - إظهار الرئيسية
+        activatePanel('homePanel');
+        
+        // تفعيل أزرار القائمة الجانبية التي لا تحتوي على onclick
+        document.querySelectorAll('.nav li[data-target]').forEach(li => {
+            if (!li.getAttribute('onclick')) {
+                li.addEventListener('click', () => {
+                    activatePanel(li.getAttribute('data-target'));
+                });
+            }
+        });
+
+        // زر الجوال
+        const mobileBtn = document.querySelector('.mobile-btn');
+        const sidebar = document.querySelector('.sidebar');
+        if (mobileBtn && sidebar) {
+            mobileBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+            });
+        }
+        
+        // تشغيل التحديث الدوري إذا وجد
+        if (typeof startFastPolling === 'function') {
+            startFastPolling();
+        }
+    });
+    </script>
+
+
+
+<script>
+// ============================================
+// منصة نطاق منى - تحسينات السرعة والأيقونات
+// ============================================
+
+// نظام التخزين المؤقت (Caching System)
+const dataCache = {
+    deployment: { data: null, timestamp: 0, ttl: 5000 }, // 5 ثواني
+    support: { data: null, timestamp: 0, ttl: 5000 },
+    daily: { data: null, timestamp: 0, ttl: 5000 }
+};
+
+// دالة جلب البيانات مع التخزين المؤقت السريع
+async function fetchWithCache(action, cacheKey) {
+    const cache = dataCache[cacheKey];
+    const now = Date.now();
+    
+    // إذا كانت البيانات محفوظة وحديثة، أرجعها فوراً
+    if (cache.data && (now - cache.timestamp) < cache.ttl) {
+        return cache.data;
+    }
+    
+    try {
+        const res = await fetch(`${SCRIPT_URL}?action=${action}`, {
+            method: 'GET',
+            headers: { 'Accept': 'application/json' },
+            cache: 'no-cache'
+        });
+        if (!res.ok) throw new Error("فشل الاتصال");
+        const data = await res.json();
+        
+        // حفظ في الذاكرة المؤقتة
+        cache.data = data;
+        cache.timestamp = now;
+        return data;
+    } catch (err) {
+        console.error(`❌ خطأ في جلب ${action}:`, err);
+        return cache.data || []; // أرجع البيانات القديمة إن وجدت
+    }
+}
+
+// دالة تحديث البيانات الفورية (Force Refresh)
+async function forceRefreshData(cacheKey) {
+    dataCache[cacheKey].timestamp = 0; // أجبر على تحديث
+}
+
+// ============================================
+// رسائل الواتساب مع الأيقونات التعريفية
+// ============================================
+
+function buildHandoverMessageWithEmojis(row) {
+    const date = row["التاريخ"] || new Date().toLocaleDateString('ar-SA');
+    const sector = row["القطاع"] || "غير محدد";
+    const sender = row["handover_sender"] || "غير محدد";
+    const receiver = row["handover_receiver"] || "غير محدد";
+
+    const message = `
+🏥 *تقرير تسليم المناوبة* 🤝
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📍 القطاع:* ${sector}
+*📅 التاريخ:* ${date}
+*⏰ الوقت من:* ${row["الوقت من"] || "غير محدد"}
+*⏰ الوقت إلى:* ${row["الوقت إلى"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*👨‍⚕️ كبير المسعفين المسلم:* ${sender}
+*👨‍⚕️ كبير المسعفين المستقبل:* ${receiver}
+*👥 المساعدون:* ${row["handover_assistant1"] || "-"} | ${row["handover_assistant2"] || "-"} | ${row["handover_assistant3"] || "-"} | ${row["handover_assistant4"] || "-"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🚑 ملخص الآليات:*
+• عدد مركبات الإسعاف: ${row["عدد مركبات الإسعاف"] || "0"}
+• عدد القولف: ${row["عدد القولف"] || "0"}
+• عدد الاستجابة النوعية: ${row["عدد الاستجابة النوعية"] || "0"}
+• عدد فرق التدخل السريع: ${row["عدد فرق التدخل السريع"] || "0"}
+• العاملة: ${row["العاملة"] || "0"}
+• الاحتياط: ${row["الاحتياط"] || "0"}
+• خارج الخدمة: ${row["الخارج عن الخدمة"] || "0"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📊 ملخص الإحصائيات:*
+• متوسط زمن الاستجابة: ${row["متوسط زمن الاستجابة"] || "0"} دقيقة
+• متوسط زمن استجابة ECHO: ${row["متوسط زمن استجابة ECHO"] || "0"} دقيقة
+• إجمالي البلاغات: ${row["إجمالي البلاغات"] || "0"}
+• عدد الفرق الفعالة: ${row["عدد الفرق الفعالة"] || "0"}
+• عدد الفرق المعتمدة: ${row["عدد الفرق المعتمدة"] || "0"}
+• بلاغات الدعم اللوجستي: ${row["بلاغات الدعم اللوجستي"] || "0"}
+• البلاغات المفتوحة: ${row["البلاغات المفتوحة"] || "0"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🚨 أحداث طارئة:*
+${row["أحداث طارئة"] === "نعم" ? `
+• حادث جسيم: ${row["h_methane_major"] || "-"}
+• الموقع: ${row["h_methane_location"] || "-"}
+• النوع: ${row["h_methane_type"] || "-"}
+• المخاطر: ${row["h_methane_hazards"] || "-"}
+• الوصول: ${row["h_methane_access"] || "-"}
+• الإصابات: ${row["h_methane_number"] || "-"}
+• الخدمات: ${row["h_methane_emergency"] || "-"}
+• ملاحظات: ${row["h_methane_notes"] || "-"}
+` : "لا توجد أحداث طارئة"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*⚠️ تحذيرات وملاحظات:*
+• التحذيرات الجوية: ${row["التحذيرات الجوية"] || "لا توجد"}
+• التحذيرات الأمنية: ${row["التحذيرات الأمنية"] || "لا توجد"}
+• مواقع خطرة: ${row["مواقع خطرة"] || "لا توجد"}
+• إصابات العاملين: ${row["إصابات العاملين"] || "لا توجد"}
+• إحاطات أخرى: ${row["إحاطات أخرى"] || "لا توجد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📝 ملخص المناوبة:*
+• ملخص الأحداث: ${row["ملخص الأحداث"] || "لا توجد"}
+• ملخص الموارد المطلوبة وتوزيعها: ${row["ملخص الموارد المطلوبة وتوزيعها"] || "لا توجد"}
+• ملاحظات عامة عن المناوبة: ${row["ملاحظات عامة عن المناوبة"] || "لا توجد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ *تم الحفظ بنجاح*`;
+    return message;
+}
+
+function buildDeploymentMessageWithEmojis(row) {
+    const date = row["التاريخ"] || new Date().toLocaleDateString('ar-SA');
+    const sector = row["القطاع"] || "غير محدد";
+    const code = row["الرمز"] || "غير محدد";
+    const status = row["الحالة"] || "غير محدد";
+
+    const message = `
+🗺️ *خطة الانتشار* 📍
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📍 القطاع:* ${sector}
+*🏷️ الرمز:* ${code}
+*📅 التاريخ:* ${date}
+*⏰ الوقت:* ${row["الوقت"] || "غير محدد"}
+*🔄 العرض الزمني:* ${row["العرض الزمني"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*👨‍⚕️ مدخل البيانات:* ${row["deploy_lead_name"] || "غير محدد"} (${row["deploy_role"] || "غير محدد"})
+*👤 كبير المسعفين المناوب:* ${row["deploy_current_lead"] || "غير محدد"}
+*👥 المساعدون:* ${row["deploy_assistants_auto"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🚑 تفاصيل الآلية:*
+• نوع الآلية: ${row["نوع الآلية"] || "غير محدد"}
+• مناوبة النقطة: ${row["مناوبة النقطة"] || "غير محدد"}
+• وقت البداية: ${row["وقت البداية"] || "غير محدد"}
+• وقت النهاية: ${row["وقت النهاية"] || "غير محدد"}
+• الحالة: ${status}
+• عدد الفرق الفعلي: ${row["عدد الفرق الفعلي"] || "0"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🗺️ الموقع:*
+• Latitude: ${row["Latitude"] || "غير محدد"}
+• Longitude: ${row["Longitude"] || "غير محدد"}
+• رابط النقطة: ${row["رابط النقطة"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🤝 التدعيم:*
+• نوع التدعيم: ${row["نوع التدعيم"] || "غير محدد"}
+• جهة التدعيم: ${row["جهة التدعيم"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📝 ملاحظات:*
+• ملاحظة السجل: ${row["ملاحظة السجل"] || "لا توجد ملاحظات"}
+• ملاحظات عامة: ${row["ملاحظات عامة"] || "لا توجد ملاحظات"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ *تم الحفظ بنجاح*`;
+    return message;
+}
+
+function buildPersonalEquipmentMessageWithEmojis(row) {
+    const date = row["التاريخ"] || new Date().toLocaleDateString('ar-SA');
+    const sector = row["القطاع"] || "غير محدد";
+    const lead = row["كبير المسعفين"] || "غير محدد";
+
+    const message = `
+🏥 *تقرير العهد الشخصية* 📝
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📍 القطاع:* ${sector}
+*👨‍⚕️ كبير المسعفين:* ${lead}
+*📅 التاريخ:* ${date}
+*⏰ فترة المناوبة:* ${row["فترة المناوبة"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🔧 الأجهزة الطبية:*
+• 🔴 جهاز لوكس (LUCAS): ${row["حالة جهاز لوكس"] || "غير محدد"} (العدد: ${row["عدد جهاز لوكس"] || "0"})
+• 🟢 جهاز ميندري (Mindray): ${row["حالة جهاز ميندري"] || "غير محدد"} (العدد: ${row["عدد جهاز ميندري"] || "0"})
+• 🟡 جهاز لايف باك (LifePak): ${row["حالة جهاز لايف باك"] || "غير محدد"} (العدد: ${row["عدد جهاز لايف باك"] || "0"})
+• 📡 جهاز اللاسلكي (Radio): ${row["حالة جهاز اللاسلكي"] || "غير محدد"} (العدد: ${row["عدد جهاز اللاسلكي"] || "0"})
+• 📱 جهاز لوحي (Tablet): ${row["حالة جهاز لوحي (تابلت)"] || "غير محدد"} (العدد: ${row["عدد جهاز لوحي (تابلت)"] || "0"})
+• 💓 جهاز قياس العلامات الحيوية: ${row["حالة جهاز قياس العلامات الحيوية"] || "غير محدد"} (العدد: ${row["عدد جهاز قياس العلامات الحيوية"] || "0"})
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📝 ملاحظات:*
+• ملاحظات جهاز لوكس: ${row["ملاحظات جهاز لوكس"] || "لا توجد"}
+• ملاحظات جهاز ميندري: ${row["ملاحظات جهاز ميندري"] || "لا توجد"}
+• ملاحظات جهاز لايف باك: ${row["ملاحظات جهاز لايف باك"] || "لا توجد"}
+• ملاحظات جهاز اللاسلكي: ${row["ملاحظات جهاز اللاسلكي"] || "لا توجد"}
+• ملاحظات جهاز لوحي (تابلت): ${row["ملاحظات جهاز لوحي (تابلت)"] || "لا توجد"}
+• ملاحظات جهاز قياس العلامات الحيوية: ${row["ملاحظات جهاز قياس العلامات الحيوية"] || "لا توجد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ *تم الحفظ بنجاح*`;
+    return message;
+}
+
+// ============================================
+// دوال الخريطة التفاعلية السريعة
+// ============================================
+
+async function updateMapPointsInstantly() {
+    try {
+        // تم استبدال المنطق المباشر بـ loadLiveDeploymentData لضمان توحيد مصدر البيانات
+        await loadLiveDeploymentData();
+        console.log("✅ تم تحديث الخريطة بنجاح");
+    } catch (err) {
+        console.error("❌ خطأ في تحديث الخريطة:", err);
+    }
+}
+
+function getStatusColor(status) {
+    const colors = {
+        "جاهز": "#00b894",
+        "مدعم": "#fdcb6e",
+        "خارج الخدمة": "#d63031"
+    };
+    return colors[status] || "#0b5ed7";
+}
+
+// ============================================
+// تحديث الداشبورد الفوري
+// ============================================
+
+async function updateDashboardInstantly() {
+    try {
+        // تم إزالة استدعاء getDailyStats لأنه غير مدعوم في Code.gs
+        // سيتم الاعتماد على loadLiveDeploymentData لتحديث الداشبورد
+        await loadLiveDeploymentData();
+        console.log("✅ تم تحديث الداشبورد بنجاح");
+    } catch (err) {
+        console.error("❌ خطأ في تحديث الداشبورد:", err);
+    }
+}
+
+// ============================================
+// دالة الحفظ المحسّنة
+// ============================================
+
+async function saveToGoogleSheetsOptimized(action, data) {
+    try {
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action, ...data })
+        });
+        
+        if (!response.ok) throw new Error('فشل الحفظ');
+        
+        // تحديث الذاكرة المؤقتة فوراً
+        forceRefreshData('deployment');
+        forceRefreshData('daily');
+        
+        // تحديث الداشبورد والخريطة فوراً (بدون تأخير)
+        setTimeout(() => {
+            updateDashboardInstantly();
+            updateMapPointsInstantly();
+        }, 100); // تأخير بسيط جداً (100ms فقط)
+        
+        return { success: true };
+    } catch (err) {
+        console.error("❌ خطأ في الحفظ:", err);
+        return { success: false, error: err.message };
+    }
+}
+
+// ============================================
+// تحديث دوري سريع (كل 3 ثواني)
+// ============================================
+
+function startFastPolling() {
+    setInterval(async () => {
+        await updateDashboardInstantly();
+        await updateMapPointsInstantly();
+    }, 3000); // تحديث كل 3 ثواني بدلاً من دقيقتين
+}
+</script>
+
+<script>
+// ============================================
+// منصة نطاق منى - تحسينات السرعة والأيقونات
+// ============================================
+
+// نظام التخزين المؤقت (Caching System)
+const dataCache = {
+    deployment: { data: null, timestamp: 0, ttl: 5000 }, // 5 ثواني
+    support: { data: null, timestamp: 0, ttl: 5000 },
+    daily: { data: null, timestamp: 0, ttl: 5000 }
+};
+
+// دالة جلب البيانات مع التخزين المؤقت السريع
+async function fetchWithCache(action, cacheKey) {
+    const cache = dataCache[cacheKey];
+    const now = Date.now();
+    
+    // إذا كانت البيانات محفوظة وحديثة، أرجعها فوراً
+    if (cache.data && (now - cache.timestamp) < cache.ttl) {
+        return cache.data;
+    }
+    
+    try {
+        const res = await fetch(`${SCRIPT_URL}?action=${action}`, {
+            method: 'GET',
+            headers: { 'Accept': 'application/json' },
+            cache: 'no-cache'
+        });
+        if (!res.ok) throw new Error("فشل الاتصال");
+        const data = await res.json();
+        
+        // حفظ في الذاكرة المؤقتة
+        cache.data = data;
+        cache.timestamp = now;
+        return data;
+    } catch (err) {
+        console.error(`❌ خطأ في جلب ${action}:`, err);
+        return cache.data || []; // أرجع البيانات القديمة إن وجدت
+    }
+}
+
+// دالة تحديث البيانات الفورية (Force Refresh)
+async function forceRefreshData(cacheKey) {
+    dataCache[cacheKey].timestamp = 0; // أجبر على تحديث
+}
+
+// ============================================
+// رسائل الواتساب مع الأيقونات التعريفية
+// ============================================
+
+function buildHandoverMessageWithEmojis(row) {
+    const date = row["التاريخ"] || new Date().toLocaleDateString('ar-SA');
+    const sector = row["القطاع"] || "غير محدد";
+    const sender = row["handover_sender"] || "غير محدد";
+    const receiver = row["handover_receiver"] || "غير محدد";
+
+    const message = `
+🏥 *تقرير تسليم المناوبة* 🤝
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📍 القطاع:* ${sector}
+*📅 التاريخ:* ${date}
+*⏰ الوقت من:* ${row["الوقت من"] || "غير محدد"}
+*⏰ الوقت إلى:* ${row["الوقت إلى"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*👨‍⚕️ كبير المسعفين المسلم:* ${sender}
+*👨‍⚕️ كبير المسعفين المستقبل:* ${receiver}
+*👥 المساعدون:* ${row["handover_assistant1"] || "-"} | ${row["handover_assistant2"] || "-"} | ${row["handover_assistant3"] || "-"} | ${row["handover_assistant4"] || "-"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🚑 ملخص الآليات:*
+• عدد مركبات الإسعاف: ${row["عدد مركبات الإسعاف"] || "0"}
+• عدد القولف: ${row["عدد القولف"] || "0"}
+• عدد الاستجابة النوعية: ${row["عدد الاستجابة النوعية"] || "0"}
+• عدد فرق التدخل السريع: ${row["عدد فرق التدخل السريع"] || "0"}
+• العاملة: ${row["العاملة"] || "0"}
+• الاحتياط: ${row["الاحتياط"] || "0"}
+• خارج الخدمة: ${row["الخارج عن الخدمة"] || "0"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📊 ملخص الإحصائيات:*
+• متوسط زمن الاستجابة: ${row["متوسط زمن الاستجابة"] || "0"} دقيقة
+• متوسط زمن استجابة ECHO: ${row["متوسط زمن استجابة ECHO"] || "0"} دقيقة
+• إجمالي البلاغات: ${row["إجمالي البلاغات"] || "0"}
+• عدد الفرق الفعالة: ${row["عدد الفرق الفعالة"] || "0"}
+• عدد الفرق المعتمدة: ${row["عدد الفرق المعتمدة"] || "0"}
+• بلاغات الدعم اللوجستي: ${row["بلاغات الدعم اللوجستي"] || "0"}
+• البلاغات المفتوحة: ${row["البلاغات المفتوحة"] || "0"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🚨 أحداث طارئة:*
+${row["أحداث طارئة"] === "نعم" ? `
+• حادث جسيم: ${row["h_methane_major"] || "-"}
+• الموقع: ${row["h_methane_location"] || "-"}
+• النوع: ${row["h_methane_type"] || "-"}
+• المخاطر: ${row["h_methane_hazards"] || "-"}
+• الوصول: ${row["h_methane_access"] || "-"}
+• الإصابات: ${row["h_methane_number"] || "-"}
+• الخدمات: ${row["h_methane_emergency"] || "-"}
+• ملاحظات: ${row["h_methane_notes"] || "-"}
+` : "لا توجد أحداث طارئة"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*⚠️ تحذيرات وملاحظات:*
+• التحذيرات الجوية: ${row["التحذيرات الجوية"] || "لا توجد"}
+• التحذيرات الأمنية: ${row["التحذيرات الأمنية"] || "لا توجد"}
+• مواقع خطرة: ${row["مواقع خطرة"] || "لا توجد"}
+• إصابات العاملين: ${row["إصابات العاملين"] || "لا توجد"}
+• إحاطات أخرى: ${row["إحاطات أخرى"] || "لا توجد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📝 ملخص المناوبة:*
+• ملخص الأحداث: ${row["ملخص الأحداث"] || "لا توجد"}
+• ملخص الموارد المطلوبة وتوزيعها: ${row["ملخص الموارد المطلوبة وتوزيعها"] || "لا توجد"}
+• ملاحظات عامة عن المناوبة: ${row["ملاحظات عامة عن المناوبة"] || "لا توجد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ *تم الحفظ بنجاح*`;
+    return message;
+}
+
+function buildDeploymentMessageWithEmojis(row) {
+    const date = row["التاريخ"] || new Date().toLocaleDateString('ar-SA');
+    const sector = row["القطاع"] || "غير محدد";
+    const code = row["الرمز"] || "غير محدد";
+    const status = row["الحالة"] || "غير محدد";
+
+    const message = `
+🗺️ *خطة الانتشار* 📍
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📍 القطاع:* ${sector}
+*🏷️ الرمز:* ${code}
+*📅 التاريخ:* ${date}
+*⏰ الوقت:* ${row["الوقت"] || "غير محدد"}
+*🔄 العرض الزمني:* ${row["العرض الزمني"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*👨‍⚕️ مدخل البيانات:* ${row["deploy_lead_name"] || "غير محدد"} (${row["deploy_role"] || "غير محدد"})
+*👤 كبير المسعفين المناوب:* ${row["deploy_current_lead"] || "غير محدد"}
+*👥 المساعدون:* ${row["deploy_assistants_auto"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🚑 تفاصيل الآلية:*
+• نوع الآلية: ${row["نوع الآلية"] || "غير محدد"}
+• مناوبة النقطة: ${row["مناوبة النقطة"] || "غير محدد"}
+• وقت البداية: ${row["وقت البداية"] || "غير محدد"}
+• وقت النهاية: ${row["وقت النهاية"] || "غير محدد"}
+• الحالة: ${status}
+• عدد الفرق الفعلي: ${row["عدد الفرق الفعلي"] || "0"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🗺️ الموقع:*
+• Latitude: ${row["Latitude"] || "غير محدد"}
+• Longitude: ${row["Longitude"] || "غير محدد"}
+• رابط النقطة: ${row["رابط النقطة"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🤝 التدعيم:*
+• نوع التدعيم: ${row["نوع التدعيم"] || "غير محدد"}
+• جهة التدعيم: ${row["جهة التدعيم"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📝 ملاحظات:*
+• ملاحظة السجل: ${row["ملاحظة السجل"] || "لا توجد ملاحظات"}
+• ملاحظات عامة: ${row["ملاحظات عامة"] || "لا توجد ملاحظات"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ *تم الحفظ بنجاح*`;
+    return message;
+}
+
+function buildPersonalEquipmentMessageWithEmojis(row) {
+    const date = row["التاريخ"] || new Date().toLocaleDateString('ar-SA');
+    const sector = row["القطاع"] || "غير محدد";
+    const lead = row["كبير المسعفين"] || "غير محدد";
+
+    const message = `
+🏥 *تقرير العهد الشخصية* 📝
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📍 القطاع:* ${sector}
+*👨‍⚕️ كبير المسعفين:* ${lead}
+*📅 التاريخ:* ${date}
+*⏰ فترة المناوبة:* ${row["فترة المناوبة"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🔧 الأجهزة الطبية:*
+• 🔴 جهاز لوكس (LUCAS): ${row["حالة جهاز لوكس"] || "غير محدد"} (العدد: ${row["عدد جهاز لوكس"] || "0"})
+• 🟢 جهاز ميندري (Mindray): ${row["حالة جهاز ميندري"] || "غير محدد"} (العدد: ${row["عدد جهاز ميندري"] || "0"})
+• 🟡 جهاز لايف باك (LifePak): ${row["حالة جهاز لايف باك"] || "غير محدد"} (العدد: ${row["عدد جهاز لايف باك"] || "0"})
+• 📡 جهاز اللاسلكي (Radio): ${row["حالة جهاز اللاسلكي"] || "غير محدد"} (العدد: ${row["عدد جهاز اللاسلكي"] || "0"})
+• 📱 جهاز لوحي (Tablet): ${row["حالة جهاز لوحي (تابلت)"] || "غير محدد"} (العدد: ${row["عدد جهاز لوحي (تابلت)"] || "0"})
+• 💓 جهاز قياس العلامات الحيوية: ${row["حالة جهاز قياس العلامات الحيوية"] || "غير محدد"} (العدد: ${row["عدد جهاز قياس العلامات الحيوية"] || "0"})
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📝 ملاحظات:*
+• ملاحظات جهاز لوكس: ${row["ملاحظات جهاز لوكس"] || "لا توجد"}
+• ملاحظات جهاز ميندري: ${row["ملاحظات جهاز ميندري"] || "لا توجد"}
+• ملاحظات جهاز لايف باك: ${row["ملاحظات جهاز لايف باك"] || "لا توجد"}
+• ملاحظات جهاز اللاسلكي: ${row["ملاحظات جهاز اللاسلكي"] || "لا توجد"}
+• ملاحظات جهاز لوحي (تابلت): ${row["ملاحظات جهاز لوحي (تابلت)"] || "لا توجد"}
+• ملاحظات جهاز قياس العلامات الحيوية: ${row["ملاحظات جهاز قياس العلامات الحيوية"] || "لا توجد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ *تم الحفظ بنجاح*`;
+    return message;
+}
+
+// ============================================
+// دوال الخريطة التفاعلية السريعة
+// ============================================
+
+async function updateMapPointsInstantly() {
+    try {
+        // تم استبدال المنطق المباشر بـ loadLiveDeploymentData لضمان توحيد مصدر البيانات
+        await loadLiveDeploymentData();
+        console.log("✅ تم تحديث الخريطة بنجاح");
+    } catch (err) {
+        console.error("❌ خطأ في تحديث الخريطة:", err);
+    }
+}
+
+function getStatusColor(status) {
+    const colors = {
+        "جاهز": "#00b894",
+        "مدعم": "#fdcb6e",
+        "خارج الخدمة": "#d63031"
+    };
+    return colors[status] || "#0b5ed7";
+}
+
+// ============================================
+// تحديث الداشبورد الفوري
+// ============================================
+
+async function updateDashboardInstantly() {
+    try {
+        // تم إزالة استدعاء getDailyStats لأنه غير مدعوم في Code.gs
+        // سيتم الاعتماد على loadLiveDeploymentData لتحديث الداشبورد
+        await loadLiveDeploymentData();
+        console.log("✅ تم تحديث الداشبورد بنجاح");
+    } catch (err) {
+        console.error("❌ خطأ في تحديث الداشبورد:", err);
+    }
+}
+
+// ============================================
+// دالة الحفظ المحسّنة
+// ============================================
+
+async function saveToGoogleSheetsOptimized(action, data) {
+    try {
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action, ...data })
+        });
+        
+        if (!response.ok) throw new Error('فشل الحفظ');
+        
+        // تحديث الذاكرة المؤقتة فوراً
+        forceRefreshData('deployment');
+        forceRefreshData('daily');
+        
+        // تحديث الداشبورد والخريطة فوراً (بدون تأخير)
+        setTimeout(() => {
+            updateDashboardInstantly();
+            updateMapPointsInstantly();
+        }, 100); // تأخير بسيط جداً (100ms فقط)
+        
+        return { success: true };
+    } catch (err) {
+        console.error("❌ خطأ في الحفظ:", err);
+        return { success: false, error: err.message };
+    }
+}
+
+// ============================================
+// تحديث دوري سريع (كل 3 ثواني)
+// ============================================
+
+function startFastPolling() {
+    setInterval(async () => {
+        await updateDashboardInstantly();
+        await updateMapPointsInstantly();
+    }, 3000); // تحديث كل 3 ثواني بدلاً من دقيقتين
+}
 </script>
 
 
+<script>
+// ============================================
+// منصة نطاق منى - تحسينات السرعة والأيقونات
+// ============================================
+
+// نظام التخزين المؤقت (Caching System)
+const dataCache = {
+    deployment: { data: null, timestamp: 0, ttl: 5000 }, // 5 ثواني
+    support: { data: null, timestamp: 0, ttl: 5000 },
+    daily: { data: null, timestamp: 0, ttl: 5000 }
+};
+
+// دالة جلب البيانات مع التخزين المؤقت السريع
+async function fetchWithCache(action, cacheKey) {
+    const cache = dataCache[cacheKey];
+    const now = Date.now();
+    
+    // إذا كانت البيانات محفوظة وحديثة، أرجعها فوراً
+    if (cache.data && (now - cache.timestamp) < cache.ttl) {
+        return cache.data;
+    }
+    
+    try {
+        const res = await fetch(`${SCRIPT_URL}?action=${action}`, {
+            method: 'GET',
+            headers: { 'Accept': 'application/json' },
+            cache: 'no-cache'
+        });
+        if (!res.ok) throw new Error("فشل الاتصال");
+        const data = await res.json();
+        
+        // حفظ في الذاكرة المؤقتة
+        cache.data = data;
+        cache.timestamp = now;
+        return data;
+    } catch (err) {
+        console.error(`❌ خطأ في جلب ${action}:`, err);
+        return cache.data || []; // أرجع البيانات القديمة إن وجدت
+    }
+}
+
+// دالة تحديث البيانات الفورية (Force Refresh)
+async function forceRefreshData(cacheKey) {
+    dataCache[cacheKey].timestamp = 0; // أجبر على تحديث
+}
+
+// ============================================
+// رسائل الواتساب مع الأيقونات التعريفية
+// ============================================
+
+function buildHandoverMessageWithEmojis(row) {
+    const date = row["التاريخ"] || new Date().toLocaleDateString('ar-SA');
+    const sector = row["القطاع"] || "غير محدد";
+    const sender = row["handover_sender"] || "غير محدد";
+    const receiver = row["handover_receiver"] || "غير محدد";
+
+    const message = `
+🏥 *تقرير تسليم المناوبة* 🤝
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📍 القطاع:* ${sector}
+*📅 التاريخ:* ${date}
+*⏰ الوقت من:* ${row["الوقت من"] || "غير محدد"}
+*⏰ الوقت إلى:* ${row["الوقت إلى"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*👨‍⚕️ كبير المسعفين المسلم:* ${sender}
+*👨‍⚕️ كبير المسعفين المستقبل:* ${receiver}
+*👥 المساعدون:* ${row["handover_assistant1"] || "-"} | ${row["handover_assistant2"] || "-"} | ${row["handover_assistant3"] || "-"} | ${row["handover_assistant4"] || "-"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🚑 ملخص الآليات:*
+• عدد مركبات الإسعاف: ${row["عدد مركبات الإسعاف"] || "0"}
+• عدد القولف: ${row["عدد القولف"] || "0"}
+• عدد الاستجابة النوعية: ${row["عدد الاستجابة النوعية"] || "0"}
+• عدد فرق التدخل السريع: ${row["عدد فرق التدخل السريع"] || "0"}
+• العاملة: ${row["العاملة"] || "0"}
+• الاحتياط: ${row["الاحتياط"] || "0"}
+• خارج الخدمة: ${row["الخارج عن الخدمة"] || "0"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📊 ملخص الإحصائيات:*
+• متوسط زمن الاستجابة: ${row["متوسط زمن الاستجابة"] || "0"} دقيقة
+• متوسط زمن استجابة ECHO: ${row["متوسط زمن استجابة ECHO"] || "0"} دقيقة
+• إجمالي البلاغات: ${row["إجمالي البلاغات"] || "0"}
+• عدد الفرق الفعالة: ${row["عدد الفرق الفعالة"] || "0"}
+• عدد الفرق المعتمدة: ${row["عدد الفرق المعتمدة"] || "0"}
+• بلاغات الدعم اللوجستي: ${row["بلاغات الدعم اللوجستي"] || "0"}
+• البلاغات المفتوحة: ${row["البلاغات المفتوحة"] || "0"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🚨 أحداث طارئة:*
+${row["أحداث طارئة"] === "نعم" ? `
+• حادث جسيم: ${row["h_methane_major"] || "-"}
+• الموقع: ${row["h_methane_location"] || "-"}
+• النوع: ${row["h_methane_type"] || "-"}
+• المخاطر: ${row["h_methane_hazards"] || "-"}
+• الوصول: ${row["h_methane_access"] || "-"}
+• الإصابات: ${row["h_methane_number"] || "-"}
+• الخدمات: ${row["h_methane_emergency"] || "-"}
+• ملاحظات: ${row["h_methane_notes"] || "-"}
+` : "لا توجد أحداث طارئة"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*⚠️ تحذيرات وملاحظات:*
+• التحذيرات الجوية: ${row["التحذيرات الجوية"] || "لا توجد"}
+• التحذيرات الأمنية: ${row["التحذيرات الأمنية"] || "لا توجد"}
+• مواقع خطرة: ${row["مواقع خطرة"] || "لا توجد"}
+• إصابات العاملين: ${row["إصابات العاملين"] || "لا توجد"}
+• إحاطات أخرى: ${row["إحاطات أخرى"] || "لا توجد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📝 ملخص المناوبة:*
+• ملخص الأحداث: ${row["ملخص الأحداث"] || "لا توجد"}
+• ملخص الموارد المطلوبة وتوزيعها: ${row["ملخص الموارد المطلوبة وتوزيعها"] || "لا توجد"}
+• ملاحظات عامة عن المناوبة: ${row["ملاحظات عامة عن المناوبة"] || "لا توجد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ *تم الحفظ بنجاح*`;
+    return message;
+}
+
+function buildDeploymentMessageWithEmojis(row) {
+    const date = row["التاريخ"] || new Date().toLocaleDateString('ar-SA');
+    const sector = row["القطاع"] || "غير محدد";
+    const code = row["الرمز"] || "غير محدد";
+    const status = row["الحالة"] || "غير محدد";
+
+    const message = `
+🗺️ *خطة الانتشار* 📍
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📍 القطاع:* ${sector}
+*🏷️ الرمز:* ${code}
+*📅 التاريخ:* ${date}
+*⏰ الوقت:* ${row["الوقت"] || "غير محدد"}
+*🔄 العرض الزمني:* ${row["العرض الزمني"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*👨‍⚕️ مدخل البيانات:* ${row["deploy_lead_name"] || "غير محدد"} (${row["deploy_role"] || "غير محدد"})
+*👤 كبير المسعفين المناوب:* ${row["deploy_current_lead"] || "غير محدد"}
+*👥 المساعدون:* ${row["deploy_assistants_auto"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🚑 تفاصيل الآلية:*
+• نوع الآلية: ${row["نوع الآلية"] || "غير محدد"}
+• مناوبة النقطة: ${row["مناوبة النقطة"] || "غير محدد"}
+• وقت البداية: ${row["وقت البداية"] || "غير محدد"}
+• وقت النهاية: ${row["وقت النهاية"] || "غير محدد"}
+• الحالة: ${status}
+• عدد الفرق الفعلي: ${row["عدد الفرق الفعلي"] || "0"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🗺️ الموقع:*
+• Latitude: ${row["Latitude"] || "غير محدد"}
+• Longitude: ${row["Longitude"] || "غير محدد"}
+• رابط النقطة: ${row["رابط النقطة"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🤝 التدعيم:*
+• نوع التدعيم: ${row["نوع التدعيم"] || "غير محدد"}
+• جهة التدعيم: ${row["جهة التدعيم"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📝 ملاحظات:*
+• ملاحظة السجل: ${row["ملاحظة السجل"] || "لا توجد ملاحظات"}
+• ملاحظات عامة: ${row["ملاحظات عامة"] || "لا توجد ملاحظات"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ *تم الحفظ بنجاح*`;
+    return message;
+}
+
+function buildPersonalEquipmentMessageWithEmojis(row) {
+    const date = row["التاريخ"] || new Date().toLocaleDateString('ar-SA');
+    const sector = row["القطاع"] || "غير محدد";
+    const lead = row["كبير المسعفين"] || "غير محدد";
+
+    const message = `
+🏥 *تقرير العهد الشخصية* 📝
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📍 القطاع:* ${sector}
+*👨‍⚕️ كبير المسعفين:* ${lead}
+*📅 التاريخ:* ${date}
+*⏰ فترة المناوبة:* ${row["فترة المناوبة"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🔧 الأجهزة الطبية:*
+• 🔴 جهاز لوكس (LUCAS): ${row["حالة جهاز لوكس"] || "غير محدد"} (العدد: ${row["عدد جهاز لوكس"] || "0"})
+• 🟢 جهاز ميندري (Mindray): ${row["حالة جهاز ميندري"] || "غير محدد"} (العدد: ${row["عدد جهاز ميندري"] || "0"})
+• 🟡 جهاز لايف باك (LifePak): ${row["حالة جهاز لايف باك"] || "غير محدد"} (العدد: ${row["عدد جهاز لايف باك"] || "0"})
+• 📡 جهاز اللاسلكي (Radio): ${row["حالة جهاز اللاسلكي"] || "غير محدد"} (العدد: ${row["عدد جهاز اللاسلكي"] || "0"})
+• 📱 جهاز لوحي (Tablet): ${row["حالة جهاز لوحي (تابلت)"] || "غير محدد"} (العدد: ${row["عدد جهاز لوحي (تابلت)"] || "0"})
+• 💓 جهاز قياس العلامات الحيوية: ${row["حالة جهاز قياس العلامات الحيوية"] || "غير محدد"} (العدد: ${row["عدد جهاز قياس العلامات الحيوية"] || "0"})
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📝 ملاحظات:*
+• ملاحظات جهاز لوكس: ${row["ملاحظات جهاز لوكس"] || "لا توجد"}
+• ملاحظات جهاز ميندري: ${row["ملاحظات جهاز ميندري"] || "لا توجد"}
+• ملاحظات جهاز لايف باك: ${row["ملاحظات جهاز لايف باك"] || "لا توجد"}
+• ملاحظات جهاز اللاسلكي: ${row["ملاحظات جهاز اللاسلكي"] || "لا توجد"}
+• ملاحظات جهاز لوحي (تابلت): ${row["ملاحظات جهاز لوحي (تابلت)"] || "لا توجد"}
+• ملاحظات جهاز قياس العلامات الحيوية: ${row["ملاحظات جهاز قياس العلامات الحيوية"] || "لا توجد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ *تم الحفظ بنجاح*`;
+    return message;
+}
+
+// ============================================
+// دوال الخريطة التفاعلية السريعة
+// ============================================
+
+async function updateMapPointsInstantly() {
+    try {
+        // تم استبدال المنطق المباشر بـ loadLiveDeploymentData لضمان توحيد مصدر البيانات
+        await loadLiveDeploymentData();
+        console.log("✅ تم تحديث الخريطة بنجاح");
+    } catch (err) {
+        console.error("❌ خطأ في تحديث الخريطة:", err);
+    }
+}
+
+function getStatusColor(status) {
+    const colors = {
+        "جاهز": "#00b894",
+        "مدعم": "#fdcb6e",
+        "خارج الخدمة": "#d63031"
+    };
+    return colors[status] || "#0b5ed7";
+}
+
+// ============================================
+// تحديث الداشبورد الفوري
+// ============================================
+
+async function updateDashboardInstantly() {
+    try {
+        // تم إزالة استدعاء getDailyStats لأنه غير مدعوم في Code.gs
+        // سيتم الاعتماد على loadLiveDeploymentData لتحديث الداشبورد
+        await loadLiveDeploymentData();
+        console.log("✅ تم تحديث الداشبورد بنجاح");
+    } catch (err) {
+        console.error("❌ خطأ في تحديث الداشبورد:", err);
+    }
+}
+
+// ============================================
+// دالة الحفظ المحسّنة
+// ============================================
+
+async function saveToGoogleSheetsOptimized(action, data) {
+    try {
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action, ...data })
+        });
+        
+        if (!response.ok) throw new Error('فشل الحفظ');
+        
+        // تحديث الذاكرة المؤقتة فوراً
+        forceRefreshData('deployment');
+        forceRefreshData('daily');
+        
+        // تحديث الداشبورد والخريطة فوراً (بدون تأخير)
+        setTimeout(() => {
+            updateDashboardInstantly();
+            updateMapPointsInstantly();
+        }, 100); // تأخير بسيط جداً (100ms فقط)
+        
+        return { success: true };
+    } catch (err) {
+        console.error("❌ خطأ في الحفظ:", err);
+        return { success: false, error: err.message };
+    }
+}
+
+// ============================================
+// تحديث دوري سريع (كل 3 ثواني)
+// ============================================
+
+function startFastPolling() {
+    setInterval(async () => {
+        await updateDashboardInstantly();
+        await updateMapPointsInstantly();
+    }, 3000); // تحديث كل 3 ثواني بدلاً من دقيقتين
+}
+</script>
+
+
+
+
+<script>
+// ============================================ // منصة نطاق منى - تحسينات السرعة والأيقونات // ============================================ 
+
+// نظام التخزين المؤقت (Caching System)
+const dataCache = {
+    deployment: { data: null, timestamp: 0, ttl: 5000 }, // 5 ثواني
+    support: { data: null, timestamp: 0, ttl: 5000 },
+    daily: { data: null, timestamp: 0, ttl: 5000 }
+};
+
+// دالة جلب البيانات مع التخزين المؤقت السريع
+async function fetchWithCache(action, cacheKey) {
+    const cache = dataCache[cacheKey];
+    const now = Date.now();
+    
+    // إذا كانت البيانات محفوظة وحديثة، أرجعها فوراً
+    if (cache.data && (now - cache.timestamp) < cache.ttl) {
+        return cache.data;
+    }
+    
+    try {
+        const res = await fetch(`${SCRIPT_URL}?action=${action}`, {
+            method: 'GET',
+            headers: { 'Accept': 'application/json' },
+            cache: 'no-cache'
+        });
+        if (!res.ok) throw new Error("فشل الاتصال");
+        const data = await res.json();
+        
+        // حفظ في الذاكرة المؤقتة
+        cache.data = data;
+        cache.timestamp = now;
+        return data;
+    } catch (err) {
+        console.error(`❌ خطأ في جلب ${action}:`, err);
+        return cache.data || []; // أرجع البيانات القديمة إن وجدت
+    }
+}
+
+// دالة تحديث البيانات الفورية (Force Refresh)
+async function forceRefreshData(cacheKey) {
+    dataCache[cacheKey].timestamp = 0; // أجبر على تحديث
+}
+
+// ============================================ // رسائل الواتساب مع الأيقونات التعريفية // ============================================ 
+
+function buildHandoverMessageWithEmojis(row) {
+    const date = row["التاريخ"] || new Date().toLocaleDateString('ar-SA');
+    const sector = row["القطاع"] || "غير محدد";
+    const sender = row["handover_sender"] || "غير محدد";
+    const receiver = row["handover_receiver"] || "غير محدد";
+
+    const message = `
+🏥 *تقرير تسليم المناوبة* 🤝
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📍 القطاع:* ${sector}
+*📅 التاريخ:* ${date}
+*⏰ الوقت من:* ${row["الوقت من"] || "غير محدد"}
+*⏰ الوقت إلى:* ${row["الوقت إلى"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*👨‍⚕️ كبير المسعفين المسلم:* ${sender}
+*👨‍⚕️ كبير المسعفين المستقبل:* ${receiver}
+*👥 المساعدون:* ${row["handover_assistant1"] || "-"} | ${row["handover_assistant2"] || "-"} | ${row["handover_assistant3"] || "-"} | ${row["handover_assistant4"] || "-"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🚑 ملخص الآليات:*
+• عدد مركبات الإسعاف: ${row["عدد مركبات الإسعاف"] || "0"}
+• عدد القولف: ${row["عدد القولف"] || "0"}
+• عدد الاستجابة النوعية: ${row["عدد الاستجابة النوعية"] || "0"}
+• عدد فرق التدخل السريع: ${row["عدد فرق التدخل السريع"] || "0"}
+• العاملة: ${row["العاملة"] || "0"}
+• الاحتياط: ${row["الاحتياط"] || "0"}
+• خارج الخدمة: ${row["الخارج عن الخدمة"] || "0"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📊 ملخص الإحصائيات:*
+• متوسط زمن الاستجابة: ${row["متوسط زمن الاستجابة"] || "0"} دقيقة
+• متوسط زمن استجابة ECHO: ${row["متوسط زمن استجابة ECHO"] || "0"} دقيقة
+• إجمالي البلاغات: ${row["إجمالي البلاغات"] || "0"}
+• عدد الفرق الفعالة: ${row["عدد الفرق الفعالة"] || "0"}
+• عدد الفرق المعتمدة: ${row["عدد الفرق المعتمدة"] || "0"}
+• بلاغات الدعم اللوجستي: ${row["بلاغات الدعم اللوجستي"] || "0"}
+• البلاغات المفتوحة: ${row["البلاغات المفتوحة"] || "0"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🚨 أحداث طارئة:*
+${row["أحداث طارئة"] === "نعم" ? `
+• حادث جسيم: ${row["h_methane_major"] || "-"}
+• الموقع: ${row["h_methane_location"] || "-"}
+• النوع: ${row["h_methane_type"] || "-"}
+• المخاطر: ${row["h_methane_hazards"] || "-"}
+• الوصول: ${row["h_methane_access"] || "-"}
+• الإصابات: ${row["h_methane_number"] || "-"}
+• الخدمات: ${row["h_methane_emergency"] || "-"}
+• ملاحظات: ${row["h_methane_notes"] || "-"}
+` : "لا توجد أحداث طارئة"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*⚠️ تحذيرات وملاحظات:*
+• التحذيرات الجوية: ${row["التحذيرات الجوية"] || "لا توجد"}
+• التحذيرات الأمنية: ${row["التحذيرات الأمنية"] || "لا توجد"}
+• مواقع خطرة: ${row["مواقع خطرة"] || "لا توجد"}
+• إصابات العاملين: ${row["إصابات العاملين"] || "لا توجد"}
+• إحاطات أخرى: ${row["إحاطات أخرى"] || "لا توجد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📝 ملخص المناوبة:*
+• ملخص الأحداث: ${row["ملخص الأحداث"] || "لا توجد"}
+• ملخص الموارد المطلوبة وتوزيعها: ${row["ملخص الموارد المطلوبة وتوزيعها"] || "لا توجد"}
+• ملاحظات عامة عن المناوبة: ${row["ملاحظات عامة عن المناوبة"] || "لا توجد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ *تم الحفظ بنجاح*`;
+    return message;
+}
+
+function buildDeploymentMessageWithEmojis(row) {
+    const date = row["التاريخ"] || new Date().toLocaleDateString('ar-SA');
+    const sector = row["القطاع"] || "غير محدد";
+    const code = row["الرمز"] || "غير محدد";
+    const status = row["الحالة"] || "غير محدد";
+
+    const message = `
+🗺️ *خطة الانتشار* 📍
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📍 القطاع:* ${sector}
+*🏷️ الرمز:* ${code}
+*📅 التاريخ:* ${date}
+*⏰ الوقت:* ${row["الوقت"] || "غير محدد"}
+*🔄 العرض الزمني:* ${row["العرض الزمني"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*👨‍⚕️ مدخل البيانات:* ${row["deploy_lead_name"] || "غير محدد"} (${row["deploy_role"] || "غير محدد"})
+*👤 كبير المسعفين المناوب:* ${row["deploy_current_lead"] || "غير محدد"}
+*👥 المساعدون:* ${row["deploy_assistants_auto"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🚑 تفاصيل الآلية:*
+• نوع الآلية: ${row["نوع الآلية"] || "غير محدد"}
+• مناوبة النقطة: ${row["مناوبة النقطة"] || "غير محدد"}
+• وقت البداية: ${row["وقت البداية"] || "غير محدد"}
+• وقت النهاية: ${row["وقت النهاية"] || "غير محدد"}
+• الحالة: ${status}
+• عدد الفرق الفعلي: ${row["عدد الفرق الفعلي"] || "0"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🗺️ الموقع:*
+• Latitude: ${row["Latitude"] || "غير محدد"}
+• Longitude: ${row["Longitude"] || "غير محدد"}
+• رابط النقطة: ${row["رابط النقطة"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🤝 التدعيم:*
+• نوع التدعيم: ${row["نوع التدعيم"] || "غير محدد"}
+• جهة التدعيم: ${row["جهة التدعيم"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📝 ملاحظات:*
+• ملاحظة السجل: ${row["ملاحظة السجل"] || "لا توجد ملاحظات"}
+• ملاحظات عامة: ${row["ملاحظات عامة"] || "لا توجد ملاحظات"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ *تم الحفظ بنجاح*`;
+    return message;
+}
+
+function buildPersonalEquipmentMessageWithEmojis(row) {
+    const date = row["التاريخ"] || new Date().toLocaleDateString('ar-SA');
+    const sector = row["القطاع"] || "غير محدد";
+    const lead = row["كبير المسعفين"] || "غير محدد";
+
+    const message = `
+🏥 *تقرير العهد الشخصية* 📝
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📍 القطاع:* ${sector}
+*👨‍⚕️ كبير المسعفين:* ${lead}
+*📅 التاريخ:* ${date}
+*⏰ فترة المناوبة:* ${row["فترة المناوبة"] || "غير محدد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*🔧 الأجهزة الطبية:*
+• 🔴 جهاز لوكس (LUCAS): ${row["حالة جهاز لوكس"] || "غير محدد"} (العدد: ${row["عدد جهاز لوكس"] || "0"})
+• 🟢 جهاز ميندري (Mindray): ${row["حالة جهاز ميندري"] || "غير محدد"} (العدد: ${row["عدد جهاز ميندري"] || "0"})
+• 🟡 جهاز لايف باك (LifePak): ${row["حالة جهاز لايف باك"] || "غير محدد"} (العدد: ${row["عدد جهاز لايف باك"] || "0"})
+• 📡 جهاز اللاسلكي (Radio): ${row["حالة جهاز اللاسلكي"] || "غير محدد"} (العدد: ${row["عدد جهاز اللاسلكي"] || "0"})
+• 📱 جهاز لوحي (Tablet): ${row["حالة جهاز لوحي (تابلت)"] || "غير محدد"} (العدد: ${row["عدد جهاز لوحي (تابلت)"] || "0"})
+• 💓 جهاز قياس العلامات الحيوية: ${row["حالة جهاز قياس العلامات الحيوية"] || "غير محدد"} (العدد: ${row["عدد جهاز قياس العلامات الحيوية"] || "0"})
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+*📝 ملاحظات:*
+• ملاحظات جهاز لوكس: ${row["ملاحظات جهاز لوكس"] || "لا توجد"}
+• ملاحظات جهاز ميندري: ${row["ملاحظات جهاز ميندري"] || "لا توجد"}
+• ملاحظات جهاز لايف باك: ${row["ملاحظات جهاز لايف باك"] || "لا توجد"}
+• ملاحظات جهاز اللاسلكي: ${row["ملاحظات جهاز اللاسلكي"] || "لا توجد"}
+• ملاحظات جهاز لوحي (تابلت): ${row["ملاحظات جهاز لوحي (تابلت)"] || "لا توجد"}
+• ملاحظات جهاز قياس العلامات الحيوية: ${row["ملاحظات جهاز قياس العلامات الحيوية"] || "لا توجد"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ *تم الحفظ بنجاح*`;
+    return message;
+}
+
+// ============================================ // دوال الخريطة التفاعلية السريعة // ============================================ 
+
+async function updateMapPointsInstantly() {
+    try {
+        // تم استبدال المنطق المباشر بـ loadLiveDeploymentData لضمان توحيد مصدر البيانات
+        await loadLiveDeploymentData();
+        console.log("✅ تم تحديث الخريطة بنجاح");
+    } catch (err) {
+        console.error("❌ خطأ في تحديث الخريطة:", err);
+    }
+}
+
+function getStatusColor(status) {
+    const colors = {
+        "جاهز": "#00b894",
+        "مدعم": "#fdcb6e",
+        "خارج الخدمة": "#d63031"
+    };
+    return colors[status] || "#0b5ed7";
+}
+
+// ============================================ // تحديث الداشبورد الفوري // ============================================ 
+
+async function updateDashboardInstantly() {
+    try {
+        // تم إزالة استدعاء getDailyStats لأنه غير مدعوم في Code.gs
+        // سيتم الاعتماد على loadLiveDeploymentData لتحديث الداشبورد
+        await loadLiveDeploymentData();
+        console.log("✅ تم تحديث الداشبورد بنجاح");
+    } catch (err) {
+        console.error("❌ خطأ في تحديث الداشبورد:", err);
+    }
+}
+
+// ============================================ // دالة الحفظ المحسّنة // ============================================ 
+
+async function saveToGoogleSheetsOptimized(action, data) {
+    try {
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action, ...data })
+        });
+        
+        if (!response.ok) throw new Error('فشل الحفظ');
+        
+        // تحديث الذاكرة المؤقتة فوراً
+        forceRefreshData('deployment');
+        forceRefreshData('daily');
+        
+        // تحديث الداشبورد والخريطة فوراً (بدون تأخير)
+        setTimeout(() => {
+            updateDashboardInstantly();
+            updateMapPointsInstantly();
+        }, 100); // تأخير بسيط جداً (100ms فقط)
+        
+        return { success: true };
+    } catch (err) {
+        console.error("❌ خطأ في الحفظ:", err);
+        return { success: false, error: err.message };
+    }
+}
+
+// ============================================ // تحديث دوري سريع (كل 3 ثواني) // ============================================ 
+
+function startFastPolling() {
+    setInterval(async () => {
+        await updateDashboardInstantly();
+        await updateMapPointsInstantly();
+    }, 3000); // تحديث كل 3 ثواني بدلاً من دقيقتين
+}
+</script>
+
 </body>
+
 </html>

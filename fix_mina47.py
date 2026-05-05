@@ -38,7 +38,7 @@ def fix_nav_items_onclick(match):
     # Extract the data-target value
     data_target = match.group(1)
     # Construct the correct onclick attribute
-    onclick_attr = f"onclick=\"activatePanel(\\\\'{data_target}\\\\\\' )\""
+    onclick_attr = f"onclick=\"activatePanel(\\'{data_target}\\' )\""
     # Return the data-target and the new onclick attribute
     return f"data-target=\"{data_target}\" {onclick_attr}"
 

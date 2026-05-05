@@ -1715,8 +1715,19 @@
 
     function activatePanel(targetId){
       document.querySelectorAll('.nav li').forEach(i => i.classList.remove('active'));
-     document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add(\'active\');      document.querySelectorAll('.panel').forEach(panel => panel.style.display = 'none');
-      if(document.getElementById(targetId)) document.getElementById(targetId).style.display = 'block';
+      const targetLi = document.querySelector(`.nav li[data-target="${targetId}" onclick="activatePanel(\'${targetId}\')"]`);
+      if(targetLi) targetLi.classList.add('active');
+      
+      document.querySelectorAll('.panel').forEach(panel => {
+        panel.style.display = 'none';
+        panel.classList.remove('active');
+      });
+      
+      const targetPanel = document.getElementById(targetId);
+      if(targetPanel) {
+        targetPanel.style.display = 'block';
+        targetPanel.classList.add('active');
+      }
       window.scrollTo({top:0,behavior:'smooth'});
     }
 

@@ -15,13 +15,11 @@ correct_activate_panel_func_template = """    function activatePanel(targetId){
        
       document.querySelectorAll(\".panel\").forEach(panel => { 
         panel.style.display = \"none\"; 
-        panel.classList.remove(\"active\"); 
       }); 
        
       const targetPanel = document.getElementById(targetId); 
       if(targetPanel) { 
         targetPanel.style.display = \"block\"; 
-        targetPanel.classList.add(\"active\"); 
       } 
       window.scrollTo({top:0,behavior:\"smooth\"}); 
     }"""
@@ -68,7 +66,6 @@ def fix_dom_listener(match):
     initial_logic = """
       document.querySelectorAll(\".panel\").forEach(panel => {
         panel.style.display = \"none\";
-        panel.classList.remove(\"active\");
       });
       const homePanel = document.getElementById(\"homePanel\");
       if (homePanel) {

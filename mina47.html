@@ -1820,16 +1820,21 @@ async function fetchDeploymentFromSheet(){
 }
 
     function openWhatsApp(text){
+      console.log('openWhatsApp called with text:', text);
       const encoded = encodeURIComponent(text);
       const url = `https://api.whatsapp.com/send?text=${encoded}`;
+      console.log('WhatsApp URL:', url);
       
       // محاولة فتح الرابط في نافذة جديدة
       const win = window.open(url, '_blank');
       
       // إذا تم حظر النافذة المنبثقة، نقوم بتنبيه المستخدم أو تغيير الموقع الحالي
       if (!win || win.closed || typeof win.closed === 'undefined') {
+        console.warn('Pop-up blocked or failed to open. Redirecting current window to WhatsApp URL.');
         // خيار بديل في حال حظر النوافذ المنبثقة
         window.location.href = url;
+      } else {
+        console.log('WhatsApp opened successfully in a new window/tab.');
       }
     }
 
@@ -2820,13 +2825,16 @@ ${row["ملاحظات إضافية"]}
         row['النطاق المدعم له'] = toZone;
       }
 
-      const save = await saveToGoogleSheets('submitSupportPlan', row);
+      console.log('Attempting to save support plan to Google Sheets...');
+      const save = await saveToGoogleSheets("submitSupportPlan", row);
       if (!save.success) {
-        showAlert('supportPlanAlert', 'error', 'تعذر حفظ خطة الدعم');
+        showAlert("supportPlanAlert", "error", "تعذر حفظ خطة الدعم");
+        console.error('Failed to save support plan:', save.message);
         return;
       }
 
-        showAlert('supportPlanAlert','success','تم حفظ خطة الدعم بنجاح');
+      showAlert("supportPlanAlert",'success','تم حفظ خطة الدعم بنجاح');
+      console.log('Support plan saved successfully. Preparing WhatsApp message...');
       
       // تخزين البيانات محلياً لتحديث الداشبورد
       if (!window.supportPlanData) window.supportPlanData = [];
@@ -2852,6 +2860,7 @@ ${row["ملاحظات إضافية"]}
       msg += `👤 *مدخل البيانات:* ${entryName}\n`;
       if (notes) msg += `\n📝 *ملاحظات:* \n${notes}\n`;
       
+      console.log('WhatsApp message prepared. Calling openWhatsApp...');
       openWhatsApp(msg);
       clearSupportPlanForm();
     }

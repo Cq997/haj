@@ -8,7 +8,8 @@ with open(file_path, "r", encoding="utf-8") as f:
 
 # 1. Correct the activatePanel function definition
 # This regex looks for the function definition and captures its content
-# It\"s designed to be flexible to variations in whitespace and content within the function
+# It's designed to be flexible to variations in whitespace and content within the function
+# It also handles the duplicate function definition by replacing the first occurrence and then removing the second.
 activate_panel_pattern = re.compile(r"""function activatePanel\(targetId\)\{.*?window\.scrollTo\(\{top:0,behavior:\"smooth\"\}\);\s*\}""", re.DOTALL)
 
 # The correct activatePanel function
@@ -30,18 +31,18 @@ correct_activate_panel_func = """    function activatePanel(targetId){
       window.scrollTo({top:0,behavior:\"smooth\"}); 
     }"""
 
-# Replace the activatePanel function. If multiple are found, replace all.
-# This will also remove the duplicate/incorrect definition.
-content = activate_panel_pattern.sub(correct_activate_panel_func, content)
+# Replace the first activatePanel function definition
+content = activate_panel_pattern.sub(correct_activate_panel_func, content, 1)
+
+# Remove any subsequent duplicate activatePanel function definitions
+content = re.sub(r"""function activatePanel\(targetId\)\{.*?window\.scrollTo\(\{top:0,behavior:\"smooth\"\}\);\s*\}""", "", content)
 
 # 2. Ensure onclick attributes are correctly set on nav items
 def fix_nav_items_onclick(match):
     # Extract the data-target value
     data_target = match.group(1)
     # Construct the correct onclick attribute, passing the data-target as a string
-    onclick_attr = f"onclick=\"activatePanel(\\\\\\'{data_target}\\\\\\\')\""
-    # Remove the extra space before the closing parenthesis in the onclick attribute
-    onclick_attr = onclick_attr.replace(" )", ")")
+    onclick_attr = f"onclick=\"activatePanel(\\\\'{data_target}\\\\')\""
     # Return the data-target and the new onclick attribute
     return f"data-target=\"{data_target}\" {onclick_attr}"
 

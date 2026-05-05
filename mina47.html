@@ -413,7 +413,7 @@
       <li class="active" data-target="homePanel"><i class="fas fa-home"></i> الرئيسية</li>
       <li data-target="groundEMS"><i class="fas fa-clipboard-list"></i> التحضير اليومي</li>
       <li data-target="handoverPanel"><i class="fas fa-exchange-alt"></i> تسليم المناوبة</li>
-      <li data-target="unitsCheckPanel"><i class="fas fa-stethoscope"></i> تشييك الوحدات</li>
+      <li data-target="personalCovenantPanel"><i class="fas fa-handshake"></i> العهد الشخصية</li>
       <li data-target="stockPanel"><i class="fas fa-boxes-stacked"></i> الخزن الاستراتيجي</li>
       <li data-target="deploymentPanel"><i class="fas fa-map-marked-alt"></i> خطة الانتشار</li>
       <li data-target="mapsPanel"><i class="fas fa-map"></i> خرائط النطاق</li>
@@ -983,25 +983,25 @@
         </div>
       </section>
 
-      <section class="panel" id="unitsCheckPanel">
+      <section class="panel" id="personalCovenantPanel">
         <div class="panel-head">
           <div>
-            <h3>تشييك الوحدة التشغيلية</h3>
-            <p>النموذج الميداني لتشييك الوحدة والطاقم والتجهيزات الطبية.</p>
+            <h3>العهد الشخصية</h3>
+            <p>نموذج تسجيل العهد الشخصية للمعدات والأصناف.</p>
           </div>
         </div>
 
-        <div id="unitCheckAlert" class="alert"></div>
+        <div id="personalCovenantAlert" class="alert"></div>
 
         <div class="section">
           <div class="section-title">البيانات الأساسية</div>
           <div class="section-body grid-3">
-            <div class="field"><label for="units_check_date">تاريخ التشييك</label><input type="date" id="units_check_date"></div>
-            <div class="field"><label for="units_check_time">وقت التشييك</label><input type="time" id="units_check_time"></div>
+            <div class="field"><label for="personal_covenant_date">تاريخ العهدة</label><input type="date" id="personal_covenant_date"></div>
+            <div class="field"><label for="personal_covenant_time">وقت العهدة</label><input type="time" id="personal_covenant_time"></div>
 
             <div class="field">
-              <label for="units_check_sector">القطاع</label>
-              <select id="units_check_sector">
+              <label for="personal_covenant_sector">القطاع</label>
+              <select id="personal_covenant_sector">
                 <option value="" selected>اختر القطاع</option>
                 <option value="الجمرات">الجمرات</option>
                 <option value="القطارات">القطارات</option>
@@ -1014,8 +1014,8 @@
             </div>
 
             <div class="field">
-              <label for="units_check_shift">فترة التشييك</label>
-              <select id="units_check_shift">
+              <label for="personal_covenant_shift">فترة العهدة</label>
+              <select id="personal_covenant_shift">
                 <option value="" selected>اختر الفترة</option>
                 <option value="الصباحية">الصباحية</option>
                 <option value="المسائية">المسائية</option>
@@ -1023,117 +1023,84 @@
               </select>
             </div>
 
-            <div class="field"><label for="unit_call_sign">رمز / نداء الوحدة التشغيلية</label><input type="text" id="unit_call_sign"></div>
-
             <div class="field">
-              <label for="unit_type">نوع الوحدة التشغيلية</label>
-              <select id="unit_type">
+              <label for="personal_covenant_type">نوع العهدة</label>
+              <select id="personal_covenant_type">
                 <option value="" selected>اختر النوع</option>
-                <option value="مركبة إسعافية">مركبة إسعافية</option>
-                <option value="قولف">قولف</option>
-                <option value="راجلة">راجلة</option>
-                <option value="دراجة نارية">دراجة نارية</option>
-                <option value="دراجة هوائية">دراجة هوائية</option>
-                <option value="سكوتر">سكوتر</option>
-                <option value="بولاريس">بولاريس</option>
-                <option value="أخرى">أخرى</option>
+                <option value="عهد شخصية">عهد شخصية</option>
+                <option value="عهد مركبة">عهد مركبة</option>
+                <option value="عهد موقع">عهد موقع</option>
               </select>
             </div>
 
+            <div class="field"><label for="personal_covenant_id">رقم العهدة / المعرف</label><input type="text" id="personal_covenant_id"></div>
+
             <div class="field">
-              <label for="checker_has_third_party">هل الفرقة تحتوي على طرف ثالث؟</label>
-              <select id="checker_has_third_party">
-                <option value="" selected>اختر</option>
-                <option value="نعم">نعم</option>
-                <option value="لا">لا</option>
-              </select>
+              <label for="personal_covenant_paramedic_chief">اسم كبير المسعفين والمساعدين</label>
+              <input type="text" id="personal_covenant_paramedic_chief">
             </div>
 
-            <div class="field"><label for="crew1_name">اسم الطاقم الإسعافي 1</label><input type="text" id="crew1_name"></div>
-            <div class="field"><label for="crew2_name">اسم الطاقم الإسعافي 2</label><input type="text" id="crew2_name"></div>
-            <div class="field hidden" id="thirdCrewWrap"><label for="crew3_name">اسم الطاقم الإسعافي 3</label><input type="text" id="crew3_name"></div>
-          </div>
-        </div>
-
-        <div class="section hidden" id="ambulanceMechanicalWrap">
-          <div class="section-title">التشييك الميكانيكي - مركبة إسعافية</div>
-          <div class="section-body grid-2">
-            <div class="field"><label for="vehicle_plate_number">رقم اللوحة</label><input type="text" id="vehicle_plate_number"></div>
             <div class="field">
-              <label for="vehicle_fuel_level">مستوى الوقود</label>
-              <select id="vehicle_fuel_level">
-                <option value="" selected>اختر المستوى</option>
-                <option value="ممتاز">ممتاز</option>
-                <option value="جيد">جيد</option>
-                <option value="متوسط">متوسط</option>
-                <option value="منخفض">منخفض</option>
-              </select>
+              <label for="personal_covenant_data_entry_name">اسم مدخل البيانات</label>
+              <input type="text" id="personal_covenant_data_entry_name">
             </div>
-            <div class="field">
-              <label for="vehicle_ac_status">التكييف</label>
-              <select id="vehicle_ac_status">
-                <option value="" selected>اختر الحالة</option>
-                <option value="يعمل">يعمل</option>
-                <option value="لا يعمل">لا يعمل</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="vehicle_lights_status">الأضواء والأصوات التحذيرية</label>
-              <select id="vehicle_lights_status">
-                <option value="" selected>اختر الحالة</option>
-                <option value="سليمة">سليمة</option>
-                <option value="يوجد ملاحظة">يوجد ملاحظة</option>
-                <option value="لا تعمل">لا تعمل</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="section hidden" id="golfWrap">
-          <div class="section-title">تشييك القولف</div>
-          <div class="section-body grid-2">
-            <div class="field">
-              <label for="golf_charge_level">مستوى الشحن</label>
-              <select id="golf_charge_level">
-                <option value="" selected>اختر المستوى</option>
-                <option value="ممتاز">ممتاز</option>
-                <option value="جيد">جيد</option>
-                <option value="متوسط">متوسط</option>
-                <option value="منخفض">منخفض</option>
-              </select>
-            </div>
-            <div class="field"><label for="golf_notes">ملاحظات القولف</label><textarea id="golf_notes"></textarea></div>
           </div>
         </div>
 
         <div class="section">
-          <div class="section-title">التشييك الطبي</div>
+          <div class="section-title">الأصناف المشمولة في العهدة</div>
           <div class="section-body">
             <div class="table-wrap">
               <table>
                 <thead>
                   <tr>
-                    <th>الصنف الطبي</th>
+                    <th>الصنف</th>
+                    <th>الكمية</th>
                     <th>الحالة</th>
-                    <th>العدد</th>
                     <th>ملاحظات</th>
+                    <th></th>
                   </tr>
                 </thead>
-                <tbody id="medicalCheckTableBody"></tbody>
+                <tbody id="personalCovenantTableBody">
+                  <tr>
+                    <td>
+          <select>
+            <option value="جهاز لوكس">جهاز لوكس</option>
+            <option value="ميندري">ميندري</option>
+            <option value="لايف باك 15">لايف باك 15</option>
+            <option value="جهاز قياس علامات الحيوية">جهاز قياس علامات الحيوية</option>
+            <option value="جهاز اتصال لاسلكي">جهاز اتصال لاسلكي</option>
+            <option value="جهاز مسف إلكتروني تابلت">جهاز مسف إلكتروني تابلت</option>
+            <option value="اخرى اذكر">اخرى اذكر</option>
+          </select>
+        </td>
+                    <td><input type="number" min="1" value="1"></td>
+                    <td>
+                      <select>
+                        <option value="سليم">سليم</option>
+                        <option value="يوجد عطل">يوجد عطل</option>
+                        <option value="مفقود">مفقود</option>
+                      </select>
+                    </td>
+                    <td><textarea placeholder="ملاحظات الصنف"></textarea></td>
+                    <td><button class="btn btn-danger btn-sm" onclick="removeCovenantItem(this)"><i class="fas fa-trash"></i></button></td>
+                  </tr>
+                </tbody>
               </table>
             </div>
+            <button class="btn btn-secondary btn-sm mt-3" onclick="addCovenantItem()"><i class="fas fa-plus"></i> إضافة صنف</button>
           </div>
         </div>
 
         <div class="section">
           <div class="section-title">ملاحظات عامة</div>
           <div class="section-body">
-            <div class="field"><label for="units_check_notes">الملاحظات</label><textarea id="units_check_notes"></textarea></div>
+            <div class="field"><label for="personal_covenant_notes">الملاحظات</label><textarea id="personal_covenant_notes"></textarea></div>
           </div>
         </div>
 
         <div class="actions">
-          <button class="btn btn-success" onclick="sendUnitsCheck()">حفظ وإرسال</button>
+          <button class="btn btn-success" onclick="sendPersonalCovenant()"><i class="fas fa-paper-plane"></i> حفظ وإرسال</button>
         </div>
       </section>
 
@@ -1175,6 +1142,18 @@
             </div>
 
             <div class="bullets-box">
+              <div class="field">
+                <label for="stock_has_shortage">هل يوجد نقص طبي؟</label>
+                <select id="stock_has_shortage" onchange="toggleMedicalShortages()">
+                  <option value="">اختر</option>
+                  <option value="لا">لا</option>
+                  <option value="نعم">نعم</option>
+                </select>
+              </div>
+              <div class="field" id="medicalShortagesWrap" style="display:none">
+                <label for="stock_medical_shortages">قائمة الأصناف الناقصة والكميات</label>
+                <textarea id="stock_medical_shortages" placeholder="مثال: جهاز AED x2، شاشة مراقبة x1"></textarea>
+              </div>
               <div class="field">
                 <label for="stock_notes">ملاحظات الخزن</label>
                 <textarea id="stock_notes" placeholder="اكتب كل ملاحظة في سطر مستقل"></textarea>
@@ -2072,95 +2051,140 @@ ${supportLines}
       });
     }
 
-    async function sendUnitsCheck(){
-      const required = ['units_check_date','units_check_time','units_check_sector','units_check_shift','unit_call_sign','unit_type','checker_has_third_party','crew1_name','crew2_name'];
+    async function sendPersonalCovenant(){
+            const required = ['personal_covenant_date','personal_covenant_time','personal_covenant_sector','personal_covenant_shift','personal_covenant_type','personal_covenant_id'];
       for(const id of required){
         const el = document.getElementById(id);
         if(!el || !String(el.value).trim()){
-          showAlert('unitCheckAlert','error','يرجى تعبئة جميع الحقول الأساسية');
+            showAlert('personalCovenantAlert','error','يرجى تعبئة جميع الحقول الأساسية');
           return;
         }
       }
 
-      const hasThird = document.getElementById('checker_has_third_party').value;
-      if(hasThird === 'نعم' && !document.getElementById('crew3_name').value.trim()){
-        showAlert('unitCheckAlert','error','يرجى إدخال اسم الطاقم الإسعافي الثالث');
+            const covenantItems = [];
+      const tableBody = document.getElementById('personalCovenantTableBody');
+      for (let i = 0; i < tableBody.rows.length; i++) {
+        const row = tableBody.rows[i];
+        const itemName = row.cells[0].querySelector('input').value.trim();
+        const quantity = row.cells[1].querySelector('input').value.trim();
+        const status = row.cells[2].querySelector('select').value;
+        const notes = row.cells[3].querySelector('textarea').value.trim();
+        if (itemName && quantity && status) {
+          covenantItems.push(`${itemName}: الكمية=${quantity}, الحالة=${status}, ملاحظات=${notes || '-'}`);
+        }
+      }
+
+      if (covenantItems.length === 0) {
+        showAlert('personalCovenantAlert','error','يرجى إضافة صنف واحد على الأقل للعهدة الشخصية');
         return;
       }
 
-      const unitType = document.getElementById('unit_type').value;
-      let specificCheck = '';
-
-      if(unitType === 'مركبة إسعافية'){
-        specificCheck = `رقم اللوحة=${document.getElementById('vehicle_plate_number').value.trim() || '-'} | مستوى الوقود=${document.getElementById('vehicle_fuel_level').value || '-'} | التكييف=${document.getElementById('vehicle_ac_status').value || '-'} | الأضواء والأصوات=${document.getElementById('vehicle_lights_status').value || '-'}`;
-      } else if(unitType === 'قولف'){
-        specificCheck = `مستوى الشحن=${document.getElementById('golf_charge_level').value || '-'} | ملاحظات القولف=${document.getElementById('golf_notes').value.trim() || '-'}`;
-      } else {
-        specificCheck = 'لا يوجد تشييك خاص إضافي لهذا النوع';
-      }
-
-      const medicalSummary = medicalItemsData.map((item,index)=>{
-        const status = document.getElementById(`medical_status_${index}`).value;
-        const count = document.getElementById(`medical_count_${index}`).value || '0';
-        const note = document.getElementById(`medical_note_${index}`).value.trim() || '-';
-        return `${item}: الحالة=${status}, العدد=${count}, الملاحظات=${note}`;
-      });
-
-      const row = {
+            const row = {
         "وقت الحفظ": new Date().toLocaleString('ar-SA'),
-        "تاريخ التشييك": document.getElementById('units_check_date').value,
-        "وقت التشييك": document.getElementById('units_check_time').value,
-        "القطاع": document.getElementById('units_check_sector').value,
-        "الفترة": document.getElementById('units_check_shift').value,
-        "رمز/نداء الوحدة": document.getElementById('unit_call_sign').value.trim(),
-        "نوع الوحدة التشغيلية": unitType,
-        "هل يوجد طرف ثالث": hasThird,
-        "اسم الطاقم 1": document.getElementById('crew1_name').value.trim(),
-        "اسم الطاقم 2": document.getElementById('crew2_name').value.trim(),
-        "اسم الطاقم 3": document.getElementById('crew3_name').value.trim() || '-',
-        "التشييك الخاص بالوحدة": specificCheck,
-        "ملخص التشييك الطبي": medicalSummary.join(' || '),
-        "ملاحظات عامة": document.getElementById('units_check_notes').value.trim() || 'لا توجد ملاحظات'
+        "تاريخ العهدة": document.getElementById('personal_covenant_date').value,
+        "وقت العهدة": document.getElementById('personal_covenant_time').value,
+        "القطاع": document.getElementById('personal_covenant_sector').value,
+        "الفترة": document.getElementById('personal_covenant_shift').value,
+        "نوع العهدة": document.getElementById('personal_covenant_type').value,
+        "رقم العهدة/المعرف": document.getElementById('personal_covenant_id').value.trim(),
+        "الأصناف": covenantItems.join(\' || \'),
+        "ملاحظات عامة": document.getElementById("personal_covenant_notes").value.trim() || \'لا توجد ملاحظات\',
+        "اسم كبير المسعفين والمساعدين": document.getElementById("personal_covenant_paramedic_chief").value.trim(),
+        "اسم مدخل البيانات": document.getElementById("personal_covenant_data_entry_name").value.trim()
       };
-
-      const save = await saveToGoogleSheets('تشييك الوحدات التشغيلية', [row]);
+            const save = await saveToGoogleSheets('العهد الشخصية', [row]);
       if(!save.success){
-        showAlert('unitCheckAlert','error','تعذر حفظ بيانات التشييك');
+        showAlert('personalCovenantAlert','error','تعذر حفظ بيانات العهدة الشخصية');
         return;
       }
 
-      showAlert('unitCheckAlert','success','تم حفظ نموذج التشييك بنجاح');
+      showAlert('personalCovenantAlert','success','تم حفظ نموذج العهدة الشخصية بنجاح');
 
-      let msg = `🩺 *نموذج تشييك الوحدة التشغيلية* 🩺\n\n`;
+            let msg = `🤝 *نموذج العهد الشخصية* 🤝\n\n`;
       msg += `📍 *القطاع:* ${row["القطاع"]}\n`;
       msg += `🕘 *الفترة:* ${row["الفترة"]}\n`;
-      msg += `📅 *التاريخ:* ${row["تاريخ التشييك"]} | ${row["وقت التشييك"]}\n\n`;
-      msg += `🚑 *بيانات الوحدة:* \n`;
-      msg += `• النداء: ${row["رمز/نداء الوحدة"]}\n`;
-      msg += `• النوع: ${row["نوع الوحدة التشغيلية"]}\n`;
-      msg += `• طرف ثالث: ${row["هل يوجد طرف ثالث"]}\n\n`;
-      msg += `👥 *الطاقم:* \n`;
-      msg += `• 1: ${row["اسم الطاقم 1"]}\n`;
-      msg += `• 2: ${row["اسم الطاقم 2"]}\n`;
-      msg += `• 3: ${row["اسم الطاقم 3"]}\n\n`;
-      msg += `✅ *حالة التشييك:* \n`;
-      msg += `• تشييك الوحدة: ${row["التشييك الخاص بالوحدة"]}\n`;
-      msg += `• التشييك الطبي: ${row["ملخص التشييك الطبي"]}\n\n`;
-      msg += `📝 *الملاحظات:* \n${row["ملاحظات عامة"]}`;
+      msg += `📅 *التاريخ:* ${row["تاريخ العهدة"]} | ${row["وقت العهدة"]}\n\n`;
+      msg += `📝 *تفاصيل العهدة:* \n`;
+      msg += `• النوع: ${row["نوع العهدة"]}\n`;
+      msg += `• رقم العهدة/المعرف: ${row["رقم العهدة/المعرف"]}\n\n`;
+      msg += `📦 *الأصناف:* \n${covenantItems.map(item => `• ${item}`).join('\n')}\n\n`;
+      msg += `📝 *ملاحظات عامة:* \n${row["ملاحظات عامة"]}\n\n`;
+      msg += `👨‍⚕️ *كبير المسعفين والمساعدين:* ${row["اسم كبير المسعفين والمساعدين"]}\n`;
+      msg += `✍️ *مدخل البيانات:* ${row["اسم مدخل البيانات"]}`;
       openWhatsApp(msg);
+      clearPersonalCovenantForm();
     }
 
-    function buildStrategicTable(){
-      const body = document.getElementById('strategicTableBody');
-      body.innerHTML = '';
-      stockItems.forEach((entry,index)=>{
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${entry.category}</td>
-          <td>${entry.item}</td>
+    function addCovenantItem() {
+      const tbody = document.getElementById("personalCovenantTableBody");
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>
+          <select>
+            <option value="جهاز لوكس">جهاز لوكس</option>
+            <option value="ميندري">ميندري</option>
+            <option value="لايف باك 15">لايف باك 15</option>
+            <option value="جهاز قياس علامات الحيوية">جهاز قياس علامات الحيوية</option>
+            <option value="جهاز اتصال لاسلكي">جهاز اتصال لاسلكي</option>
+            <option value="جهاز مسف إلكتروني تابلت">جهاز مسف إلكتروني تابلت</option>
+            <option value="اخرى اذكر">اخرى اذكر</option>
+          </select>
+        </td>
+        <td><input type="number" min="1" value="1"></td>
+        <td>
+          <select>
+            <option value="سليم">سليم</option>
+            <option value="يوجد عطل">يوجد عطل</option>
+            <option value="مفقود">مفقود</option>
+          </select>
+        </td>
+        <td><textarea placeholder="ملاحظات الصنف"></textarea></td>
+        <td><button class="btn btn-danger btn-sm" onclick="removeCovenantItem(this)"><i class="fas fa-trash"></i></button></td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    function removeCovenantItem(btn) {
+      btn.closest("tr").remove();
+    }
+
+    function clearPersonalCovenantForm() {
+      document.getElementById("personal_covenant_date").value = "";
+      document.getElementById("personal_covenant_time").value = "";
+      document.getElementById("personal_covenant_sector").value = "";
+      document.getElementById("personal_covenant_shift").value = "";
+      document.getElementById("personal_covenant_type").value = "";
+      document.getElementById("personal_covenant_id").value = "";
+      document.getElementById("personalCovenantTableBody").innerHTML = `
+        <tr>
           <td>
-            <select id="stock_status_${index}">
-              <option value="متوفر">متوفر</option>
+          <select>
+            <option value="جهاز لوكس">جهاز لوكس</option>
+            <option value="ميندري">ميندري</option>
+            <option value="لايف باك 15">لايف باك 15</option>
+            <option value="جهاز قياس علامات الحيوية">جهاز قياس علامات الحيوية</option>
+            <option value="جهاز اتصال لاسلكي">جهاز اتصال لاسلكي</option>
+            <option value="جهاز مسف إلكتروني تابلت">جهاز مسف إلكتروني تابلت</option>
+            <option value="اخرى اذكر">اخرى اذكر</option>
+          </select>
+        </td>
+          <td><input type="number" min="1" value="1"></td>
+          <td>
+            <select>
+              <option value="سليم">سليم</option>
+              <option value="يوجد عطل">يوجد عطل</option>
+              <option value="مفقود">مفقود</option>
+            </select>
+          </td>
+          <td><textarea placeholder="ملاحظات الصنف"></textarea></td>
+          <td><button class="btn btn-danger btn-sm" onclick="removeCovenantItem(this)"><i class="fas fa-trash"></i></button></td>
+        </tr>
+      `;
+      document.getElementById("personal_covenant_notes").value = "";
+      document.getElementById("personal_covenant_paramedic_chief").value = "";
+      document.getElementById("personal_covenant_data_entry_name").value = "";
+      hideAlert("personalCovenantAlert");
+    }
               <option value="غير متوفر">غير متوفر</option>
               <option value="يوجد نقص">يوجد نقص</option>
             </select>
@@ -2172,18 +2196,25 @@ ${supportLines}
     }
 
     async function sendStrategicStock(){
-      const date = document.getElementById('stock_date').value;
-      const time = document.getElementById('stock_time').value;
-      const checker = document.getElementById('stock_checker').value.trim();
-      const location = document.getElementById('stock_location').value.trim();
-      const notes = document.getElementById('stock_notes').value.trim();
+      const date = document.getElementById(\'stock_date\').value;
+      const time = document.getElementById(\'stock_time\').value;
+      const checker = document.getElementById(\'stock_checker\').value.trim();
+      const location = document.getElementById(\'stock_location\').value.trim();
+      const hasShortage = document.getElementById(\'stock_has_shortage\').value;
+      const medicalShortages = document.getElementById(\'stock_medical_shortages\').value.trim();
+      const notes = document.getElementById(\'stock_notes\').value.trim();
 
-      if(!date || !time || !checker || !location){
-        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
+      if(!date || !time || !checker || !location || !hasShortage){
+        showAlert(\'stockAlert\',\'error\',\'يرجى تعبئة البيانات الأساسية وحالة النقص الطبي\');
         return;
       }
 
-      let shortageFound = false;
+      if(hasShortage === \'نعم\' && !medicalShortages){
+        showAlert(\'stockAlert\',\'error\',\'يرجى تدوين قائمة الأصناف الناقصة والكميات\');
+        return;
+      }
+
+      let shortageFound = (hasShortage === \'نعم\');
 
       const rows = stockItems.map((entry,index)=>{
         const status = document.getElementById(`stock_status_${index}`).value;
@@ -2200,7 +2231,9 @@ ${supportLines}
           "الصنف": entry.item,
           "الحالة": status,
           "الكمية الحالية": current,
-          "ملاحظات": notes || '-'
+          "هل يوجد نقص طبي": hasShortage,
+          "النواقص الطبية": medicalShortages || \'-\',
+          "ملاحظات": notes || \'-\'
         };
       });
 
@@ -2215,11 +2248,49 @@ ${supportLines}
 
       let msg = `📦 تقرير الخزن الاستراتيجي\n\n`;
       msg += `📅 ${date}\n⏰ ${time}\n👤 ${checker}\n📍 ${location}\n`;
-      if(shortageFound) msg += `\n⚠ يوجد نقص في بعض الأصناف`;
+      if(shortageFound) {
+        msg += `\n⚠ يوجد نقص في بعض الأصناف:\n${medicalShortages}`;
+      }
       openWhatsApp(msg);
+      clearStrategicStockForm();
+
+    // Function to clear the strategic stock form
+    function clearStrategicStockForm() {
+      document.getElementById(\'stock_date\').value = \'\';
+      document.getElementById(\'stock_time\').value = \'\';
+      document.getElementById(\'stock_checker\').value = \'\';
+      document.getElementById(\'stock_location\').value = \'\';
+      document.getElementById(\'stock_has_shortage\').value = \'\';
+      document.getElementById(\'stock_medical_shortages\').value = \'\';
+      document.getElementById(\'stock_notes\').value = \'\';
+      document.getElementById(\'medicalShortagesWrap\').style.display = \'none\';
+      // Clear dynamic table rows
+      const tableBody = document.getElementById(\'strategicTableBody\');
+      tableBody.innerHTML = \'\';
+      // Re-populate with default items
+      populateStrategicStockTable();
     }
 
-    document.getElementById('deploy_sector').addEventListener('change', handleDeploymentContextChange);
+    // Function to toggle medical shortages field
+    function toggleMedicalShortages(){
+      const hasShortage = document.getElementById(\'stock_has_shortage\').value;
+      const wrap = document.getElementById(\'medicalShortagesWrap\');
+      if(hasShortage === \'نعم\') wrap.style.display = \'block\';
+      else{
+        wrap.style.display = \'none\';
+        document.getElementById(\'stock_medical_shortages\').value = \'\';
+      }
+    }
+
+
+
+
+
+
+
+
+
+    document.getElementById(\'deploy_sector\').addEventListener(\'change\', handleDeploymentContextChange);
     document.getElementById('deploy_shift').addEventListener('change', handleDeploymentContextChange);
     document.getElementById('deploy_role').addEventListener('change', handleDeploymentRoleChange);
 
@@ -2985,7 +3056,7 @@ function renderMapMarkers(data){
     `);
     mapMarkers.push(marker);
   });
-  document.getElementById('mapPointCount').textContent = `النقاط المعروضة: ${data.length} من ${liveDeploymentData.length}`;
+document.getElementById(\'mapPointCount\').textContent = `النقاط المعروضة: ${data.length} من 148`;
 }
 
 /* ─── فلترة الخريطة ─── */
@@ -3058,35 +3129,37 @@ function resetDashboardFilters(){
 
 function updateDashboard(data){
   // KPIs
-  const total = data.length;
-  const ready = data.filter(d => d.status === 'جاهزة' || d.status === 'جاهز').length;
-  const supported = data.filter(d => d.status === 'مدعمة' || d.status === 'مدعم').length;
-  const oos = data.filter(d => d.status === 'خارج الخدمة').length;
-  const broken = data.filter(d => d.status === 'متعطلة' || d.status === 'موقوف').length;
+  const total = 148; // Fixed total points
+  const ready = data.filter(d => d.status === \'جاهزة\' || d.status === \'جاهز\').reduce((sum, pt) => sum + (parseInt(pt.teams) || 1), 0);
+  const supported = data.filter(d => d.status === \'مدعمة\' || d.status === \'مدعم\').reduce((sum, pt) => sum + (parseInt(pt.teams) || 1), 0);
+  const oos = data.filter(d => d.status === \'خارج الخدمة\').reduce((sum, pt) => sum + (parseInt(pt.teams) || 1), 0);
+  const broken = data.filter(d => d.status === \'متعطلة\' || d.status === \'موقوف\').reduce((sum, pt) => sum + (parseInt(pt.teams) || 1), 0);
 
-  document.getElementById('kpi_total').textContent = total;
-  document.getElementById('kpi_ready').textContent = ready;
-  document.getElementById('kpi_supported').textContent = supported;
-  document.getElementById('kpi_oos').textContent = oos;
-  document.getElementById('kpi_broken').textContent = broken;
+  document.getElementById(\'kpi_total\').textContent = 148;
+  document.getElementById(\'kpi_ready\').textContent = ready;
+  document.getElementById(\'kpi_supported\').textContent = supported;
+  document.getElementById(\'kpi_oos\').textContent = oos;
+  document.getElementById(\'kpi_broken\').textContent = broken;
 
   // Sector Table
-  const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
-  const sectorBody = document.querySelector('#dashSectorTable tbody');
-  sectorBody.innerHTML = '';
+  const sectors = [\'الجمرات\',\'القطارات\',\'بطن منى الجنوبي\',\'بطن منى الشمالي\',\'الشعيبين\',\'منى الجديد 1\',\'منى الجديد 2\'];
+  const sectorBody = document.querySelector(\'#dashSectorTable tbody\');
+  sectorBody.innerHTML = \'\';
   sectors.forEach(sec => {
     const pts = data.filter(d => d.sector === sec);
-    const r = pts.filter(d => d.status === 'جاهزة' || d.status === 'جاهز').length;
-    const s = pts.filter(d => d.status === 'مدعمة' || d.status === 'مدعم').length;
-    const o = pts.filter(d => d.status === 'خارج الخدمة').length;
-    const b = pts.filter(d => d.status === 'متعطلة' || d.status === 'موقوف').length;
+    const totalTeamsInSector = pts.reduce((sum, pt) => sum + (parseInt(pt.teams) || 1), 0); // Calculate total teams dynamically
+    const readyTeamsInSector = pts.filter(d => d.status === \'جاهزة\' || d.status === \'جاهز\').reduce((sum, pt) => sum + (parseInt(pt.teams) || 1), 0); // Calculate ready teams dynamically
+
+    const supportedTeamsInSector = pts.filter(d => d.status === \'مدعمة\' || d.status === \'مدعم\').reduce((sum, pt) => sum + (parseInt(pt.teams) || 1), 0);
+    const oosTeamsInSector = pts.filter(d => d.status === \'خارج الخدمة\').reduce((sum, pt) => sum + (parseInt(pt.teams) || 1), 0);
+    const brokenTeamsInSector = pts.filter(d => d.status === \'متعطلة\' || d.status === \'موقوف\').reduce((sum, pt) => sum + (parseInt(pt.teams) || 1), 0);
     sectorBody.innerHTML += `<tr>
-      <td style="font-weight:700">${sec}</td>
-      <td>${pts.length}</td>
-      <td><span class="status-badge ready">${r}</span></td>
-      <td><span class="status-badge supported">${s}</span></td>
-      <td><span class="status-badge oos">${o}</span></td>
-      <td><span class="status-badge broken">${b}</span></td>
+      <td style=\'font-weight:700\'>${sec}</td>
+      <td>${totalTeamsInSector}</td>
+      <td><span class=\'status-badge ready\'>${readyTeamsInSector}</span></td>
+      <td><span class=\'status-badge supported\'>${supportedTeamsInSector}</span></td>
+      <td><span class=\'status-badge oos\'>${oosTeamsInSector}</span></td>
+      <td><span class=\'status-badge broken\'>${brokenTeamsInSector}</span></td>
     </tr>`;
   });
 
@@ -3139,8 +3212,7 @@ function updateDashboard(data){
       <i class="fas fa-check-circle"></i> تم تحديث البيانات
     </div>
     <div style="font-size:.78rem;color:var(--muted);margin-top:4px">
-      ${new Date().toLocaleString('ar-SA')} | إجمالي ${total} نقطة
-    </div>
+      ${new Date().toLocaleString(\'ar-SA\')} | إجمالي 148 نقطة   </div>
   `;
 }
 

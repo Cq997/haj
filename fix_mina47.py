@@ -6,16 +6,11 @@ file_path = "/home/ubuntu/final_push_dir/haj/mina47.html"
 with open(file_path, "r", encoding="utf-8") as f:
     content = f.read()
 
-# 1. Correct the activatePanel function definition
-# This regex looks for the function definition and captures its content
-# It's designed to be flexible to variations in whitespace and content within the function
-# It also handles the duplicate function definition by replacing the first occurrence and then removing the second.
-activate_panel_pattern = re.compile(r"""function activatePanel\(targetId\)\{.*?window\.scrollTo\(\{top:0,behavior:\"smooth\"\}\);\s*\}""", re.DOTALL)
-
-# The correct activatePanel function
-correct_activate_panel_func = """    function activatePanel(targetId){ 
+# 1. Correct the activatePanel function definition and remove duplicates
+# The correct activatePanel function structure
+correct_activate_panel_func_template = """    function activatePanel(targetId){ 
       document.querySelectorAll(\".nav li\").forEach(i => i.classList.remove(\"active\")); 
-      const targetLi = document.querySelector(`.nav li[data-target=\"${targetId}\"]`); // Corrected selector
+      const targetLi = document.querySelector(`.nav li[data-target=\"${targetId}\"]`); 
       if(targetLi) targetLi.classList.add(\"active\"); 
        
       document.querySelectorAll(\".panel\").forEach(panel => { 
@@ -31,18 +26,24 @@ correct_activate_panel_func = """    function activatePanel(targetId){
       window.scrollTo({top:0,behavior:\"smooth\"}); 
     }"""
 
-# Replace the first activatePanel function definition
-content = activate_panel_pattern.sub(correct_activate_panel_func, content, 1)
+# Find all occurrences of activatePanel function definitions
+activate_panel_pattern = re.compile(r"function activatePanel\(targetId\)\{.*?window\.scrollTo\(\{top:0,behavior:\"smooth\"\}\);\s*\}", re.DOTALL)
 
-# Remove any subsequent duplicate activatePanel function definitions
-content = re.sub(r"""function activatePanel\(targetId\)\{.*?window\.scrollTo\(\{top:0,behavior:\"smooth\"\}\);\s*\}""", "", content)
+# Replace the first occurrence with the corrected version and remove subsequent duplicates
+def replace_activate_panel(match_obj, count=[0]):
+    count[0] += 1
+    if count[0] == 1:
+        return correct_activate_panel_func_template
+    else:
+        return ""
+
+content = activate_panel_pattern.sub(replace_activate_panel, content)
 
 # 2. Ensure onclick attributes are correctly set on nav items
 def fix_nav_items_onclick(match):
-    # Extract the data-target value
     data_target = match.group(1)
     # Construct the correct onclick attribute, passing the data-target as a string
-    onclick_attr = f"onclick=\"activatePanel(\\\\'{data_target}\\\\')\""
+    onclick_attr = f"onclick=\"activatePanel(\\\\\\'{data_target}\\\\\\\\' )\""
     # Return the data-target and the new onclick attribute
     return f"data-target=\"{data_target}\" {onclick_attr}"
 
@@ -79,7 +80,7 @@ def fix_dom_listener(match):
 
 content = dom_content_loaded_pattern.sub(fix_dom_listener, content)
 
-# 4. Remove !important from .panel.active CSS rule
+# 4. Remove !important from .panel.active CSS rule if it exists
 content = re.sub(r"\.panel\.active\{display:block!important\}", ".panel.active{display:block}", content)
 
 with open(file_path, "w", encoding="utf-8") as f:

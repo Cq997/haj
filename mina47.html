@@ -417,7 +417,7 @@
       <div class="section">
         <div class="section-body">
           <div class="grid-2">
-            <div class="field"><label>القطاع</label><select id="sector"><option>الجمرات</option><option>القطارات</option></select></div>
+            <div class="field"><label>القطاع</label><select id="sector"><option>الجمرات</option><option>القطارات</option><option>بطن منى الجنوبي</option><option>بطن منى الشمالي</option><option>الشعيبين</option><option>منى الجديد 1</option><option>منى الجديد 2</option></select></div>
             <div class="field"><label>الفترة</label><select id="shift_time"><option>الصباحية</option><option>المسائية</option></select></div>
           </div>
           <div class="actions">
@@ -435,7 +435,14 @@
             <div class="field"><label>اسم كبير المسعفين</label><input type="text" id="personal_covenant_paramedic_chief"></div>
             <div class="field"><label>اسم مدخل البيانات</label><input type="text" id="personal_covenant_data_entry_name"></div>
           </div>
+          <div class="table-wrap" style="margin-top: 20px;">
+            <table id="personalCovenantTable">
+              <thead><tr><th>اسم الصنف</th><th>العدد</th><th>الحالة</th><th>ملاحظات</th></tr></thead>
+              <tbody id="personalCovenantTableBody"></tbody>
+            </table>
+          </div>
           <div class="actions">
+            <button class="btn btn-outline" onclick="addCovenantItem()"><i class="fas fa-plus"></i> إضافة صنف</button>
             <button class="btn btn-success" onclick="sendPersonalCovenant()"><i class="fab fa-whatsapp"></i> حفظ وإرسال</button>
           </div>
         </div>
@@ -471,7 +478,9 @@
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygXkrELNwv4GJ-2cUqqlJTuEB_j4CD93CnLkqojuK2bcJszUz1FnD5ECchgQ653qcdDg/exec';
     let mapInstance, mapMarkers = [], liveDeploymentData = [];
 
+    // --- نظام التنقل ---
     function activatePanel(targetId){
+      console.log('Activating panel:', targetId);
       document.querySelectorAll('.panel').forEach(p => {
         p.classList.remove('active');
         p.style.display = 'none';
@@ -484,8 +493,8 @@
       document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
       document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
       
-      if(targetId === 'homePanel') {
-        setTimeout(() => { if(mapInstance) mapInstance.invalidateSize(); }, 200);
+      if(targetId === 'homePanel' || targetId === 'mapsPanel') {
+        setTimeout(() => { if(mapInstance) mapInstance.invalidateSize(); }, 300);
       }
       window.scrollTo(0,0);
     }
@@ -495,32 +504,110 @@
       btn.classList.add('active');
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
       document.getElementById(tabId).classList.add('active');
-      if(tabId === 'tabMap') setTimeout(() => { if(mapInstance) mapInstance.invalidateSize(); }, 200);
+      if(tabId === 'tabMap') setTimeout(() => { if(mapInstance) mapInstance.invalidateSize(); }, 300);
     }
 
+    // --- الخريطة والداشبورد ---
     function initMap(){
       if(mapInstance) return;
       mapInstance = L.map('deploymentMap').setView([21.4150, 39.8850], 14);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapInstance);
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.nav li').forEach(li => {
-        li.addEventListener('click', () => activatePanel(li.dataset.target));
-      });
-      initMap();
-      activatePanel('homePanel');
-    });
+    async function loadLiveDeploymentData(){
+      try {
+        const res = await fetch(`${SCRIPT_URL}?action=getDeployment`);
+        const data = await res.json();
+        if(Array.isArray(data)){
+          liveDeploymentData = data;
+          updateDashboard(data);
+          renderMapMarkers(data);
+        }
+      } catch(e) { console.error('Error loading data:', e); }
+    }
 
-    function toggleQuickLinks(){ document.getElementById('quickLinks').classList.toggle('show'); }
+    function updateDashboard(data = []){
+      document.getElementById('kpi_total').textContent = '148';
+      // منطق تحديث الجداول هنا...
+    }
+
+    function renderMapMarkers(data){
+      mapMarkers.forEach(m => mapInstance.removeLayer(m));
+      mapMarkers = [];
+      data.forEach(d => {
+        if(d.Latitude && d.Longitude){
+          const m = L.marker([d.Latitude, d.Longitude]).addTo(mapInstance);
+          m.bindPopup(`<b>${d["اسم النقطة"] || d["الرمز"]}</b><br>${d["القطاع"]}`);
+          mapMarkers.push(m);
+        }
+      });
+    }
+
+    // --- النماذج ---
+    function addCovenantItem(){
+      const tbody = document.getElementById('personalCovenantTableBody');
+      const row = `<tr>
+        <td><select class="item-name"><option>جهاز لوكس</option><option>ميندري</option><option>لايف باك 15</option><option>جهاز قياس علامات الحيوية</option><option>جهاز اتصال لاسلكي</option><option>جهاز مسف إلكتروني تابلت</option><option>اخرى اذكر</option></select></td>
+        <td><input type="number" class="item-count" value="1"></td>
+        <td><select class="item-status"><option>سليم</option><option>عطلان</option><option>مفقود</option></select></td>
+        <td><input type="text" class="item-note"></td>
+      </tr>`;
+      tbody.insertAdjacentHTML('beforeend', row);
+    }
+
     function toggleShortageDetails(){
       const val = document.getElementById('has_shortage').value;
       document.getElementById('shortage_details_container').classList.toggle('hidden', val === 'لا');
     }
 
-    async function sendGroundEMS(){ alert('تم الإرسال بنجاح'); }
-    async function sendPersonalCovenant(){ alert('تم الإرسال بنجاح'); }
-    async function sendStrategicStock(){ alert('تم الإرسال بنجاح'); }
+    function toggleQuickLinks(){ document.getElementById('quickLinks').classList.toggle('show'); }
+
+    async function sendPersonalCovenant(){
+      const chief = document.getElementById('personal_covenant_paramedic_chief').value;
+      const entry = document.getElementById('personal_covenant_data_entry_name').value;
+      let msg = `📦 *نموذج العهد الشخصية*\n👤 كبير المسعفين: ${chief}\n👤 مدخل البيانات: ${entry}\n\nالأصناف:\n`;
+      document.querySelectorAll('#personalCovenantTableBody tr').forEach(tr => {
+        msg += `- ${tr.querySelector('.item-name').value}: ${tr.querySelector('.item-count').value} (${tr.querySelector('.item-status').value})\n`;
+      });
+      openWhatsApp(msg);
+    }
+
+    async function sendStrategicStock(){
+      const has = document.getElementById('has_shortage').value;
+      const notes = document.getElementById('shortage_notes').value;
+      let msg = `📦 *نموذج الخزن الاستراتيجي*\n❓ يوجد نواقص: ${has}\n`;
+      if(has === 'نعم') msg += `📝 النواقص: ${notes}`;
+      openWhatsApp(msg);
+    }
+
+    function openWhatsApp(text){
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    // --- التهيئة ---
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('Initializing Platform...');
+      
+      // ربط أزرار القائمة
+      document.querySelectorAll('.nav li').forEach(li => {
+        li.addEventListener('click', () => {
+          activatePanel(li.dataset.target);
+          if(window.innerWidth <= 1180) document.getElementById('sidebar').classList.remove('active');
+        });
+      });
+
+      // زر الجوال
+      document.getElementById('mobileBtn').addEventListener('click', () => {
+        document.getElementById('sidebar').classList.toggle('active');
+      });
+
+      initMap();
+      activatePanel('homePanel');
+      loadLiveDeploymentData();
+      
+      // إضافة صنف افتراضي للعهد
+      addCovenantItem();
+    });
 </script>
 </body>
 </html>

@@ -2120,8 +2120,8 @@ ${supportLines}
         "الفترة": document.getElementById('personal_covenant_shift').value,
         "نوع العهدة": document.getElementById('personal_covenant_type').value,
         "رقم العهدة/المعرف": document.getElementById('personal_covenant_id').value.trim(),
-        "الأصناف": covenantItems.join(\' || \'),
-        "ملاحظات عامة": document.getElementById("personal_covenant_notes").value.trim() || \'لا توجد ملاحظات\',
+        "الأصناف": covenantItems.join(' || '),
+        "ملاحظات عامة": document.getElementById("personal_covenant_notes").value.trim() || 'لا توجد ملاحظات',
         "اسم كبير المسعفين والمساعدين": document.getElementById("personal_covenant_paramedic_chief").value.trim(),
         "اسم مدخل البيانات": document.getElementById("personal_covenant_data_entry_name").value.trim()
       };
@@ -2229,25 +2229,25 @@ ${supportLines}
     }
 
     async function sendStrategicStock(){
-      const date = document.getElementById(\'stock_date\').value;
-      const time = document.getElementById(\'stock_time\').value;
-      const checker = document.getElementById(\'stock_checker\').value.trim();
-      const location = document.getElementById(\'stock_location\').value.trim();
-      const hasShortage = document.getElementById(\'stock_has_shortage\').value;
-      const medicalShortages = document.getElementById(\'stock_medical_shortages\').value.trim();
-      const notes = document.getElementById(\'stock_notes\').value.trim();
+      const date = document.getElementById('stock_date').value;
+      const time = document.getElementById('stock_time').value;
+      const checker = document.getElementById('stock_checker').value.trim();
+      const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('stock_has_shortage').value;
+      const medicalShortages = document.getElementById('stock_medical_shortages').value.trim();
+      const notes = document.getElementById('stock_notes').value.trim();
 
       if(!date || !time || !checker || !location || !hasShortage){
-        showAlert(\'stockAlert\',\'error\',\'يرجى تعبئة البيانات الأساسية وحالة النقص الطبي\');
+        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية وحالة النقص الطبي');
         return;
       }
 
-      if(hasShortage === \'نعم\' && !medicalShortages){
-        showAlert(\'stockAlert\',\'error\',\'يرجى تدوين قائمة الأصناف الناقصة والكميات\');
+      if(hasShortage === 'نعم' && !medicalShortages){
+        showAlert('stockAlert','error','يرجى تدوين قائمة الأصناف الناقصة والكميات');
         return;
       }
 
-      let shortageFound = (hasShortage === \'نعم\');
+      let shortageFound = (hasShortage === 'نعم');
 
       const rows = stockItems.map((entry,index)=>{
         const status = document.getElementById(`stock_status_${index}`).value;
@@ -2265,8 +2265,8 @@ ${supportLines}
           "الحالة": status,
           "الكمية الحالية": current,
           "هل يوجد نقص طبي": hasShortage,
-          "النواقص الطبية": medicalShortages || \'-\',
-          "ملاحظات": notes || \'-\'
+          "النواقص الطبية": medicalShortages || '-',
+          "ملاحظات": notes || '-'
         };
       });
 
@@ -2289,29 +2289,29 @@ ${supportLines}
 
     // Function to clear the strategic stock form
     function clearStrategicStockForm() {
-      document.getElementById(\'stock_date\').value = \'\';
-      document.getElementById(\'stock_time\').value = \'\';
-      document.getElementById(\'stock_checker\').value = \'\';
-      document.getElementById(\'stock_location\').value = \'\';
-      document.getElementById(\'stock_has_shortage\').value = \'\';
-      document.getElementById(\'stock_medical_shortages\').value = \'\';
-      document.getElementById(\'stock_notes\').value = \'\';
-      document.getElementById(\'medicalShortagesWrap\').style.display = \'none\';
+      document.getElementById('stock_date').value = '';
+      document.getElementById('stock_time').value = '';
+      document.getElementById('stock_checker').value = '';
+      document.getElementById('stock_location').value = '';
+      document.getElementById('stock_has_shortage').value = '';
+      document.getElementById('stock_medical_shortages').value = '';
+      document.getElementById('stock_notes').value = '';
+      document.getElementById('medicalShortagesWrap').style.display = 'none';
       // Clear dynamic table rows
-      const tableBody = document.getElementById(\'strategicTableBody\');
-      tableBody.innerHTML = \'\';
+      const tableBody = document.getElementById('strategicTableBody');
+      tableBody.innerHTML = '';
       // Re-populate with default items
       populateStrategicStockTable();
     }
 
     // Function to toggle medical shortages field
     function toggleMedicalShortages(){
-      const hasShortage = document.getElementById(\'stock_has_shortage\').value;
-      const wrap = document.getElementById(\'medicalShortagesWrap\');
-      if(hasShortage === \'نعم\') wrap.style.display = \'block\';
+      const hasShortage = document.getElementById('stock_has_shortage').value;
+      const wrap = document.getElementById('medicalShortagesWrap');
+      if(hasShortage === 'نعم') wrap.style.display = 'block';
       else{
-        wrap.style.display = \'none\';
-        document.getElementById(\'stock_medical_shortages\').value = \'\';
+        wrap.style.display = 'none';
+        document.getElementById('stock_medical_shortages').value = '';
       }
     }
 
@@ -2323,7 +2323,7 @@ ${supportLines}
 
 
 
-    document.getElementById(\'deploy_sector\').addEventListener(\'change\', handleDeploymentContextChange);
+    document.getElementById('deploy_sector').addEventListener('change', handleDeploymentContextChange);
     document.getElementById('deploy_shift').addEventListener('change', handleDeploymentContextChange);
     document.getElementById('deploy_role').addEventListener('change', handleDeploymentRoleChange);
 
@@ -3089,7 +3089,7 @@ function renderMapMarkers(data){
     `);
     mapMarkers.push(marker);
   });
-document.getElementById(\'mapPointCount\').textContent = `النقاط المعروضة: ${data.length} من 148`;
+document.getElementById('mapPointCount').textContent = `النقاط المعروضة: ${data.length} من 148`;
 }
 
 /* ─── فلترة الخريطة ─── */
@@ -3175,24 +3175,24 @@ function updateDashboard(data){
   document.getElementById('kpi_broken').textContent = broken;
 
   // Sector Table
-  const sectors = [\'الجمرات\',\'القطارات\',\'بطن منى الجنوبي\',\'بطن منى الشمالي\',\'الشعيبين\',\'منى الجديد 1\',\'منى الجديد 2\'];
-  const sectorBody = document.querySelector(\'#dashSectorTable tbody\');
-  sectorBody.innerHTML = \'\';
+  const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
+  const sectorBody = document.querySelector('#dashSectorTable tbody');
+  sectorBody.innerHTML = '';
   sectors.forEach(sec => {
     const pts = data.filter(d => d.sector === sec);
     const totalTeamsInSector = pts.reduce((sum, pt) => sum + (parseInt(pt.teams) || 1), 0); // Calculate total teams dynamically
-    const readyTeamsInSector = pts.filter(d => d.status === \'جاهزة\' || d.status === \'جاهز\').reduce((sum, pt) => sum + (parseInt(pt.teams) || 1), 0); // Calculate ready teams dynamically
+    const readyTeamsInSector = pts.filter(d => d.status === 'جاهزة' || d.status === 'جاهز').reduce((sum, pt) => sum + (parseInt(pt.teams) || 1), 0); // Calculate ready teams dynamically
 
-    const supportedTeamsInSector = pts.filter(d => d.status === \'مدعمة\' || d.status === \'مدعم\').reduce((sum, pt) => sum + (parseInt(pt.teams) || 1), 0);
-    const oosTeamsInSector = pts.filter(d => d.status === \'خارج الخدمة\').reduce((sum, pt) => sum + (parseInt(pt.teams) || 1), 0);
-    const brokenTeamsInSector = pts.filter(d => d.status === \'متعطلة\' || d.status === \'موقوف\').reduce((sum, pt) => sum + (parseInt(pt.teams) || 1), 0);
+    const supportedTeamsInSector = pts.filter(d => d.status === 'مدعمة' || d.status === 'مدعم').reduce((sum, pt) => sum + (parseInt(pt.teams) || 1), 0);
+    const oosTeamsInSector = pts.filter(d => d.status === 'خارج الخدمة').reduce((sum, pt) => sum + (parseInt(pt.teams) || 1), 0);
+    const brokenTeamsInSector = pts.filter(d => d.status === 'متعطلة' || d.status === 'موقوف').reduce((sum, pt) => sum + (parseInt(pt.teams) || 1), 0);
     sectorBody.innerHTML += `<tr>
-      <td style=\'font-weight:700\'>${sec}</td>
+      <td style='font-weight:700'>${sec}</td>
       <td>${totalTeamsInSector}</td>
-      <td><span class=\'status-badge ready\'>${readyTeamsInSector}</span></td>
-      <td><span class=\'status-badge supported\'>${supportedTeamsInSector}</span></td>
-      <td><span class=\'status-badge oos\'>${oosTeamsInSector}</span></td>
-      <td><span class=\'status-badge broken\'>${brokenTeamsInSector}</span></td>
+      <td><span class='status-badge ready'>${readyTeamsInSector}</span></td>
+      <td><span class='status-badge supported'>${supportedTeamsInSector}</span></td>
+      <td><span class='status-badge oos'>${oosTeamsInSector}</span></td>
+      <td><span class='status-badge broken'>${brokenTeamsInSector}</span></td>
     </tr>`;
   });
 
@@ -3245,7 +3245,7 @@ function updateDashboard(data){
       <i class="fas fa-check-circle"></i> تم تحديث البيانات
     </div>
     <div style="font-size:.78rem;color:var(--muted);margin-top:4px">
-      ${new Date().toLocaleString(\'ar-SA\')} | إجمالي 148 نقطة   </div>
+      ${new Date().toLocaleString('ar-SA')} | إجمالي 148 نقطة   </div>
   `;
 }
 

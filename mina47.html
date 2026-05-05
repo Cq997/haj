@@ -2592,17 +2592,17 @@ const items = data.filter(d =>
     }
 
     async function sendMethaneReport() {
-        const sector = document.getElementById('h_methane_sector')?.value?.trim() || '';
-      const reporter = document.getElementById('h_methane_reporter')?.value?.trim() || '';
-      const contact = document.getElementById('h_methane_contact')?.value?.trim() || '';
-      const major = document.getElementById('h_methane_major')?.value?.trim() || '';
-      const location = document.getElementById('h_methane_location')?.value?.trim() || '';
-      const type = document.getElementById('h_methane_type')?.value?.trim() || '';
-      const hazards = document.getElementById('h_methane_hazards')?.value?.trim() || '';
-      const access = document.getElementById('h_methane_access')?.value?.trim() || '';
-      const casualties = document.getElementById('h_methane_casualties')?.value?.trim() || '';
-      const services = document.getElementById('h_methane_services')?.value?.trim() || '';
-      const notes = document.getElementById("h_methane_notes")?.value?.trim() || "";
+      const sector = document.getElementById('methane_sector')?.value?.trim() || '';
+      const reporter = document.getElementById('methane_reporter')?.value?.trim() || '';
+      const contact = document.getElementById('methane_contact')?.value?.trim() || '';
+      const major = document.getElementById('methane_major')?.value?.trim() || '';
+      const location = document.getElementById('methane_location')?.value?.trim() || '';
+      const type = document.getElementById('methane_type')?.value?.trim() || '';
+      const hazards = document.getElementById('methane_hazards')?.value?.trim() || '';
+      const access = document.getElementById('methane_access')?.value?.trim() || '';
+      const casualties = document.getElementById('methane_casualties')?.value?.trim() || '';
+      const services = document.getElementById('methane_services')?.value?.trim() || '';
+      const notes = document.getElementById('methane_notes')?.value?.trim() || '';
 
       if (!sector || !reporter || !major || !location || !type) {
         showAlert('methaneAlert', 'error', 'يرجى تعبئة: القطاع، اسم المبلغ، M، E، T');
@@ -2661,17 +2661,17 @@ ${row["ملاحظات إضافية"]}
 
     function clearMethaneForm() {
       [
-        'h_methane_sector',
-        'h_methane_reporter',
-        'h_methane_contact',
-        'h_methane_major',
-        'h_methane_location',
-        'h_methane_type',
-        'h_methane_hazards',
-        'h_methane_access',
-        'h_methane_casualties',
-        'h_methane_services',
-        'h_methane_notes'
+        'methane_sector',
+        'methane_reporter',
+        'methane_contact',
+        'methane_major',
+        'methane_location',
+        'methane_type',
+        'methane_hazards',
+        'methane_access',
+        'methane_casualties',
+        'methane_services',
+        'methane_notes'
       ].forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;

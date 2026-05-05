@@ -23,13 +23,15 @@ activate_panel_func = """    function activatePanel(targetId){
       window.scrollTo({top:0,behavior:'smooth'});
     }"""
 
-content = re.sub(r"    function activatePanel\(targetId\)\{.*?\n    \}", activate_panel_func, content, flags=re.DOTALL)
+# The regex needs to be more specific to avoid matching other functions or comments
+# Also, ensure the replacement string is correctly escaped for re.sub if it contains backslashes or special regex characters
+content = re.sub(r"    function activatePanel\(targetId\)\{[^}]*?\}", activate_panel_func, content, flags=re.DOTALL)
 
 # 2. Ensure onclick attributes are correctly set on nav items
 def fix_nav_items(match):
     target = match.group(1)
     # Remove any existing onclick to avoid duplicates, then add the correct one
-    return f"data-target=\"{target}\" onclick=\"activatePanel(\\'{target}\\\')\""
+    return f"data-target=\"{target}\" onclick=\"activatePanel(\\\'{target}\\\\\')\""
 
 content = re.sub(r"data-target=\"([^\"]+)\"(?:\s+onclick=\"[^\"]+\")?", fix_nav_items, content)
 

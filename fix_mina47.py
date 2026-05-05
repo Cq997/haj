@@ -15,11 +15,13 @@ correct_activate_panel_func_template = """    function activatePanel(targetId){
        
       document.querySelectorAll(\".panel\").forEach(panel => { 
         panel.style.display = \"none\"; 
+        panel.classList.remove(\"active\"); // Ensure active class is removed
       }); 
        
       const targetPanel = document.getElementById(targetId); 
       if(targetPanel) { 
         targetPanel.style.display = \"block\"; 
+        targetPanel.classList.add(\"active\"); 
       } 
       window.scrollTo({top:0,behavior:\"smooth\"}); 
     }"""
@@ -42,7 +44,7 @@ def fix_nav_items_onclick(match):
     data_target = match.group(1)
     # Corrected: Pass data_target as a string literal to activatePanel
     # The regex for sub already handles the outer quotes, so we just need single quotes inside
-    onclick_attr = f"onclick=\"activatePanel(\\\'{data_target}\\\' )\""
+    onclick_attr = f"onclick=\"activatePanel(\\\\'{data_target}\\\\' )\""
     # Return the data-target and the new onclick attribute
     return f"data-target=\"{data_target}\" {onclick_attr}"
 
@@ -66,6 +68,7 @@ def fix_dom_listener(match):
     initial_logic = """
       document.querySelectorAll(\".panel\").forEach(panel => {
         panel.style.display = \"none\";
+        panel.classList.remove(\"active\");
       });
       const homePanel = document.getElementById(\"homePanel\");
       if (homePanel) {

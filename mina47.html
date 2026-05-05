@@ -1715,8 +1715,7 @@
 
     function activatePanel(targetId){
       document.querySelectorAll('.nav li').forEach(i => i.classList.remove('active'));
-      document.querySelector(`.nav li[data-target="${targetId}" onclick="activatePanel(${targetId})"]`)?.classList.add('active');
-      document.querySelectorAll('.panel').forEach(panel => panel.style.display = 'none');
+     document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add(\'active\');      document.querySelectorAll('.panel').forEach(panel => panel.style.display = 'none');
       if(document.getElementById(targetId)) document.getElementById(targetId).style.display = 'block';
       window.scrollTo({top:0,behavior:'smooth'});
     }

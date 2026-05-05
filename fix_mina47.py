@@ -14,7 +14,7 @@ activate_panel_pattern = re.compile(r"""function activatePanel\(targetId\)\{.*?w
 # The correct activatePanel function
 correct_activate_panel_func = """    function activatePanel(targetId){ 
       document.querySelectorAll(\".nav li\").forEach(i => i.classList.remove(\"active\")); 
-      const targetLi = document.querySelector(`.nav li[data-target=\"${targetId}\"]`); 
+      const targetLi = document.querySelector(`.nav li[data-target=\"${targetId}\"]`); // Corrected selector
       if(targetLi) targetLi.classList.add(\"active\"); 
        
       document.querySelectorAll(\".panel\").forEach(panel => { 
@@ -38,7 +38,7 @@ def fix_nav_items_onclick(match):
     # Extract the data-target value
     data_target = match.group(1)
     # Construct the correct onclick attribute, passing the data-target as a string
-    onclick_attr = f"onclick=\"activatePanel(\\\'{data_target}\\\' )\""
+    onclick_attr = f"onclick=\"activatePanel(\\\\'{data_target}\\\\')\""
     # Return the data-target and the new onclick attribute
     return f"data-target=\"{data_target}\" {onclick_attr}"
 

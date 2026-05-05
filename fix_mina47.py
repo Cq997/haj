@@ -8,7 +8,7 @@ with open(file_path, "r", encoding="utf-8") as f:
 
 # 1. Correct the activatePanel function definition
 # This regex looks for the function definition and captures its content
-# It's designed to be flexible to variations in whitespace and content within the function
+# It\\'s designed to be flexible to variations in whitespace and content within the function
 activate_panel_pattern = re.compile(r"""function activatePanel\(targetId\)\{.*?window\.scrollTo\(\{top:0,behavior:\"smooth\"\}\);\s*\}""", re.DOTALL)
 
 # The correct activatePanel function
@@ -38,7 +38,9 @@ def fix_nav_items_onclick(match):
     # Extract the data-target value
     data_target = match.group(1)
     # Construct the correct onclick attribute, passing the data-target as a string
-    onclick_attr = f"onclick=\"activatePanel(\\\\'{data_target}\\\\')\""
+    onclick_attr = f"onclick=\"activatePanel(\\'{data_target}\\' )\""
+    # Remove the extra space before the closing parenthesis in the onclick attribute
+    onclick_attr = onclick_attr.replace(" )", ")")
     # Return the data-target and the new onclick attribute
     return f"data-target=\"{data_target}\" {onclick_attr}"
 

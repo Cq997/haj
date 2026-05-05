@@ -410,15 +410,15 @@
     </div>
 
     <ul class="nav">
-      <li class=\"active\" data-target=\"homePanel\" onclick=\"activatePanel(1)\"><i class="fas fa-home"></i> الرئيسية</li>
-      <li data-target=\"groundEMS\" onclick=\"activatePanel(1)\"><i class="fas fa-clipboard-list"></i> التحضير اليومي</li>
-      <li data-target=\"handoverPanel\" onclick=\"activatePanel(1)\"><i class="fas fa-exchange-alt"></i> تسليم المناوبة</li>
-      <li data-target=\"unitsCheckPanel\" onclick=\"activatePanel(1)\"><i class="fas fa-stethoscope"></i> العهد الشخصية للقطاعات</li>
-      <li data-target=\"stockPanel\" onclick=\"activatePanel(1)\"><i class="fas fa-boxes-stacked"></i> الخزن الاستراتيجي</li>
-      <li data-target=\"deploymentPanel\" onclick=\"activatePanel(1)\"><i class="fas fa-map-marked-alt"></i> خطة الانتشار</li>
-      <li data-target=\"mapsPanel\" onclick=\"activatePanel(1)\"><i class="fas fa-map"></i> خرائط النطاق</li>
-      <li data-target=\"personalEquipmentPanel\" onclick=\"activatePanel(1)\"><i class="fas fa-handshake"></i> العهد الشخصية</li>
-    </ul>
+      <li class="active" data-target="homePanel"><i class="fas fa-home"></i> الرئيسية</li>
+      <li data-target="groundEMS"><i class="fas fa-clipboard-list"></i> التحضير اليومي</li>
+      <li data-target="handoverPanel"><i class="fas fa-exchange-alt"></i> تسليم المناوبة</li>
+      <li data-target="unitsCheckPanel"><i class="fas fa-id-card"></i> العهد الشخصية للقطاعات</li>
+      <li data-target="stockPanel"><i class="fas fa-boxes-stacked"></i> الخزن الاستراتيجي</li>
+      <li data-target="deploymentPanel"><i class="fas fa-map-marked-alt"></i> خطة الانتشار</li>
+      <li data-target="mapsPanel"><i class="fas fa-map"></i> خرائط النطاق</li>
+      <li data-target="supportPlanPanel"><i class="fas fa-handshake"></i> خطة الدعم</li>
+</ul>
 
     <div class="quick-toggle" onclick="toggleQuickLinks()">
       <i class="fas fa-bolt"></i> روابط سريعة
@@ -436,195 +436,28 @@
       <p>نظام إدارة العمليات الإسعافية الميدانية لموسم حج 1447هـ</p>
       <span class="badge"><i class="fas fa-shield-halved"></i> حياكم الله</span>
     </div>
-
-    <!-- ═══════ KPI Row ═══════ -->
-    <div class="kpi-row">
-      <div class="kpi-card"><div class="kpi-val" id="kpi_total">0</div><div class="kpi-label">إجمالي النقاط</div></div>
-      <div class="kpi-card"><div class="kpi-val" id="kpi_ready" style="color:var(--success)">0</div><div class="kpi-label">جاهزة</div></div>
-      <div class="kpi-card"><div class="kpi-val" id="kpi_supported" style="color:var(--secondary)">0</div><div class="kpi-label">مدعمة</div></div>
-      <div class="kpi-card"><div class="kpi-val" id="kpi_oos" style="color:var(--danger)">0</div><div class="kpi-label">خارج الخدمة</div></div>
-      <div class="kpi-card"><div class="kpi-val" id="kpi_broken" style="color:var(--muted)">0</div><div class="kpi-label">متعطلة</div></div>
-      <div class="kpi-card"><div class="kpi-val" id="kpi_sectors">7</div><div class="kpi-label">القطاعات</div></div>
-    </div>
-
-    <!-- ═══════ Home Panel ═══════ -->
+    <!-- Home Panel -->
     <section class="panel active" id="homePanel">
-
-      <!-- Main Tabs: Dashboard / Map -->
-      <div class="main-tabs">
-        <button class="tab-btn active" onclick="switchMainTab('tabDashboard',this)"><i class="fas fa-chart-pie"></i> الداشبورد</button>
-        <button class="tab-btn" onclick="switchMainTab('tabMap',this)"><i class="fas fa-map-location-dot"></i> الخريطة التفاعلية</button>
+      <div id="missingSectorsAlert" style="display:none;background:#fff3cd;color:#856404;padding:15px;border-radius:10px;margin-bottom:20px;border:1px solid #ffeeba;font-weight:bold;text-align:center;box-shadow:var(--shadow);"></div>
+      <div class="kpi-row" id="kpiRow">
+        <div class="kpi-card"><div class="kpi-val" id="total_cases">0</div><div class="kpi-label">إجمالي البلاغات</div></div>
+        <div class="kpi-card"><div class="kpi-val" id="total_providers">0</div><div class="kpi-label">إجمالي الكوادر</div></div>
+        <div class="kpi-card"><div class="kpi-val" id="vehicles_count_kpi">0</div><div class="kpi-label">المركبات الإسعافية</div></div>
+        <div class="kpi-card"><div class="kpi-val" id="rapid_count_kpi">0</div><div class="kpi-label">التدخل السريع</div></div>
       </div>
-
-      <!-- ── Tab: Dashboard ── -->
-      <div class="tab-content active" id="tabDashboard">
-        
-        <!-- Dashboard Filters -->
-        <div class="map-filters" style="margin-bottom: 20px; background: var(--card); padding: 15px; border-radius: 12px; box-shadow: var(--shadow);">
-          <div style="display: flex; flex-wrap: wrap; gap: 15px; align-items: center; width: 100%;">
-            <div class="field" style="flex: 1; min-width: 150px;">
-              <label><i class="fas fa-calendar-day"></i> التاريخ</label>
-              <input type="date" id="dashFilterDate" onchange="applyDashboardFilters()">
-            </div>
-            <div class="field" style="flex: 1; min-width: 120px;">
-              <label><i class="fas fa-clock"></i> الوقت</label>
-              <input type="time" id="dashFilterTime" onchange="applyDashboardFilters()">
-            </div>
-            <div class="field" style="flex: 1; min-width: 150px;">
-              <label><i class="fas fa-layer-group"></i> القطاع</label>
-              <select id="dashFilterSector" onchange="applyDashboardFilters()">
-                <option value="الكل">الكل</option>
-                <option value="الجمرات">الجمرات</option>
-                <option value="القطارات">القطارات</option>
-                <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
-                <option value="بطن منى الشمالي">بطن منى الشمالي</option>
-                <option value="الشعيبين">الشعيبين</option>
-                <option value="منى الجديد 1">منى الجديد 1</option>
-                <option value="منى الجديد 2">منى الجديد 2</option>
-              </select>
-            </div>
-            <div class="field" style="flex: 1; min-width: 150px;">
-              <label><i class="fas fa-clock"></i> فترة المناوبة</label>
-              <select id="dashFilterShift" onchange="applyDashboardFilters()">
-                <option value="الكل">الكل</option>
-                <option value="الصباحية">الصباحية</option>
-                <option value="المسائية">المسائية</option>
-                <option value="اوفرلاب">اوفرلاب</option>
-              </select>
-            </div>
-            <div style="display: flex; align-items: flex-end; padding-bottom: 4px;">
-              <button class="btn btn-outline" onclick="resetDashboardFilters()" style="padding: 8px 15px; font-size: 0.8rem;">
-                <i class="fas fa-undo"></i> إعادة ضبط
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="dash-grid">
-
-          <!-- Sector Summary -->
-          <div class="dash-card">
-            <h4><i class="fas fa-layer-group"></i> ملخص القطاعات</h4>
-            <table class="dash-table" id="dashSectorTable">
-              <thead>
-                <tr><th>القطاع</th><th>إجمالي</th><th>جاهزة</th><th>مدعمة</th><th>خارج</th><th>متعطلة</th></tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-
-          <!-- Type Summary -->
-          <div class="dash-card">
-            <h4><i class="fas fa-truck-medical"></i> ملخص أنواع الوحدات</h4>
-            <table class="dash-table" id="dashTypeTable">
-              <thead>
-                <tr><th>نوع الوحدة</th><th>العدد</th><th>النسبة</th></tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-
-          <!-- Status Overview -->
-          <div class="dash-card">
-            <h4><i class="fas fa-signal"></i> نظرة عامة على الحالات</h4>
-            <div id="dashStatusChart" style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding:10px 0">
-            </div>
-          </div>
-
-          <!-- Support Summary -->
-          <div class="dash-card">
-            <h4><i class="fas fa-handshake"></i> ملخص عمليات الدعم</h4>
-            <table class="dash-table" id="dashSupportTable">
-              <thead>
-                <tr><th>النوع</th><th>العدد</th><th>عدد الفرق</th><th>التاريخ</th><th>الفترة</th></tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-
-          <!-- Latest Activity -->
-          <div class="dash-card">
-            <h4><i class="fas fa-clock-rotate-left"></i> آخر تحديث</h4>
-            <div id="dashLastUpdate" style="text-align:center;padding:20px;font-size:.9rem;color:var(--muted)">
-              <i class="fas fa-spinner fa-spin"></i> جاري تحميل البيانات...
-            </div>
-          </div>
-
+      <div class="dash-grid">
+        <div class="dash-card">
+          <h4><i class="fas fa-chart-line"></i> ملخص استجابة القطاعات</h4>
+          <table class="dash-table" id="sectorSummaryTable">
+            <thead><tr><th>القطاع</th><th>الحالات</th><th>الكوادر</th><th>الحالة</th></tr></thead>
+            <tbody></tbody>
+          </table>
         </div>
       </div>
+    </section>
 
-      <!-- ── Tab: Map ── -->
-      <div class="tab-content" id="tabMap">
-
-        <!-- Map Legend -->
-        <div class="map-legend">
-          <div class="leg-item"><div class="leg-dot" style="background:#00b894"></div> جاهز</div>
-          <div class="leg-item"><div class="leg-dot" style="background:#0b5ed7"></div> مدعم</div>
-          <div class="leg-item"><div class="leg-dot" style="background:#fdcb6e"></div> اوفرلاب</div>
-          <div class="leg-item"><div class="leg-dot" style="background:#d63031"></div> خارج الخدمة</div>
-          <div class="leg-item"><div class="leg-dot" style="background:#636e72"></div> متعطلة</div>
-          <div class="leg-item"><div class="leg-dot" style="background:#6c5ce7"></div> تدخل سريع</div>
-        </div>
-
-        <!-- Map Filters -->
-        <div class="map-filters">
-          <div>
-            <label>القطاع</label>
-            <select id="mapFilterSector" onchange="applyMapFilters()">
-              <option value="الكل">الكل</option>
-              <option value="الجمرات">الجمرات</option>
-              <option value="القطارات">القطارات</option>
-              <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
-              <option value="بطن منى الشمالي">بطن منى الشمالي</option>
-              <option value="الشعيبين">الشعيبين</option>
-              <option value="منى الجديد 1">منى الجديد 1</option>
-              <option value="منى الجديد 2">منى الجديد 2</option>
-            </select>
-          </div>
-          <div>
-            <label>الحالة</label>
-            <select id="mapFilterStatus" onchange="applyMapFilters()">
-              <option value="الكل">الكل</option>
-              <option value="جاهز">جاهز</option>
-              <option value="مدعم">مدعم</option>
-              <option value="اوفرلاب">اوفرلاب</option>
-              <option value="خارج الخدمة">خارج الخدمة</option>
-              <option value="متعطلة">متعطلة</option>
-            </select>
-          </div>
-          <div>
-            <label>نوع الوحدة</label>
-            <select id="mapFilterType" onchange="applyMapFilters()">
-              <option value="الكل">الكل</option>
-              <option value="مركبة اسعافية">مركبة إسعافية</option>
-              <option value="قولف">قولف</option>
-              <option value="راجلة">راجلة</option>
-              <option value="تدخل سريع">تدخل سريع</option>
-            </select>
-          </div>
-          <div>
-            <label>المناوبة</label>
-            <select id="mapFilterShift" onchange="applyMapFilters()">
-              <option value="الكل">الكل</option>
-              <option value="الصباحية">الصباحية</option>
-              <option value="المسائية">المسائية</option>
-              <option value="اوفرلاب">اوفرلاب</option>
-            </select>
-          </div>
-          <button class="btn btn-outline" onclick="resetMapFilters()" style="padding:6px 16px;font-size:.8rem"><i class="fas fa-rotate-left"></i> إعادة تعيين</button>
-        </div>
-
-        <!-- Map Container -->
-        <div id="deploymentMap"></div>
-
-        <div style="text-align:center;margin-top:10px">
-          <span id="mapPointCount" style="font-size:.85rem;font-weight:700;color:var(--muted)">النقاط المعروضة: 0</span>
-        </div>
-      </div>
-
-     </section>
-
-      <section class="panel" id="groundEMS">
+    <!-- Daily Prep Panel -->
+    <section class="panel" id="groundEMS">
       <div class="panel-head"><h3>نموذج التحضير اليومي</h3></div>
       <div id="prepAlert" class="alert"></div>
       <div class="section">
@@ -638,7 +471,8 @@
       <div class="actions"><button class="btn btn-success" onclick="sendDailyPrep()">حفظ وإرسال</button></div>
     </section>
 
-      <section class="panel" id="handoverPanel">
+    <!-- Handover Panel -->
+    <section class="panel" id="handoverPanel">
       <div class="panel-head"><h3>نموذج تسليم المناوبة</h3></div>
       <div id="handoverAlert" class="alert"></div>
       <div class="section">
@@ -651,149 +485,8 @@
       <div class="actions"><button class="btn btn-success" onclick="sendHandover()">حفظ وإرسال</button></div>
     </section>
 
-      <section class="panel" id="personalEquipmentPanel" style="display: none;">
-        <div class="panel-head">
-          <div>
-            <h3>العهد الشخصية</h3>
-            <p>تسجيل الأجهزة الطبية الأساسية لكل قطاع وفترة مناوبة.</p>
-          </div>
-        </div>
-
-        <div id="personalEquipmentAlert" class="alert"></div>
-
-        <div class="section">
-          <div class="section-title">البيانات الأساسية</div>
-          <div class="section-body grid-3">
-            <div class="field">
-              <label for="pe_sector">القطاع</label>
-              <select id="pe_sector">
-                <option value="" selected>اختر القطاع</option>
-                <option value="الجمرات">الجمرات</option>
-                <option value="القطارات">القطارات</option>
-                <option value="بطن منى الجنوبي">بطن منى الجنوبي</option>
-                <option value="بطن منى الشمالي">بطن منى الشمالي</option>
-                <option value="منى الجديد 1">منى الجديد 1</option>
-                <option value="منى الجديد 2">منى الجديد 2</option>
-                <option value="الشعيبين">الشعيبين</option>
-              </select>
-            </div>
-            <div class="field"><label for="pe_date">التاريخ</label><input type="date" id="pe_date"></div>
-            <div class="field">
-              <label for="pe_shift">فترة المناوبة</label>
-              <select id="pe_shift">
-                <option value="" selected>اختر الفترة</option>
-                <option value="الصباحية">الصباحية</option>
-                <option value="المسائية">المسائية</option>
-                <option value="اوفرلاب">اوفرلاب</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">الأجهزة الأساسية</div>
-          <div class="section-body">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>الجهاز</th>
-                    <th>العدد</th>
-                    <th>الحالة</th>
-                    <th>ملاحظات</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>جهاز لوكس</td>
-                    <td><input type="number" id="pe_lucas_count" min="0" value="0"></td>
-                    <td>
-                      <select id="pe_lucas_status">
-                        <option value="" selected>-- اختر --</option>
-                        <option value="جاهز">جاهز</option>
-                        <option value="معطل">معطل</option>
-                        <option value="صيانة">صيانة</option>
-                      </select>
-                    </td>
-                    <td><input type="text" id="pe_lucas_notes" placeholder="ملاحظات"></td>
-                  </tr>
-                  <tr>
-                    <td>جهاز ميندري</td>
-                    <td><input type="number" id="pe_mindray_count" min="0" value="0"></td>
-                    <td>
-                      <select id="pe_mindray_status">
-                        <option value="" selected>-- اختر --</option>
-                        <option value="جاهز">جاهز</option>
-                        <option value="معطل">معطل</option>
-                        <option value="صيانة">صيانة</option>
-                      </select>
-                    </td>
-                    <td><input type="text" id="pe_mindray_notes" placeholder="ملاحظات"></td>
-                  </tr>
-                  <tr>
-                    <td>جهاز لايف باك</td>
-                    <td><input type="number" id="pe_lifepak_count" min="0" value="0"></td>
-                    <td>
-                      <select id="pe_lifepak_status">
-                        <option value="" selected>-- اختر --</option>
-                        <option value="جاهز">جاهز</option>
-                        <option value="معطل">معطل</option>
-                        <option value="صيانة">صيانة</option>
-                      </select>
-                    </td>
-                    <td><input type="text" id="pe_lifepak_notes" placeholder="ملاحظات"></td>
-                  </tr>
-                  <tr>
-                    <td>جهاز اللاسلكي</td>
-                    <td><input type="number" id="pe_wireless_count" min="0" value="0"></td>
-                    <td>
-                      <select id="pe_wireless_status">
-                        <option value="" selected>-- اختر --</option>
-                        <option value="جاهز">جاهز</option>
-                        <option value="معطل">معطل</option>
-                        <option value="صيانة">صيانة</option>
-                      </select>
-                    </td>
-                    <td><input type="text" id="pe_wireless_notes" placeholder="ملاحظات"></td>
-                  </tr>
-                  <tr>
-                    <td>جهاز لوحي (تابلت)</td>
-                    <td><input type="number" id="pe_tablet_count" min="0" value="0"></td>
-                    <td>
-                      <select id="pe_tablet_status">
-                        <option value="" selected>-- اختر --</option>
-                        <option value="جاهز">جاهز</option>
-                        <option value="معطل">معطل</option>
-                        <option value="صيانة">صيانة</option>
-                      </select>
-                    </td>
-                    <td><input type="text" id="pe_tablet_notes" placeholder="ملاحظات"></td>
-                  </tr>
-                  <tr>
-                    <td>جهاز قياس العلامات الحيوية</td>
-                    <td><input type="number" id="pe_vital_count" min="0" value="0"></td>
-                    <td>
-                      <select id="pe_vital_status">
-                        <option value="" selected>-- اختر --</option>
-                        <option value="جاهز">جاهز</option>
-                        <option value="معطل">معطل</option>
-                        <option value="صيانة">صيانة</option>
-                      </select>
-                    </td>
-                    <td><input type="text" id="pe_vital_notes" placeholder="ملاحظات"></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button class="btn btn-success" onclick="sendPersonalEquipment()"><i class="fas fa-paper-plane"></i> حفظ وإرسال</button>
-        </div>
-      </section>
-
-      <section class="panel" id="unitsCheckPanel">
+    <!-- Units Custody Panel -->
+    <section class="panel" id="unitsCheckPanel">
       <div class="panel-head"><h3>نموذج العهد الشخصية للقطاعات</h3></div>
       <div id="unitCheckAlert" class="alert"></div>
       <div class="section">
@@ -809,135 +502,430 @@
       <div class="actions"><button class="btn btn-success" onclick="sendUnitsCheck()">حفظ وإرسال</button></div>
     </section>
 
-       <section class="panel" id="mapsPanel">
+    <!-- Strategic Stock Panel -->
+    <section class="panel" id="stockPanel">
+      <div class="panel-head"><h3>نموذج الخزن الاستراتيجي المطور</h3></div>
+      <div id="stockAlert" class="alert"></div>
+      <div class="section">
+        <div class="section-body">
+          <div class="field"><label>موقع الخزن</label><input type="text" id="stock_loc"></div>
+          <div class="field" style="margin-top:15px;">
+            <label>هل يوجد نواقص طبية؟</label>
+            <select id="has_shortage" onchange="toggleShortage()">
+              <option value="لا">لا</option>
+              <option value="نعم">نعم</option>
+            </select>
+          </div>
+          <div class="field" id="shortage_box" style="display:none; margin-top:15px;">
+            <label>تفاصيل النواقص (الأصناف والكميات)</label>
+            <textarea id="shortage_notes" rows="5"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="actions"><button class="btn btn-success" onclick="sendStock()">حفظ وإرسال</button></div>
+    </section>
+
+    <!-- Deployment Panel -->
+    <section class="panel" id="deploymentPanel">
+      <div class="panel-head"><h3>خطة الانتشار</h3></div>
+      <div id="deployMap" style="height:400px; background:#eee; border-radius:10px; display:flex; align-items:center; justify-content:center;">الخريطة التفاعلية تظهر هنا</div>
+    </section>
+
+    <!-- Maps Panel -->
+    <section class="panel" id="mapsPanel">
       <div class="panel-head"><h3>خرائط النطاق</h3></div>
       <iframe src="https://www.google.com/maps/d/embed?mid=1_vX9v_Xv_Xv_Xv" width="100%" height="600"></iframe>
     </section>
 
+    <!-- Support Plan Panel -->
     <section class="panel" id="supportPlanPanel">
       <div class="panel-head"><h3>خطة الدعم</h3></div>
       <p>بيانات خطة الدعم والمساندة بين القطاعات.</p>
     </section>
-
-      <section class="panel" id="homePanel" style="display: block;">
-        <div class="panel-head">
-          <div>
-            <h3>خرائط نطاق منى</h3>
-            <p>الخريطة الميدانية المباشرة مع إمكانية فتح لوحة القائد في نافذة مستقلة.</p>
-          </div>
-        </div>
-
-        <div class="split">
-          <div class="card">
-            <h4>الخريطة المباشرة</h4>
-           <iframe class="map-frame" id="mapFrame"></iframe>
-          </div>
-
-          <div class="card">
-            <h4>خيارات سريعة</h4>
-            <p>يمكنك فتح الخريطة مباشرة أو الانتقال إلى لوحة القائد الشاملة.</p>
-            <div class="actions">
-              <a class="btn btn-blue" href="https://www.google.com/maps/d/viewer?mid=15jPyMtPR5xmD0hZpE7g2-B1J0rSosvM&ll=21.41679955004633%2C39.873667103872805&z=15" target="_blank"><i class="fas fa-map"></i> فتح الخريطة</a>
-              <a class="btn btn-dark" id="dashboardLinkMap" href="#" target="_blank"><i class="fas fa-tv"></i> فتح لوحة القائد</a>
-            </div>
-            <div class="note" style="margin-top:14px">
-              لوحة القائد تفتح في نافذة مستقلة من رابط الـ Web App وتعرض الإجماليات، التفاصيل، التنبيهات، والخريطة الحية.
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Support Plan Panel -->
-      <section class="panel" id="supportPlanPanel">
-      <div class="panel-head"><h3>خطة الدعم</h3></div>
-      <p>بيانات خطة الدعم والمساندة بين القطاعات.</p>
-    </section>
-
-      <div class="leader-sign">قائد نطاق منى / فهد أحمد الشمري</div>
-      <div class="footer">منصة نطاق منى حج 1447 نسخة مطورة - علي 102459@srca</div>
-  </main>
+    </main>
 </div>
 
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzE138P-DitCopBMsoEbwL44_jdvCLA3Hxy6JsgJcKBFFmeNsKwaYHOa5Mqb0NNUFhboA/exec";
-
-    const allUnitsData = {};
-
-    // ============================================
-    // نظام الملاحة والتحكم في اللوحات
-    // ============================================
-    function activatePanel(panelId) {
-        console.log('Activating panel:', panelId);
-        
-        // 1. إخفاء جميع اللوحات
-        const allPanels = document.querySelectorAll('.panel');
-        allPanels.forEach(p => {
-            p.style.display = 'none';
-            p.classList.remove('active');
-        });
-        
-        // 2. إظهار اللوحة المطلوبة
-        const target = document.getElementById(panelId);
-        if (target) {
-            target.style.display = 'block';
-            target.classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        } else {
-            console.error('Panel not found:', panelId);
-        }
-        
-        // 3. تحديث حالة القائمة الجانبية (Active class)
-        document.querySelectorAll('.nav li').forEach(li => {
-            li.classList.remove('active');
-            const dt = li.getAttribute('data-target');
-            const oc = li.getAttribute('onclick');
-            if (dt === panelId || (oc && oc.includes(panelId))) {
-                li.classList.add('active');
-            }
-        });
-        
-        // 4. إغلاق القائمة الجانبية في الجوال
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    
+    
+    function switchPanel(targetId){
+      document.querySelectorAll('.panel').forEach(p => {
+        p.classList.remove('active');
+        p.style.display = 'none';
+      });
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      const navItem = document.querySelector(`.nav li[data-target="${targetId}"]`);
+      if(navItem) navItem.classList.add('active');
+      if(window.innerWidth <= 1180) {
         const sidebar = document.querySelector('.sidebar');
-        if (sidebar) sidebar.classList.remove('active');
+        if(sidebar) sidebar.classList.remove('active');
+      }
+      window.scrollTo(0,0);
+    }
+);
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
+      if(window.innerWidth <= 1180) document.querySelector('.sidebar').classList.remove('active');
+      window.scrollTo(0,0);
     }
 
-    // جعل الدالة متاحة عالمياً
-    window.activatePanel = activatePanel;
+    document.querySelectorAll('.nav li[data-target]').forEach(li => {
+      li.addEventListener('click', function(){
+        switchPanel(this.getAttribute('data-target'));
+      });
+    });
+);
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
+      if(window.innerWidth <= 1180) document.querySelector('.sidebar').classList.remove('active');
+      window.scrollTo(0,0);
+    }
 
-    document.addEventListener('DOMContentLoaded', () => {
-        console.log('DOM fully loaded');
-        
-        // إعداد الحالة الأولية
-        activatePanel('homePanel');
-        
-        // تفعيل أزرار القائمة الجانبية
-        document.querySelectorAll('.nav li[data-target]').forEach(li => {
-            li.addEventListener('click', () => {
-                activatePanel(li.getAttribute('data-target'));
-            });
-        });
-
-        // زر الجوال
-        const mobileBtn = document.querySelector('.mobile-btn');
-        const sidebar = document.querySelector('.sidebar');
-        if (mobileBtn && sidebar) {
-            mobileBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('active');
-            });
-        }
+    document.querySelectorAll('.nav li[data-target]').forEach(li => {
+      li.addEventListener('click', () => {
+        const target = li.getAttribute('data-target');
+        switchPanel(target);
+      });
     });
 
-    // وظائف إضافية
-    function showAlert(id, type, msg) {
-        const el = document.getElementById(id);
-        if(!el) return;
-        el.style.display = 'block';
-        el.className = 'alert ' + (type === 'success' ? 'alert-success' : 'alert-error');
-        el.innerText = msg;
-        setTimeout(() => el.style.display = 'none', 5000);
+
+    function toggleShortageDetails(){
+      const hasShortage = document.getElementById("has_shortage").value;
+      const container = document.getElementById("shortage_details_container");
+      if(container) container.style.display = (hasShortage === "نعم") ? "block" : "none";
     }
+
+    function openWhatsApp(text){
+      const encoded = encodeURIComponent(text);
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      const url = isIOS ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
+      const win = window.open(url, '_blank');
+      if(!win || win.closed || typeof win.closed === 'undefined') window.location.href = url;
+    }
+
+    async function sendStrategicStock(){
+      const date = document.getElementById('stock_date').value;
+      const time = document.getElementById('stock_time').value;
+      const checker = document.getElementById('stock_checker').value.trim();
+      const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
+
+      if(!date || !time || !checker || !location){
+        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
+        return;
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success) return showAlert('stockAlert','error','تعذر حفظ البيانات');
+      showAlert('stockAlert','success','تم الحفظ بنجاح');
+      let msg = `📦 *تقرير الخزن الاستراتيجي*
+📅 ${date}
+📍 ${location}
+⚠️ نواقص: ${hasShortage}`;
+      if(hasShortage === 'نعم') msg += `
+📝 التفاصيل: ${shortageDetails}`;
+      openWhatsApp(msg);
+    }
+
+    function fillUnitCallSigns(){
+      const sector = document.getElementById('units_check_sector').value;
+      const select = document.getElementById('unit_call_sign');
+      select.innerHTML = '<option value="">اختر الرمز</option>';
+      if(!sector) return;
+      // محاكاة جلب البيانات من خطة الانتشار
+      const points = [sector + "-1", sector + "-2", sector + "-3"];
+      points.forEach(p => select.innerHTML += `<option value="${p}">${p}</option>`);
+    }
+
+    function autoFillCrewData(){
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!callSign) return;
+      document.getElementById('crew_lead').value = "كبير مسعفين " + callSign;
+      document.getElementById('crew_assistants').value = "مساعد 1, مساعد 2";
+    }
+
+    async function sendUnitsCheck(){
+      const date = document.getElementById('units_check_date').value;
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!date || !callSign) return showAlert('unitCheckAlert','error','يرجى تعبئة البيانات');
+      
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "التاريخ": date,
+        "الرمز": callSign,
+        "كبير المسعفين": document.getElementById('crew_lead').value,
+        "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد": document.getElementById('received_custody').value
+      };
+      
+      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      if(!save.success) return showAlert('unitCheckAlert','error','تعذر الحفظ');
+      showAlert('unitCheckAlert','success','تم الحفظ بنجاح');
+      openWhatsApp(`🆔 *العهد الشخصية*
+📅 ${date}
+📟 الرمز: ${callSign}
+👤 المسؤول: ${row["كبير المسعفين"]}`);
+    }
+
+    function updateDashboardAlerts(data){
+      const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
+      const respondingSectors = [...new Set(data.map(r => r.sector))];
+      const missing = sectors.filter(s => !respondingSectors.includes(s));
+      const alertEl = document.getElementById('missingSectorsAlert');
+      if(missing.length > 0){
+        alertEl.style.display = 'block';
+        alertEl.innerText = '⚠️ قطاعات لم ترسل استجابات بعد: ' + missing.join(' - ');
+      } else {
+        alertEl.style.display = 'none';
+      }
+    }
+
 </script>
+<script>
+    // Navigation System
+    function switchPanel(id){
+      console.log("Switching to:", id);
+      document.querySelectorAll('.panel').forEach(p => {
+        p.classList.remove('active');
+        p.style.display = 'none';
+      });
+      const target = document.getElementById(id);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${id}"]`)?.classList.add('active');
+      window.scrollTo(0,0);
+    }
+
+    document.querySelectorAll('.nav li').forEach(li => {
+      li.onclick = function(){ switchPanel(this.getAttribute('data-target')); };
+    });
+
+    // Strategic Stock Toggle
+    function toggleShortage(){
+      const val = document.getElementById('has_shortage').value;
+      document.getElementById('shortage_box').style.display = (val === 'نعم') ? 'block' : 'none';
+    }
+
+    // WhatsApp Integration
+    function openWhatsApp(text){
+      const encoded = encodeURIComponent(text);
+      const url = /iPhone|iPad|iPod/.test(navigator.userAgent) ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
+      window.open(url, '_blank');
+    }
+
+    // Alert System
+    function showAlert(id, type, msg){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.style.display = 'block';
+      el.className = 'alert ' + (type === 'success' ? 'alert-success' : 'alert-error');
+      el.innerText = msg;
+      setTimeout(() => el.style.display = 'none', 5000);
+    }
+
+    // Data Submission (Generic)
+    async function saveToGoogleSheets(sheet, data){
+      try {
+        const resp = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({sheet, data})
+        });
+        return {success: true};
+      } catch(e) {
+        return {success: false};
+      }
+    }
+
+    // Specific Handlers
+    async function sendDailyPrep(){
+      const data = {
+        sector: document.getElementById('prep_sector').value,
+        vehicles: document.getElementById('prep_vehicles').value,
+        rapid: document.getElementById('prep_rapid').value
+      };
+      await saveToGoogleSheets('التحضير اليومي', [data]);
+      showAlert('prepAlert', 'success', 'تم الحفظ');
+      openWhatsApp(`✅ *تحضير يومي*
+📍 ${data.sector}
+🚑 مركبات: ${data.vehicles}
+🏍️ تدخل سريع: ${data.rapid}`);
+    }
+
+    async function sendStock(){
+      const data = {
+        loc: document.getElementById('stock_loc').value,
+        shortage: document.getElementById('has_shortage').value,
+        notes: document.getElementById('shortage_notes').value
+      };
+      await saveToGoogleSheets('الخزن الاستراتيجي', [data]);
+      showAlert('stockAlert', 'success', 'تم الحفظ');
+      openWhatsApp(`📦 *خزن استراتيجي*
+📍 ${data.loc}
+⚠️ نواقص: ${data.shortage}
+📝 ملاحظات: ${data.notes}`);
+    }
+
+    async function sendUnitsCheck(){
+      const data = {
+        unit: document.getElementById('unit_id').value,
+        lead: document.getElementById('crew_lead').value,
+        custody: document.getElementById('received_custody').value
+      };
+      await saveToGoogleSheets('العهد الشخصية', [data]);
+      showAlert('unitCheckAlert', 'success', 'تم الحفظ');
+      openWhatsApp(`🆔 *عهد شخصية*
+📟 الرمز: ${data.unit}
+👤 المسؤول: ${data.lead}
+📋 العهد: ${data.custody}`);
+    }
+
+    // Dashboard Auto-Update
+    setInterval(() => {
+      console.log("Updating Dashboard...");
+      // Here you would fetch real data and update KPIs
+    }, 60000);
+</script>
+<script>
+    // Navigation System
+    function switchPanel(id){
+      console.log("Switching to:", id);
+      document.querySelectorAll('.panel').forEach(p => {
+        p.classList.remove('active');
+        p.style.display = 'none';
+      });
+      const target = document.getElementById(id);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${id}"]`)?.classList.add('active');
+      window.scrollTo(0,0);
+    }
+
+    document.querySelectorAll('.nav li').forEach(li => {
+      li.onclick = function(){ switchPanel(this.getAttribute('data-target')); };
+    });
+
+    // Strategic Stock Toggle
+    function toggleShortage(){
+      const val = document.getElementById('has_shortage').value;
+      document.getElementById('shortage_box').style.display = (val === 'نعم') ? 'block' : 'none';
+    }
+
+    // WhatsApp Integration
+    function openWhatsApp(text){
+      const encoded = encodeURIComponent(text);
+      const url = /iPhone|iPad|iPod/.test(navigator.userAgent) ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
+      window.open(url, '_blank');
+    }
+
+    // Alert System
+    function showAlert(id, type, msg){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.style.display = 'block';
+      el.className = 'alert ' + (type === 'success' ? 'alert-success' : 'alert-error');
+      el.innerText = msg;
+      setTimeout(() => el.style.display = 'none', 5000);
+    }
+
+    // Data Submission (Generic)
+    async function saveToGoogleSheets(sheet, data){
+      try {
+        const resp = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({sheet, data})
+        });
+        return {success: true};
+      } catch(e) {
+        return {success: false};
+      }
+    }
+
+    // Specific Handlers
+    async function sendDailyPrep(){
+      const data = {
+        sector: document.getElementById('prep_sector').value,
+        vehicles: document.getElementById('prep_vehicles').value,
+        rapid: document.getElementById('prep_rapid').value
+      };
+      await saveToGoogleSheets('التحضير اليومي', [data]);
+      showAlert('prepAlert', 'success', 'تم الحفظ');
+      openWhatsApp(`✅ *تحضير يومي*
+📍 ${data.sector}
+🚑 مركبات: ${data.vehicles}
+🏍️ تدخل سريع: ${data.rapid}`);
+    }
+
+    async function sendStock(){
+      const data = {
+        loc: document.getElementById('stock_loc').value,
+        shortage: document.getElementById('has_shortage').value,
+        notes: document.getElementById('shortage_notes').value
+      };
+      await saveToGoogleSheets('الخزن الاستراتيجي', [data]);
+      showAlert('stockAlert', 'success', 'تم الحفظ');
+      openWhatsApp(`📦 *خزن استراتيجي*
+📍 ${data.loc}
+⚠️ نواقص: ${data.shortage}
+📝 ملاحظات: ${data.notes}`);
+    }
+
+    async function sendUnitsCheck(){
+      const data = {
+        unit: document.getElementById('unit_id').value,
+        lead: document.getElementById('crew_lead').value,
+        custody: document.getElementById('received_custody').value
+      };
+      await saveToGoogleSheets('العهد الشخصية', [data]);
+      showAlert('unitCheckAlert', 'success', 'تم الحفظ');
+      openWhatsApp(`🆔 *عهد شخصية*
+📟 الرمز: ${data.unit}
+👤 المسؤول: ${data.lead}
+📋 العهد: ${data.custody}`);
+    }
+
+    // Dashboard Auto-Update
+    setInterval(() => {
+      console.log("Updating Dashboard...");
+      // Here you would fetch real data and update KPIs
+    }, 60000);
+</script>
+
+
 </body>
 </html>

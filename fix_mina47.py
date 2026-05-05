@@ -42,8 +42,9 @@ content = activate_panel_pattern.sub(replace_activate_panel, content)
 # 2. Ensure onclick attributes are correctly set on nav items
 def fix_nav_items_onclick(match):
     data_target = match.group(1)
-    # Construct the correct onclick attribute, passing the data-target as a string
-    onclick_attr = f"onclick=\"activatePanel(\\\\\\'{data_target}\\\\\\\\' )\""
+    # Corrected: Pass data_target as a string literal to activatePanel
+    # The regex for sub already handles the outer quotes, so we just need single quotes inside
+    onclick_attr = f"onclick=\"activatePanel(\\\\'{data_target}\\\\\\' )\""
     # Return the data-target and the new onclick attribute
     return f"data-target=\"{data_target}\" {onclick_attr}"
 
@@ -61,8 +62,8 @@ def fix_dom_listener(match):
     body = match.group(2)
     
     # Remove any existing panel display logic to avoid duplicates
-    body = re.sub(r"document\.querySelectorAll\(\'\\.panel\'\)\.forEach\(panel => \{.*?\}\);", "", body, flags=re.DOTALL)
-    body = re.sub(r"const homePanel = document\.getElementById\(\'homePanel\'\);.*?\}", "", body, flags=re.DOTALL)
+    body = re.sub(r"document\.querySelectorAll\(\'\\.panel\'\]\)\.forEach\(panel => \{.*?\}\);", "", body, flags=re.DOTALL)
+    body = re.sub(r"const homePanel = document\.getElementById\(\'homePanel\'\]\);.*?\}", "", body, flags=re.DOTALL)
     
     initial_logic = """
       document.querySelectorAll(\".panel\").forEach(panel => {

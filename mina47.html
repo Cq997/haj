@@ -502,6 +502,11 @@
 
         <div class="dash-grid">
 
+          <div class="dash-card" style="grid-column: 1 / -1; background: #fff5f5; border: 1px solid #feb2b2;">
+            <h4 style="color: #c53030;"><i class="fas fa-exclamation-triangle"></i> قطاعات لم ترسل استجابات</h4>
+            <div id="missingSectorsList" style="font-weight: bold; padding: 10px;">جاري التحقق...</div>
+          </div>
+
           <!-- Sector Summary -->
           <div class="dash-card">
             <h4><i class="fas fa-layer-group"></i> ملخص القطاعات</h4>
@@ -788,10 +793,10 @@
           <div class="section-title">ملخص الوضع الراهن</div>
           <div class="section-body grid-3">
             <div class="field"><label for="avg_response">متوسط زمن الاستجابة</label><input type="text" id="avg_response" placeholder="مثال: 10:09"></div>
-            <div class="field"><label for="echo_response">متوسط زمن استجابة ECHO</label><input type="text" id="echo_response" placeholder="مثال: 00:55"></div>
+            <div class="field"><label for="echo_response">عدد بلاغات ECHO</label><input type="number" id="echo_response" min="0" value="0"></div>
             <div class="field"><label for="total_cases">إجمالي البلاغات</label><input type="number" id="total_cases" min="0" value="0"></div>
-            <div class="field"><label for="active_teams">عدد الفرق الفعالة</label><input type="number" id="active_teams" min="0" value="0"></div>
-            <div class="field"><label for="planned_teams">عدد الفرق المعتمدة</label><input type="number" id="planned_teams" min="0" value="0"></div>
+            <div class="field"><label for="active_teams">إجمالي عدد الفرق بما في ذلك التداخلية (اوفرلاب) والمدعمه</label><input type="number" id="active_teams" min="0" value="0"></div>
+            <div class="field"><label for="planned_teams">عدد الفرق الأساسية</label><input type="number" id="planned_teams" min="0" value="0"></div>
           </div>
         </div>
 
@@ -879,6 +884,10 @@
             <div class="field">
               <label for="handover_special_response_count">عدد الاستجابة النوعية</label>
               <input type="number" id="handover_special_response_count" min="0" value="0">
+            </div>
+            <div class="field">
+              <label for="handover_rapid_intervention_count">عدد فرق التدخل السريع</label>
+              <input type="number" id="handover_rapid_intervention_count" min="0" value="0">
             </div>
           </div>
         </div>
@@ -1107,7 +1116,7 @@
         </div>
 
         <div class="section">
-          <div class="section-title">التشييك الطبي</div>
+          <div class="section-title">العهد الأساسية (العدد فقط)</div>
           <div class="section-body">
             <div class="table-wrap">
               <table>
@@ -1160,21 +1169,20 @@
         <div class="section">
           <div class="section-title">الأجهزة الطبية والمستهلكات</div>
           <div class="section-body">
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>الفئة</th>
-                    <th>الصنف</th>
-                    <th>الحالة</th>
-                    <th>الكمية الحالية</th>
-                  </tr>
-                </thead>
-                <tbody id="strategicTableBody"></tbody>
-              </table>
+            <div class="field">
+              <label>هل يوجد نواقص طبية؟</label>
+              <select id="has_shortage" onchange="toggleShortageField()">
+                <option value="لا">لا</option>
+                <option value="نعم">نعم</option>
+              </select>
             </div>
-
-            <div class="bullets-box">
+            <div id="shortage_field_wrap" class="hidden">
+              <div class="field">
+                <label>النواقص الطبية (اذكر عدد وأنواع الأصناف الناقصة)</label>
+                <textarea id="medical_shortages" placeholder="اذكر عدد وأنواع الأصناف الناقصة"></textarea>
+              </div>
+            </div>
+<div class="bullets-box">
               <div class="field">
                 <label for="stock_notes">ملاحظات الخزن</label>
                 <textarea id="stock_notes" placeholder="اكتب كل ملاحظة في سطر مستقل"></textarea>
@@ -1526,7 +1534,8 @@
       }
     };
 
-    const medicalItemsData = [
+    const medicalItemsData = ['جهاز لوكس', 'جهاز ميندري', 'جهاز لايف باك 15', 'جهاز اتصال لاسلكي', 'المسعف الالكتروني(تابلت)', 'جهاز قياس العلامات الحيوية'];
+    const oldMedicalItemsData = [
       "جهاز لوكس","جهاز صدمات خارجي AED","جهاز تنفس صناعي","جهاز لايف باك","جهاز ميندري","جهاز قياس العلامات الحيوية",
       "جهاز قياس النبض ونسبة الأكسجين بالدم","جهاز قياس السكر بالدم","جهاز الشفط المتنقل الكهربائي","جهاز الدريل العظمي",
       "جهاز قياس الحرارة","سماعة طبية","مقص جراحي","ثاقب زجاج","كشاف ضوء","لوح بورد بلاستيكي طويل",
@@ -1708,6 +1717,16 @@ async function fetchDeploymentFromSheet(){
     const sectorSelect = document.getElementById('sector');
     const shiftTimeSelect = document.getElementById('shift_time');
 
+    
+    function fillUnitCheckTeamData(){
+      const sector = document.getElementById("units_check_sector").value;
+      const shift = document.getElementById("units_check_shift").value;
+      const team = teamsData?.[sector]?.[shift];
+      document.getElementById("ems_lead_display").value = team?.lead || "";
+      document.getElementById("assistants_display").value = (team?.assistants || []).filter(a => a).join(" - ") || "";
+    }
+    
+
     function fillTeamData(){
       const sector = sectorSelect.value;
       const shift = shiftTimeSelect.value;
@@ -1720,6 +1739,8 @@ async function fetchDeploymentFromSheet(){
     }
 
     sectorSelect.addEventListener('change', fillTeamData);
+    document.getElementById('units_check_sector').addEventListener('change', fillUnitCheckTeamData);
+    document.getElementById('units_check_shift').addEventListener('change', fillUnitCheckTeamData);
     shiftTimeSelect.addEventListener('change', fillTeamData);
 
     function clearDailyForm(){
@@ -1731,7 +1752,7 @@ async function fetchDeploymentFromSheet(){
         }
       });
 
-      ['operational_units','total_providers','employees_count','volunteers_count','vehicles_count','golf_count','walking_count'].forEach(id => {
+      ['operational_units','total_providers','employees_count','volunteers_count','vehicles_count','golf_count','walking_count','rapid_intervention_count'].forEach(id => {
         const el = document.getElementById(id);
         if(el) el.value = 0;
       });
@@ -1767,6 +1788,7 @@ async function fetchDeploymentFromSheet(){
         "المركبات": document.getElementById('vehicles_count').value || 0,
         "القولف": document.getElementById('golf_count').value || 0,
         "الراجلة": document.getElementById('walking_count').value || 0,
+        "مركبات التدخل السريع": document.getElementById('rapid_intervention_count').value || 0,
         "الملاحظات": document.getElementById('notes').value.trim() || 'لا توجد ملاحظات'
       };
 
@@ -2072,14 +2094,59 @@ ${supportLines}
       });
     }
 
+    
     async function sendUnitsCheck(){
-      const required = ['units_check_date','units_check_time','units_check_sector','units_check_shift','unit_call_sign','unit_type','checker_has_third_party','crew1_name','crew2_name'];
+      const required = ['units_check_date','units_check_sector','units_check_shift'];
       for(const id of required){
         const el = document.getElementById(id);
         if(!el || !String(el.value).trim()){
           showAlert('unitCheckAlert','error','يرجى تعبئة جميع الحقول الأساسية');
           return;
         }
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": document.getElementById('units_check_date').value,
+        "وقت التشييك": new Date().toLocaleTimeString('ar-SA'),
+        "القطاع": document.getElementById('units_check_sector').value,
+        "الفترة": document.getElementById('units_check_shift').value,
+        "كبير المسعفين": document.getElementById('ems_lead_display').value,
+        "المساعدين": document.getElementById('assistants_display').value,
+        "جهاز لوكس": document.getElementById('medical_count_0')?.value || '0',
+        "جهاز ميندري": document.getElementById('medical_count_1')?.value || '0',
+        "جهاز لايف باك 15": document.getElementById('medical_count_2')?.value || '0',
+        "جهاز اتصال لاسلكي": document.getElementById('medical_count_3')?.value || '0',
+        "المسعف الالكتروني(تابلت)": document.getElementById('medical_count_4')?.value || '0',
+        "جهاز قياس العلامات الحيوية": document.getElementById('medical_count_5')?.value || '0',
+        "ملاحظات عامة": document.getElementById('units_check_notes').value.trim() || 'لا توجد ملاحظات'
+      };
+
+      const save = await saveToGoogleSheets('نموذج العهد الشخصية للقطاعات', [row]);
+      if(!save.success){
+        showAlert('unitCheckAlert','error','تعذر حفظ بيانات العهد');
+        return;
+      }
+
+      showAlert('unitCheckAlert','success','تم حفظ نموذج العهد بنجاح');
+
+      let msg = `🩺 *نموذج العهد الشخصية للقطاعات* 🩺\n\n`;
+      msg += `📍 *القطاع:* ${row["القطاع"]}\n`;
+      msg += `🕘 *المناوبة:* ${row["الفترة"]}\n`;
+      msg += `📅 *التاريخ:* ${row["تاريخ التشييك"]}\n\n`;
+      msg += `👤 *كبير المسعفين:* ${row["كبير المسعفين"]}\n`;
+      msg += `👥 *المساعدين:* ${row["المساعدين"]}\n\n`;
+      msg += `✅ *العهد:* \n`;
+      msg += `• جهاز لوكس: ${row["جهاز لوكس"]}\n`;
+      msg += `• جهاز ميندري: ${row["جهاز ميندري"]}\n`;
+      msg += `• جهاز لايف باك 15: ${row["جهاز لايف باك 15"]}\n`;
+      msg += `• جهاز اتصال لاسلكي: ${row["جهاز اتصال لاسلكي"]}\n`;
+      msg += `• المسعف الالكتروني(تابلت): ${row["المسعف الالكتروني(تابلت)"]}\n`;
+      msg += `• جهاز قياس العلامات الحيوية: ${row["جهاز قياس العلامات الحيوية"]}\n\n`;
+      msg += `📝 *الملاحظات:* \n${row["ملاحظات عامة"]}`;
+      openWhatsApp(msg);
+    }
+
       }
 
       const hasThird = document.getElementById('checker_has_third_party').value;
@@ -2150,6 +2217,13 @@ ${supportLines}
       openWhatsApp(msg);
     }
 
+    
+    function toggleShortageField(){
+      const hasShortage = document.getElementById("has_shortage").value;
+      document.getElementById("shortage_field_wrap").classList.toggle("hidden", hasShortage === "لا");
+    }
+    
+
     function buildStrategicTable(){
       const body = document.getElementById('strategicTableBody');
       body.innerHTML = '';
@@ -2171,17 +2245,51 @@ ${supportLines}
       });
     }
 
+    
     async function sendStrategicStock(){
       const date = document.getElementById('stock_date').value;
       const time = document.getElementById('stock_time').value;
       const checker = document.getElementById('stock_checker').value.trim();
       const location = document.getElementById('stock_location').value.trim();
       const notes = document.getElementById('stock_notes').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortages = document.getElementById('medical_shortages').value.trim();
 
       if(!date || !time || !checker || !location){
         showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
         return;
       }
+
+      const row = {
+          "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+          "تاريخ التشييك": date,
+          "وقت التشييك": time,
+          "القائم بالتشييك": checker,
+          "موقع الخزن": location,
+          "هل يوجد نواقص": hasShortage,
+          "النواقص الطبية": shortages || 'لا يوجد',
+          "ملاحظات": notes || '-'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success){
+        showAlert('stockAlert','error','تعذر حفظ بيانات الخزن');
+        return;
+      }
+
+      showAlert('stockAlert','success','تم حفظ نموذج الخزن الاستراتيجي بنجاح');
+
+      let msg = `📦 *تقرير الخزن الاستراتيجي*\n\n`;
+      msg += `📅 التاريخ: ${date}\n⏰ الوقت: ${time}\n👤 القائم بالتشييك: ${checker}\n📍 الموقع: ${location}\n`;
+      msg += `❓ هل يوجد نواقص: ${hasShortage}\n`;
+      if(hasShortage === 'نعم') {
+          msg += `⚠️ النواقص: ${shortages}\n`;
+      }
+      if(notes) msg += `📝 ملاحظات: ${notes}\n`;
+      
+      openWhatsApp(msg);
+    }
+
 
       let shortageFound = false;
 
@@ -3070,6 +3178,12 @@ function updateDashboard(data){
   document.getElementById('kpi_oos').textContent = oos;
   document.getElementById('kpi_broken').textContent = broken;
 
+  // Missing Sectors
+  const respondedSectors = new Set(data.map(d => d.sector));
+  const missingSectors = sectors.filter(s => !respondedSectors.has(s));
+  const missingEl = document.getElementById('missingSectorsList');
+  if(missingEl) missingEl.innerHTML = missingSectors.length ? missingSectors.join(' - ') : 'الكل أرسل';
+
   // Sector Table
   const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
   const sectorBody = document.querySelector('#dashSectorTable tbody');
@@ -3256,7 +3370,7 @@ async function loadLiveDeploymentData(){
 loadLiveDeploymentData();
 
 // تحديث تلقائي كل 3 دقائق
-setInterval(loadLiveDeploymentData, 180000);
+setInterval(loadLiveDeploymentData, 60000);
 
 /* لتحميل النقاط الافتراضية للقطاع المختار */
 function loadDefaultDeploymentPoints(){

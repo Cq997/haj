@@ -271,7 +271,7 @@
     /* ─── Panels / Forms ─── */
     .panel{display:none;width:100%;min-height:calc(100vh - 100px)}
     .panel.active{display:block!important}
-    .panel.active.hidden{display:block!important}
+
 
     .panel-head{
       display:flex;align-items:center;justify-content:space-between;
@@ -417,7 +417,7 @@
       <li data-target="stockPanel"><i class="fas fa-boxes-stacked"></i> الخزن الاستراتيجي</li>
       <li data-target="deploymentPanel"><i class="fas fa-map-marked-alt"></i> خطة الانتشار</li>
       <li data-target="mapsPanel"><i class="fas fa-map"></i> خرائط النطاق</li>
-      <li data-target="supportPlanPanel"><i class="fas fa-handshake"></i> خطة الدعم</li>
+      <li data-target="personalEquipmentPanel"><i class="fas fa-handshake"></i> العهد الشخصية</li>
     </ul>
 
     <div class="quick-toggle" onclick="toggleQuickLinks()">
@@ -624,7 +624,7 @@
 
      </section>
 
-      <section class="panel" id="groundEMS">
+      <section class="panel" id="groundEMS" style="display: none;">
         <div class="panel-head">
           <div>
             <h3>نموذج التحضير اليومي</h3>
@@ -735,7 +735,7 @@
         </div>
       </section>
 
-      <section class="panel" id="handoverPanel">
+      <section class="panel" id="handoverPanel" style="display: none;">
         <div class="panel-head">
           <div>
             <h3>نموذج تسليم المناوبة</h3>
@@ -987,7 +987,7 @@
         </div>
       </section>
 
-      <section class="panel" id="personalEquipmentPanel">
+      <section class="panel" id="personalEquipmentPanel" style="display: none;">
         <div class="panel-head">
           <div>
             <h3>العهد الشخصية</h3>
@@ -1129,7 +1129,7 @@
         </div>
       </section>
 
-      <section class="panel" id="unitsCheckPanel">
+      <section class="panel" id="unitsCheckPanel" style="display: none;">
         <div class="panel-head">
           <div>
             <h3>العهد الشخصية للقطاعات</h3>
@@ -1276,7 +1276,7 @@
         </div>
       </section>
 
-      <section class="panel" id="stockPanel">
+       <section class="panel" id="mapsPanel" style="display: none;">
         <div class="panel-head">
           <div>
             <h3>الخزن الاستراتيجي</h3>
@@ -1325,7 +1325,7 @@
         </div>
       </section>
 
-      <section class="panel" id="deploymentPanel">
+    <section class="panel" id="supportPlanPanel" style="display: none;">
         <div class="panel-head">
           <div>
             <h3>خطة الانتشار</h3>
@@ -1437,7 +1437,7 @@
         </div>
       </section>
 
-      <section class="panel" id="mapsPanel">
+      <section class="panel" id="homePanel" style="display: block;">
         <div class="panel-head">
           <div>
             <h3>خرائط نطاق منى</h3>
@@ -1716,8 +1716,8 @@
     function activatePanel(targetId){
       document.querySelectorAll('.nav li').forEach(i => i.classList.remove('active'));
       document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
-      document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
-      document.getElementById(targetId)?.classList.add('active');
+      document.querySelectorAll('.panel').forEach(panel => panel.style.display = 'none');
+      if(document.getElementById(targetId)) document.getElementById(targetId).style.display = 'block';
       window.scrollTo({top:0,behavior:'smooth'});
     }
 

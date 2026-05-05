@@ -2622,6 +2622,22 @@ function loadDefaultDeploymentPoints(){
         document.getElementById("stock_medical_shortages").value = "";
       }
     }
+    function toggleSupportTypeFields() {
+      const type = document.getElementById("support_type").value;
+      const internalWrap = document.getElementById("internalSupportWrap");
+      const externalWrap = document.getElementById("externalSupportWrap");
+      
+      if (type === "داخل_النطاق") {
+        internalWrap.classList.remove("hidden");
+        externalWrap.classList.add("hidden");
+      } else if (type === "خارج_النطاق") {
+        internalWrap.classList.add("hidden");
+        externalWrap.classList.remove("hidden");
+      } else {
+        internalWrap.classList.add("hidden");
+        externalWrap.classList.add("hidden");
+      }
+    }
     </script>
 </body>
 </html>

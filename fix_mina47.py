@@ -44,7 +44,7 @@ def fix_nav_items_onclick(match):
     data_target = match.group(1)
     # Corrected: Pass data_target as a string literal to activatePanel
     # The regex for sub already handles the outer quotes, so we just need single quotes inside
-    onclick_attr = f"onclick=\"activatePanel(\\\\'{data_target}\\\\' )\""
+    onclick_attr = f"onclick=\"activatePanel(\\\\'{data_target}\\\\')\""
     # Return the data-target and the new onclick attribute
     return f"data-target=\"{data_target}\" {onclick_attr}"
 

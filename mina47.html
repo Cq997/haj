@@ -1713,9 +1713,9 @@
       });
     });
 
-                                                                                                function activatePanel(targetId){ 
+                                                                                                    function activatePanel(targetId){ 
       document.querySelectorAll(".nav li").forEach(i => i.classList.remove("active")); 
-      const targetLi = document.querySelector(`.nav li[data-target="${targetId}" onclick="activatePanel(\\'${targetId}\\' )"]`); 
+      const targetLi = document.querySelector(`.nav li[data-target="${targetId}" onclick="activatePanel(\\'${targetId}\\')"]`); 
       if(targetLi) targetLi.classList.add("active"); 
        
       document.querySelectorAll(".panel").forEach(panel => { 
@@ -4615,6 +4615,16 @@ document.addEventListener('DOMContentLoaded', () => {
     
       document.querySelectorAll(".panel").forEach(panel => {
         panel.style.display = "none";
+        panel.classList.remove("active");
+      });
+      const homePanel = document.getElementById("homePanel");
+      if (homePanel) {
+        homePanel.style.display = "block";
+        homePanel.classList.add("active");
+      }
+    
+      document.querySelectorAll(".panel").forEach(panel => {
+        panel.style.display = "none";
       });
       const homePanel = document.getElementById("homePanel");
       if (homePanel) {
@@ -4836,6 +4846,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
     document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll(".panel").forEach(panel => {
+        panel.style.display = "none";
+        panel.classList.remove("active");
+      });
+      const homePanel = document.getElementById("homePanel");
+      if (homePanel) {
+        homePanel.style.display = "block";
+        homePanel.classList.add("active");
+      }
+    
       document.querySelectorAll(".panel").forEach(panel => {
         panel.style.display = "none";
         panel.classList.remove("active");

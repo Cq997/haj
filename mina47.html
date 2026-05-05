@@ -1548,44 +1548,52 @@
 
     mobileBtn.addEventListener('click', () => sidebar.classList.toggle('active'));
 
-    document.querySelectorAll('.nav li').forEach(item => {
-      item.addEventListener('click', () => {
-        activatePanel(item.dataset.target);
-        if(window.innerWidth <= 1180) sidebar.classList.remove('active');
-      });
-    });
-
+    // دالة تفعيل اللوحات (Panels)
     function activatePanel(targetId) {
-      // إخفاء جميع اللوحات أولاً باستخدام display و class
+      console.log("تفعيل اللوحة:", targetId);
+      
+      // 1. إخفاء جميع اللوحات
       document.querySelectorAll('.panel').forEach(p => {
         p.style.display = 'none';
         p.classList.remove('active');
       });
       
+      // 2. إظهار اللوحة المستهدفة
       const target = document.getElementById(targetId);
       if (target) {
         target.style.display = 'block';
         target.classList.add('active');
-        window.scrollTo({top:0,behavior:'smooth'});
+        window.scrollTo({top: 0, behavior: 'smooth'});
         
-        // تهيئة الخريطة إذا تم فتح لوحة الخريطة
-        if (targetId === 'mapPanel' && typeof mapInstance !== 'undefined') {
-          setTimeout(() => { mapInstance.invalidateSize(); }, 200);
+        // تهيئة الخريطة إذا كانت اللوحة هي لوحة الخريطة أو الرئيسية
+        if ((targetId === 'mapPanel' || targetId === 'homePanel') && typeof mapInstance !== 'undefined') {
+          setTimeout(() => { mapInstance.invalidateSize(); }, 300);
         }
+      } else {
+        console.error("اللوحة غير موجودة:", targetId);
       }
       
-      // تحديث حالة القائمة الجانبية
+      // 3. تحديث حالة القائمة الجانبية
       document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
-      const navItem = document.querySelector(`.nav li[data-target="${targetId}"]`) || 
-                      document.querySelector(`.nav li[onclick*="${targetId}"]`);
+      const navItem = document.querySelector(`.nav li[data-target="${targetId}"]`);
       if (navItem) navItem.classList.add('active');
       
-      // إغلاق القائمة الجانبية في الجوال
+      // 4. إغلاق القائمة الجانبية في الجوال
       const sidebar = document.getElementById('sidebar');
       if (sidebar && window.innerWidth <= 1180) {
         sidebar.classList.remove('active');
       }
     }
+    
+    // ربط أحداث النقر للقائمة الجانبية
+    document.querySelectorAll('.nav li').forEach(item => {
+      item.onclick = function() {
+        const target = this.getAttribute('data-target');
+        if (target) activatePanel(target);
+      };
+    });
+    
+    // جعل الدالة متاحة عالمياً
     window.activatePanel = activatePanel;
 
     function toggleShortageDetails(){

@@ -5,22 +5,22 @@ with open(file_path, "r", encoding="utf-8") as f:
     content = f.read()
 
 # 1. Fix activatePanel function
-activate_panel_func = """    function activatePanel(targetId){
-      document.querySelectorAll('.nav li').forEach(i => i.classList.remove('active'));
-      const targetLi = document.querySelector(`.nav li[data-target="${targetId}"]`);
-      if(targetLi) targetLi.classList.add('active');
-      
-      document.querySelectorAll('.panel').forEach(panel => {
-        panel.style.display = 'none';
-        panel.classList.remove('active');
-      });
-      
-      const targetPanel = document.getElementById(targetId);
-      if(targetPanel) {
-        targetPanel.style.display = 'block';
-        targetPanel.classList.add('active');
-      }
-      window.scrollTo({top:0,behavior:'smooth'});
+activate_panel_func = """    function activatePanel(targetId){ 
+      document.querySelectorAll('.nav li').forEach(i => i.classList.remove('active')); 
+      const targetLi = document.querySelector(`.nav li[data-target="${targetId}"]`); 
+      if(targetLi) targetLi.classList.add('active'); 
+       
+      document.querySelectorAll('.panel').forEach(panel => { 
+        panel.style.display = 'none'; 
+        panel.classList.remove('active'); 
+      }); 
+       
+      const targetPanel = document.getElementById(targetId); 
+      if(targetPanel) { 
+        targetPanel.style.display = 'block'; 
+        targetPanel.classList.add('active'); 
+      } 
+      window.scrollTo({top:0,behavior:'smooth'}); 
     }"""
 
 # The regex needs to be more specific to avoid matching other functions or comments
@@ -31,7 +31,7 @@ content = re.sub(r"    function activatePanel\(targetId\)\{[^}]*?\}", activate_p
 def fix_nav_items(match):
     target = match.group(1)
     # Remove any existing onclick to avoid duplicates, then add the correct one
-    return f"data-target=\"{target}\" onclick=\"activatePanel(\\\'{target}\\\\\')\""
+    return f"data-target=\"{target}\" onclick=\"activatePanel(\\\\'{target}\\\\\')\""
 
 content = re.sub(r"data-target=\"([^\"]+)\"(?:\s+onclick=\"[^\"]+\")?", fix_nav_items, content)
 

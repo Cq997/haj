@@ -1467,7 +1467,28 @@
   </main>
 </div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+
+function activatePanel(targetId){
+      document.querySelectorAll('.nav li').forEach(i => i.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
+      document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
+      document.getElementById(targetId)?.classList.add('active');
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.nav li').forEach(item => {
+      item.addEventListener('click', () => {
+        activatePanel(item.dataset.target);
+        if(window.innerWidth <= 1180) sidebar.classList.remove('active');
+      });
+        // Initial panel activation
+        activatePanel('homePanel');
+    });
+    
+</script>
 <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxzkS1GrOC4IBKYQCD2APoK-6iIcGngUikW7zXseLK6JgnQd_pBxA_gX8LgYyoNBS-n2w/exec';
 
@@ -1571,20 +1592,10 @@
 
     mobileBtn.addEventListener('click', () => sidebar.classList.toggle('active'));
 
-    document.querySelectorAll('.nav li').forEach(item => {
-      item.addEventListener('click', () => {
-        activatePanel(item.dataset.target);
-        if(window.innerWidth <= 1180) sidebar.classList.remove('active');
-      });
+    
     });
 
-    function activatePanel(targetId){
-      document.querySelectorAll('.nav li').forEach(i => i.classList.remove('active'));
-      document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
-      document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
-      document.getElementById(targetId)?.classList.add('active');
-      window.scrollTo({top:0,behavior:'smooth'});
-    }
+    
 
     function toggleQuickLinks(){
       document.getElementById('quickLinks').classList.toggle('show');

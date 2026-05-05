@@ -1713,14 +1713,19 @@
       });
     });
 
-                                                                                                    function activatePanel(targetId){ 
-      document.querySelectorAll(".nav li").forEach(i => i.classList.remove("active")); 
-      const targetLi = document.querySelector(`.nav li[data-target="${targetId}" onclick="activatePanel(\\'${targetId}\\')"]`); 
+                                                                                                    " onclick="activatePanel(\\'${targetId}\\')"]`); 
       if(targetLi) targetLi.classList.add("active"); 
        
-      document.querySelectorAll(".panel").forEach(panel => { 
-        panel.style.display = "none"; 
-        panel.classList.remove("active"); // Ensure active class is removed
+      // Cleaned Navigation Logic
+      document.querySelectorAll('.panel').forEach(p => {
+          p.style.display = 'none';
+          p.classList.remove('active');
+      });
+      const homePanel = document.getElementById('homePanel');
+      if (homePanel) {
+          homePanel.style.display = 'block';
+          homePanel.classList.add('active');
+      }
       }); 
        
       const targetPanel = document.getElementById(targetId); 
@@ -1732,9 +1737,16 @@
     }" onclick="activatePanel(\'${targetId}\')"]`);
       if(targetLi) targetLi.classList.add('active');
       
-      document.querySelectorAll('.panel').forEach(panel => {
-        panel.style.display = 'none';
-        panel.classList.remove('active');
+      // Cleaned Navigation Logic
+      document.querySelectorAll('.panel').forEach(p => {
+          p.style.display = 'none';
+          p.classList.remove('active');
+      });
+      const homePanel = document.getElementById('homePanel');
+      if (homePanel) {
+          homePanel.style.display = 'block';
+          homePanel.classList.add('active');
+      }
       });
       
       const targetPanel = document.getElementById(targetId);
@@ -4321,770 +4333,80 @@ const DEPLOYMENT_POINTS = {
     "lng": 39.8986349
   }
 };
-</script>
+
+    // ============================================
+    // نظام الملاحة والتحكم في اللوحات
+    // ============================================
+    function activatePanel(panelId) {
+        console.log('Activating panel:', panelId);
+        
+        // 1. إخفاء جميع اللوحات
+        const allPanels = document.querySelectorAll('.panel');
+        allPanels.forEach(p => {
+            p.style.display = 'none';
+            p.classList.remove('active');
+        });
+        
+        // 2. إظهار اللوحة المطلوبة
+        const target = document.getElementById(panelId);
+        if (target) {
+            target.style.display = 'block';
+            target.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+            console.error('Panel not found:', panelId);
+        }
+        
+        // 3. تحديث حالة القائمة الجانبية (Active class)
+        document.querySelectorAll('.nav li').forEach(li => {
+            li.classList.remove('active');
+            // التحقق من data-target أو onclick
+            const dt = li.getAttribute('data-target');
+            const oc = li.getAttribute('onclick');
+            if (dt === panelId || (oc && oc.includes(panelId))) {
+                li.classList.add('active');
+            }
+        });
+        
+        // 4. إغلاق القائمة الجانبية في الجوال
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar) sidebar.classList.remove('active');
+    }
+
+    // جعل الدالة متاحة عالمياً
+    window.activatePanel = activatePanel;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('DOM fully loaded and parsed');
+        
+        // إعداد الحالة الأولية - إظهار الرئيسية
+        activatePanel('homePanel');
+        
+        // تفعيل أزرار القائمة الجانبية التي لا تحتوي على onclick
+        document.querySelectorAll('.nav li[data-target]').forEach(li => {
+            if (!li.getAttribute('onclick')) {
+                li.addEventListener('click', () => {
+                    activatePanel(li.getAttribute('data-target'));
+                });
+            }
+        });
+
+        // زر الجوال
+        const mobileBtn = document.querySelector('.mobile-btn');
+        const sidebar = document.querySelector('.sidebar');
+        if (mobileBtn && sidebar) {
+            mobileBtn.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+            });
+        }
+        
+        // تشغيل التحديث الدوري إذا وجد
+        if (typeof startFastPolling === 'function') {
+            startFastPolling();
+        }
+    });
+    </script>
 
 
 </body>
-</html>// ============================================
-// منصة نطاق منى - تحسينات السرعة والأيقونات
-// ============================================
-
-// نظام التخزين المؤقت (Caching System)
-const dataCache = {
-  deployment: { data: null, timestamp: 0, ttl: 5000 }, // 5 ثواني
-  support: { data: null, timestamp: 0, ttl: 5000 },
-  daily: { data: null, timestamp: 0, ttl: 5000 }
-};
-
-// دالة جلب البيانات مع التخزين المؤقت السريع
-async function fetchWithCache(action, cacheKey) {
-  const cache = dataCache[cacheKey];
-  const now = Date.now();
-  
-  // إذا كانت البيانات محفوظة وحديثة، أرجعها فوراً
-  if (cache.data && (now - cache.timestamp) < cache.ttl) {
-    return cache.data;
-  }
-  
-  try {
-    const res = await fetch(`${SCRIPT_URL}?action=${action}`, {
-      method: 'GET',
-      headers: { 'Accept': 'application/json' },
-      cache: 'no-cache'
-    });
-    
-    if (!res.ok) throw new Error("فشل الاتصال");
-    
-    const data = await res.json();
-    
-    // حفظ في الذاكرة المؤقتة
-    cache.data = data;
-    cache.timestamp = now;
-    
-    return data;
-  } catch (err) {
-    console.error(`❌ خطأ في جلب ${action}:`, err);
-    return cache.data || []; // أرجع البيانات القديمة إن وجدت
-  }
-}
-
-// دالة تحديث البيانات الفورية (Force Refresh)
-async function forceRefreshData(cacheKey) {
-  dataCache[cacheKey].timestamp = 0; // أجبر على تحديث
-}
-
-// ============================================
-// رسائل الواتساب مع الأيقونات التعريفية
-// ============================================
-
-function buildHandoverMessageWithEmojis(row) {
-  const date = row["التاريخ"] || new Date().toLocaleDateString('ar-SA');
-  const sector = row["القطاع"] || "غير محدد";
-  const sender = row["handover_sender"] || "غير محدد";
-  const receiver = row["handover_receiver"] || "غير محدد";
-  
-  const message = `
-🏥 *تقرير تسليم المناوبة* 🤝
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-*📍 القطاع:* ${sector}
-*📅 التاريخ:* ${date}
-*⏰ الوقت من:* ${row["الوقت من"] || "غير محدد"}
-*⏰ الوقت إلى:* ${row["الوقت إلى"] || "غير محدد"}
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-*👨‍⚕️ كبير المسعفين المسلم:* ${sender}
-*👨‍⚕️ كبير المسعفين المستقبل:* ${receiver}
-*👥 المساعدون:* ${row["handover_assistant1"] || "-"} | ${row["handover_assistant2"] || "-"} | ${row["handover_assistant3"] || "-"} | ${row["handover_assistant4"] || "-"}
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-*🚑 ملخص الآليات:*
-• عدد مركبات الإسعاف: ${row["عدد مركبات الإسعاف"] || "0"}
-• عدد القولف: ${row["عدد القولف"] || "0"}
-• عدد الاستجابة النوعية: ${row["عدد الاستجابة النوعية"] || "0"}
-• عدد فرق التدخل السريع: ${row["عدد فرق التدخل السريع"] || "0"}
-• العاملة: ${row["العاملة"] || "0"}
-• الاحتياط: ${row["الاحتياط"] || "0"}
-• خارج الخدمة: ${row["الخارج عن الخدمة"] || "0"}
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-*📊 ملخص الإحصائيات:*
-• متوسط زمن الاستجابة: ${row["متوسط زمن الاستجابة"] || "0"} دقيقة
-• متوسط زمن استجابة ECHO: ${row["متوسط زمن استجابة ECHO"] || "0"} دقيقة
-• إجمالي البلاغات: ${row["إجمالي البلاغات"] || "0"}
-• عدد الفرق الفعالة: ${row["عدد الفرق الفعالة"] || "0"}
-• عدد الفرق المعتمدة: ${row["عدد الفرق المعتمدة"] || "0"}
-• بلاغات الدعم اللوجستي: ${row["بلاغات الدعم اللوجستي"] || "0"}
-• البلاغات المفتوحة: ${row["البلاغات المفتوحة"] || "0"}
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-*🚨 أحداث طارئة:*
-${row["أحداث طارئة"] === "نعم" ? `
-  • حادث جسيم: ${row["h_methane_major"] || "-"}
-  • الموقع: ${row["h_methane_location"] || "-"}
-  • النوع: ${row["h_methane_type"] || "-"}
-  • المخاطر: ${row["h_methane_hazards"] || "-"}
-  • الوصول: ${row["h_methane_access"] || "-"}
-  • الإصابات: ${row["h_methane_number"] || "-"}
-  • الخدمات: ${row["h_methane_emergency"] || "-"}
-  • ملاحظات: ${row["h_methane_notes"] || "-"}
-` : "لا توجد أحداث طارئة"}
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-*⚠️ تحذيرات وملاحظات:*
-• التحذيرات الجوية: ${row["التحذيرات الجوية"] || "لا توجد"}
-• التحذيرات الأمنية: ${row["التحذيرات الأمنية"] || "لا توجد"}
-• مواقع خطرة: ${row["مواقع خطرة"] || "لا توجد"}
-• إصابات العاملين: ${row["إصابات العاملين"] || "لا توجد"}
-• إحاطات أخرى: ${row["إحاطات أخرى"] || "لا توجد"}
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-*📝 ملخص المناوبة:*
-• ملخص الأحداث: ${row["ملخص الأحداث"] || "لا توجد"}
-• ملخص الموارد المطلوبة وتوزيعها: ${row["ملخص الموارد المطلوبة وتوزيعها"] || "لا توجد"}
-• ملاحظات عامة عن المناوبة: ${row["ملاحظات عامة عن المناوبة"] || "لا توجد"}
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ *تم الحفظ بنجاح*`
-  
-  return message;
-}
-
-function buildDeploymentMessageWithEmojis(row) {
-  const date = row["التاريخ"] || new Date().toLocaleDateString('ar-SA');
-  const sector = row["القطاع"] || "غير محدد";
-  const code = row["الرمز"] || "غير محدد";
-  const status = row["الحالة"] || "غير محدد";
-  
-  const message = `
-🗺️ *خطة الانتشار* 📍
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-*📍 القطاع:* ${sector}
-*🏷️ الرمز:* ${code}
-*📅 التاريخ:* ${date}
-*⏰ الوقت:* ${row["الوقت"] || "غير محدد"}
-*🔄 العرض الزمني:* ${row["العرض الزمني"] || "غير محدد"}
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-*👨‍⚕️ مدخل البيانات:* ${row["deploy_lead_name"] || "غير محدد"} (${row["deploy_role"] || "غير محدد"})
-*👤 كبير المسعفين المناوب:* ${row["deploy_current_lead"] || "غير محدد"}
-*👥 المساعدون:* ${row["deploy_assistants_auto"] || "غير محدد"}
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-*🚑 تفاصيل الآلية:*
-• نوع الآلية: ${row["نوع الآلية"] || "غير محدد"}
-• مناوبة النقطة: ${row["مناوبة النقطة"] || "غير محدد"}
-• وقت البداية: ${row["وقت البداية"] || "غير محدد"}
-• وقت النهاية: ${row["وقت النهاية"] || "غير محدد"}
-• الحالة: ${status}
-• عدد الفرق الفعلي: ${row["عدد الفرق الفعلي"] || "0"}
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-*🗺️ الموقع:*
-• Latitude: ${row["Latitude"] || "غير محدد"}
-• Longitude: ${row["Longitude"] || "غير محدد"}
-• رابط النقطة: ${row["رابط النقطة"] || "غير محدد"}
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-*🤝 التدعيم:*
-• نوع التدعيم: ${row["نوع التدعيم"] || "غير محدد"}
-• جهة التدعيم: ${row["جهة التدعيم"] || "غير محدد"}
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-*📝 ملاحظات:*
-• ملاحظة السجل: ${row["ملاحظة السجل"] || "لا توجد ملاحظات"}
-• ملاحظات عامة: ${row["ملاحظات عامة"] || "لا توجد ملاحظات"}
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ *تم الحفظ بنجاح*`
-  
-  return message;
-}
-
-function buildPersonalEquipmentMessageWithEmojis(row) {
-  const date = row["التاريخ"] || new Date().toLocaleDateString('ar-SA');
-  const sector = row["القطاع"] || "غير محدد";
-  const lead = row["كبير المسعفين"] || "غير محدد";
-  
-  const message = `
-🏥 *تقرير العهد الشخصية* 📝
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-*📍 القطاع:* ${sector}
-*👨‍⚕️ كبير المسعفين:* ${lead}
-*📅 التاريخ:* ${date}
-*⏰ فترة المناوبة:* ${row["فترة المناوبة"] || "غير محدد"}
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-*🔧 الأجهزة الطبية:*
-• 🔴 جهاز لوكس (LUCAS): ${row["حالة جهاز لوكس"] || "غير محدد"} (العدد: ${row["عدد جهاز لوكس"] || "0"})
-• 🟢 جهاز ميندري (Mindray): ${row["حالة جهاز ميندري"] || "غير محدد"} (العدد: ${row["عدد جهاز ميندري"] || "0"})
-• 🟡 جهاز لايف باك (LifePak): ${row["حالة جهاز لايف باك"] || "غير محدد"} (العدد: ${row["عدد جهاز لايف باك"] || "0"})
-• 📡 جهاز اللاسلكي (Radio): ${row["حالة جهاز اللاسلكي"] || "غير محدد"} (العدد: ${row["عدد جهاز اللاسلكي"] || "0"})
-• 📱 جهاز لوحي (Tablet): ${row["حالة جهاز لوحي (تابلت)"] || "غير محدد"} (العدد: ${row["عدد جهاز لوحي (تابلت)"] || "0"})
-• 💓 جهاز قياس العلامات الحيوية: ${row["حالة جهاز قياس العلامات الحيوية"] || "غير محدد"} (العدد: ${row["عدد جهاز قياس العلامات الحيوية"] || "0"})
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-*📝 ملاحظات:*
-• ملاحظات جهاز لوكس: ${row["ملاحظات جهاز لوكس"] || "لا توجد"}
-• ملاحظات جهاز ميندري: ${row["ملاحظات جهاز ميندري"] || "لا توجد"}
-• ملاحظات جهاز لايف باك: ${row["ملاحظات جهاز لايف باك"] || "لا توجد"}
-• ملاحظات جهاز اللاسلكي: ${row["ملاحظات جهاز اللاسلكي"] || "لا توجد"}
-• ملاحظات جهاز لوحي (تابلت): ${row["ملاحظات جهاز لوحي (تابلت)"] || "لا توجد"}
-• ملاحظات جهاز قياس العلامات الحيوية: ${row["ملاحظات جهاز قياس العلامات الحيوية"] || "لا توجد"}
-━━━━━━━━━━━━━━━━━━━━━━━━━━
-✅ *تم الحفظ بنجاح*`
-  
-  return message;
-}
-
-// ============================================
-// دوال الخريطة التفاعلية السريعة
-// ============================================
-
-async function updateMapPointsInstantly() {
-  try {
-    // تم استبدال المنطق المباشر بـ loadLiveDeploymentData لضمان توحيد مصدر البيانات
-    await loadLiveDeploymentData();
-    console.log("✅ تم تحديث الخريطة بنجاح");
-  } catch (err) {
-    console.error("❌ خطأ في تحديث الخريطة:", err);
-  }
-}
-
-function getStatusColor(status) {
-  const colors = {
-    "جاهز": "#00b894",
-    "مدعم": "#fdcb6e",
-    "خارج الخدمة": "#d63031"
-  };
-  return colors[status] || "#0b5ed7";
-}
-
-// ============================================
-// تحديث الداشبورد الفوري
-// ============================================
-
-async function updateDashboardInstantly() {
-  try {
-    // تم إزالة استدعاء getDailyStats لأنه غير مدعوم في Code.gs
-    // سيتم الاعتماد على loadLiveDeploymentData لتحديث الداشبورد
-    await loadLiveDeploymentData();
-    console.log("✅ تم تحديث الداشبورد بنجاح");
-  } catch (err) {
-    console.error("❌ خطأ في تحديث الداشبورد:", err);
-  }
-}
-
-// ============================================
-// دالة الحفظ المحسّنة
-// ============================================
-
-async function saveToGoogleSheetsOptimized(action, data) {
-  try {
-    const response = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action, ...data })
-    });
-    
-    if (!response.ok) throw new Error('فشل الحفظ');
-    
-    // تحديث الذاكرة المؤقتة فوراً
-    forceRefreshData('deployment');
-    forceRefreshData('daily');
-    
-    // تحديث الداشبورد والخريطة فوراً (بدون تأخير)
-    setTimeout(() => {
-      updateDashboardInstantly();
-      updateMapPointsInstantly();
-    }, 100); // تأخير بسيط جداً (100ms فقط)
-    
-    return { success: true };
-  } catch (err) {
-    console.error("❌ خطأ في الحفظ:", err);
-    return { success: false, error: err.message };
-  }
-}
-
-// ============================================
-// تحديث دوري سريع (كل 3 ثواني)
-// ============================================
-
-function startFastPolling() {
-  setInterval(async () => {
-    await updateDashboardInstantly();
-    await updateMapPointsInstantly();
-  }, 3000); // تحديث كل 3 ثواني بدلاً من دقيقتين
-}
-
-// تشغيل التحديث الدوري عند تحميل الصفحة
-document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-
-      document.querySelectorAll('.panel').forEach(panel => {
-        panel.style.display = 'none';
-        panel.classList.remove('active');
-      });
-      const homePanel = document.getElementById('homePanel');
-      if (homePanel) {
-        homePanel.style.display = 'block';
-        homePanel.classList.add('active');
-      }
-    
-  startFastPolling();
-});
-
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-    
-      document.querySelectorAll(".panel").forEach(panel => {
-        panel.style.display = "none";
-        panel.classList.remove("active");
-      });
-      const homePanel = document.getElementById("homePanel");
-      if (homePanel) {
-        homePanel.style.display = "block";
-        homePanel.classList.add("active");
-      }
-
-      document.querySelectorAll('.panel').forEach(panel => {
-        panel.style.display = 'none';
-        panel.classList.remove('active');
-      });
-      const homePanel = document.getElementById('homePanel');
-      if (homePanel) {
-        homePanel.style.display = 'block';
-        homePanel.classList.add('active');
-      }
-    
-  startFastPolling();
-});
-  </script>
+</html>

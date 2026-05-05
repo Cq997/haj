@@ -1713,9 +1713,9 @@
       });
     });
 
-    function activatePanel(targetId){ 
+        function activatePanel(targetId){ 
       document.querySelectorAll('.nav li').forEach(i => i.classList.remove('active')); 
-      const targetLi = document.querySelector(`.nav li[data-target="${targetId}" onclick="activatePanel(\\'${targetId}\\')"]`); 
+      const targetLi = document.querySelector(`.nav li[data-target="${targetId}" onclick="activatePanel(\'${targetId}\\\\')"]`); 
       if(targetLi) targetLi.classList.add('active'); 
        
       document.querySelectorAll('.panel').forEach(panel => { 
@@ -1729,34 +1729,6 @@
         targetPanel.classList.add('active'); 
       } 
       window.scrollTo({top:0,behavior:'smooth'}); 
-    }" onclick="activatePanel(\\'${targetId}\\')"]`); 
-      if(targetLi) targetLi.classList.add('active'); 
-       
-      document.querySelectorAll('.panel').forEach(panel => { 
-        panel.style.display = 'none'; 
-        panel.classList.remove('active'); 
-      }); 
-       
-      const targetPanel = document.getElementById(targetId); 
-      if(targetPanel) { 
-        targetPanel.style.display = 'block'; 
-        targetPanel.classList.add('active'); 
-      } 
-      window.scrollTo({top:0,behavior:'smooth'}); 
-    }" onclick="activatePanel(\'${targetId}\\')"]`);
-      if(targetLi) targetLi.classList.add('active');
-      
-      document.querySelectorAll('.panel').forEach(panel => {
-        panel.style.display = 'none';
-        panel.classList.remove('active');
-      });
-      
-      const targetPanel = document.getElementById(targetId);
-      if(targetPanel) {
-        targetPanel.style.display = 'block';
-        targetPanel.classList.add('active');
-      }
-      window.scrollTo({top:0,behavior:'smooth'});
     }" onclick="activatePanel(\'${targetId}\')"]`);
       if(targetLi) targetLi.classList.add('active');
       
@@ -4631,13 +4603,30 @@ function startFastPolling() {
 
 // تشغيل التحديث الدوري عند تحميل الصفحة
 document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.panel').forEach(panel => {
+        panel.style.display = 'none';
+        panel.classList.remove('active');
+      });
+      const homePanel = document.getElementById('homePanel');
+      if (homePanel) {
+        homePanel.style.display = 'block';
+        homePanel.classList.add('active');
+      }
+    
   startFastPolling();
 });
 
     document.addEventListener('DOMContentLoaded', () => {
-      const activeNavItem = document.querySelector('.nav li.active');
-      if (activeNavItem) {
-        activatePanel(activeNavItem.dataset.target);
+      document.querySelectorAll('.panel').forEach(panel => {
+        panel.style.display = 'none';
+        panel.classList.remove('active');
+      });
+      const homePanel = document.getElementById('homePanel');
+      if (homePanel) {
+        homePanel.style.display = 'block';
+        homePanel.classList.add('active');
       }
-    });
+    
+  startFastPolling();
+});
   </script>

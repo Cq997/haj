@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -270,8 +271,8 @@
 
     /* ─── Panels / Forms ─── */
     .panel{display:none;width:100%;min-height:calc(100vh - 100px)}
-    .panel.active{display:block}
-
+    .panel.active{display:block!important}
+    .panel.active.hidden{display:block!important}
 
     .panel-head{
       display:flex;align-items:center;justify-content:space-between;
@@ -398,6 +399,7 @@
   </style>
 </head>
 <body>
+
 
 <button class="mobile-btn" id="mobileBtn"><i class="fas fa-bars"></i></button>
 
@@ -644,12 +646,8 @@
       const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
       if(!save.success) return showAlert('stockAlert','error','تعذر حفظ البيانات');
       showAlert('stockAlert','success','تم الحفظ بنجاح');
-      let msg = `📦 *تقرير الخزن الاستراتيجي*
-📅 ${date}
-📍 ${location}
-⚠️ نواقص: ${hasShortage}`;
-      if(hasShortage === 'نعم') msg += `
-📝 التفاصيل: ${shortageDetails}`;
+      let msg = `📦 *تقرير الخزن الاستراتيجي*\n📅 ${date}\n📍 ${location}\n⚠️ نواقص: ${hasShortage}`;
+      if(hasShortage === 'نعم') msg += `\n📝 التفاصيل: ${shortageDetails}`;
       openWhatsApp(msg);
     }
 
@@ -687,10 +685,7 @@
       const save = await saveToGoogleSheets('العهد الشخصية', [row]);
       if(!save.success) return showAlert('unitCheckAlert','error','تعذر الحفظ');
       showAlert('unitCheckAlert','success','تم الحفظ بنجاح');
-      openWhatsApp(`🆔 *العهد الشخصية*
-📅 ${date}
-📟 الرمز: ${callSign}
-👤 المسؤول: ${row["كبير المسعفين"]}`);
+      openWhatsApp(`🆔 *العهد الشخصية*\n📅 ${date}\n📟 الرمز: ${callSign}\n👤 المسؤول: ${row["كبير المسعفين"]}`);
     }
 
     function updateDashboardAlerts(data){
@@ -706,8 +701,485 @@
       }
     }
 
-</script>
-<script>
+
+    // Navigation System
+    function switchPanel(id){
+      console.log("Switching to:", id);
+      document.querySelectorAll('.panel').forEach(p => {
+        p.classList.remove('active');
+        p.style.display = 'none';
+      });
+      const target = document.getElementById(id);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${id}"]`)?.classList.add('active');
+      window.scrollTo(0,0);
+    }
+
+    document.querySelectorAll('.nav li').forEach(li => {
+      li.onclick = function(){ switchPanel(this.getAttribute('data-target')); };
+    });
+
+    // Strategic Stock Toggle
+    function toggleShortage(){
+      const val = document.getElementById('has_shortage').value;
+      document.getElementById('shortage_box').style.display = (val === 'نعم') ? 'block' : 'none';
+    }
+
+    // WhatsApp Integration
+    function openWhatsApp(text){
+      const encoded = encodeURIComponent(text);
+      const url = /iPhone|iPad|iPod/.test(navigator.userAgent) ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
+      window.open(url, '_blank');
+    }
+
+    // Alert System
+    function showAlert(id, type, msg){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.style.display = 'block';
+      el.className = 'alert ' + (type === 'success' ? 'alert-success' : 'alert-error');
+      el.innerText = msg;
+      setTimeout(() => el.style.display = 'none', 5000);
+    }
+
+    // Data Submission (Generic)
+    async function saveToGoogleSheets(sheet, data){
+      try {
+        const resp = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({sheet, data})
+        });
+        return {success: true};
+      } catch(e) {
+        return {success: false};
+      }
+    }
+
+    // Specific Handlers
+    async function sendDailyPrep(){
+      const data = {
+        sector: document.getElementById('prep_sector').value,
+        vehicles: document.getElementById('prep_vehicles').value,
+        rapid: document.getElementById('prep_rapid').value
+      };
+      await saveToGoogleSheets('التحضير اليومي', [data]);
+      showAlert('prepAlert', 'success', 'تم الحفظ');
+      openWhatsApp(`✅ *تحضير يومي*
+📍 ${data.sector}
+🚑 مركبات: ${data.vehicles}
+🏍️ تدخل سريع: ${data.rapid}`);
+    }
+
+    async function sendStock(){
+      const data = {
+        loc: document.getElementById('stock_loc').value,
+        shortage: document.getElementById('has_shortage').value,
+        notes: document.getElementById('shortage_notes').value
+      };
+      await saveToGoogleSheets('الخزن الاستراتيجي', [data]);
+      showAlert('stockAlert', 'success', 'تم الحفظ');
+      openWhatsApp(`📦 *خزن استراتيجي*
+📍 ${data.loc}
+⚠️ نواقص: ${data.shortage}
+📝 ملاحظات: ${data.notes}`);
+    }
+
+    async function sendUnitsCheck(){
+      const data = {
+        unit: document.getElementById('unit_id').value,
+        lead: document.getElementById('crew_lead').value,
+        custody: document.getElementById('received_custody').value
+      };
+      await saveToGoogleSheets('العهد الشخصية', [data]);
+      showAlert('unitCheckAlert', 'success', 'تم الحفظ');
+      openWhatsApp(`🆔 *عهد شخصية*
+📟 الرمز: ${data.unit}
+👤 المسؤول: ${data.lead}
+📋 العهد: ${data.custody}`);
+    }
+
+    // Dashboard Auto-Update
+    setInterval(() => {
+      console.log("Updating Dashboard...");
+      // Here you would fetch real data and update KPIs
+    }, 60000);
+
+    // Navigation System
+    function switchPanel(id){
+      console.log("Switching to:", id);
+      document.querySelectorAll('.panel').forEach(p => {
+        p.classList.remove('active');
+        p.style.display = 'none';
+      });
+      const target = document.getElementById(id);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${id}"]`)?.classList.add('active');
+      window.scrollTo(0,0);
+    }
+
+    document.querySelectorAll('.nav li').forEach(li => {
+      li.onclick = function(){ switchPanel(this.getAttribute('data-target')); };
+    });
+
+    // Strategic Stock Toggle
+    function toggleShortage(){
+      const val = document.getElementById('has_shortage').value;
+      document.getElementById('shortage_box').style.display = (val === 'نعم') ? 'block' : 'none';
+    }
+
+    // WhatsApp Integration
+    function openWhatsApp(text){
+      const encoded = encodeURIComponent(text);
+      const url = /iPhone|iPad|iPod/.test(navigator.userAgent) ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
+      window.open(url, '_blank');
+    }
+
+    // Alert System
+    function showAlert(id, type, msg){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.style.display = 'block';
+      el.className = 'alert ' + (type === 'success' ? 'alert-success' : 'alert-error');
+      el.innerText = msg;
+      setTimeout(() => el.style.display = 'none', 5000);
+    }
+
+    // Data Submission (Generic)
+    async function saveToGoogleSheets(sheet, data){
+      try {
+        const resp = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({sheet, data})
+        });
+        return {success: true};
+      } catch(e) {
+        return {success: false};
+      }
+    }
+
+    // Specific Handlers
+    async function sendDailyPrep(){
+      const data = {
+        sector: document.getElementById('prep_sector').value,
+        vehicles: document.getElementById('prep_vehicles').value,
+        rapid: document.getElementById('prep_rapid').value
+      };
+      await saveToGoogleSheets('التحضير اليومي', [data]);
+      showAlert('prepAlert', 'success', 'تم الحفظ');
+      openWhatsApp(`✅ *تحضير يومي*
+📍 ${data.sector}
+🚑 مركبات: ${data.vehicles}
+🏍️ تدخل سريع: ${data.rapid}`);
+    }
+
+    async function sendStock(){
+      const data = {
+        loc: document.getElementById('stock_loc').value,
+        shortage: document.getElementById('has_shortage').value,
+        notes: document.getElementById('shortage_notes').value
+      };
+      await saveToGoogleSheets('الخزن الاستراتيجي', [data]);
+      showAlert('stockAlert', 'success', 'تم الحفظ');
+      openWhatsApp(`📦 *خزن استراتيجي*
+📍 ${data.loc}
+⚠️ نواقص: ${data.shortage}
+📝 ملاحظات: ${data.notes}`);
+    }
+
+    async function sendUnitsCheck(){
+      const data = {
+        unit: document.getElementById('unit_id').value,
+        lead: document.getElementById('crew_lead').value,
+        custody: document.getElementById('received_custody').value
+      };
+      await saveToGoogleSheets('العهد الشخصية', [data]);
+      showAlert('unitCheckAlert', 'success', 'تم الحفظ');
+      openWhatsApp(`🆔 *عهد شخصية*
+📟 الرمز: ${data.unit}
+👤 المسؤول: ${data.lead}
+📋 العهد: ${data.custody}`);
+    }
+
+    // Dashboard Auto-Update
+    setInterval(() => {
+      console.log("Updating Dashboard...");
+      // Here you would fetch real data and update KPIs
+    }, 60000);
+
+    
+    
+    function switchPanel(targetId){
+      document.querySelectorAll('.panel').forEach(p => {
+        p.classList.remove('active');
+        p.style.display = 'none';
+      });
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      const navItem = document.querySelector(`.nav li[data-target="${targetId}"]`);
+      if(navItem) navItem.classList.add('active');
+      if(window.innerWidth <= 1180) {
+        const sidebar = document.querySelector('.sidebar');
+        if(sidebar) sidebar.classList.remove('active');
+      }
+      window.scrollTo(0,0);
+    }
+);
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
+      if(window.innerWidth <= 1180) document.querySelector('.sidebar').classList.remove('active');
+      window.scrollTo(0,0);
+    }
+
+    document.querySelectorAll('.nav li[data-target]').forEach(li => {
+      li.addEventListener('click', function(){
+        switchPanel(this.getAttribute('data-target'));
+      });
+    });
+);
+      const target = document.getElementById(targetId);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
+      if(window.innerWidth <= 1180) document.querySelector('.sidebar').classList.remove('active');
+      window.scrollTo(0,0);
+    }
+
+    document.querySelectorAll('.nav li[data-target]').forEach(li => {
+      li.addEventListener('click', () => {
+        const target = li.getAttribute('data-target');
+        switchPanel(target);
+      });
+    });
+
+
+    function toggleShortageDetails(){
+      const hasShortage = document.getElementById("has_shortage").value;
+      const container = document.getElementById("shortage_details_container");
+      if(container) container.style.display = (hasShortage === "نعم") ? "block" : "none";
+    }
+
+    function openWhatsApp(text){
+      const encoded = encodeURIComponent(text);
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      const url = isIOS ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
+      const win = window.open(url, '_blank');
+      if(!win || win.closed || typeof win.closed === 'undefined') window.location.href = url;
+    }
+
+    async function sendStrategicStock(){
+      const date = document.getElementById('stock_date').value;
+      const time = document.getElementById('stock_time').value;
+      const checker = document.getElementById('stock_checker').value.trim();
+      const location = document.getElementById('stock_location').value.trim();
+      const hasShortage = document.getElementById('has_shortage').value;
+      const shortageDetails = document.getElementById('shortage_details').value.trim();
+
+      if(!date || !time || !checker || !location){
+        showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
+        return;
+      }
+
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": date,
+        "وقت التشييك": time,
+        "القائم بالتشييك": checker,
+        "موقع الخزن": location,
+        "هل يوجد نواقص": hasShortage,
+        "تفاصيل النواقص": shortageDetails || 'لا يوجد'
+      };
+
+      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
+      if(!save.success) return showAlert('stockAlert','error','تعذر حفظ البيانات');
+      showAlert('stockAlert','success','تم الحفظ بنجاح');
+      let msg = `📦 *تقرير الخزن الاستراتيجي*\n📅 ${date}\n📍 ${location}\n⚠️ نواقص: ${hasShortage}`;
+      if(hasShortage === 'نعم') msg += `\n📝 التفاصيل: ${shortageDetails}`;
+      openWhatsApp(msg);
+    }
+
+    function fillUnitCallSigns(){
+      const sector = document.getElementById('units_check_sector').value;
+      const select = document.getElementById('unit_call_sign');
+      select.innerHTML = '<option value="">اختر الرمز</option>';
+      if(!sector) return;
+      // محاكاة جلب البيانات من خطة الانتشار
+      const points = [sector + "-1", sector + "-2", sector + "-3"];
+      points.forEach(p => select.innerHTML += `<option value="${p}">${p}</option>`);
+    }
+
+    function autoFillCrewData(){
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!callSign) return;
+      document.getElementById('crew_lead').value = "كبير مسعفين " + callSign;
+      document.getElementById('crew_assistants').value = "مساعد 1, مساعد 2";
+    }
+
+    async function sendUnitsCheck(){
+      const date = document.getElementById('units_check_date').value;
+      const callSign = document.getElementById('unit_call_sign').value;
+      if(!date || !callSign) return showAlert('unitCheckAlert','error','يرجى تعبئة البيانات');
+      
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "التاريخ": date,
+        "الرمز": callSign,
+        "كبير المسعفين": document.getElementById('crew_lead').value,
+        "المساعدين": document.getElementById('crew_assistants').value,
+        "العهد": document.getElementById('received_custody').value
+      };
+      
+      const save = await saveToGoogleSheets('العهد الشخصية', [row]);
+      if(!save.success) return showAlert('unitCheckAlert','error','تعذر الحفظ');
+      showAlert('unitCheckAlert','success','تم الحفظ بنجاح');
+      openWhatsApp(`🆔 *العهد الشخصية*\n📅 ${date}\n📟 الرمز: ${callSign}\n👤 المسؤول: ${row["كبير المسعفين"]}`);
+    }
+
+    function updateDashboardAlerts(data){
+      const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
+      const respondingSectors = [...new Set(data.map(r => r.sector))];
+      const missing = sectors.filter(s => !respondingSectors.includes(s));
+      const alertEl = document.getElementById('missingSectorsAlert');
+      if(missing.length > 0){
+        alertEl.style.display = 'block';
+        alertEl.innerText = '⚠️ قطاعات لم ترسل استجابات بعد: ' + missing.join(' - ');
+      } else {
+        alertEl.style.display = 'none';
+      }
+    }
+
+
+    // Navigation System
+    function switchPanel(id){
+      console.log("Switching to:", id);
+      document.querySelectorAll('.panel').forEach(p => {
+        p.classList.remove('active');
+        p.style.display = 'none';
+      });
+      const target = document.getElementById(id);
+      if(target){
+        target.classList.add('active');
+        target.style.display = 'block';
+      }
+      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${id}"]`)?.classList.add('active');
+      window.scrollTo(0,0);
+    }
+
+    document.querySelectorAll('.nav li').forEach(li => {
+      li.onclick = function(){ switchPanel(this.getAttribute('data-target')); };
+    });
+
+    // Strategic Stock Toggle
+    function toggleShortage(){
+      const val = document.getElementById('has_shortage').value;
+      document.getElementById('shortage_box').style.display = (val === 'نعم') ? 'block' : 'none';
+    }
+
+    // WhatsApp Integration
+    function openWhatsApp(text){
+      const encoded = encodeURIComponent(text);
+      const url = /iPhone|iPad|iPod/.test(navigator.userAgent) ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
+      window.open(url, '_blank');
+    }
+
+    // Alert System
+    function showAlert(id, type, msg){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.style.display = 'block';
+      el.className = 'alert ' + (type === 'success' ? 'alert-success' : 'alert-error');
+      el.innerText = msg;
+      setTimeout(() => el.style.display = 'none', 5000);
+    }
+
+    // Data Submission (Generic)
+    async function saveToGoogleSheets(sheet, data){
+      try {
+        const resp = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({sheet, data})
+        });
+        return {success: true};
+      } catch(e) {
+        return {success: false};
+      }
+    }
+
+    // Specific Handlers
+    async function sendDailyPrep(){
+      const data = {
+        sector: document.getElementById('prep_sector').value,
+        vehicles: document.getElementById('prep_vehicles').value,
+        rapid: document.getElementById('prep_rapid').value
+      };
+      await saveToGoogleSheets('التحضير اليومي', [data]);
+      showAlert('prepAlert', 'success', 'تم الحفظ');
+      openWhatsApp(`✅ *تحضير يومي*
+📍 ${data.sector}
+🚑 مركبات: ${data.vehicles}
+🏍️ تدخل سريع: ${data.rapid}`);
+    }
+
+    async function sendStock(){
+      const data = {
+        loc: document.getElementById('stock_loc').value,
+        shortage: document.getElementById('has_shortage').value,
+        notes: document.getElementById('shortage_notes').value
+      };
+      await saveToGoogleSheets('الخزن الاستراتيجي', [data]);
+      showAlert('stockAlert', 'success', 'تم الحفظ');
+      openWhatsApp(`📦 *خزن استراتيجي*
+📍 ${data.loc}
+⚠️ نواقص: ${data.shortage}
+📝 ملاحظات: ${data.notes}`);
+    }
+
+    async function sendUnitsCheck(){
+      const data = {
+        unit: document.getElementById('unit_id').value,
+        lead: document.getElementById('crew_lead').value,
+        custody: document.getElementById('received_custody').value
+      };
+      await saveToGoogleSheets('العهد الشخصية', [data]);
+      showAlert('unitCheckAlert', 'success', 'تم الحفظ');
+      openWhatsApp(`🆔 *عهد شخصية*
+📟 الرمز: ${data.unit}
+👤 المسؤول: ${data.lead}
+📋 العهد: ${data.custody}`);
+    }
+
+    // Dashboard Auto-Update
+    setInterval(() => {
+      console.log("Updating Dashboard...");
+      // Here you would fetch real data and update KPIs
+    }, 60000);
+
     // Navigation System
     function switchPanel(id){
       console.log("Switching to:", id);
@@ -816,116 +1288,5 @@
       // Here you would fetch real data and update KPIs
     }, 60000);
 </script>
-<script>
-    // Navigation System
-    function switchPanel(id){
-      console.log("Switching to:", id);
-      document.querySelectorAll('.panel').forEach(p => {
-        p.classList.remove('active');
-        p.style.display = 'none';
-      });
-      const target = document.getElementById(id);
-      if(target){
-        target.classList.add('active');
-        target.style.display = 'block';
-      }
-      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
-      document.querySelector(`.nav li[data-target="${id}"]`)?.classList.add('active');
-      window.scrollTo(0,0);
-    }
-
-    document.querySelectorAll('.nav li').forEach(li => {
-      li.onclick = function(){ switchPanel(this.getAttribute('data-target')); };
-    });
-
-    // Strategic Stock Toggle
-    function toggleShortage(){
-      const val = document.getElementById('has_shortage').value;
-      document.getElementById('shortage_box').style.display = (val === 'نعم') ? 'block' : 'none';
-    }
-
-    // WhatsApp Integration
-    function openWhatsApp(text){
-      const encoded = encodeURIComponent(text);
-      const url = /iPhone|iPad|iPod/.test(navigator.userAgent) ? "whatsapp://send?text=" + encoded : "https://wa.me/?text=" + encoded;
-      window.open(url, '_blank');
-    }
-
-    // Alert System
-    function showAlert(id, type, msg){
-      const el = document.getElementById(id);
-      if(!el) return;
-      el.style.display = 'block';
-      el.className = 'alert ' + (type === 'success' ? 'alert-success' : 'alert-error');
-      el.innerText = msg;
-      setTimeout(() => el.style.display = 'none', 5000);
-    }
-
-    // Data Submission (Generic)
-    async function saveToGoogleSheets(sheet, data){
-      try {
-        const resp = await fetch(SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({sheet, data})
-        });
-        return {success: true};
-      } catch(e) {
-        return {success: false};
-      }
-    }
-
-    // Specific Handlers
-    async function sendDailyPrep(){
-      const data = {
-        sector: document.getElementById('prep_sector').value,
-        vehicles: document.getElementById('prep_vehicles').value,
-        rapid: document.getElementById('prep_rapid').value
-      };
-      await saveToGoogleSheets('التحضير اليومي', [data]);
-      showAlert('prepAlert', 'success', 'تم الحفظ');
-      openWhatsApp(`✅ *تحضير يومي*
-📍 ${data.sector}
-🚑 مركبات: ${data.vehicles}
-🏍️ تدخل سريع: ${data.rapid}`);
-    }
-
-    async function sendStock(){
-      const data = {
-        loc: document.getElementById('stock_loc').value,
-        shortage: document.getElementById('has_shortage').value,
-        notes: document.getElementById('shortage_notes').value
-      };
-      await saveToGoogleSheets('الخزن الاستراتيجي', [data]);
-      showAlert('stockAlert', 'success', 'تم الحفظ');
-      openWhatsApp(`📦 *خزن استراتيجي*
-📍 ${data.loc}
-⚠️ نواقص: ${data.shortage}
-📝 ملاحظات: ${data.notes}`);
-    }
-
-    async function sendUnitsCheck(){
-      const data = {
-        unit: document.getElementById('unit_id').value,
-        lead: document.getElementById('crew_lead').value,
-        custody: document.getElementById('received_custody').value
-      };
-      await saveToGoogleSheets('العهد الشخصية', [data]);
-      showAlert('unitCheckAlert', 'success', 'تم الحفظ');
-      openWhatsApp(`🆔 *عهد شخصية*
-📟 الرمز: ${data.unit}
-👤 المسؤول: ${data.lead}
-📋 العهد: ${data.custody}`);
-    }
-
-    // Dashboard Auto-Update
-    setInterval(() => {
-      console.log("Updating Dashboard...");
-      // Here you would fetch real data and update KPIs
-    }, 60000);
-</script>
-
-
 </body>
 </html>

@@ -1,3 +1,4 @@
+
 import re
 
 file_path = "/home/ubuntu/final_push_dir/haj/mina47.html"
@@ -8,7 +9,7 @@ with open(file_path, "r", encoding="utf-8") as f:
 # 1. Correct the activatePanel function definition
 # This regex looks for the function definition and captures its content
 # It's designed to be flexible to variations in whitespace and content within the function
-activate_panel_pattern = re.compile(r"""(function activatePanel\(targetId\)\{.*?window\.scrollTo\(\{top:0,behavior:\'smooth\'\}\);\s*\})""", re.DOTALL)
+activate_panel_pattern = re.compile(r"""function activatePanel\(targetId\)\{.*?window\.scrollTo\(\{top:0,behavior:\"smooth\"\}\);\s*\}""", re.DOTALL)
 
 # The correct activatePanel function
 correct_activate_panel_func = """    function activatePanel(targetId){ 
@@ -37,7 +38,7 @@ def fix_nav_items_onclick(match):
     # Extract the data-target value
     data_target = match.group(1)
     # Construct the correct onclick attribute
-    onclick_attr = f"onclick=\"activatePanel(\\\\\'{data_target}\\\\\\\\\\' )\""
+    onclick_attr = f"onclick=\"activatePanel(\\\\'{data_target}\\\\\\' )\""
     # Return the data-target and the new onclick attribute
     return f"data-target=\"{data_target}\" {onclick_attr}"
 
@@ -68,7 +69,7 @@ def fix_dom_listener(match):
         homePanel.style.display = \"block\";
         homePanel.classList.add(\"active\");
       }
-"""
+    """
     # Insert the logic right after the DOMContentLoaded opening brace
     return start + initial_logic + body
 

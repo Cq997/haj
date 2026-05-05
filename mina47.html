@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -399,6 +400,7 @@
 </head>
 <body>
 
+
 <button class="mobile-btn" id="mobileBtn"><i class="fas fa-bars"></i></button>
 
 <div class="layout">
@@ -501,11 +503,6 @@
         </div>
 
         <div class="dash-grid">
-
-          <div class="dash-card" style="grid-column: 1 / -1; background: #fff5f5; border: 1px solid #feb2b2;">
-            <h4 style="color: #c53030;"><i class="fas fa-exclamation-triangle"></i> قطاعات لم ترسل استجابات</h4>
-            <div id="missingSectorsList" style="font-weight: bold; padding: 10px;">جاري التحقق...</div>
-          </div>
 
           <!-- Sector Summary -->
           <div class="dash-card">
@@ -793,10 +790,10 @@
           <div class="section-title">ملخص الوضع الراهن</div>
           <div class="section-body grid-3">
             <div class="field"><label for="avg_response">متوسط زمن الاستجابة</label><input type="text" id="avg_response" placeholder="مثال: 10:09"></div>
-            <div class="field"><label for="echo_response">عدد بلاغات ECHO</label><input type="number" id="echo_response" min="0" value="0"></div>
+            <div class="field"><label for="echo_response">متوسط زمن استجابة ECHO</label><input type="text" id="echo_response" placeholder="مثال: 00:55"></div>
             <div class="field"><label for="total_cases">إجمالي البلاغات</label><input type="number" id="total_cases" min="0" value="0"></div>
-            <div class="field"><label for="active_teams">إجمالي عدد الفرق بما في ذلك التداخلية (اوفرلاب) والمدعمه</label><input type="number" id="active_teams" min="0" value="0"></div>
-            <div class="field"><label for="planned_teams">عدد الفرق الأساسية</label><input type="number" id="planned_teams" min="0" value="0"></div>
+            <div class="field"><label for="active_teams">عدد الفرق الفعالة</label><input type="number" id="active_teams" min="0" value="0"></div>
+            <div class="field"><label for="planned_teams">عدد الفرق المعتمدة</label><input type="number" id="planned_teams" min="0" value="0"></div>
           </div>
         </div>
 
@@ -884,10 +881,6 @@
             <div class="field">
               <label for="handover_special_response_count">عدد الاستجابة النوعية</label>
               <input type="number" id="handover_special_response_count" min="0" value="0">
-            </div>
-            <div class="field">
-              <label for="handover_rapid_intervention_count">عدد فرق التدخل السريع</label>
-              <input type="number" id="handover_rapid_intervention_count" min="0" value="0">
             </div>
           </div>
         </div>
@@ -1116,7 +1109,7 @@
         </div>
 
         <div class="section">
-          <div class="section-title">العهد الأساسية (العدد فقط)</div>
+          <div class="section-title">التشييك الطبي</div>
           <div class="section-body">
             <div class="table-wrap">
               <table>
@@ -1169,20 +1162,21 @@
         <div class="section">
           <div class="section-title">الأجهزة الطبية والمستهلكات</div>
           <div class="section-body">
-            <div class="field">
-              <label>هل يوجد نواقص طبية؟</label>
-              <select id="has_shortage" onchange="toggleShortageField()">
-                <option value="لا">لا</option>
-                <option value="نعم">نعم</option>
-              </select>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>الفئة</th>
+                    <th>الصنف</th>
+                    <th>الحالة</th>
+                    <th>الكمية الحالية</th>
+                  </tr>
+                </thead>
+                <tbody id="strategicTableBody"></tbody>
+              </table>
             </div>
-            <div id="shortage_field_wrap" class="hidden">
-              <div class="field">
-                <label>النواقص الطبية (اذكر عدد وأنواع الأصناف الناقصة)</label>
-                <textarea id="medical_shortages" placeholder="اذكر عدد وأنواع الأصناف الناقصة"></textarea>
-              </div>
-            </div>
-<div class="bullets-box">
+
+            <div class="bullets-box">
               <div class="field">
                 <label for="stock_notes">ملاحظات الخزن</label>
                 <textarea id="stock_notes" placeholder="اكتب كل ملاحظة في سطر مستقل"></textarea>
@@ -1475,7 +1469,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygXkrELNwv4GJ-2cUqqlJTuEB_j4CD93CnLkqojuK2bcJszUz1FnD5ECchgQ653qcdDg/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxzkS1GrOC4IBKYQCD2APoK-6iIcGngUikW7zXseLK6JgnQd_pBxA_gX8LgYyoNBS-n2w/exec';
 
     const deploymentPlanData = {
       "الجمرات": [
@@ -1534,8 +1528,7 @@
       }
     };
 
-    const medicalItemsData = ['جهاز لوكس', 'جهاز ميندري', 'جهاز لايف باك 15', 'جهاز اتصال لاسلكي', 'المسعف الالكتروني(تابلت)', 'جهاز قياس العلامات الحيوية'];
-    const oldMedicalItemsData = [
+    const medicalItemsData = [
       "جهاز لوكس","جهاز صدمات خارجي AED","جهاز تنفس صناعي","جهاز لايف باك","جهاز ميندري","جهاز قياس العلامات الحيوية",
       "جهاز قياس النبض ونسبة الأكسجين بالدم","جهاز قياس السكر بالدم","جهاز الشفط المتنقل الكهربائي","جهاز الدريل العظمي",
       "جهاز قياس الحرارة","سماعة طبية","مقص جراحي","ثاقب زجاج","كشاف ضوء","لوح بورد بلاستيكي طويل",
@@ -1591,11 +1584,6 @@
       document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
       document.getElementById(targetId)?.classList.add('active');
       window.scrollTo({top:0,behavior:'smooth'});
-    }
-
-    function toggleShortageDetails(){
-      const hasShortage = document.getElementById("has_shortage").value;
-      document.getElementById("shortage_details_container").style.display = (hasShortage === "نعم") ? "block" : "none";
     }
 
     function toggleQuickLinks(){
@@ -1717,16 +1705,6 @@ async function fetchDeploymentFromSheet(){
     const sectorSelect = document.getElementById('sector');
     const shiftTimeSelect = document.getElementById('shift_time');
 
-    
-    function fillUnitCheckTeamData(){
-      const sector = document.getElementById("units_check_sector").value;
-      const shift = document.getElementById("units_check_shift").value;
-      const team = teamsData?.[sector]?.[shift];
-      document.getElementById("ems_lead_display").value = team?.lead || "";
-      document.getElementById("assistants_display").value = (team?.assistants || []).filter(a => a).join(" - ") || "";
-    }
-    
-
     function fillTeamData(){
       const sector = sectorSelect.value;
       const shift = shiftTimeSelect.value;
@@ -1739,8 +1717,6 @@ async function fetchDeploymentFromSheet(){
     }
 
     sectorSelect.addEventListener('change', fillTeamData);
-    document.getElementById('units_check_sector').addEventListener('change', fillUnitCheckTeamData);
-    document.getElementById('units_check_shift').addEventListener('change', fillUnitCheckTeamData);
     shiftTimeSelect.addEventListener('change', fillTeamData);
 
     function clearDailyForm(){
@@ -1752,7 +1728,7 @@ async function fetchDeploymentFromSheet(){
         }
       });
 
-      ['operational_units','total_providers','employees_count','volunteers_count','vehicles_count','golf_count','walking_count','rapid_intervention_count'].forEach(id => {
+      ['operational_units','total_providers','employees_count','volunteers_count','vehicles_count','golf_count','walking_count'].forEach(id => {
         const el = document.getElementById(id);
         if(el) el.value = 0;
       });
@@ -1788,7 +1764,6 @@ async function fetchDeploymentFromSheet(){
         "المركبات": document.getElementById('vehicles_count').value || 0,
         "القولف": document.getElementById('golf_count').value || 0,
         "الراجلة": document.getElementById('walking_count').value || 0,
-        "مركبات التدخل السريع": document.getElementById('rapid_intervention_count').value || 0,
         "الملاحظات": document.getElementById('notes').value.trim() || 'لا توجد ملاحظات'
       };
 
@@ -1800,21 +1775,41 @@ async function fetchDeploymentFromSheet(){
 
       showAlert('dailyAlert','success','تم حفظ تقرير التحضير اليومي بنجاح');
 
-      let msg = `🚑 *منصة نطاق منى – التحضير اليومي* 🚑\n\n`;
-      msg += `📍 *القطاع:* ${row["القطاع"]}\n`;
-      msg += `🕘 *الفترة:* ${row["الفترة"]}\n`;
-      msg += `🕒 *التاريخ والوقت:* ${row["التاريخ والوقت"]}\n\n`;
-      msg += `👤 *كبير المسعفين:* ${row["كبير المسعفين"]}\n`;
-      msg += `👥 *المساعدون:* ${row["مساعد1"]} | ${row["مساعد2"]} | ${row["مساعد3"]} | ${row["مساعد4"]}\n\n`;
-      msg += `📊 *الإحصائيات:* \n`;
-      msg += `• الوحدات التشغيلية: ${row["الوحدات التشغيلية"]}\n`;
-      msg += `• إجمالي مقدمي الخدمة: ${row["مقدمي الخدمة"]}\n`;
-      msg += `• الموظفين: ${row["الموظفين"]} | المتطوعين: ${row["المتطوعين"]}\n\n`;
-      msg += `🚑 *توزيع الآليات:* \n`;
-      msg += `• المركبات الإسعافية: ${row["المركبات"]}\n`;
-      msg += `• عربات القولف: ${row["القولف"]}\n`;
-      msg += `• الفرق الراجلة: ${row["الراجلة"]}\n\n`;
-      msg += `📝 *الملاحظات:* \n${row["الملاحظات"]}`;
+      let msg = `🚑 *منصة نطاق منى – التحضير اليومي* 🚑
+
+`;
+      msg += `📍 *القطاع:* ${row["القطاع"]}
+`;
+      msg += `🕘 *الفترة:* ${row["الفترة"]}
+`;
+      msg += `🕒 *التاريخ والوقت:* ${row["التاريخ والوقت"]}
+
+`;
+      msg += `👤 *كبير المسعفين:* ${row["كبير المسعفين"]}
+`;
+      msg += `👥 *المساعدون:* ${row["مساعد1"]} | ${row["مساعد2"]} | ${row["مساعد3"]} | ${row["مساعد4"]}
+
+`;
+      msg += `📊 *الإحصائيات:* 
+`;
+      msg += `• الوحدات التشغيلية: ${row["الوحدات التشغيلية"]}
+`;
+      msg += `• إجمالي مقدمي الخدمة: ${row["مقدمي الخدمة"]}
+`;
+      msg += `• الموظفين: ${row["الموظفين"]} | المتطوعين: ${row["المتطوعين"]}
+
+`;
+      msg += `🚑 *توزيع الآليات:* 
+`;
+      msg += `• المركبات الإسعافية: ${row["المركبات"]}
+`;
+      msg += `• عربات القولف: ${row["القولف"]}
+`;
+      msg += `• الفرق الراجلة: ${row["الراجلة"]}
+
+`;
+      msg += `📝 *الملاحظات:* 
+${row["الملاحظات"]}`;
       openWhatsApp(msg);
     }
 
@@ -1856,11 +1851,13 @@ async function fetchDeploymentFromSheet(){
 
     function buildHandoverMessage(row){
       const sites = (row["مواقع الانتشار"] || 'لايوجد')
-        .split('\n')
+        .split('
+')
         .map(s => s.trim())
         .filter(Boolean)
         .map(s => `• ${s}`)
-        .join('\n') || '• لايوجد';
+        .join('
+') || '• لايوجد';
 
       const supportLines = [1,2,3].map(i => {
         const call = row[`نداء الفرقة ${i}`];
@@ -1877,7 +1874,9 @@ async function fetchDeploymentFromSheet(){
 - الإجراء المتبع: ${action || '-'}
 - العودة للخدمة: ${back || '-'}
 - لوحة المركبة: ${plate || '-'}`;
-      }).filter(Boolean).join('\n\n') || '• لايوجد';
+      }).filter(Boolean).join('
+
+') || '• لايوجد';
 
       let methaneSection = '';
       if(row["أحداث طارئة"] === 'نعم'){
@@ -1946,7 +1945,9 @@ ${supportLines}
 • ${row["ملخص الموارد المطلوبة وتوزيعها"] || 'لايوجد'}
 
 📌 *ملاحظات عامة عن المناوبة:*
-• ${(row["ملاحظات عامة عن المناوبة"] || 'لايوجد').split('\n').filter(Boolean).join('\n• ')}`;
+• ${(row["ملاحظات عامة عن المناوبة"] || 'لايوجد').split('
+').filter(Boolean).join('
+• ')}`;
     }
 
     async function sendHandoverMerged(){
@@ -2094,59 +2095,14 @@ ${supportLines}
       });
     }
 
-    
     async function sendUnitsCheck(){
-      const required = ['units_check_date','units_check_sector','units_check_shift'];
+      const required = ['units_check_date','units_check_time','units_check_sector','units_check_shift','unit_call_sign','unit_type','checker_has_third_party','crew1_name','crew2_name'];
       for(const id of required){
         const el = document.getElementById(id);
         if(!el || !String(el.value).trim()){
           showAlert('unitCheckAlert','error','يرجى تعبئة جميع الحقول الأساسية');
           return;
         }
-      }
-
-      const row = {
-        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
-        "تاريخ التشييك": document.getElementById('units_check_date').value,
-        "وقت التشييك": new Date().toLocaleTimeString('ar-SA'),
-        "القطاع": document.getElementById('units_check_sector').value,
-        "الفترة": document.getElementById('units_check_shift').value,
-        "كبير المسعفين": document.getElementById('ems_lead_display').value,
-        "المساعدين": document.getElementById('assistants_display').value,
-        "جهاز لوكس": document.getElementById('medical_count_0')?.value || '0',
-        "جهاز ميندري": document.getElementById('medical_count_1')?.value || '0',
-        "جهاز لايف باك 15": document.getElementById('medical_count_2')?.value || '0',
-        "جهاز اتصال لاسلكي": document.getElementById('medical_count_3')?.value || '0',
-        "المسعف الالكتروني(تابلت)": document.getElementById('medical_count_4')?.value || '0',
-        "جهاز قياس العلامات الحيوية": document.getElementById('medical_count_5')?.value || '0',
-        "ملاحظات عامة": document.getElementById('units_check_notes').value.trim() || 'لا توجد ملاحظات'
-      };
-
-      const save = await saveToGoogleSheets('نموذج العهد الشخصية للقطاعات', [row]);
-      if(!save.success){
-        showAlert('unitCheckAlert','error','تعذر حفظ بيانات العهد');
-        return;
-      }
-
-      showAlert('unitCheckAlert','success','تم حفظ نموذج العهد بنجاح');
-
-      let msg = `🩺 *نموذج العهد الشخصية للقطاعات* 🩺\n\n`;
-      msg += `📍 *القطاع:* ${row["القطاع"]}\n`;
-      msg += `🕘 *المناوبة:* ${row["الفترة"]}\n`;
-      msg += `📅 *التاريخ:* ${row["تاريخ التشييك"]}\n\n`;
-      msg += `👤 *كبير المسعفين:* ${row["كبير المسعفين"]}\n`;
-      msg += `👥 *المساعدين:* ${row["المساعدين"]}\n\n`;
-      msg += `✅ *العهد:* \n`;
-      msg += `• جهاز لوكس: ${row["جهاز لوكس"]}\n`;
-      msg += `• جهاز ميندري: ${row["جهاز ميندري"]}\n`;
-      msg += `• جهاز لايف باك 15: ${row["جهاز لايف باك 15"]}\n`;
-      msg += `• جهاز اتصال لاسلكي: ${row["جهاز اتصال لاسلكي"]}\n`;
-      msg += `• المسعف الالكتروني(تابلت): ${row["المسعف الالكتروني(تابلت)"]}\n`;
-      msg += `• جهاز قياس العلامات الحيوية: ${row["جهاز قياس العلامات الحيوية"]}\n\n`;
-      msg += `📝 *الملاحظات:* \n${row["ملاحظات عامة"]}`;
-      openWhatsApp(msg);
-    }
-
       }
 
       const hasThird = document.getElementById('checker_has_third_party').value;
@@ -2198,31 +2154,45 @@ ${supportLines}
 
       showAlert('unitCheckAlert','success','تم حفظ نموذج التشييك بنجاح');
 
-      let msg = `🩺 *نموذج تشييك الوحدة التشغيلية* 🩺\n\n`;
-      msg += `📍 *القطاع:* ${row["القطاع"]}\n`;
-      msg += `🕘 *الفترة:* ${row["الفترة"]}\n`;
-      msg += `📅 *التاريخ:* ${row["تاريخ التشييك"]} | ${row["وقت التشييك"]}\n\n`;
-      msg += `🚑 *بيانات الوحدة:* \n`;
-      msg += `• النداء: ${row["رمز/نداء الوحدة"]}\n`;
-      msg += `• النوع: ${row["نوع الوحدة التشغيلية"]}\n`;
-      msg += `• طرف ثالث: ${row["هل يوجد طرف ثالث"]}\n\n`;
-      msg += `👥 *الطاقم:* \n`;
-      msg += `• 1: ${row["اسم الطاقم 1"]}\n`;
-      msg += `• 2: ${row["اسم الطاقم 2"]}\n`;
-      msg += `• 3: ${row["اسم الطاقم 3"]}\n\n`;
-      msg += `✅ *حالة التشييك:* \n`;
-      msg += `• تشييك الوحدة: ${row["التشييك الخاص بالوحدة"]}\n`;
-      msg += `• التشييك الطبي: ${row["ملخص التشييك الطبي"]}\n\n`;
-      msg += `📝 *الملاحظات:* \n${row["ملاحظات عامة"]}`;
+      let msg = `🩺 *نموذج تشييك الوحدة التشغيلية* 🩺
+
+`;
+      msg += `📍 *القطاع:* ${row["القطاع"]}
+`;
+      msg += `🕘 *الفترة:* ${row["الفترة"]}
+`;
+      msg += `📅 *التاريخ:* ${row["تاريخ التشييك"]} | ${row["وقت التشييك"]}
+
+`;
+      msg += `🚑 *بيانات الوحدة:* 
+`;
+      msg += `• النداء: ${row["رمز/نداء الوحدة"]}
+`;
+      msg += `• النوع: ${row["نوع الوحدة التشغيلية"]}
+`;
+      msg += `• طرف ثالث: ${row["هل يوجد طرف ثالث"]}
+
+`;
+      msg += `👥 *الطاقم:* 
+`;
+      msg += `• 1: ${row["اسم الطاقم 1"]}
+`;
+      msg += `• 2: ${row["اسم الطاقم 2"]}
+`;
+      msg += `• 3: ${row["اسم الطاقم 3"]}
+
+`;
+      msg += `✅ *حالة التشييك:* 
+`;
+      msg += `• تشييك الوحدة: ${row["التشييك الخاص بالوحدة"]}
+`;
+      msg += `• التشييك الطبي: ${row["ملخص التشييك الطبي"]}
+
+`;
+      msg += `📝 *الملاحظات:* 
+${row["ملاحظات عامة"]}`;
       openWhatsApp(msg);
     }
-
-    
-    function toggleShortageField(){
-      const hasShortage = document.getElementById("has_shortage").value;
-      document.getElementById("shortage_field_wrap").classList.toggle("hidden", hasShortage === "لا");
-    }
-    
 
     function buildStrategicTable(){
       const body = document.getElementById('strategicTableBody');
@@ -2245,51 +2215,17 @@ ${supportLines}
       });
     }
 
-    
     async function sendStrategicStock(){
       const date = document.getElementById('stock_date').value;
       const time = document.getElementById('stock_time').value;
       const checker = document.getElementById('stock_checker').value.trim();
       const location = document.getElementById('stock_location').value.trim();
       const notes = document.getElementById('stock_notes').value.trim();
-      const hasShortage = document.getElementById('has_shortage').value;
-      const shortages = document.getElementById('medical_shortages').value.trim();
 
       if(!date || !time || !checker || !location){
         showAlert('stockAlert','error','يرجى تعبئة البيانات الأساسية');
         return;
       }
-
-      const row = {
-          "وقت الحفظ": new Date().toLocaleString('ar-SA'),
-          "تاريخ التشييك": date,
-          "وقت التشييك": time,
-          "القائم بالتشييك": checker,
-          "موقع الخزن": location,
-          "هل يوجد نواقص": hasShortage,
-          "النواقص الطبية": shortages || 'لا يوجد',
-          "ملاحظات": notes || '-'
-      };
-
-      const save = await saveToGoogleSheets('الخزن الاستراتيجي', [row]);
-      if(!save.success){
-        showAlert('stockAlert','error','تعذر حفظ بيانات الخزن');
-        return;
-      }
-
-      showAlert('stockAlert','success','تم حفظ نموذج الخزن الاستراتيجي بنجاح');
-
-      let msg = `📦 *تقرير الخزن الاستراتيجي*\n\n`;
-      msg += `📅 التاريخ: ${date}\n⏰ الوقت: ${time}\n👤 القائم بالتشييك: ${checker}\n📍 الموقع: ${location}\n`;
-      msg += `❓ هل يوجد نواقص: ${hasShortage}\n`;
-      if(hasShortage === 'نعم') {
-          msg += `⚠️ النواقص: ${shortages}\n`;
-      }
-      if(notes) msg += `📝 ملاحظات: ${notes}\n`;
-      
-      openWhatsApp(msg);
-    }
-
 
       let shortageFound = false;
 
@@ -2321,9 +2257,16 @@ ${supportLines}
       if(shortageFound) showAlert('stockAlert','error','تم الحفظ مع تنبيه: يوجد نقص في بعض الأصناف');
       else showAlert('stockAlert','success','تم حفظ نموذج الخزن الاستراتيجي بنجاح');
 
-      let msg = `📦 تقرير الخزن الاستراتيجي\n\n`;
-      msg += `📅 ${date}\n⏰ ${time}\n👤 ${checker}\n📍 ${location}\n`;
-      if(shortageFound) msg += `\n⚠ يوجد نقص في بعض الأصناف`;
+      let msg = `📦 تقرير الخزن الاستراتيجي
+
+`;
+      msg += `📅 ${date}
+⏰ ${time}
+👤 ${checker}
+📍 ${location}
+`;
+      if(shortageFound) msg += `
+⚠ يوجد نقص في بعض الأصناف`;
       openWhatsApp(msg);
     }
 
@@ -2600,31 +2543,48 @@ const items = data.filter(d =>
       // تحديث الداشبورد والخريطة ديناميكياً بعد الحفظ
       setTimeout(() => {
         updateDashboard();
-    setInterval(updateDashboard, 60000);
         updateMapWithDeploymentData();
       }, 1000);
 
-      let msg = `📍 *خطة الانتشار - نطاق منى* 📍\n\n`;
-      msg += `📍 *القطاع:* ${sector}\n`;
-      msg += `🕘 *العرض الزمني:* ${shift}\n`;
-      msg += `📅 *التاريخ:* ${date} | ${time}\n\n`;
-      msg += `👤 *مدخل البيانات:* ${entryName} (${role})\n`;
-      msg += `👨‍⚕️ *كبير المسعفين المناوب:* ${lead}\n`;
-      msg += `👥 *المساعدون:* ${autoAssistants}\n\n`;
-      msg += `📋 *ملخص الانتشار:* \n`;
-      msg += `• إجمالي نقاط الانتشار: ${rows.length}\n`;
+      let msg = `📍 *خطة الانتشار - نطاق منى* 📍
+
+`;
+      msg += `📍 *القطاع:* ${sector}
+`;
+      msg += `🕘 *العرض الزمني:* ${shift}
+`;
+      msg += `📅 *التاريخ:* ${date} | ${time}
+
+`;
+      msg += `👤 *مدخل البيانات:* ${entryName} (${role})
+`;
+      msg += `👨‍⚕️ *كبير المسعفين المناوب:* ${lead}
+`;
+      msg += `👥 *المساعدون:* ${autoAssistants}
+
+`;
+      msg += `📋 *ملخص الانتشار:* 
+`;
+      msg += `• إجمالي نقاط الانتشار: ${rows.length}
+`;
       
       const statusCounts = rows.reduce((acc, r) => {
         acc[r["الحالة"]] = (acc[r["الحالة"]] || 0) + 1;
         return acc;
       }, {});
       
-      msg += `• جاهزة: ${statusCounts["جاهز"] || 0}\n`;
-      msg += `• مدعمة: ${statusCounts["مدعم"] || 0}\n`;
-      msg += `• خارج الخدمة: ${statusCounts["خارج الخدمة"] || 0}\n`;
-      msg += `• متعطلة: ${statusCounts["متعطلة"] || 0}\n`;
+      msg += `• جاهزة: ${statusCounts["جاهز"] || 0}
+`;
+      msg += `• مدعمة: ${statusCounts["مدعم"] || 0}
+`;
+      msg += `• خارج الخدمة: ${statusCounts["خارج الخدمة"] || 0}
+`;
+      msg += `• متعطلة: ${statusCounts["متعطلة"] || 0}
+`;
 
-      if(notes) msg += `\n📝 *ملاحظات:* \n${notes}`;
+      if(notes) msg += `
+📝 *ملاحظات:* 
+${notes}`;
       openWhatsApp(msg);
     }
 
@@ -2804,22 +2764,37 @@ ${row["ملاحظات إضافية"]}
       // تحديث الداشبورد بالبيانات الجديدة
       updateSupportSummary();
       
-      let msg = `🤝 *خطة الدعم - نطاق منى* 🤝\n\n`;
-      msg += `📅 *التاريخ:* ${date} | ${time}\n`;
-      msg += `👥 *عدد الفرق:* ${teamsCount}\n`;
-      msg += `🔄 *نوع التدعيم:* ${type === 'داخل_النطاق' ? 'داخل النطاق' : 'خارج النطاق'}\n\n`;
+      let msg = `🤝 *خطة الدعم - نطاق منى* 🤝
+
+`;
+      msg += `📅 *التاريخ:* ${date} | ${time}
+`;
+      msg += `👥 *عدد الفرق:* ${teamsCount}
+`;
+      msg += `🔄 *نوع التدعيم:* ${type === 'داخل_النطاق' ? 'داخل النطاق' : 'خارج النطاق'}
+
+`;
       
       if (type === 'داخل_النطاق') {
-        msg += `📤 *من القطاع:* ${document.getElementById('support_from_sector').value}\n`;
-        msg += `📥 *إلى القطاع:* ${document.getElementById('support_to_sector').value}\n`;
+        msg += `📤 *من القطاع:* ${document.getElementById('support_from_sector').value}
+`;
+        msg += `📥 *إلى القطاع:* ${document.getElementById('support_to_sector').value}
+`;
       } else {
-        msg += `📤 *من النطاق:* ${document.getElementById('support_from_zone').value}\n`;
-        msg += `📥 *إلى النطاق:* ${document.getElementById('support_to_zone').value}\n`;
+        msg += `📤 *من النطاق:* ${document.getElementById('support_from_zone').value}
+`;
+        msg += `📥 *إلى النطاق:* ${document.getElementById('support_to_zone').value}
+`;
       }
       
-      msg += `⏰ *وقت الحضور:* ${arrivalTime}\n`;
-      msg += `👤 *مدخل البيانات:* ${entryName}\n`;
-      if (notes) msg += `\n📝 *ملاحظات:* \n${notes}\n`;
+      msg += `⏰ *وقت الحضور:* ${arrivalTime}
+`;
+      msg += `👤 *مدخل البيانات:* ${entryName}
+`;
+      if (notes) msg += `
+📝 *ملاحظات:* 
+${notes}
+`;
       
       openWhatsApp(msg);
       clearSupportPlanForm();
@@ -3178,12 +3153,6 @@ function updateDashboard(data){
   document.getElementById('kpi_oos').textContent = oos;
   document.getElementById('kpi_broken').textContent = broken;
 
-  // Missing Sectors
-  const respondedSectors = new Set(data.map(d => d.sector));
-  const missingSectors = sectors.filter(s => !respondedSectors.has(s));
-  const missingEl = document.getElementById('missingSectorsList');
-  if(missingEl) missingEl.innerHTML = missingSectors.length ? missingSectors.join(' - ') : 'الكل أرسل';
-
   // Sector Table
   const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
   const sectorBody = document.querySelector('#dashSectorTable tbody');
@@ -3370,7 +3339,7 @@ async function loadLiveDeploymentData(){
 loadLiveDeploymentData();
 
 // تحديث تلقائي كل 3 دقائق
-setInterval(loadLiveDeploymentData, 60000);
+setInterval(loadLiveDeploymentData, 180000);
 
 /* لتحميل النقاط الافتراضية للقطاع المختار */
 function loadDefaultDeploymentPoints(){
@@ -4307,6 +4276,7 @@ const DEPLOYMENT_POINTS = {
   }
 };
 </script>
+
 
 
 </body>

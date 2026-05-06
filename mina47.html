@@ -1548,7 +1548,8 @@
 
     mobileBtn.addEventListener('click', () => sidebar.classList.toggle('active'));
 
-    // دالة تفعيل اللوحات    function activatePanel(targetId) {
+    // دالة تفعيل اللوحات
+    function activatePanel(targetId) {
       console.log("تفعيل اللوحة:", targetId);
       
       // 1. إخفاء جميع اللوحات
@@ -1568,8 +1569,10 @@
         // تهيئة الخريطة إذا كانت اللوحة هي لوحة الخريطة أو الرئيسية
         if ((targetId === 'mapsPanel' || targetId === 'homePanel') && typeof mapInstance !== 'undefined') {
           setTimeout(() => { 
-            mapInstance.invalidateSize(); 
-            console.log("تم تحديث حجم الخريطة");
+            if (typeof mapInstance !== 'undefined') {
+              mapInstance.invalidateSize(); 
+              console.log("تم تحديث حجم الخريطة");
+            }
           }, 400);
         }
       } else {
@@ -1585,12 +1588,9 @@
       });
       
       // 4. إغلاق القائمة الجانبية في الجوال
-      const sidebar = document.getElementById('sidebar');
-      if (sidebar && window.innerWidth <= 992) {
-        sidebar.classList.remove('active');
-      }
-    }<= 1180) {
-        sidebar.classList.remove('active');
+      const sidebarElem = document.getElementById('sidebar');
+      if (sidebarElem && window.innerWidth <= 992) {
+        sidebarElem.classList.remove('active');
       }
     }
     

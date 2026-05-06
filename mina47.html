@@ -2305,6 +2305,39 @@ ${supportLines}
     }
 
     // Function to toggle medical shortages field
+    // Function to build the strategic stock table structure
+    function buildStrategicTable() {
+      const tableBody = document.getElementById('strategicTableBody');
+      if (!tableBody) return;
+      tableBody.innerHTML = '';
+      populateStrategicStockTable();
+    }
+
+    // Function to populate the strategic stock table with items
+    function populateStrategicStockTable() {
+      const tableBody = document.getElementById('strategicTableBody');
+      if (!tableBody) return;
+      
+      stockItems.forEach((item, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.category}</td>
+          <td>${item.item}</td>
+          <td>
+            <select id="stock_status_${index}" class="form-control">
+              <option value="متوفر">متوفر</option>
+              <option value="يوجد نقص">يوجد نقص</option>
+              <option value="غير متوفر">غير متوفر</option>
+            </select>
+          </td>
+          <td>
+            <input type="number" id="stock_current_${index}" class="form-control" placeholder="0" min="0">
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
     function toggleMedicalShortages(){
       const hasShortage = document.getElementById('stock_has_shortage').value;
       const wrap = document.getElementById('medicalShortagesWrap');

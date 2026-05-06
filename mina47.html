@@ -1044,6 +1044,8 @@
               <label for="personal_covenant_data_entry_name">اسم مدخل البيانات</label>
               <input type="text" id="personal_covenant_data_entry_name">
             </div>
+
+
           </div>
         </div>
 
@@ -1506,7 +1508,7 @@
     };
 
     const medicalItemsData = [
-      "جهاز لوكس","جهاز صدمات خارجي AED","جهاز تنفس صناعي","جهاز لايف باك","جهاز ميندري","جهاز قياس العلامات الحيوية",
+      "جهاز لوكس","Mindray","Lifepak 15","جهاز قياس علامات الحيوية","جهاز اتصال لاسلكي","جهاز مسف إلكتروني تابلت","اخرى اذكر","جهاز صدمات خارجي AED","جهاز تنفس صناعي","جهاز لايف باك","جهاز ميندري",
       "جهاز قياس النبض ونسبة الأكسجين بالدم","جهاز قياس السكر بالدم","جهاز الشفط المتنقل الكهربائي","جهاز الدريل العظمي",
       "جهاز قياس الحرارة","سماعة طبية","مقص جراحي","ثاقب زجاج","كشاف ضوء","لوح بورد بلاستيكي طويل",
       "نقالة طي","سكوب","سرير","كرسي الدرج","جبائر شد للفخذ","قاطع خواتم","حقيبة إسعافية بكامل ملحقاتها"
@@ -1604,10 +1606,38 @@
     
     // جعل الدالة متاحة عالمياً
     window.activatePanel = activatePanel;
+    
+    // ربط أحداث النقر عند تحميل الصفحة
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.nav li[data-target]').forEach(item => {
+          item.addEventListener('click', function() {
+            const target = this.getAttribute('data-target');
+            if (target && window.activatePanel) {
+              window.activatePanel(target);
+            }
+          });
+        });
+      });
+    } else {
+      document.querySelectorAll('.nav li[data-target]').forEach(item => {
+        item.addEventListener('click', function() {
+          const target = this.getAttribute('data-target');
+          if (target && window.activatePanel) {
+            window.activatePanel(target);
+          }
+        });
+      });
+    }
 
     function toggleShortageDetails(){
       const hasShortage = document.getElementById("has_shortage").value;
       document.getElementById("shortage_details_container").style.display = (hasShortage === "نعم") ? "block" : "none";
+    }
+
+    function toggleMedicalShortages(){
+      const hasShortage = document.getElementById("stock_has_shortage").value;
+      document.getElementById("medicalShortagesWrap").style.display = (hasShortage === "نعم") ? "block" : "none";
     }
 
     function toggleQuickLinks(){
@@ -2081,13 +2111,7 @@ ${supportLines}
         row.innerHTML = `
           <td>${item}</td>
           <td>
-            <select id="medical_status_${index}">
-              <option value="متوفر">متوفر</option>
-              <option value="غير متوفر">غير متوفر</option>
-            </select>
-          </td>
-          <td><input type="number" id="medical_count_${index}" min="0" value="0" class="compact-number"></td>
-          <td><input type="text" id="medical_note_${index}" placeholder="ملاحظات"></td>
+            <select id="medical_status_${index}"laceholder="ملاحظات"></td>
         `;
         medicalBody.appendChild(row);
       });
@@ -2107,7 +2131,7 @@ ${supportLines}
       const tableBody = document.getElementById('personalCovenantTableBody');
       for (let i = 0; i < tableBody.rows.length; i++) {
         const row = tableBody.rows[i];
-        const itemName = row.cells[0].querySelector('input').value.trim();
+        const itemName = row.cells[0].querySelector('select').value.trim();
         const quantity = row.cells[1].querySelector('input').value.trim();
         const status = row.cells[2].querySelector('select').value;
         const notes = row.cells[3].querySelector('textarea').value.trim();
@@ -2227,15 +2251,8 @@ ${supportLines}
       document.getElementById("personal_covenant_data_entry_name").value = "";
       hideAlert("personalCovenantAlert");
     }
-              <option value="غير متوفر">غير متوفر</option>
-              <option value="يوجد نقص">يوجد نقص</option>
-            </select>
-          </td>
-          <td><input type="number" id="stock_current_${index}" min="0" value="0" class="compact-number"></td>
-        `;
-        body.appendChild(row);
-      });
-    }
+
+
 
     async function sendStrategicStock(){
       const date = document.getElementById('stock_date').value;
@@ -2295,6 +2312,7 @@ ${supportLines}
       }
       openWhatsApp(msg);
       clearStrategicStockForm();
+    }
 
     // Function to clear the strategic stock form
     function clearStrategicStockForm() {
@@ -3204,13 +3222,13 @@ function resetDashboardFilters(){
 
 function updateDashboard(data){
   // KPIs
-  const total = 148; // Fixed total points
+  const total = data.length; // Dynamic total points
   const ready = data.filter(d => d.status === 'جاهزة' || d.status === 'جاهز').reduce((sum, pt) => sum + (parseInt(pt.teams) || 1), 0);
   const supported = data.filter(d => d.status === 'مدعمة' || d.status === 'مدعم').reduce((sum, pt) => sum + (parseInt(pt.teams) || 1), 0);
   const oos = data.filter(d => d.status === 'خارج الخدمة').reduce((sum, pt) => sum + (parseInt(pt.teams) || 1), 0);
   const broken = data.filter(d => d.status === 'متعطلة' || d.status === 'موقوف').reduce((sum, pt) => sum + (parseInt(pt.teams) || 1), 0);
 
-  document.getElementById('kpi_total').textContent = 148;
+  document.getElementById('kpi_total').textContent = total;
   document.getElementById('kpi_ready').textContent = ready;
   document.getElementById('kpi_supported').textContent = supported;
   document.getElementById('kpi_oos').textContent = oos;
@@ -3287,7 +3305,7 @@ function updateDashboard(data){
       <i class="fas fa-check-circle"></i> تم تحديث البيانات
     </div>
     <div style="font-size:.78rem;color:var(--muted);margin-top:4px">
-      ${new Date().toLocaleString('ar-SA')} | إجمالي 148 نقطة   </div>
+      ${new Date().toLocaleString('ar-SA')} | إجمالي ${total} نقطة   </div>
   `;
 }
 
@@ -3380,20 +3398,38 @@ async function updateSupportSummary() {
 async function loadLiveDeploymentData(){
   try {
     const data = await fetchDeploymentFromSheet();
+    // نبدأ دائماً بالنقاط الثابتة الـ 148
+    let mergedData = staticDeploymentPoints.map(p => ({...p}));
+
     if(data && data.length > 0){
-      liveDeploymentData = data.map(d => ({
-        id: d["الرمز"] || d["اسم النقطة"] || '',
-        sector: d["القطاع"] || '',
-        type: d["نوع الآلية"] || d["الالية المشغلة بالنقطة"] || '',
-        teams: parseInt(d["عدد الفرق الفعلي"] || d["عدد الفرق بالنقطة"] || 1),
-        lat: parseFloat(d["Latitude"] || 0),
-        lng: parseFloat(d["Longitude"] || 0),
-        status: d["الحالة"] || 'جاهز',
-        shift: d["مناوبة النقطة"] || d["العرض الزمني"] || 'الصباحية'
-      })).filter(d => d.lat && d.lng);
+      data.forEach(livePt => {
+        const liveId = livePt["الرمز"] || livePt["اسم النقطة"];
+        const index = mergedData.findIndex(p => p.id === liveId);
+        if(index !== -1){
+          // تحديث النقطة الموجودة ببيانات الشيت
+          mergedData[index].status = livePt["الحالة"] || mergedData[index].status;
+          mergedData[index].teams = parseInt(livePt["عدد الفرق الفعلي"] || livePt["عدد الفرق بالنقطة"] || mergedData[index].teams);
+          mergedData[index].type = livePt["نوع الآلية"] || livePt["الالية المشغلة بالنقطة"] || mergedData[index].type;
+          mergedData[index].shift = livePt["مناوبة النقطة"] || livePt["العرض الزمني"] || mergedData[index].shift;
+        } else if(liveId) {
+          // إضافة نقطة جديدة إذا لم تكن موجودة في الـ 148 (نقاط إضافية)
+          mergedData.push({
+            id: liveId,
+            sector: livePt["القطاع"] || '',
+            type: livePt["نوع الآلية"] || livePt["الالية المشغلة بالنقطة"] || '',
+            teams: parseInt(livePt["عدد الفرق الفعلي"] || livePt["عدد الفرق بالنقطة"] || 1),
+            lat: parseFloat(livePt["Latitude"] || 0),
+            lng: parseFloat(livePt["Longitude"] || 0),
+            status: livePt["الحالة"] || 'جاهز',
+            shift: livePt["مناوبة النقطة"] || livePt["العرض الزمني"] || 'الصباحية'
+          });
+        }
+      });
     }
+    liveDeploymentData = mergedData;
   } catch(e) {
-    console.log('استخدام البيانات الثابتة:', e);
+    console.log('استخدام البيانات الثابتة بسبب خطأ:', e);
+    liveDeploymentData = [...staticDeploymentPoints];
   }
   updateDashboard(liveDeploymentData);
   if(mapInstance) renderMapMarkers(liveDeploymentData);

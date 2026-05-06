@@ -2656,10 +2656,9 @@ const items = data.filter(d =>
       
       // تحديث الداشبورد والخريطة ديناميكياً بعد الحفظ
       setTimeout(() => {
-        updateDashboard();
-    setInterval(updateDashboard, 60000);
-        updateMapWithDeploymentData();
-      }, 1000);
+        loadLiveDeploymentData();
+        updateSupportSummary();
+      }, 500);
 
       let msg = `📍 *خطة الانتشار - نطاق منى* 📍\n\n`;
       msg += `📍 *القطاع:* ${sector}\n`;
@@ -3567,9 +3566,8 @@ function loadDefaultDeploymentPoints(){
   
   showAlert('deploymentAlert','success',`تم تحميل ${sectorPoints.length} نقطة بنجاح لقطاع ${sector}`);
 }
-</script>
-<script>
-const DEPLOYMENT_POINTS = {
+
+var DEPLOYMENT_POINTS = {
   "MH1": {
     "sector": "الجمرات",
     "unit_type": "مركبة اسعافية",
@@ -4459,7 +4457,7 @@ const DEPLOYMENT_POINTS = {
     "lng": 39.8986349
   }
 };
-</script>
+
 
 
 </body>

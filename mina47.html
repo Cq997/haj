@@ -3105,6 +3105,54 @@ function getTypeIcon(type){
   return '📍';
 }
 
+// تحديد المناوبة الحالية (صباحية/مسائية)
+function getCurrentShift() {
+  const now = new Date();
+  const hours = now.getHours();
+  // افتراض المناوبة الصباحية من 6 صباحًا إلى 6 مساءً (18:00)
+  // والمناوبة المسائية من 6 مساءً إلى 6 صباحًا
+  if (hours >= 6 && hours < 18) {
+    return "الصباحية";
+  } else {
+    return "المسائية";
+  }
+}
+
+// الحصول على بداية ونهاية الفترة الزمنية للمناوبة الحالية
+function getShiftPeriod(shift) {
+  const now = new Date();
+  let startHour, endHour;
+
+  if (shift === "الصباحية") {
+    startHour = 6;
+    endHour = 18;
+  } else { // المسائية
+    startHour = 18;
+    endHour = 6; // اليوم التالي
+  }
+
+  const startDate = new Date(now);
+  startDate.setHours(startHour, 0, 0, 0);
+
+  const endDate = new Date(now);
+  endDate.setHours(endHour, 0, 0, 0);
+
+  // إذا كانت المناوبة المسائية تمتد لليوم التالي
+  if (shift === "المسائية" && endHour < startHour) {
+    endDate.setDate(endDate.getDate() + 1);
+  }
+
+  // إذا كانت المناوبة الصباحية بدأت في اليوم السابق (مثلاً، الساعة 6 صباحًا اليوم ولكن الوقت الحالي قبل 6 صباحًا)
+  if (shift === "الصباحية" && now < startDate) {
+    startDate.setDate(startDate.getDate() - 1);
+    endDate.setDate(endDate.getDate() - 1);
+  }
+
+  return { start: startDate, end: endDate };
+}
+
+// ---
+
 /* ─── تهيئة الخريطة ─── */
 function initMap(){
   if(mapInstance) {
@@ -3348,9 +3396,17 @@ async function updateSupportSummary() {
       return;
     }
 
+    const currentShift = getCurrentShift();
+    const { start: shiftStartTime, end: shiftEndTime } = getShiftPeriod(currentShift);
+
+    const filteredSupportData = result.data.filter(row => {
+      const rowDate = new Date(row['التاريخ'] + ' ' + (row['الوقت'] || '00:00'));
+      return rowDate >= shiftStartTime && rowDate < shiftEndTime;
+    });
+
     // تجميع البيانات حسب القطاع/النطاق والتاريخ والفترة
     const supportMap = {};
-    result.data.forEach(row => {
+    filteredSupportData.forEach(row => {
       if (!row) return;
       const type = row['النوع'] || (row['نوع التدعيم'] === 'داخل_النطاق' ? 
         (row['القطاع المدعم له'] || 'بين القطاعات') : 
@@ -3373,7 +3429,7 @@ async function updateSupportSummary() {
     });
 
     // عرض البيانات في الجدول
-    tbody.innerHTML = '';
+    tbody.innerHTML = "";
     const items = Object.values(supportMap).slice(0, 10);
     if (items.length === 0) {
       tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم -</td></tr>';
@@ -3453,6 +3509,12 @@ async function loadLiveDeploymentData(){
   console.log('✓ loadLiveDeploymentData completed. Data count:', liveDeploymentData.length);
   updateDashboard(liveDeploymentData);
   if(typeof mapInstance !== 'undefined' && mapInstance) renderMapMarkers(liveDeploymentData);
+
+  // تحديث الداشبورد والخريطة بشكل دوري كل 3 دقائق
+  setInterval(() => {
+    loadLiveDeploymentData();
+    updateSupportSummary();
+  }, 180000); // 3 دقائق
 }
 
 // تحميل البيانات عند بدء التشغيل بعد تحميل الصفحة بالكامل

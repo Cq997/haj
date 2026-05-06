@@ -1446,7 +1446,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbygXkrELNwv4GJ-2cUqqlJTuEB_j4CD93CnLkqojuK2bcJszUz1FnD5ECchgQ653qcdDg/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxFPfnVSIVVdpgZy25PUhFKjLnWt1JxVt_4Jtu94vz4BzbJBPGb5QTIJ1JA0n8o310jqw/exec';
 
     const deploymentPlanData = {
       "الجمرات": [
@@ -1548,12 +1548,12 @@
 
     mobileBtn.addEventListener('click', () => sidebar.classList.toggle('active'));
 
-    // دالة تفعيل اللوحات (Panels)
-    function activatePanel(targetId) {
+    // دالة تفعيل اللوحات    function activatePanel(targetId) {
       console.log("تفعيل اللوحة:", targetId);
       
       // 1. إخفاء جميع اللوحات
-      document.querySelectorAll('.panel').forEach(p => {
+      const panels = document.querySelectorAll('.panel');
+      panels.forEach(p => {
         p.style.display = 'none';
         p.classList.remove('active');
       });
@@ -1566,21 +1566,30 @@
         window.scrollTo({top: 0, behavior: 'smooth'});
         
         // تهيئة الخريطة إذا كانت اللوحة هي لوحة الخريطة أو الرئيسية
-        if ((targetId === 'mapPanel' || targetId === 'homePanel') && typeof mapInstance !== 'undefined') {
-          setTimeout(() => { mapInstance.invalidateSize(); }, 300);
+        if ((targetId === 'mapsPanel' || targetId === 'homePanel') && typeof mapInstance !== 'undefined') {
+          setTimeout(() => { 
+            mapInstance.invalidateSize(); 
+            console.log("تم تحديث حجم الخريطة");
+          }, 400);
         }
       } else {
         console.error("اللوحة غير موجودة:", targetId);
       }
       
-      // 3. تحديث حالة القائمة الجانبية
-      document.querySelectorAll('.nav li').forEach(li => li.classList.remove('active'));
-      const navItem = document.querySelector(`.nav li[data-target="${targetId}"]`);
-      if (navItem) navItem.classList.add('active');
+      // 3. تحديث القائمة الجانبية
+      document.querySelectorAll('.nav li').forEach(li => {
+        li.classList.remove('active');
+        if (li.getAttribute('data-target') === targetId) {
+          li.classList.add('active');
+        }
+      });
       
       // 4. إغلاق القائمة الجانبية في الجوال
       const sidebar = document.getElementById('sidebar');
-      if (sidebar && window.innerWidth <= 1180) {
+      if (sidebar && window.innerWidth <= 992) {
+        sidebar.classList.remove('active');
+      }
+    }<= 1180) {
         sidebar.classList.remove('active');
       }
     }

@@ -453,13 +453,8 @@
 
       <!-- Main Tabs: Dashboard / Map -->
       <div class="main-tabs">
-        <div style="display:flex; gap:10px;">
-          <button class="tab-btn active" onclick="switchMainTab('tabDashboard',this)"><i class="fas fa-chart-pie"></i> الداشبورد</button>
-          <button class="tab-btn" onclick="switchMainTab('tabMap',this)"><i class="fas fa-map-location-dot"></i> الخريطة التفاعلية</button>
-        </div>
-        <button class="btn btn-primary" onclick="loadLiveDeploymentData()" style="padding: 5px 15px; font-size: 0.8rem;">
-          <i class="fas fa-sync-alt"></i> تحديث البيانات
-        </button>
+        <button class="tab-btn active" onclick="switchMainTab('tabDashboard',this)"><i class="fas fa-chart-pie"></i> الداشبورد</button>
+        <button class="tab-btn" onclick="switchMainTab('tabMap',this)"><i class="fas fa-map-location-dot"></i> الخريطة التفاعلية</button>
       </div>
 
       <!-- ── Tab: Dashboard ── -->
@@ -1454,7 +1449,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxFPfnVSIVVdpgZy25PUhFKjLnWt1JxVt_4Jtu94vz4BzbJBPGb5QTIJ1JA0n8o310jqw/exec';
+    var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxFPfnVSIVVdpgZy25PUhFKjLnWt1JxVt_4Jtu94vz4BzbJBPGb5QTIJ1JA0n8o310jqw/exec';
 
     const deploymentPlanData = {
       "الجمرات": [
@@ -1841,14 +1836,14 @@ async function fetchDeploymentFromSheet(){
       msg += `🕒 *التاريخ والوقت:* ${row["التاريخ والوقت"]}\n\n`;
       msg += `👤 *كبير المسعفين:* ${row["كبير المسعفين"]}\n`;
       msg += `👥 *المساعدون:* ${row["مساعد1"]} | ${row["مساعد2"]} | ${row["مساعد3"]} | ${row["مساعد4"]}\n\n`;
-      msg += `📊 *الإحصائيات التشغيلية:* \n`;
-      msg += `🏢 الوحدات التشغيلية: ${row["الوحدات التشغيلية"]}\n`;
-      msg += `👨‍⚕️ إجمالي مقدمي الخدمة: ${row["مقدمي الخدمة"]}\n`;
-      msg += `👥 الموظفين: ${row["الموظفين"]} | 🤝 المتطوعين: ${row["المتطوعين"]}\n\n`;
+      msg += `📊 *الإحصائيات:* \n`;
+      msg += `• الوحدات التشغيلية: ${row["الوحدات التشغيلية"]}\n`;
+      msg += `• إجمالي مقدمي الخدمة: ${row["مقدمي الخدمة"]}\n`;
+      msg += `• الموظفين: ${row["الموظفين"]} | المتطوعين: ${row["المتطوعين"]}\n\n`;
       msg += `🚑 *توزيع الآليات:* \n`;
-      msg += `🚑 المركبات الإسعافية: ${row["المركبات"]}\n`;
-      msg += `⛳ عربات القولف: ${row["القولف"]}\n`;
-      msg += `🚶 الفرق الراجلة: ${row["الراجلة"]}\n\n`;
+      msg += `• المركبات الإسعافية: ${row["المركبات"]}\n`;
+      msg += `• عربات القولف: ${row["القولف"]}\n`;
+      msg += `• الفرق الراجلة: ${row["الراجلة"]}\n\n`;
       msg += `📝 *الملاحظات:* \n${row["الملاحظات"]}`;
       openWhatsApp(msg);
     }
@@ -1929,51 +1924,49 @@ async function fetchDeploymentFromSheet(){
 `;
       }
 
-       return `🔄 *نموذج تسليم مناوبة كبير المسعفين* 🔄
+      return `📋 *نموذج تسليم مناوبة كبير المسعفين* 📋
 
 📍 *القطاع:* ${row["القطاع"] || '-'}
 🕘 *نوع المناوبة:* ${row["نوع المناوبة"] || '-'}
 📅 *التاريخ:* ${row["التاريخ"] || '-'}
 ⏰ *الوقت:* من ${row["الوقت من"] || '-'} إلى ${row["الوقت إلى"] || '-'}
 
-📤 *كبير المسعفين المسلم:* ${row["كبير المسعفين المسلم"] || '-'}
-📥 *كبير المسعفين المستلم:* ${row["كبير المسعفين المستلم"] || '-'}
+👤 *كبير المسعفين المسلم:* ${row["كبير المسعفين المسلم"] || '-'}
+👤 *كبير المسعفين المستلم:* ${row["كبير المسعفين المستلم"] || '-'}
 👥 *المساعدون:* ${row["مساعد 1"]} | ${row["مساعد 2"]} | ${row["مساعد 3"]} | ${row["مساعد 4"]}
 
 📊 *ملخص الوضع الراهن:*
-⏱️ متوسط زمن الاستجابة: ${row["متوسط زمن الاستجابة"] || '0'}
-⏱️ متوسط زمن استجابة ECHO: ${row["متوسط زمن استجابة ECHO"] || '0'}
-📈 إجمالي البلاغات: ${row["إجمالي البلاغات"] || '0'}
-🚑 عدد الفرق الفعالة: ${row["عدد الفرق الفعالة"] || '0'} من أصل ${row["عدد الفرق المعتمدة"] || '0'}
+• متوسط زمن الاستجابة: ${row["متوسط زمن الاستجابة"] || '0'}
+• متوسط زمن استجابة ECHO: ${row["متوسط زمن استجابة ECHO"] || '0'}
+• إجمالي البلاغات: ${row["إجمالي البلاغات"] || '0'}
+• عدد الفرق الفعالة: ${row["عدد الفرق الفعالة"] || '0'} من أصل ${row["عدد الفرق المعتمدة"] || '0'}
 ${methaneSection}
 🚑 *الوحدات التشغيلية:*
-🚑 مركبات إسعافية: ${row["عدد مركبات الإسعاف"] || '0'}
-⛳ عربات قولف: ${row["عدد القولف"] || '0'}
-⚡ استجابة نوعية: ${row["عدد الاستجابة النوعية"] || '0'}
-✅ العاملة: ${row["العاملة"] || '0'} | 🅿️ الاحتياط: ${row["الاحتياط"] || '0'} | ❌ خارج الخدمة: ${row["الخارج عن الخدمة"] || '0'}
+• مركبات إسعافية: ${row["عدد مركبات الإسعاف"] || '0'}
+• قولف: ${row["عدد القولف"] || '0'}
+• استجابة نوعية: ${row["عدد الاستجابة النوعية"] || '0'}
 
-🛠️ *الدعم اللوجستي:*
-🔧 بلاغات الدعم: ${row["بلاغات الدعم اللوجستي"] || '0'}
-🔓 البلاغات المفتوحة: ${row["البلاغات المفتوحة"] || '0'}
+🚑 *المركبات والدعم اللوجستي:*
+• العاملة: ${row["العاملة"] || '0'}
+• الاحتياط: ${row["الاحتياط"] || '0'}
+• الخارج عن الخدمة: ${row["الخارج عن الخدمة"] || '0'}
+• بلاغات الدعم اللوجستي: ${row["بلاغات الدعم اللوجستي"] || '0'}
+• البلاغات المفتوحة: ${row["البلاغات المفتوحة"] || '0'}
 
 📍 *مواقع الانتشار:*
 ${sites}
 
-⚠️ *الوحدات المتعطلة:*
+🔧 *الوحدات المتعطلة ومواقعها:*
+• ${row["الوحدات المتعطلة ومواقعها"] || 'لايوجد'}
+
+🚚 *طلبات الدعم اللوجستي للمركبات:*
 ${supportLines}
 
-🌤️ *التحذيرات والملاحظات:*
-☁️ الجوية: ${row["التحذيرات الجوية"] || 'لايوجد'}
-🛡️ الأمنية: ${row["التحذيرات الأمنية"] || 'لايوجد'}
-🚫 مواقع خطرة: ${row["مواقع خطرة"] || 'لايوجد'}
-🩹 إصابات العاملين: ${row["إصابات العاملين"] || 'لايوجد'}
-
-📝 *ملخص الأحداث:*
-${row["ملخص الأحداث"] || 'لايوجد'}
-
-📝 *ملاحظات عامة:*
-${row["ملاحظات عامة عن المناوبة"] || 'لايوجد'}
-
+🛡️ *إحاطات الصحة والسلامة:*
+• التحذيرات الجوية: ${row["التحذيرات الجوية"] || 'لايوجد'}
+• التحذيرات الأمنية: ${row["التحذيرات الأمنية"] || 'لايوجد'}
+• مواقع خطرة: ${row["مواقع خطرة"] || 'لايوجد'}
+• إصابات العاملين: ${row["إصابات العاملين"] || 'لايوجد'}
 • إحاطات أخرى: ${row["إحاطات أخرى"] || 'لايوجد'}
 
 📝 *ملخص الأحداث:*
@@ -2179,9 +2172,9 @@ ${row["ملاحظات عامة عن المناوبة"] || 'لايوجد'}
       msg += `🕘 *الفترة:* ${row["الفترة"]}\n`;
       msg += `📅 *التاريخ:* ${row["تاريخ العهدة"]} | ${row["وقت العهدة"]}\n\n`;
       msg += `📝 *تفاصيل العهدة:* \n`;
-      msg += `🏷️ النوع: ${row["نوع العهدة"]}\n`;
-      msg += `🆔 رقم العهدة/المعرف: ${row["رقم العهدة/المعرف"]}\n\n`;
-      msg += `📦 *الأصناف المستلمة:* \n${covenantItems.map(item => `✅ ${item}`).join('\n')}\n\n`;
+      msg += `• النوع: ${row["نوع العهدة"]}\n`;
+      msg += `• رقم العهدة/المعرف: ${row["رقم العهدة/المعرف"]}\n\n`;
+      msg += `📦 *الأصناف:* \n${covenantItems.map(item => `• ${item}`).join('\n')}\n\n`;
       msg += `📝 *ملاحظات عامة:* \n${row["ملاحظات عامة"]}\n\n`;
       msg += `👨‍⚕️ *كبير المسعفين والمساعدين:* ${row["اسم كبير المسعفين والمساعدين"]}\n`;
       msg += `✍️ *مدخل البيانات:* ${row["اسم مدخل البيانات"]}`;
@@ -2313,15 +2306,10 @@ ${row["ملاحظات عامة عن المناوبة"] || 'لايوجد'}
       if(shortageFound) showAlert('stockAlert','error','تم الحفظ مع تنبيه: يوجد نقص في بعض الأصناف');
       else showAlert('stockAlert','success','تم حفظ نموذج الخزن الاستراتيجي بنجاح');
 
-      let msg = `📦 *تقرير الخزن الاستراتيجي* 📦\n\n`;
-      msg += `📅 *التاريخ:* ${date}\n`;
-      msg += `⏰ *الوقت:* ${time}\n`;
-      msg += `👤 *القائم بالتشييك:* ${checker}\n`;
-      msg += `📍 *موقع الخزن:* ${location}\n`;
+      let msg = `📦 تقرير الخزن الاستراتيجي\n\n`;
+      msg += `📅 ${date}\n⏰ ${time}\n👤 ${checker}\n📍 ${location}\n`;
       if(shortageFound) {
-        msg += `\n⚠️ *تنبيه: يوجد نقص في الأصناف التالية:* \n${medicalShortages}\n`;
-      } else {
-        msg += `\n✅ *جميع الأصناف متوفرة بحالة جيدة*\n`;
+        msg += `\n⚠ يوجد نقص في بعض الأصناف:\n${medicalShortages}`;
       }
       openWhatsApp(msg);
       clearStrategicStockForm();
@@ -2681,7 +2669,7 @@ const items = data.filter(d =>
       msg += `👨‍⚕️ *كبير المسعفين المناوب:* ${lead}\n`;
       msg += `👥 *المساعدون:* ${autoAssistants}\n\n`;
       msg += `📋 *ملخص الانتشار:* \n`;
-      msg += `🔢 إجمالي نقاط الانتشار: ${rows.length}\n`;
+      msg += `• إجمالي نقاط الانتشار: ${rows.length}\n`;
       
       const statusCounts = rows.reduce((acc, r) => {
         acc[r["الحالة"]] = (acc[r["الحالة"]] || 0) + 1;
@@ -2876,7 +2864,7 @@ ${row["ملاحظات إضافية"]}
       let msg = `🤝 *خطة الدعم - نطاق منى* 🤝\n\n`;
       msg += `📅 *التاريخ:* ${date} | ${time}\n`;
       msg += `👥 *عدد الفرق:* ${teamsCount}\n`;
-      msg += `🔄 *نوع التدعيم:* ${type === 'داخل_النطاق' ? '🔄 داخل النطاق' : '🌐 خارج النطاق'}\n\n`;
+      msg += `🔄 *نوع التدعيم:* ${type === 'داخل_النطاق' ? 'داخل النطاق' : 'خارج النطاق'}\n\n`;
       
       if (type === 'داخل_النطاق') {
         msg += `📤 *من القطاع:* ${document.getElementById('support_from_sector').value}\n`;
@@ -2930,7 +2918,7 @@ setMapLink();
 /* ═══════════════════════════════════════════
    بيانات نقاط الانتشار الثابتة (148 نقطة)
    ═══════════════════════════════════════════ */
-const staticDeploymentPoints = [
+var staticDeploymentPoints = [
   {id:"MH1",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.425546,lng:39.86387,status:"جاهز",shift:"الصباحية"},
   {id:"MH2",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.424468,lng:39.863626,status:"جاهز",shift:"الصباحية"},
   {id:"MH3",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.425116,lng:39.865597,status:"جاهز",shift:"الصباحية"},
@@ -3084,9 +3072,9 @@ const staticDeploymentPoints = [
 /* ═══════════════════════════════════════════
    بيانات الخريطة والداشبورد المباشرة
    ═══════════════════════════════════════════ */
-let liveDeploymentData = [...staticDeploymentPoints];
-let mapInstance = null;
-let mapMarkers = [];
+var liveDeploymentData = [...staticDeploymentPoints];
+var mapInstance = null;
+var mapMarkers = [];
 
 /* ─── تبديل التابات الرئيسية ─── */
 function switchMainTab(tabId, btn){
@@ -3154,7 +3142,6 @@ function renderMapMarkers(data){
           <tr><td style="font-weight:700;padding:2px 8px">الحالة</td><td><span style="background:${color};color:#fff;padding:2px 8px;border-radius:10px;font-size:.75rem">${pt.status}</span></td></tr>
           <tr><td style="font-weight:700;padding:2px 8px">الفرق</td><td>${pt.teams}</td></tr>
           <tr><td style="font-weight:700;padding:2px 8px">المناوبة</td><td>${pt.shift || '-'}</td></tr>
-          ${pt.lastUpdate ? `<tr><td style="font-weight:700;padding:2px 8px">آخر تحديث</td><td style="font-size:0.7rem;color:#666">${pt.lastUpdate}</td></tr>` : ''}
         </table>
         <div style="margin-top:8px;text-align:center">
           <a href="https://www.google.com/maps?q=${pt.lat},${pt.lng}" target="_blank" style="color:#0b5ed7;font-size:.8rem">فتح في Google Maps</a>
@@ -3427,7 +3414,6 @@ async function loadLiveDeploymentData(){
 
       // استخدام Map لتخزين أحدث حالة لكل نقطة
       const latestStatusMap = new Map();
-      let updateCount = 0;
       sortedData.forEach(livePt => {
         const liveId = String(livePt["الرمز"] || livePt["اسم النقطة"] || "").trim();
         if (liveId && !latestStatusMap.has(liveId)) {
@@ -3444,7 +3430,6 @@ async function loadLiveDeploymentData(){
           mergedData[index].type = livePt["نوع الآلية"] || livePt["الالية المشغلة بالنقطة"] || mergedData[index].type;
           mergedData[index].shift = livePt["مناوبة النقطة"] || livePt["العرض الزمني"] || mergedData[index].shift;
           mergedData[index].lastUpdate = livePt["التاريخ"] + " " + (livePt["الوقت"] || "");
-          updateCount++;
         } else if(liveId) {
           mergedData.push({
             id: liveId,
@@ -3465,16 +3450,18 @@ async function loadLiveDeploymentData(){
     console.log('استخدام البيانات الثابتة بسبب خطأ:', e);
     liveDeploymentData = [...staticDeploymentPoints];
   }
-    console.log('✓ loadLiveDeploymentData completed. Total points:', liveDeploymentData.length, 'Updated from sheet:', updateCount);
+  console.log('✓ loadLiveDeploymentData completed. Data count:', liveDeploymentData.length);
   updateDashboard(liveDeploymentData);
-  if(mapInstance) renderMapMarkers(liveDeploymentData);
+  if(typeof mapInstance !== 'undefined' && mapInstance) renderMapMarkers(liveDeploymentData);
 }
 
-// تحميل البيانات عند بدء التشغيل
-loadLiveDeploymentData();
+// تحميل البيانات عند بدء التشغيل بعد تحميل الصفحة بالكامل
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(loadLiveDeploymentData, 1000);
+});
 
-// تحديث تلقائي كل 60 ثانية لضمان اللحظية
-setInterval(loadLiveDeploymentData, 60000);
+// تحديث تلقائي كل 3 دقائق
+setInterval(loadLiveDeploymentData, 180000);
 
 /* لتحميل النقاط الافتراضية للقطاع المختار */
 function loadDefaultDeploymentPoints(){

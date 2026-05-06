@@ -453,8 +453,13 @@
 
       <!-- Main Tabs: Dashboard / Map -->
       <div class="main-tabs">
-        <button class="tab-btn active" onclick="switchMainTab('tabDashboard',this)"><i class="fas fa-chart-pie"></i> الداشبورد</button>
-        <button class="tab-btn" onclick="switchMainTab('tabMap',this)"><i class="fas fa-map-location-dot"></i> الخريطة التفاعلية</button>
+        <div style="display:flex; gap:10px;">
+          <button class="tab-btn active" onclick="switchMainTab('tabDashboard',this)"><i class="fas fa-chart-pie"></i> الداشبورد</button>
+          <button class="tab-btn" onclick="switchMainTab('tabMap',this)"><i class="fas fa-map-location-dot"></i> الخريطة التفاعلية</button>
+        </div>
+        <button class="btn btn-primary" onclick="loadLiveDeploymentData()" style="padding: 5px 15px; font-size: 0.8rem;">
+          <i class="fas fa-sync-alt"></i> تحديث البيانات
+        </button>
       </div>
 
       <!-- ── Tab: Dashboard ── -->
@@ -3142,6 +3147,7 @@ function renderMapMarkers(data){
           <tr><td style="font-weight:700;padding:2px 8px">الحالة</td><td><span style="background:${color};color:#fff;padding:2px 8px;border-radius:10px;font-size:.75rem">${pt.status}</span></td></tr>
           <tr><td style="font-weight:700;padding:2px 8px">الفرق</td><td>${pt.teams}</td></tr>
           <tr><td style="font-weight:700;padding:2px 8px">المناوبة</td><td>${pt.shift || '-'}</td></tr>
+          ${pt.lastUpdate ? `<tr><td style="font-weight:700;padding:2px 8px">آخر تحديث</td><td style="font-size:0.7rem;color:#666">${pt.lastUpdate}</td></tr>` : ''}
         </table>
         <div style="margin-top:8px;text-align:center">
           <a href="https://www.google.com/maps?q=${pt.lat},${pt.lng}" target="_blank" style="color:#0b5ed7;font-size:.8rem">فتح في Google Maps</a>
@@ -3405,17 +3411,32 @@ async function loadLiveDeploymentData(){
     let mergedData = staticDeploymentPoints.map(p => ({...p}));
 
     if(data && data.length > 0){
-      data.forEach(livePt => {
+      // فرز البيانات حسب التاريخ والوقت تنازلياً لضمان أخذ أحدث إدخال
+      const sortedData = [...data].sort((a, b) => {
+        const dateA = new Date(a["التاريخ"] + " " + (a["الوقت"] || "00:00"));
+        const dateB = new Date(b["التاريخ"] + " " + (b["الوقت"] || "00:00"));
+        return dateB - dateA;
+      });
+
+      // استخدام Map لتخزين أحدث حالة لكل نقطة
+      const latestStatusMap = new Map();
+      sortedData.forEach(livePt => {
         const liveId = livePt["الرمز"] || livePt["اسم النقطة"];
+        if (liveId && !latestStatusMap.has(liveId)) {
+          latestStatusMap.set(liveId, livePt);
+        }
+      });
+
+      // تحديث البيانات المدمجة بأحدث الحالات
+      latestStatusMap.forEach((livePt, liveId) => {
         const index = mergedData.findIndex(p => p.id === liveId);
         if(index !== -1){
-          // تحديث النقطة الموجودة ببيانات الشيت
           mergedData[index].status = livePt["الحالة"] || mergedData[index].status;
           mergedData[index].teams = parseInt(livePt["عدد الفرق الفعلي"] || livePt["عدد الفرق بالنقطة"] || mergedData[index].teams);
           mergedData[index].type = livePt["نوع الآلية"] || livePt["الالية المشغلة بالنقطة"] || mergedData[index].type;
           mergedData[index].shift = livePt["مناوبة النقطة"] || livePt["العرض الزمني"] || mergedData[index].shift;
+          mergedData[index].lastUpdate = livePt["التاريخ"] + " " + (livePt["الوقت"] || "");
         } else if(liveId) {
-          // إضافة نقطة جديدة إذا لم تكن موجودة في الـ 148 (نقاط إضافية)
           mergedData.push({
             id: liveId,
             sector: livePt["القطاع"] || '',
@@ -3424,7 +3445,8 @@ async function loadLiveDeploymentData(){
             lat: parseFloat(livePt["Latitude"] || 0),
             lng: parseFloat(livePt["Longitude"] || 0),
             status: livePt["الحالة"] || 'جاهز',
-            shift: livePt["مناوبة النقطة"] || livePt["العرض الزمني"] || 'الصباحية'
+            shift: livePt["مناوبة النقطة"] || livePt["العرض الزمني"] || 'الصباحية',
+            lastUpdate: livePt["التاريخ"] + " " + (livePt["الوقت"] || "")
           });
         }
       });
@@ -3442,8 +3464,8 @@ async function loadLiveDeploymentData(){
 // تحميل البيانات عند بدء التشغيل
 loadLiveDeploymentData();
 
-// تحديث تلقائي كل 3 دقائق
-setInterval(loadLiveDeploymentData, 180000);
+// تحديث تلقائي كل 60 ثانية لضمان اللحظية
+setInterval(loadLiveDeploymentData, 60000);
 
 /* لتحميل النقاط الافتراضية للقطاع المختار */
 function loadDefaultDeploymentPoints(){

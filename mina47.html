@@ -440,7 +440,10 @@
     <!-- ═══════ KPI Row ═══════ -->
     <div class="kpi-row">
       <div class="kpi-card"><div class="kpi-val" id="kpi_total">0</div><div class="kpi-label">إجمالي النقاط</div></div>
-      <div class="kpi-card"><div class="kpi-val" id="kpi_teams" style="color:var(--primary)">0</div><div class="kpi-label">إجمالي الفرق</div></div>
+      <div class="kpi-card">
+        <div class="kpi-val" id="kpi_total_teams" style="color:var(--secondary)">0</div>
+        <div class="kpi-label">إجمالي عدد الفرق</div>
+      </div>
       <div class="kpi-card"><div class="kpi-val" id="kpi_ready" style="color:var(--success)">0</div><div class="kpi-label">جاهزة</div></div>
       <div class="kpi-card"><div class="kpi-val" id="kpi_supported" style="color:var(--secondary)">0</div><div class="kpi-label">مدعمة</div></div>
       <div class="kpi-card"><div class="kpi-val" id="kpi_oos" style="color:var(--danger)">0</div><div class="kpi-label">خارج الخدمة</div></div>
@@ -2841,25 +2844,42 @@ function updateDashboard(data){
   const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
   
   // Missing Sectors
+  const submittedData = data.filter(d =>
+    d["التاريخ"] || d["الوقت"] || d["اسم كبير المسعفين"] || d["اسم مدخل البيانات"] || d.saved === true
+  );
+
+  const respondedSectors = new Set(submittedData.map(d => d.sector));
+  const missingSectors = sectors.filter(s => !respondedSectors.has(s));
   const missingEl = document.getElementById('missingSectorsList');
   if(missingEl) {
-    missingEl.innerHTML = 'الكل أرسل';
+    missingEl.innerHTML = missingSectors.length ? missingSectors.join(' - ') : 'الكل أرسل';
     const alertEl = missingEl.closest('.alert-warning');
     if (alertEl) {
-      alertEl.style.display = 'none'; // إخفاء التنبيه تماماً لأن الكل أرسل
+      alertEl.style.display = missingSectors.length ? 'block' : 'none';
     }
   }
 
   // KPIs
   const total = data.length;
-  const totalTeams = data.reduce((acc, d) => acc + (parseInt(d.count || d.teams) || 0), 0);
-  const ready = data.filter(d => d.status === 'جاهزة' || d.status === 'جاهز').length;
+
+  // إجمالي عدد الفرق وليس النقاط
+  const totalTeams = data.reduce((sum, d) => {
+    return sum + Number(d.teams || d["عدد الفرق"] || d.count || 1);
+  }, 0);
+
+  // الفرق الجاهزة = مجموع عدد الفرق في النقاط الجاهزة
+  const ready = data
+    .filter(d => d.status === 'جاهزة' || d.status === 'جاهز')
+    .reduce((sum, d) => {
+      return sum + Number(d.teams || d["عدد الفرق"] || d.count || 1);
+    }, 0);
+
   const supported = data.filter(d => d.status === 'مدعمة' || d.status === 'مدعم').length;
   const oos = data.filter(d => d.status === 'خارج الخدمة').length;
   const broken = data.filter(d => d.status === 'متعطلة' || d.status === 'موقوف').length;
 
   document.getElementById('kpi_total').textContent = total;
-  document.getElementById('kpi_teams').textContent = totalTeams;
+  document.getElementById('kpi_total_teams').textContent = totalTeams;
   document.getElementById('kpi_ready').textContent = ready;
   document.getElementById('kpi_supported').textContent = supported;
   document.getElementById('kpi_oos').textContent = oos;

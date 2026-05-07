@@ -1530,6 +1530,11 @@
       document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
       document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
       document.getElementById(targetId)?.classList.add('active');
+      
+      if(targetId === 'unitsCheckPanel'){
+        buildMedicalCheckTable();
+      }
+      
       window.scrollTo({top:0,behavior:'smooth'});
     }
 

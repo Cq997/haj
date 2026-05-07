@@ -1503,7 +1503,7 @@
       ]
     };
 
-    const teamsData = {
+    window.teamsData = {
       "الجمرات": {
         "الصباحية": { lead:"راكان منصور الحصيني", assistants:["فواز حميد الظفيري","تركي أحمد عبدالله الغامدي","محمد علي عبدالله القحطاني","فيصل جري المطيري"] },
         "المسائية": { lead:"محمد عبدالکريم إبراهيم الدعيجي", assistants:["عبدالله علي القحطاني","عبدالعزيز محمد الجهني","أحمد عبدالرحمن التركستاني",""] }
@@ -2233,7 +2233,7 @@ ${row["ملاحظات عامة"]}`;
 
     function handleDeploymentContextChange(){
       fillDeploymentPeople();
-      loadDeploymentTemplate();
+      loadDefaultDeploymentPoints();
     }
 
     function handleDeploymentRoleChange(){
@@ -2773,7 +2773,7 @@ setMapLink();
 /* ═══════════════════════════════════════════
    بيانات نقاط الانتشار الثابتة (148 نقطة)
    ═══════════════════════════════════════════ */
-const staticDeploymentPoints = [
+window.staticDeploymentPoints = [
   {id:"MH1",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.425546,lng:39.86387,status:"جاهز",shift:"الصباحية"},
   {id:"MH2",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.424468,lng:39.863626,status:"جاهز",shift:"الصباحية"},
   {id:"MH3",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.425116,lng:39.865597,status:"جاهز",shift:"الصباحية"},
@@ -3285,58 +3285,65 @@ loadLiveDeploymentData();
 setInterval(loadLiveDeploymentData, 60000);
 
 			/* لتحميل النقاط الافتراضية للقطاع المختار */
-			function loadDefaultDeploymentPoints(){
-			  const sectorEl = document.getElementById('deploy_sector');
-			  const shiftEl = document.getElementById('deploy_shift');
-			  if (!sectorEl || !shiftEl) return;
+				function loadDefaultDeploymentPoints(){
+				  const sectorEl = document.getElementById('deploy_sector');
+				  const shiftEl = document.getElementById('deploy_shift');
+				  if (!sectorEl || !shiftEl) return;
 
-			  const sector = sectorEl.value;
-			  let shift = shiftEl.value || 'الصباحية';
-			  
-			  if (shift === 'صباحية') shift = 'الصباحية';
-			  if (shift === 'مسائية') shift = 'المسائية';
-			  
-			  if(!sector || sector === 'اختر القطاع'){
-			    showAlert('deploymentAlert','error','يرجى اختيار قطاع أولاً');
-			    return;
-			  }
-			  
-			  const tbody = document.getElementById('deploymentTableBody');
-			  if (!tbody) return;
-			  
-			  tbody.innerHTML = '';
-			  
-			  // استخدام DEPLOYMENT_POINTS المعرف ككائن
-			  const points = typeof DEPLOYMENT_POINTS !== 'undefined' ? DEPLOYMENT_POINTS : {};
-			  
-			  const sectorPoints = Object.entries(points).filter(([id, p]) => 
-			    String(p.sector).trim() === String(sector).trim()
-			  );
-			  
-			  if(sectorPoints.length === 0){
-			    showAlert('deploymentAlert','warning','لا توجد نقاط افتراضية لهذا القطاع');
-			    return;
-			  }
-			  
-			  sectorPoints.forEach(([id, point]) => {
-			    const rowData = {
-			      code: id,
-			      type: point.unit_type || 'مركبة إسعافية',
-			      shift: shift,
-			      count: 1,
-			      lat: point.lat || '',
-			      lng: point.lng || '',
-			      note: ''
-			    };
-			    const rowHTML = createDeploymentRowHTML(rowData);
-			    tbody.insertAdjacentHTML('beforeend', rowHTML);
-			  });
-			  
-			  showAlert('deploymentAlert','success',`تم تحميل ${sectorPoints.length} نقطة بنجاح لقطاع ${sector}`);
-			  if (typeof refreshDeploymentAdminMode === 'function') refreshDeploymentAdminMode();
-			}
+				  const sector = sectorEl.value;
+				  let shift = shiftEl.value || 'الصباحية';
+				  
+				  if (shift === 'صباحية') shift = 'الصباحية';
+				  if (shift === 'مسائية') shift = 'المسائية';
+				  
+				  if(!sector || sector === 'اختر القطاع'){
+				    showAlert('deploymentAlert','error','يرجى اختيار قطاع أولاً');
+				    return;
+				  }
+				  
+				  const tbody = document.getElementById('deploymentTableBody');
+				  if (!tbody) return;
+				  
+				  tbody.innerHTML = '';
+				  
+				  // استخدام staticDeploymentPoints (المصفوفة) بدلاً من DEPLOYMENT_POINTS (الكائن)
+				  const pointsArray = window.staticDeploymentPoints || [];
+				  
+				  console.log('Loading points for sector:', sector);
+				  console.log('Available points:', pointsArray.length);
+				  
+				  const sectorPoints = pointsArray.filter(p => String(p.sector).trim() === String(sector).trim());
+				  
+				  console.log('Filtered points for sector:', sectorPoints.length);
+				  
+				  if(sectorPoints.length === 0){
+				    showAlert('deploymentAlert','warning','لا توجد نقاط افتراضية لهذا القطاع');
+				    return;
+				  }
+				  
+				  sectorPoints.forEach(point => {
+				    // توحيد مسمى نوع الوحدة ليتطابق مع خيارات الـ select في createDeploymentRowHTML
+				    let unitType = point.type || 'مركبة إسعافية';
+				    if (unitType === 'مركبة اسعافية') unitType = 'مركبة إسعافية';
+				    
+				    const rowData = {
+				      code: point.id || '',
+				      type: unitType,
+				      shift: shift,
+				      count: 1,
+				      lat: point.lat || '',
+				      lng: point.lng || '',
+				      note: ''
+				    };
+				    const rowHTML = createDeploymentRowHTML(rowData);
+				    tbody.insertAdjacentHTML('beforeend', rowHTML);
+				  });
+				  
+				  showAlert('deploymentAlert','success',`تم تحميل ${sectorPoints.length} نقطة بنجاح لقطاع ${sector}`);
+				  if (typeof refreshDeploymentAdminMode === 'function') refreshDeploymentAdminMode();
+				}
 
-const DEPLOYMENT_POINTS = {
+window.DEPLOYMENT_POINTS = {
   "MH1": {
     "sector": "الجمرات",
     "unit_type": "مركبة اسعافية",

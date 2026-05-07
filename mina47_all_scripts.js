@@ -199,11 +199,31 @@
       if(window.map && window.deploymentMarkers){
         window.deploymentMarkers.forEach(marker => window.map.removeLayer(marker));
         window.deploymentMarkers = [];
-        fetchDeploymentFromSheet().then(() => {
-          renderDeploymentMarkers();
+        fetchDeploymentFromSheet().then((data) => {
+          renderDeploymentMarkers(data);
           console.log('تم تحديث الخريطة بنجاح');
         });
       }
+    }
+
+    function renderDeploymentMarkers(data) {
+      if (!window.map) {
+        console.error("Map instance not initialized.");
+        return;
+      }
+      if (window.deploymentMarkers) {
+        window.deploymentMarkers.forEach(marker => window.map.removeLayer(marker));
+      }
+      window.deploymentMarkers = [];
+
+      data.forEach(item => {
+        if (item.lat && item.lng) {
+          const marker = L.marker([parseFloat(item.lat), parseFloat(item.lng)]).addTo(window.map);
+          marker.bindPopup(`<b>${item.id}</b><br>${item.type}<br>الحالة: ${item.status}`);
+          window.deploymentMarkers.push(marker);
+        }
+      });
+      console.log("تم عرض مؤشرات الانتشار على الخريطة.");
     }
 
     function showAlert(elId, type, message){

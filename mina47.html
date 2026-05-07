@@ -270,8 +270,8 @@
 
     /* ─── Panels / Forms ─── */
     .panel{display:none;width:100%;min-height:calc(100vh - 100px)}
-    .panel.active{display:block!important}
-    .panel.active.hidden{display:block!important}
+    .panel.active{display:block !important}
+
 
     .panel-head{
       display:flex;align-items:center;justify-content:space-between;
@@ -410,14 +410,14 @@
     </div>
 
     <ul class="nav">
-      <li class="active" data-target="homePanel"><i class="fas fa-home"></i> الرئيسية</li>
-      <li data-target="groundEMS"><i class="fas fa-clipboard-list"></i> التحضير اليومي</li>
-      <li data-target="handoverPanel"><i class="fas fa-exchange-alt"></i> تسليم المناوبة</li>
-      <li data-target="personalCovenantPanel"><i class="fas fa-handshake"></i> العهد الشخصية</li>
-      <li data-target="stockPanel"><i class="fas fa-boxes-stacked"></i> الخزن الاستراتيجي</li>
-      <li data-target="deploymentPanel"><i class="fas fa-map-marked-alt"></i> خطة الانتشار</li>
-      <li data-target="mapsPanel"><i class="fas fa-map"></i> خرائط النطاق</li>
-      <li data-target="supportPlanPanel"><i class="fas fa-handshake"></i> خطة الدعم</li>
+      <li class="active" data-target="homePanel" onclick='activatePanel("homePanel")' onclick='activatePanel("homePanel")' onclick='activatePanel("homePanel")'><i class="fas fa-home"></i> الرئيسية</li>
+      <li data-target="groundEMS" onclick='activatePanel("groundEMS")' onclick='activatePanel("groundEMS")' onclick='activatePanel("groundEMS")'><i class="fas fa-clipboard-list"></i> التحضير اليومي</li>
+      <li data-target="handoverPanel" onclick='activatePanel("handoverPanel")' onclick='activatePanel("handoverPanel")' onclick='activatePanel("handoverPanel")'><i class="fas fa-exchange-alt"></i> تسليم المناوبة</li>
+      <li data-target="personalCovenantPanel" onclick='activatePanel("personalCovenantPanel")' onclick='activatePanel("personalCovenantPanel")' onclick='activatePanel("personalCovenantPanel")'><i class="fas fa-handshake"></i> العهد الشخصية</li>
+      <li data-target="stockPanel" onclick='activatePanel("stockPanel")' onclick='activatePanel("stockPanel")' onclick='activatePanel("stockPanel")'><i class="fas fa-boxes-stacked"></i> الخزن الاستراتيجي</li>
+      <li data-target="deploymentPanel" onclick='activatePanel("deploymentPanel")' onclick='activatePanel("deploymentPanel")' onclick='activatePanel("deploymentPanel")'><i class="fas fa-map-marked-alt"></i> خطة الانتشار</li>
+      <li data-target="mapsPanel" onclick='activatePanel("mapsPanel")' onclick='activatePanel("mapsPanel")' onclick='activatePanel("mapsPanel")'><i class="fas fa-map"></i> خرائط النطاق</li>
+      <li data-target="supportPlanPanel" onclick='activatePanel("supportPlanPanel")' onclick='activatePanel("supportPlanPanel")' onclick='activatePanel("supportPlanPanel")'><i class="fas fa-handshake"></i> خطة الدعم</li>
     </ul>
 
     <div class="quick-toggle" onclick="toggleQuickLinks()">
@@ -2442,87 +2442,38 @@
     const mobileBtn = document.getElementById('mobileBtn');
     const sidebar = document.getElementById('sidebar');
 
-    mobileBtn.addEventListener('click', () => sidebar.classList.toggle('active'));
+    mobileBtn.addEventListener("click", () => sidebar.classList.toggle("active"));
 
-    // دالة تفعيل اللوحات
-    function activatePanel(targetId) {
-      console.log("تفعيل اللوحة:", targetId);
-      
-      // 1. إخفاء جميع اللوحات
-      const panels = document.querySelectorAll('.panel');
-      panels.forEach(p => {
-        p.style.display = 'none';
-        p.classList.remove('active');
+    document.querySelectorAll(".nav li").forEach(item => {
+      item.addEventListener("click", () => {
+        activatePanel(item.dataset.target);
+        if(window.innerWidth <= 1180) sidebar.classList.remove("active");
       });
-      
-      // 2. إظهار اللوحة المستهدفة
-      const target = document.getElementById(targetId);
-      if (target) {
-        target.style.display = 'block';
-        target.classList.add('active');
-        window.scrollTo({top: 0, behavior: 'smooth'});
-        
-        // تهيئة الخريطة إذا كانت اللوحة هي لوحة الخريطة أو الرئيسية
-        if ((targetId === 'mapsPanel' || targetId === 'homePanel') && typeof mapInstance !== 'undefined') {
-          setTimeout(() => { 
-            if (typeof mapInstance !== 'undefined') {
-              mapInstance.invalidateSize(); 
-              console.log("تم تحديث حجم الخريطة");
-            }
-          }, 400);
-        }
-      } else {
-        console.error("اللوحة غير موجودة:", targetId);
-      }
-      
-      // 3. تحديث القائمة الجانبية
-      document.querySelectorAll('.nav li').forEach(li => {
-        li.classList.remove('active');
-        if (li.getAttribute('data-target') === targetId) {
-          li.classList.add('active');
-        }
-      });
-      
-      // 4. إغلاق القائمة الجانبية في الجوال
-      const sidebarElem = document.getElementById('sidebar');
-      if (sidebarElem && window.innerWidth <= 992) {
-        sidebarElem.classList.remove('active');
-      }
-    }
-    
-    // ربط أحداث النقر للقائمة الجانبية
-    document.querySelectorAll('.nav li').forEach(item => {
-      item.onclick = function() {
-        const target = this.getAttribute('data-target');
-        if (target) activatePanel(target);
-      };
     });
-    
-    // جعل الدالة متاحة عالمياً
-    window.activatePanel = activatePanel;
-    
-    // ربط أحداث النقر عند تحميل الصفحة
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.nav li[data-target]').forEach(item => {
-          item.addEventListener('click', function() {
-            const target = this.getAttribute('data-target');
-            if (target && window.activatePanel) {
-              window.activatePanel(target);
-            }
-          });
-        });
-      });
-    } else {
-      document.querySelectorAll('.nav li[data-target]').forEach(item => {
-        item.addEventListener('click', function() {
-          const target = this.getAttribute('data-target');
-          if (target && window.activatePanel) {
-            window.activatePanel(target);
-          }
-        });
-      });
+
+    function activatePanel(targetId){
+     document.querySelectorAll('.nav li').forEach(i => i.classList.remove('active'));
+      document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
+      document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
+      const targetPanel = document.getElementById(targetId);
+      if (targetPanel) {
+        targetPanel.classList.add('active');     }
+      window.scrollTo({top:0,behavior:'smooth'});
     }
+
+
+
+
+
+
+
+    function handleDeploymentContextChange(){
+      console.log('handleDeploymentContextChange triggered');
+      fillDeploymentPeople();
+      if (typeof loadDeploymentTemplate === 'function') loadDeploymentTemplate();
+    }
+
+    function handleDeploymentRoleChange(){}
 
     function toggleShortageDetails(){
       const hasShortage = document.getElementById("has_shortage").value;
@@ -2546,7 +2497,7 @@
         fetchDeploymentFromSheet().then(() => {
           renderDeploymentMarkers();
           console.log('تم تحديث الخريطة بنجاح');
-        });
+    
       }
     }
 
@@ -2592,7 +2543,7 @@ async function saveToGoogleSheets(sheetName, rows){
         sheetName: sheetName,
         rows: rows
       })
-    });
+
     
     // In no-cors mode, we can't read the response, so we assume success if no error
     return { success: true, message: "تم إرسال البيانات بنجاح" };
@@ -2674,12 +2625,12 @@ async function fetchDeploymentFromSheet(){
           if(el.tagName === 'SELECT') el.selectedIndex = 0;
           else el.value = '';
         }
-      });
+  
 
       ['operational_units','total_providers','employees_count','volunteers_count','vehicles_count','golf_count','walking_count'].forEach(id => {
         const el = document.getElementById(id);
         if(el) el.value = 0;
-      });
+  
 
       fillTeamData();
     }
@@ -3008,7 +2959,7 @@ ${supportLines}
             <select id="medical_status_${index}"laceholder="ملاحظات"></td>
         `;
         medicalBody.appendChild(row);
-      });
+  
     }
 
     async function sendPersonalCovenant(){
@@ -3188,7 +3139,7 @@ ${supportLines}
           "النواقص الطبية": medicalShortages || '-',
           "ملاحظات": notes || '-'
         };
-      });
+  
 
       const save = await saveToGoogleSheets('الخزن الاستراتيجي', rows);
       if(!save.success){
@@ -3256,7 +3207,7 @@ ${supportLines}
           </td>
         `;
         tableBody.appendChild(row);
-      });
+  
     }
 
     function toggleMedicalShortages(){
@@ -3277,13 +3228,67 @@ ${supportLines}
 
 
 
-    document.getElementById('deploy_sector').addEventListener('change', handleDeploymentContextChange);
-    document.getElementById('deploy_shift').addEventListener('change', handleDeploymentContextChange);
-    document.getElementById('deploy_role').addEventListener('change', handleDeploymentRoleChange);
+    // ربط الأحداث لنموذج خطة الانتشار والداشبورد
+    function initEventListeners() {
+      // أحداث خطة الانتشار
+      const deploySector = document.getElementById('deploy_sector');
+      const deployShift = document.getElementById('deploy_shift');
+      const deployRole = document.getElementById('deploy_role');
+
+      console.log('Initializing Event Listeners...');
+
+      if (deploySector) {
+        deploySector.addEventListener('change', function() {
+          console.log('Sector changed:', this.value);
+          fillDeploymentPeople();
+          if (typeof handleDeploymentContextChange === 'function') handleDeploymentContextChange();
+    
+      }
+      if (deployShift) {
+        deployShift.addEventListener('change', function() {
+          console.log('Shift changed:', this.value);
+          fillDeploymentPeople();
+          if (typeof handleDeploymentContextChange === 'function') handleDeploymentContextChange();
+    
+      }
+      if (deployRole) {
+        deployRole.onchange = handleDeploymentRoleChange;
+      }
+
+      // أحداث فلاتر الداشبورد
+      const dashIds = ['dashFilterSector', 'dashFilterShift', 'dashFilterDate', 'dashFilterTime'];
+      dashIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('change', function() {
+            console.log('Dashboard filter changed:', id, this.value);
+            applyDashboardFilters();
+      
+        }
+  
+      
+      // أحداث فلاتر الخريطة
+      const mapIds = ['mapFilterSector', 'mapFilterStatus', 'mapFilterType', 'mapFilterShift'];
+      mapIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.onchange = function() {
+            console.log('Map filter changed:', id, this.value);
+            if (typeof applyMapFilters === 'function') applyMapFilters();
+          };
+        }
+  
+
+      console.log('تم تفعيل جميع مستمعي الأحداث بنجاح');
+    }
+    
+
+
 
     function handleDeploymentContextChange(){
+      console.log('handleDeploymentContextChange triggered');
       fillDeploymentPeople();
-      loadDeploymentTemplate();
+      if (typeof loadDeploymentTemplate === 'function') loadDeploymentTemplate();
     }
 
     function handleDeploymentRoleChange(){
@@ -3292,20 +3297,72 @@ ${supportLines}
     }
 
     function fillDeploymentPeople(){
-      const sector = document.getElementById('deploy_sector').value;
-      const shift = document.getElementById('deploy_shift').value;
+      const sectorEl = document.getElementById('deploy_sector');
+      const shiftEl = document.getElementById('deploy_shift');
       
-      if(!sector || sector === 'اختر القطاع' || !shift || shift === 'اختر') return;
+      if (!sectorEl || !shiftEl) return;
+      
+      const sector = sectorEl.value;
+      const shift = shiftEl.value;
+      
+      if(!sector || sector === 'اختر القطاع' || !shift || shift === 'اختر') {
+        clearDeploymentPeopleFields();
+        return;
+      }
 
-      const teamShift = (shift === 'المسائية') ? 'المسائية' : 'الصباحية';
-      const team = (typeof teamsData !== 'undefined' ? teamsData : window.teamsData)?.[sector]?.[teamShift];
+      let teamShift = 'الصباحية';
+      if (shift.includes('مسائية') || shift === 'المسائية' || shift === 'مسائية') teamShift = 'المسائية';
+      else if (shift.includes('صباحية') || shift === 'الصباحية' || shift === 'صباحية') teamShift = 'الصباحية';
 
-      document.getElementById('deploy_lead_name').value = team?.lead || '';
-      document.getElementById('deploy_current_lead').value = team?.lead || '';
-      document.getElementById('deploy_assistant1_auto').value = team?.assistants?.[0] || '';
-      document.getElementById('deploy_assistant2_auto').value = team?.assistants?.[1] || '';
-      document.getElementById('deploy_assistant3_auto').value = team?.assistants?.[2] || '';
-      document.getElementById('deploy_assistant4_auto').value = team?.assistants?.[3] || '';
+      const data = (typeof teamsData !== 'undefined' ? teamsData : window.teamsData);
+      if (!data) return;
+
+      let matchedSector = sector;
+      if (!data[sector]) {
+        matchedSector = Object.keys(data).find(k => k.includes(sector) || sector.includes(k));
+      }
+
+      const team = data[matchedSector] ? data[matchedSector][teamShift] : null;
+
+      if(team) {
+        const fields = {
+          'deploy_lead_name': team.lead,
+          'deploy_current_lead': team.lead,
+          'deploy_assistant1_auto': (team.assistants && team.assistants[0]) ? team.assistants[0] : '',
+          'deploy_assistant2_auto': (team.assistants && team.assistants[1]) ? team.assistants[1] : '',
+          'deploy_assistant3_auto': (team.assistants && team.assistants[2]) ? team.assistants[2] : '',
+          'deploy_assistant4_auto': (team.assistants && team.assistants[3]) ? team.assistants[3] : ''
+        };
+        
+        for (const [id, val] of Object.entries(fields)) {
+          const el = document.getElementById(id);
+          if (el) {
+            el.value = val || '';
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+        }
+      } else {
+        clearDeploymentPeopleFields();
+      }
+    }
+
+    // تنفيذ الربط عند تحميل الصفحة
+    document.addEventListener('DOMContentLoaded', () => {
+      initEventListeners();
+      document.querySelectorAll('.panel').forEach(panel => {
+        panel.classList.remove('active');
+      });
+      activatePanel('homePanel');
+    });function setFieldValue(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.value = value || '';
+    }
+
+    function clearDeploymentPeopleFields() {
+      ['deploy_lead_name', 'deploy_current_lead', 'deploy_assistant1_auto', 'deploy_assistant2_auto', 'deploy_assistant3_auto', 'deploy_assistant4_auto'].forEach(id => {
+        setFieldValue(id, '');
+  
     }
 
     function getDefaultTimes(shift){
@@ -3418,8 +3475,8 @@ ${supportLines}
           if (!el.classList.contains('btn-blue')) {
             el.disabled = !canEdit;
           }
-        });
-      });
+    
+  
     }
 
    async function loadDeploymentTemplate(){
@@ -3538,7 +3595,7 @@ const items = data.filter(d =>
           "ملاحظة السجل": row.querySelector('.dep-note')?.value || '-',
           "ملاحظات عامة": notes || '-'
         };
-      });
+  
 
       const save = await saveToGoogleSheets('خطة الانتشار', rows);
       if(!save.success){
@@ -3664,7 +3721,7 @@ ${row["ملاحظات إضافية"]}
         if (!el) return;
         if (el.tagName === 'SELECT') el.selectedIndex = 0;
         else el.value = '';
-      });
+  
 
       const alertBox = document.getElementById('methaneAlert');
       if (alertBox) alertBox.style.display = 'none';
@@ -3794,7 +3851,7 @@ ${row["ملاحظات إضافية"]}
         if (el.tagName === 'SELECT') el.selectedIndex = 0;
         else if (el.type === 'number') el.value = '1';
         else el.value = '';
-      });
+  
 
       document.getElementById('internalSupportWrap').classList.add('hidden');
       document.getElementById('externalSupportWrap').classList.add('hidden');
@@ -4072,7 +4129,7 @@ function renderMapMarkers(data){
       html: `<div style="background:${color};width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.3);cursor:pointer">${getTypeIcon(pt.type)}</div>`,
       iconSize: [28, 28],
       iconAnchor: [14, 14]
-    });
+
     const marker = L.marker([pt.lat, pt.lng], {icon}).addTo(mapInstance);
     marker.bindPopup(`
       <div style="font-family:Cairo,sans-serif;direction:rtl;min-width:200px">
@@ -4115,6 +4172,7 @@ function applyMapFilters(){
     return true;
   });
   renderMapMarkers(filtered);
+  updateDashboard(filtered);
 }
 
 function resetMapFilters(){
@@ -4126,33 +4184,7 @@ function resetMapFilters(){
 }
 
 /* ─── تحديث الداشبورد ─── */
-function applyDashboardFilters(){
-  const date = document.getElementById('dashFilterDate').value;
-  const time = document.getElementById('dashFilterTime').value;
-  const sector = document.getElementById('dashFilterSector').value;
-  const shift = document.getElementById('dashFilterShift').value;
 
-  let filtered = liveDeploymentData;
-
-  if(date){
-    filtered = filtered.filter(d => d["التاريخ"] === date);
-  }
-  if(time){
-    const filterHour = time.split(':')[0];
-    filtered = filtered.filter(d => {
-      const dTime = d["الوقت"] || "";
-      return dTime.startsWith(filterHour + ":");
-    });
-  }
-  if(sector !== 'الكل'){
-    filtered = filtered.filter(d => d.sector === sector);
-  }
-  if(shift !== 'الكل'){
-    filtered = filtered.filter(d => d["العرض الزمني"] === shift || d.shift === shift);
-  }
-
-  updateDashboard(filtered);
-}
 
 function resetDashboardFilters(){
   document.getElementById('dashFilterDate').value = '';
@@ -4248,9 +4280,7 @@ function updateDashboard(data){
     <div style="font-size:.85rem;color:var(--success);font-weight:700">
       <i class="fas fa-check-circle"></i> تم تحديث البيانات
     </div>
-    <div style="font-size:.78rem;color:var(--muted);margin-top:4px">
-      ${new Date().toLocaleString('ar-SA')} | إجمالي ${total} نقطة   </div>
-  `;
+    <div style="font-size:.78rem;color:var(--muted);margin-top:4px">       ${new Date().toLocaleString(\'ar-SA\')} | إجمالي ${data.length} نقطة   </div>  `;
 }
 
 /* ═══════════════════════════════════════════
@@ -4268,7 +4298,7 @@ async function updateSupportSummary() {
       const response = await fetch(SCRIPT_URL + '?action=getSupportData', {
         method: 'GET',
         mode: 'cors'
-      });
+  
       
       if (response.ok) {
         result = await response.json();
@@ -4295,7 +4325,7 @@ async function updateSupportSummary() {
     const filteredSupportData = result.data.filter(row => {
       const rowDate = new Date(row['التاريخ'] + ' ' + (row['الوقت'] || '00:00'));
       return rowDate >= shiftStartTime && rowDate < shiftEndTime;
-    });
+
 
     // تجميع البيانات حسب القطاع/النطاق والتاريخ والفترة
     const supportMap = {};
@@ -4319,7 +4349,7 @@ async function updateSupportSummary() {
       }
       supportMap[key].count++;
       supportMap[key].teams += parseInt(row['عدد الفرق'] || row['عدد الفرق المدعمة'] || 1);
-    });
+
 
     // عرض البيانات في الجدول
     tbody.innerHTML = "";
@@ -4335,7 +4365,7 @@ async function updateSupportSummary() {
           <td>${item.date}</td>
           <td>${item.period}</td>
         </tr>`;
-      });
+  
     }
   } catch (err) {
     console.error('خطأ في جلب بيانات الدعم:', err);
@@ -4348,10 +4378,11 @@ async function updateSupportSummary() {
 
 /* ─── جلب البيانات من Google Sheets وتحديث الخريطة والداشبورد ─── */
 async function loadLiveDeploymentData(){
+  console.log('Loading live deployment data...');
   try {
     const data = await fetchDeploymentFromSheet();
     // نبدأ دائماً بالنقاط الثابتة الـ 148
-    let mergedData = staticDeploymentPoints.map(p => ({...p}));
+    let mergedData = (typeof staticDeploymentPoints !== 'undefined' ? staticDeploymentPoints : []).map(p => ({...p}));
 
     if(data && data.length > 0){
       // فرز البيانات حسب التاريخ والوقت تنازلياً لضمان أخذ أحدث إدخال
@@ -4359,7 +4390,7 @@ async function loadLiveDeploymentData(){
         const dateA = new Date(a["التاريخ"] + " " + (a["الوقت"] || "00:00"));
         const dateB = new Date(b["التاريخ"] + " " + (b["الوقت"] || "00:00"));
         return dateB - dateA;
-      });
+  
 
       // استخدام Map لتخزين أحدث حالة لكل نقطة
       const latestStatusMap = new Map();
@@ -4368,7 +4399,7 @@ async function loadLiveDeploymentData(){
         if (liveId && !latestStatusMap.has(liveId)) {
           latestStatusMap.set(liveId, livePt);
         }
-      });
+  
 
       // تحديث البيانات المدمجة بأحدث الحالات
       latestStatusMap.forEach((livePt, liveId) => {
@@ -4390,9 +4421,9 @@ async function loadLiveDeploymentData(){
             status: livePt["الحالة"] || 'جاهز',
             shift: livePt["مناوبة النقطة"] || livePt["العرض الزمني"] || 'الصباحية',
             lastUpdate: livePt["التاريخ"] + " " + (livePt["الوقت"] || "")
-          });
+      
         }
-      });
+  
     }
     liveDeploymentData = mergedData;
   } catch(e) {
@@ -4401,7 +4432,10 @@ async function loadLiveDeploymentData(){
   }
   console.log('✓ loadLiveDeploymentData completed. Data count:', liveDeploymentData.length);
   updateDashboard(liveDeploymentData);
-  if(typeof mapInstance !== 'undefined' && mapInstance) renderMapMarkers(liveDeploymentData);
+  if(typeof mapInstance !== 'undefined' && mapInstance) {
+    console.log('Updating map markers...');
+    renderMapMarkers(liveDeploymentData);
+  }
 
   // تحديث الداشبورد والخريطة بشكل دوري كل 3 دقائق
   setInterval(() => {
@@ -4463,7 +4497,7 @@ function loadDefaultDeploymentPoints(){
       const tempWrap = document.createElement('tbody');
       tempWrap.innerHTML = rowHTML;
       tbody.appendChild(tempWrap.firstElementChild);
-    });
+
     
     showAlert('deploymentAlert','success',`تم تحميل ${sectorPoints.length} نقطة بنجاح لقطاع ${sector}`);
   } catch (err) {

@@ -1,4 +1,5 @@
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxFPfnVSIVVdpgZy25PUhFKjLnWt1JxVt_4Jtu94vz4BzbJBPGb5QTIJ1JA0n8o310jqw/exec';
+
+    var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxFPfnVSIVVdpgZy25PUhFKjLnWt1JxVt_4Jtu94vz4BzbJBPGb5QTIJ1JA0n8o310jqw/exec';
 
     const deploymentPlanData = {
       "الجمرات": [
@@ -63,6 +64,897 @@
       "جهاز قياس الحرارة","سماعة طبية","مقص جراحي","ثاقب زجاج","كشاف ضوء","لوح بورد بلاستيكي طويل",
       "نقالة طي","سكوب","سرير","كرسي الدرج","جبائر شد للفخذ","قاطع خواتم","حقيبة إسعافية بكامل ملحقاتها"
     ];
+
+    window.DEPLOYMENT_POINTS = {
+      "MH1": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.425546,
+      "lng": 39.86387
+      },
+      "MH2": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.424468,
+      "lng": 39.863626
+      },
+      "MH3": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.425116,
+      "lng": 39.865597
+      },
+      "MH4": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.425066,
+      "lng": 39.865984
+      },
+      "MH5": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.425314,
+      "lng": 39.867029
+      },
+      "MH6": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.423748,
+      "lng": 39.865322
+      },
+      "MH7": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.424757,
+      "lng": 39.86711
+      },
+      "MH8": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.425946,
+      "lng": 39.870235
+      },
+      "MH9": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.424427,
+      "lng": 39.868784
+      },
+      "MH10": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.422679,
+      "lng": 39.876464
+      },
+      "MH11": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة",
+      "lat": 21.424594,
+      "lng": 39.872963
+      },
+      "MH12": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.422541,
+      "lng": 39.8765
+      },
+      "MH13": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة",
+      "lat": 21.42235,
+      "lng": 39.868068
+      },
+      "MH14": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.421914,
+      "lng": 39.869211
+      },
+      "MH15": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.42362,
+      "lng": 39.873042
+      },
+      "MH16": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.419938,
+      "lng": 39.872258
+      },
+      "MH17": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.419297,
+      "lng": 39.873766
+      },
+      "MH18": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.422883,
+      "lng": 39.871233
+      },
+      "MH19": {
+      "sector": "الجمرات",
+      "unit_type": "راجلة",
+      "lat": 21.420706,
+      "lng": 39.876611
+      },
+      "MH20": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.425302,
+      "lng": 39.867091
+      },
+      "MH21": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.420791,
+      "lng": 39.876812
+      },
+      "MH22": {
+      "sector": "الجمرات",
+      "unit_type": "راجلة",
+      "lat": 21.420252,
+      "lng": 39.871201
+      },
+      "MH23": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.420067,
+      "lng": 39.877646
+      },
+      "MH24": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.416968,
+      "lng": 39.877064
+      },
+      "MH25": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.423457,
+      "lng": 39.871308
+      },
+      "MH26": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.422453,
+      "lng": 39.877141
+      },
+      "MH27": {
+      "sector": "الجمرات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.422588,
+      "lng": 39.878702
+      },
+      "MH28‏": {
+      "sector": "الجمرات",
+      "unit_type": "راجلة",
+      "lat": 21.422333,
+      "lng": 39.879185
+      },
+      "MH29‏‏": {
+      "sector": "الجمرات",
+      "unit_type": "راجلة",
+      "lat": 21.422707,
+      "lng": 39.877685
+      },
+      "MH30": {
+      "sector": "الجمرات",
+      "unit_type": "راجلة",
+      "lat": 21.420637,
+      "lng": 39.87462
+      },
+      "MH31": {
+      "sector": "الجمرات",
+      "unit_type": "راجلة",
+      "lat": 21.422205,
+      "lng": 39.871614
+      },
+      "MH32": {
+      "sector": "الجمرات",
+      "unit_type": "راجلة",
+      "lat": 21.420539,
+      "lng": 39.872534
+      },
+      "MH33": {
+      "sector": "الجمرات",
+      "unit_type": "راجلة",
+      "lat": 21.419933,
+      "lng": 39.874036
+      },
+      "MH34": {
+      "sector": "الجمرات",
+      "unit_type": "راجلة",
+      "lat": 21.419995,
+      "lng": 39.873977
+      },
+      "MH35": {
+      "sector": "الجمرات",
+      "unit_type": "راجلة",
+      "lat": 21.41991,
+      "lng": 39.874087
+      },
+      "MH36": {
+      "sector": "القطارات",
+      "unit_type": "قولف",
+      "lat": 21.419885,
+      "lng": 39.87414
+      },
+      "MH37": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.422027,
+      "lng": 39.871756
+      },
+      "MH38": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.422112,
+      "lng": 39.871644
+      },
+      "MH39": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.421962,
+      "lng": 39.871955
+      },
+      "MH40": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.419221,
+      "lng": 39.874428
+      },
+      "MH41": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.419401,
+      "lng": 39.874868
+      },
+      "MH42": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.422243,
+      "lng": 39.870157
+      },
+      "MH43": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.420376,
+      "lng": 39.874716
+      },
+      "MH44": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.420419,
+      "lng": 39.87468
+      },
+      "MH45": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.421437,
+      "lng": 39.873249
+      },
+      "MH46": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.421861,
+      "lng": 39.872251
+      },
+      "MH47": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.422352,
+      "lng": 39.871188
+      },
+      "MH48": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.421639,
+      "lng": 39.870778
+      },
+      "MH49": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.42134,
+      "lng": 39.871958
+      },
+      "MH50": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.420853,
+      "lng": 39.872719
+      },
+      "MH51": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.42095,
+      "lng": 39.872647
+      },
+      "MH52": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.419738,
+      "lng": 39.87439
+      },
+      "MH53": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.418786,
+      "lng": 39.877496
+      },
+      "MH54": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.417938,
+      "lng": 39.877104
+      },
+      "MH55": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.412133,
+      "lng": 39.88039
+      },
+      "MH56": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.411564,
+      "lng": 39.884305
+      },
+      "MH57": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.412566,
+      "lng": 39.881988
+      },
+      "MH58": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.422928,
+      "lng": 39.865427
+      },
+      "MH59": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.420532,
+      "lng": 39.868676
+      },
+      "MH60": {
+      "sector": "القطارات",
+      "unit_type": "قولف",
+      "lat": 21.420106,
+      "lng": 39.869124
+      },
+      "MH61": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.4195019,
+      "lng": 39.8707124
+      },
+      "MH62": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.419418,
+      "lng": 39.87085
+      },
+      "MH63": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.4175948,
+      "lng": 39.8733618
+      },
+      "MH64": {
+      "sector": "القطارات",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.419053,
+      "lng": 39.871377
+      },
+      "MH65": {
+      "sector": "بطن منى الجنوبي",
+      "unit_type": "قولف",
+      "lat": 21.416051,
+      "lng": 39.87703
+      },
+      "MH66": {
+      "sector": "بطن منى الجنوبي",
+      "unit_type": "قولف",
+      "lat": 21.41536,
+      "lng": 39.876724
+      },
+      "MH67": {
+      "sector": "بطن منى الجنوبي",
+      "unit_type": "قولف",
+      "lat": 21.4098948,
+      "lng": 39.8850895
+      },
+      "MH68": {
+      "sector": "بطن منى الجنوبي",
+      "unit_type": "راجلة",
+      "lat": 21.413628,
+      "lng": 39.880993
+      },
+      "MH69": {
+      "sector": "بطن منى الجنوبي",
+      "unit_type": "قولف",
+      "lat": 21.408507,
+      "lng": 39.886137
+      },
+      "MH70": {
+      "sector": "بطن منى الجنوبي",
+      "unit_type": "قولف",
+      "lat": 21.407028,
+      "lng": 39.887845
+      },
+      "MH71": {
+      "sector": "بطن منى الجنوبي",
+      "unit_type": "قولف",
+      "lat": 21.415282,
+      "lng": 39.87698
+      },
+      "MH72": {
+      "sector": "بطن منى الجنوبي",
+      "unit_type": "قولف",
+      "lat": 21.42343,
+      "lng": 39.861696
+      },
+      "MH73": {
+      "sector": "بطن منى الجنوبي",
+      "unit_type": "قولف",
+      "lat": 21.4077995,
+      "lng": 39.8868492
+      },
+      "MH74": {
+      "sector": "بطن منى الجنوبي",
+      "unit_type": "راجلة",
+      "lat": 21.4134565,
+      "lng": 39.8777455
+      },
+      "MH75": {
+      "sector": "بطن منى الجنوبي",
+      "unit_type": "راجلة",
+      "lat": 21.4218743,
+      "lng": 39.8671726
+      },
+      "MH76‏‏": {
+      "sector": "بطن منى الجنوبي",
+      "unit_type": "قولف",
+      "lat": 21.4231765,
+      "lng": 39.8640488
+      },
+      "MH77": {
+      "sector": "بطن منى الجنوبي",
+      "unit_type": "مركبة",
+      "lat": 21.4153106,
+      "lng": 39.8753135
+      },
+      "MH78": {
+      "sector": "بطن منى الجنوبي",
+      "unit_type": "راجلة",
+      "lat": 21.40939,
+      "lng": 39.8908049
+      },
+      "MH79": {
+      "sector": "بطن منى الجنوبي",
+      "unit_type": "قولف",
+      "lat": 21.4105,
+      "lng": 39.8904449
+      },
+      "MH80": {
+      "sector": "بطن منى الجنوبي",
+      "unit_type": "راجلة",
+      "lat": 21.40775,
+      "lng": 39.8915449
+      },
+      "MH81": {
+      "sector": "بطن منى الجنوبي",
+      "unit_type": "مركبة",
+      "lat": 21.41402,
+      "lng": 39.8861949
+      },
+      "MH82": {
+      "sector": "بطن منى الجنوبي",
+      "unit_type": "مركبة",
+      "lat": 21.41225,
+      "lng": 39.8900849
+      },
+      "MH83": {
+      "sector": "بطن منى الجنوبي",
+      "unit_type": "مركبة",
+      "lat": 21.410197,
+      "lng": 39.88949
+      },
+      "MH84": {
+      "sector": "بطن منى الجنوبي",
+      "unit_type": "قولف",
+      "lat": 21.414572,
+      "lng": 39.884976
+      },
+      "MH85": {
+      "sector": "بطن منى الجنوبي",
+      "unit_type": "قولف",
+      "lat": 21.412519,
+      "lng": 39.885623
+      },
+      "MH86": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.4150064,
+      "lng": 39.8802659
+      },
+      "MH87": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.416245,
+      "lng": 39.8832549
+      },
+      "MH88": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "تدخل سريع",
+      "lat": 21.413125,
+      "lng": 39.8857449
+      },
+      "MH89": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.417865,
+      "lng": 39.8825649
+      },
+      "MH90‏": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.411215,
+      "lng": 39.8883049
+      },
+      "MH91": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.407645,
+      "lng": 39.8925349
+      },
+      "MH92": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "قولف",
+      "lat": 21.4084,
+      "lng": 39.8931249
+      },
+      "MH93": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "قولف",
+      "lat": 21.417475,
+      "lng": 39.8835549
+      },
+      "MH94": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.41787,
+      "lng": 39.8887049
+      },
+      "MH95": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "قولف",
+      "lat": 21.41533,
+      "lng": 39.8887149
+      },
+      "MH96‏": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.41705,
+      "lng": 39.8898649
+      },
+      "MH97‏": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.41484,
+      "lng": 39.8940749
+      },
+      "MH98‏": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.41895,
+      "lng": 39.8856949
+      },
+      "MH99‏": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "راجلة",
+      "lat": 21.41801,
+      "lng": 39.8863549
+      },
+      "MH100": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "راجلة",
+      "lat": 21.41852,
+      "lng": 39.8871449
+      },
+      "MH101‏": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "راجلة",
+      "lat": 21.41612,
+      "lng": 39.8908049
+      },
+      "MH102": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "قولف",
+      "lat": 21.41934,
+      "lng": 39.8837749
+      },
+      "MH103": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "قولف",
+      "lat": 21.41558,
+      "lng": 39.8904049
+      },
+      "MH104‏‏": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "قولف",
+      "lat": 21.41382,
+      "lng": 39.8930049
+      },
+      "MH105‏‏‏": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "قولف",
+      "lat": 21.41382,
+      "lng": 39.8930049
+      },
+      "MH106‏‏": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "قولف",
+      "lat": 21.42023,
+      "lng": 39.8841849
+      },
+      "MH107": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "قولف",
+      "lat": 21.42023,
+      "lng": 39.8841849
+      },
+      "MH108": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "تدخل سريع",
+      "lat": 21.41065,
+      "lng": 39.8944849
+      },
+      "MH109": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "راجلة",
+      "lat": 21.41284,
+      "lng": 39.8950749
+      },
+      "MH110": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "تدخل سريع",
+      "lat": 21.41284,
+      "lng": 39.8950749
+      },
+      "MH111": {
+      "sector": "بطن منى الشمالي",
+      "unit_type": "راجلة",
+      "lat": 21.4137,
+      "lng": 39.8913249
+      },
+      "MH112": {
+      "sector": "الشعيبين",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.41714,
+      "lng": 39.8862349
+      },
+      "MH113": {
+      "sector": "الشعيبين",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.420315,
+      "lng": 39.8837149
+      },
+      "MH114": {
+      "sector": "الشعيبين",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.419355,
+      "lng": 39.8836549
+      },
+      "MH115": {
+      "sector": "الشعيبين",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.417655,
+      "lng": 39.8849649
+      },
+      "MH116": {
+      "sector": "الشعيبين",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.417265,
+      "lng": 39.8890749
+      },
+      "MH117": {
+      "sector": "الشعيبين",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.41727,
+      "lng": 39.9044749
+      },
+      "MH118": {
+      "sector": "الشعيبين",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.42516,
+      "lng": 39.8958549
+      },
+      "MH119": {
+      "sector": "الشعيبين",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.41971,
+      "lng": 39.8942049
+      },
+      "MH120": {
+      "sector": "الشعيبين",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.4219,
+      "lng": 39.9015749
+      },
+      "MH121": {
+      "sector": "منى الجديد 1",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.4219,
+      "lng": 39.9015749
+      },
+      "MH122": {
+      "sector": "منى الجديد 1",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.41767,
+      "lng": 39.8995449
+      },
+      "MH123": {
+      "sector": "منى الجديد 1",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.4242799,
+      "lng": 39.9057209
+      },
+      "MH124": {
+      "sector": "منى الجديد 1",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.42085,
+      "lng": 39.8947749
+      },
+      "MH125": {
+      "sector": "منى الجديد 1",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.42085,
+      "lng": 39.8947749
+      },
+      "MH126": {
+      "sector": "منى الجديد 1",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.42245,
+      "lng": 39.8797149
+      },
+      "MH127": {
+      "sector": "منى الجديد 1",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.42947,
+      "lng": 39.9080249
+      },
+      "MH128": {
+      "sector": "منى الجديد 1",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.42038,
+      "lng": 39.8880349
+      },
+      "MH129": {
+      "sector": "منى الجديد 1",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.42104,
+      "lng": 39.8964449
+      },
+      "MH130": {
+      "sector": "منى الجديد 1",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.42348,
+      "lng": 39.9034349
+      },
+      "MH131": {
+      "sector": "منى الجديد 1",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.42348,
+      "lng": 39.9034349
+      },
+      "MH132": {
+      "sector": "منى الجديد 1",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.42402,
+      "lng": 39.8975449
+      },
+      "MH133": {
+      "sector": "منى الجديد 2",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.41167,
+      "lng": 39.9120049
+      },
+      "MH134": {
+      "sector": "منى الجديد 2",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.41285,
+      "lng": 39.9022649
+      },
+      "MH135": {
+      "sector": "منى الجديد 2",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.41146,
+      "lng": 39.9120649
+      },
+      "MH136": {
+      "sector": "منى الجديد 2",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.417675,
+      "lng": 39.8995449
+      },
+      "MH137": {
+      "sector": "منى الجديد 2",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.414515,
+      "lng": 39.8988649
+      },
+      "MH138": {
+      "sector": "منى الجديد 2",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.414875,
+      "lng": 39.9015749
+      },
+      "MH139": {
+      "sector": "منى الجديد 2",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.41311,
+      "lng": 39.8968749
+      },
+      "MH140": {
+      "sector": "منى الجديد 2",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.41263,
+      "lng": 39.9013149
+      },
+      "MH141": {
+      "sector": "منى الجديد 2",
+      "unit_type": "قولف",
+      "lat": 21.4055,
+      "lng": 39.8917449
+      },
+      "MH142": {
+      "sector": "منى الجديد 2",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.41101,
+      "lng": 39.9013649
+      },
+      "MH143": {
+      "sector": "منى الجديد 2",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.40654,
+      "lng": 39.8972549
+      },
+      "MH144": {
+      "sector": "منى الجديد 2",
+      "unit_type": "قولف",
+      "lat": 21.40654,
+      "lng": 39.8972549
+      },
+      "MH145": {
+      "sector": "منى الجديد 2",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.4037,
+      "lng": 39.8959249
+      },
+      "MH146": {
+      "sector": "منى الجديد 2",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.40314,
+      "lng": 39.8966349
+      },
+      "MH147": {
+      "sector": "منى الجديد 2",
+      "unit_type": "مركبة اسعافية",
+      "lat": 21.40951,
+      "lng": 39.8979749
+      },
+      "MH148": {
+      "sector": "منى الجديد 2",
+      "unit_type": "قولف",
+      "lat": 21.41226,
+      "lng": 39.8986349
+      }
+      };
 
     const stockItems = [
       { category:'الأجهزة الطبية', item:'جهاز لوكس' },
@@ -385,14 +1277,14 @@ async function fetchDeploymentFromSheet(){
       msg += `🕒 *التاريخ والوقت:* ${row["التاريخ والوقت"]}\n\n`;
       msg += `👤 *كبير المسعفين:* ${row["كبير المسعفين"]}\n`;
       msg += `👥 *المساعدون:* ${row["مساعد1"]} | ${row["مساعد2"]} | ${row["مساعد3"]} | ${row["مساعد4"]}\n\n`;
-      msg += `📊 *الإحصائيات التشغيلية:* \n`;
-      msg += `🏢 الوحدات التشغيلية: ${row["الوحدات التشغيلية"]}\n`;
-      msg += `👨‍⚕️ إجمالي مقدمي الخدمة: ${row["مقدمي الخدمة"]}\n`;
-      msg += `👥 الموظفين: ${row["الموظفين"]} | 🤝 المتطوعين: ${row["المتطوعين"]}\n\n`;
+      msg += `📊 *الإحصائيات:* \n`;
+      msg += `• الوحدات التشغيلية: ${row["الوحدات التشغيلية"]}\n`;
+      msg += `• إجمالي مقدمي الخدمة: ${row["مقدمي الخدمة"]}\n`;
+      msg += `• الموظفين: ${row["الموظفين"]} | المتطوعين: ${row["المتطوعين"]}\n\n`;
       msg += `🚑 *توزيع الآليات:* \n`;
-      msg += `🚑 المركبات الإسعافية: ${row["المركبات"]}\n`;
-      msg += `⛳ عربات القولف: ${row["القولف"]}\n`;
-      msg += `🚶 الفرق الراجلة: ${row["الراجلة"]}\n\n`;
+      msg += `• المركبات الإسعافية: ${row["المركبات"]}\n`;
+      msg += `• عربات القولف: ${row["القولف"]}\n`;
+      msg += `• الفرق الراجلة: ${row["الراجلة"]}\n\n`;
       msg += `📝 *الملاحظات:* \n${row["الملاحظات"]}`;
       openWhatsApp(msg);
     }
@@ -473,51 +1365,49 @@ async function fetchDeploymentFromSheet(){
 `;
       }
 
-       return `🔄 *نموذج تسليم مناوبة كبير المسعفين* 🔄
+      return `📋 *نموذج تسليم مناوبة كبير المسعفين* 📋
 
 📍 *القطاع:* ${row["القطاع"] || '-'}
 🕘 *نوع المناوبة:* ${row["نوع المناوبة"] || '-'}
 📅 *التاريخ:* ${row["التاريخ"] || '-'}
 ⏰ *الوقت:* من ${row["الوقت من"] || '-'} إلى ${row["الوقت إلى"] || '-'}
 
-📤 *كبير المسعفين المسلم:* ${row["كبير المسعفين المسلم"] || '-'}
-📥 *كبير المسعفين المستلم:* ${row["كبير المسعفين المستلم"] || '-'}
+👤 *كبير المسعفين المسلم:* ${row["كبير المسعفين المسلم"] || '-'}
+👤 *كبير المسعفين المستلم:* ${row["كبير المسعفين المستلم"] || '-'}
 👥 *المساعدون:* ${row["مساعد 1"]} | ${row["مساعد 2"]} | ${row["مساعد 3"]} | ${row["مساعد 4"]}
 
 📊 *ملخص الوضع الراهن:*
-⏱️ متوسط زمن الاستجابة: ${row["متوسط زمن الاستجابة"] || '0'}
-⏱️ متوسط زمن استجابة ECHO: ${row["متوسط زمن استجابة ECHO"] || '0'}
-📈 إجمالي البلاغات: ${row["إجمالي البلاغات"] || '0'}
-🚑 عدد الفرق الفعالة: ${row["عدد الفرق الفعالة"] || '0'} من أصل ${row["عدد الفرق المعتمدة"] || '0'}
+• متوسط زمن الاستجابة: ${row["متوسط زمن الاستجابة"] || '0'}
+• متوسط زمن استجابة ECHO: ${row["متوسط زمن استجابة ECHO"] || '0'}
+• إجمالي البلاغات: ${row["إجمالي البلاغات"] || '0'}
+• عدد الفرق الفعالة: ${row["عدد الفرق الفعالة"] || '0'} من أصل ${row["عدد الفرق المعتمدة"] || '0'}
 ${methaneSection}
 🚑 *الوحدات التشغيلية:*
-🚑 مركبات إسعافية: ${row["عدد مركبات الإسعاف"] || '0'}
-⛳ عربات قولف: ${row["عدد القولف"] || '0'}
-⚡ استجابة نوعية: ${row["عدد الاستجابة النوعية"] || '0'}
-✅ العاملة: ${row["العاملة"] || '0'} | 🅿️ الاحتياط: ${row["الاحتياط"] || '0'} | ❌ خارج الخدمة: ${row["الخارج عن الخدمة"] || '0'}
+• مركبات إسعافية: ${row["عدد مركبات الإسعاف"] || '0'}
+• قولف: ${row["عدد القولف"] || '0'}
+• استجابة نوعية: ${row["عدد الاستجابة النوعية"] || '0'}
 
-🛠️ *الدعم اللوجستي:*
-🔧 بلاغات الدعم: ${row["بلاغات الدعم اللوجستي"] || '0'}
-🔓 البلاغات المفتوحة: ${row["البلاغات المفتوحة"] || '0'}
+🚑 *المركبات والدعم اللوجستي:*
+• العاملة: ${row["العاملة"] || '0'}
+• الاحتياط: ${row["الاحتياط"] || '0'}
+• الخارج عن الخدمة: ${row["الخارج عن الخدمة"] || '0'}
+• بلاغات الدعم اللوجستي: ${row["بلاغات الدعم اللوجستي"] || '0'}
+• البلاغات المفتوحة: ${row["البلاغات المفتوحة"] || '0'}
 
 📍 *مواقع الانتشار:*
 ${sites}
 
-⚠️ *الوحدات المتعطلة:*
+🔧 *الوحدات المتعطلة ومواقعها:*
+• ${row["الوحدات المتعطلة ومواقعها"] || 'لايوجد'}
+
+🚚 *طلبات الدعم اللوجستي للمركبات:*
 ${supportLines}
 
-🌤️ *التحذيرات والملاحظات:*
-☁️ الجوية: ${row["التحذيرات الجوية"] || 'لايوجد'}
-🛡️ الأمنية: ${row["التحذيرات الأمنية"] || 'لايوجد'}
-🚫 مواقع خطرة: ${row["مواقع خطرة"] || 'لايوجد'}
-🩹 إصابات العاملين: ${row["إصابات العاملين"] || 'لايوجد'}
-
-📝 *ملخص الأحداث:*
-${row["ملخص الأحداث"] || 'لايوجد'}
-
-📝 *ملاحظات عامة:*
-${row["ملاحظات عامة عن المناوبة"] || 'لايوجد'}
-
+🛡️ *إحاطات الصحة والسلامة:*
+• التحذيرات الجوية: ${row["التحذيرات الجوية"] || 'لايوجد'}
+• التحذيرات الأمنية: ${row["التحذيرات الأمنية"] || 'لايوجد'}
+• مواقع خطرة: ${row["مواقع خطرة"] || 'لايوجد'}
+• إصابات العاملين: ${row["إصابات العاملين"] || 'لايوجد'}
 • إحاطات أخرى: ${row["إحاطات أخرى"] || 'لايوجد'}
 
 📝 *ملخص الأحداث:*
@@ -723,9 +1613,9 @@ ${row["ملاحظات عامة عن المناوبة"] || 'لايوجد'}
       msg += `🕘 *الفترة:* ${row["الفترة"]}\n`;
       msg += `📅 *التاريخ:* ${row["تاريخ العهدة"]} | ${row["وقت العهدة"]}\n\n`;
       msg += `📝 *تفاصيل العهدة:* \n`;
-      msg += `🏷️ النوع: ${row["نوع العهدة"]}\n`;
-      msg += `🆔 رقم العهدة/المعرف: ${row["رقم العهدة/المعرف"]}\n\n`;
-      msg += `📦 *الأصناف المستلمة:* \n${covenantItems.map(item => `✅ ${item}`).join('\n')}\n\n`;
+      msg += `• النوع: ${row["نوع العهدة"]}\n`;
+      msg += `• رقم العهدة/المعرف: ${row["رقم العهدة/المعرف"]}\n\n`;
+      msg += `📦 *الأصناف:* \n${covenantItems.map(item => `• ${item}`).join('\n')}\n\n`;
       msg += `📝 *ملاحظات عامة:* \n${row["ملاحظات عامة"]}\n\n`;
       msg += `👨‍⚕️ *كبير المسعفين والمساعدين:* ${row["اسم كبير المسعفين والمساعدين"]}\n`;
       msg += `✍️ *مدخل البيانات:* ${row["اسم مدخل البيانات"]}`;
@@ -857,15 +1747,10 @@ ${row["ملاحظات عامة عن المناوبة"] || 'لايوجد'}
       if(shortageFound) showAlert('stockAlert','error','تم الحفظ مع تنبيه: يوجد نقص في بعض الأصناف');
       else showAlert('stockAlert','success','تم حفظ نموذج الخزن الاستراتيجي بنجاح');
 
-      let msg = `📦 *تقرير الخزن الاستراتيجي* 📦\n\n`;
-      msg += `📅 *التاريخ:* ${date}\n`;
-      msg += `⏰ *الوقت:* ${time}\n`;
-      msg += `👤 *القائم بالتشييك:* ${checker}\n`;
-      msg += `📍 *موقع الخزن:* ${location}\n`;
+      let msg = `📦 تقرير الخزن الاستراتيجي\n\n`;
+      msg += `📅 ${date}\n⏰ ${time}\n👤 ${checker}\n📍 ${location}\n`;
       if(shortageFound) {
-        msg += `\n⚠️ *تنبيه: يوجد نقص في الأصناف التالية:* \n${medicalShortages}\n`;
-      } else {
-        msg += `\n✅ *جميع الأصناف متوفرة بحالة جيدة*\n`;
+        msg += `\n⚠ يوجد نقص في بعض الأصناف:\n${medicalShortages}`;
       }
       openWhatsApp(msg);
       clearStrategicStockForm();
@@ -1212,10 +2097,9 @@ const items = data.filter(d =>
       
       // تحديث الداشبورد والخريطة ديناميكياً بعد الحفظ
       setTimeout(() => {
-        updateDashboard();
-    setInterval(updateDashboard, 60000);
-        updateMapWithDeploymentData();
-      }, 1000);
+        loadLiveDeploymentData();
+        updateSupportSummary();
+      }, 500);
 
       let msg = `📍 *خطة الانتشار - نطاق منى* 📍\n\n`;
       msg += `📍 *القطاع:* ${sector}\n`;
@@ -1225,7 +2109,7 @@ const items = data.filter(d =>
       msg += `👨‍⚕️ *كبير المسعفين المناوب:* ${lead}\n`;
       msg += `👥 *المساعدون:* ${autoAssistants}\n\n`;
       msg += `📋 *ملخص الانتشار:* \n`;
-      msg += `🔢 إجمالي نقاط الانتشار: ${rows.length}\n`;
+      msg += `• إجمالي نقاط الانتشار: ${rows.length}\n`;
       
       const statusCounts = rows.reduce((acc, r) => {
         acc[r["الحالة"]] = (acc[r["الحالة"]] || 0) + 1;
@@ -1420,7 +2304,7 @@ ${row["ملاحظات إضافية"]}
       let msg = `🤝 *خطة الدعم - نطاق منى* 🤝\n\n`;
       msg += `📅 *التاريخ:* ${date} | ${time}\n`;
       msg += `👥 *عدد الفرق:* ${teamsCount}\n`;
-      msg += `🔄 *نوع التدعيم:* ${type === 'داخل_النطاق' ? '🔄 داخل النطاق' : '🌐 خارج النطاق'}\n\n`;
+      msg += `🔄 *نوع التدعيم:* ${type === 'داخل_النطاق' ? 'داخل النطاق' : 'خارج النطاق'}\n\n`;
       
       if (type === 'داخل_النطاق') {
         msg += `📤 *من القطاع:* ${document.getElementById('support_from_sector').value}\n`;
@@ -1474,7 +2358,7 @@ setMapLink();
 /* ═══════════════════════════════════════════
    بيانات نقاط الانتشار الثابتة (148 نقطة)
    ═══════════════════════════════════════════ */
-const staticDeploymentPoints = [
+var staticDeploymentPoints = [
   {id:"MH1",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.425546,lng:39.86387,status:"جاهز",shift:"الصباحية"},
   {id:"MH2",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.424468,lng:39.863626,status:"جاهز",shift:"الصباحية"},
   {id:"MH3",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.425116,lng:39.865597,status:"جاهز",shift:"الصباحية"},
@@ -1628,9 +2512,9 @@ const staticDeploymentPoints = [
 /* ═══════════════════════════════════════════
    بيانات الخريطة والداشبورد المباشرة
    ═══════════════════════════════════════════ */
-let liveDeploymentData = [...staticDeploymentPoints];
-let mapInstance = null;
-let mapMarkers = [];
+var liveDeploymentData = [...staticDeploymentPoints];
+var mapInstance = null;
+var mapMarkers = [];
 
 /* ─── تبديل التابات الرئيسية ─── */
 function switchMainTab(tabId, btn){
@@ -1660,6 +2544,54 @@ function getTypeIcon(type){
   if(t.includes('تدخل سريع')) return '⚡';
   return '📍';
 }
+
+// تحديد المناوبة الحالية (صباحية/مسائية)
+function getCurrentShift() {
+  const now = new Date();
+  const hours = now.getHours();
+  // افتراض المناوبة الصباحية من 6 صباحًا إلى 6 مساءً (18:00)
+  // والمناوبة المسائية من 6 مساءً إلى 6 صباحًا
+  if (hours >= 6 && hours < 18) {
+    return "الصباحية";
+  } else {
+    return "المسائية";
+  }
+}
+
+// الحصول على بداية ونهاية الفترة الزمنية للمناوبة الحالية
+function getShiftPeriod(shift) {
+  const now = new Date();
+  let startHour, endHour;
+
+  if (shift === "الصباحية") {
+    startHour = 6;
+    endHour = 18;
+  } else { // المسائية
+    startHour = 18;
+    endHour = 6; // اليوم التالي
+  }
+
+  const startDate = new Date(now);
+  startDate.setHours(startHour, 0, 0, 0);
+
+  const endDate = new Date(now);
+  endDate.setHours(endHour, 0, 0, 0);
+
+  // إذا كانت المناوبة المسائية تمتد لليوم التالي
+  if (shift === "المسائية" && endHour < startHour) {
+    endDate.setDate(endDate.getDate() + 1);
+  }
+
+  // إذا كانت المناوبة الصباحية بدأت في اليوم السابق (مثلاً، الساعة 6 صباحًا اليوم ولكن الوقت الحالي قبل 6 صباحًا)
+  if (shift === "الصباحية" && now < startDate) {
+    startDate.setDate(startDate.getDate() - 1);
+    endDate.setDate(endDate.getDate() - 1);
+  }
+
+  return { start: startDate, end: endDate };
+}
+
+// ---
 
 /* ─── تهيئة الخريطة ─── */
 function initMap(){
@@ -1698,7 +2630,6 @@ function renderMapMarkers(data){
           <tr><td style="font-weight:700;padding:2px 8px">الحالة</td><td><span style="background:${color};color:#fff;padding:2px 8px;border-radius:10px;font-size:.75rem">${pt.status}</span></td></tr>
           <tr><td style="font-weight:700;padding:2px 8px">الفرق</td><td>${pt.teams}</td></tr>
           <tr><td style="font-weight:700;padding:2px 8px">المناوبة</td><td>${pt.shift || '-'}</td></tr>
-          ${pt.lastUpdate ? `<tr><td style="font-weight:700;padding:2px 8px">آخر تحديث</td><td style="font-size:0.7rem;color:#666">${pt.lastUpdate}</td></tr>` : ''}
         </table>
         <div style="margin-top:8px;text-align:center">
           <a href="https://www.google.com/maps?q=${pt.lat},${pt.lng}" target="_blank" style="color:#0b5ed7;font-size:.8rem">فتح في Google Maps</a>
@@ -1905,9 +2836,17 @@ async function updateSupportSummary() {
       return;
     }
 
+    const currentShift = getCurrentShift();
+    const { start: shiftStartTime, end: shiftEndTime } = getShiftPeriod(currentShift);
+
+    const filteredSupportData = result.data.filter(row => {
+      const rowDate = new Date(row['التاريخ'] + ' ' + (row['الوقت'] || '00:00'));
+      return rowDate >= shiftStartTime && rowDate < shiftEndTime;
+    });
+
     // تجميع البيانات حسب القطاع/النطاق والتاريخ والفترة
     const supportMap = {};
-    result.data.forEach(row => {
+    filteredSupportData.forEach(row => {
       if (!row) return;
       const type = row['النوع'] || (row['نوع التدعيم'] === 'داخل_النطاق' ? 
         (row['القطاع المدعم له'] || 'بين القطاعات') : 
@@ -1930,7 +2869,7 @@ async function updateSupportSummary() {
     });
 
     // عرض البيانات في الجدول
-    tbody.innerHTML = '';
+    tbody.innerHTML = "";
     const items = Object.values(supportMap).slice(0, 10);
     if (items.length === 0) {
       tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم -</td></tr>';
@@ -1971,7 +2910,6 @@ async function loadLiveDeploymentData(){
 
       // استخدام Map لتخزين أحدث حالة لكل نقطة
       const latestStatusMap = new Map();
-      let updateCount = 0;
       sortedData.forEach(livePt => {
         const liveId = String(livePt["الرمز"] || livePt["اسم النقطة"] || "").trim();
         if (liveId && !latestStatusMap.has(liveId)) {
@@ -1988,7 +2926,6 @@ async function loadLiveDeploymentData(){
           mergedData[index].type = livePt["نوع الآلية"] || livePt["الالية المشغلة بالنقطة"] || mergedData[index].type;
           mergedData[index].shift = livePt["مناوبة النقطة"] || livePt["العرض الزمني"] || mergedData[index].shift;
           mergedData[index].lastUpdate = livePt["التاريخ"] + " " + (livePt["الوقت"] || "");
-          updateCount++;
         } else if(liveId) {
           mergedData.push({
             id: liveId,
@@ -2009,946 +2946,72 @@ async function loadLiveDeploymentData(){
     console.log('استخدام البيانات الثابتة بسبب خطأ:', e);
     liveDeploymentData = [...staticDeploymentPoints];
   }
-    console.log('✓ loadLiveDeploymentData completed. Total points:', liveDeploymentData.length, 'Updated from sheet:', updateCount);
+  console.log('✓ loadLiveDeploymentData completed. Data count:', liveDeploymentData.length);
   updateDashboard(liveDeploymentData);
-  if(mapInstance) renderMapMarkers(liveDeploymentData);
+  if(typeof mapInstance !== 'undefined' && mapInstance) renderMapMarkers(liveDeploymentData);
+
+  // تحديث الداشبورد والخريطة بشكل دوري كل 3 دقائق
+  setInterval(() => {
+    loadLiveDeploymentData();
+    updateSupportSummary();
+  }, 180000); // 3 دقائق
 }
 
-// تحميل البيانات عند بدء التشغيل
-loadLiveDeploymentData();
+// تحميل البيانات عند بدء التشغيل بعد تحميل الصفحة بالكامل
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(loadLiveDeploymentData, 1000);
+});
 
-// تحديث تلقائي كل 60 ثانية لضمان اللحظية
-setInterval(loadLiveDeploymentData, 60000);
+// تحديث تلقائي كل 3 دقائق
+setInterval(loadLiveDeploymentData, 180000);
 
 /* لتحميل النقاط الافتراضية للقطاع المختار */
 function loadDefaultDeploymentPoints(){
-  const sector = document.getElementById('deploy_sector').value;
-  const shift = document.getElementById('deploy_shift').value || 'الصباحية';
-  
-  if(!sector || sector === 'اختر القطاع'){
-    showAlert('deploymentAlert','error','يرجى اختيار قطاع أولاً');
-    return;
+  try {
+    const sector = document.getElementById('deploy_sector').value;
+    const shift = document.getElementById('deploy_shift').value || 'الصباحية';
+    
+    if(!sector || sector === 'اختر القطاع'){
+      showAlert('deploymentAlert','error','يرجى اختيار قطاع أولاً');
+      return;
+    }
+    
+    const tbody = document.getElementById('deploymentTableBody');
+    if (!tbody) {
+      console.error('Table body not found');
+      return;
+    }
+    
+    tbody.innerHTML = '';
+    
+    // البحث عن النقاط التابعة للقطاع المختار
+    const points = window.DEPLOYMENT_POINTS || DEPLOYMENT_POINTS || {};
+    const sectorPoints = Object.entries(points).filter(([code, point]) => point.sector === sector);
+    
+    if(sectorPoints.length === 0){
+      showAlert('deploymentAlert','warning','لا توجد نقاط افتراضية لهذا القطاع');
+      return;
+    }
+    
+    // إضافة كل نقطة إلى الجدول
+    sectorPoints.forEach(([code, point]) => {
+      const rowData = {
+        code: code,
+        type: point.unit_type || 'مركبة إسعافية',
+        shift: shift,
+        count: 1,
+        lat: point.lat || '',
+        lng: point.lng || '',
+        note: ''
+      };
+      tbody.insertAdjacentHTML('beforeend', createDeploymentRowHTML(rowData));
+    });
+    
+    showAlert('deploymentAlert','success',`تم تحميل ${sectorPoints.length} نقطة بنجاح لقطاع ${sector}`);
+  } catch (err) {
+    console.error('Error in loadDefaultDeploymentPoints:', err);
+    alert('حدث خطأ أثناء تحميل النقاط: ' + err.message);
   }
-  
-  const tbody = document.getElementById('deploymentTableBody');
-  if (!tbody) {
-    console.error('Table body not found');
-    return;
-  }
-  
-  tbody.innerHTML = '';
-  
-  // البحث عن النقاط التابعة للقطاع المختار
-  const sectorPoints = Object.entries(DEPLOYMENT_POINTS).filter(([code, point]) => point.sector === sector);
-  
-  if(sectorPoints.length === 0){
-    showAlert('deploymentAlert','warning','لا توجد نقاط افتراضية لهذا القطاع');
-    return;
-  }
-  
-  // إضافة كل نقطة إلى الجدول
-  sectorPoints.forEach(([code, point]) => {
-    const rowData = {
-      code: code,
-      type: point.unit_type || 'مركبة إسعافية',
-      shift: shift,
-      count: 1,
-      lat: point.lat || '',
-      lng: point.lng || '',
-      note: ''
-    };
-    tbody.insertAdjacentHTML('beforeend', createDeploymentRowHTML(rowData));
-  });
-  
-  showAlert('deploymentAlert','success',`تم تحميل ${sectorPoints.length} نقطة بنجاح لقطاع ${sector}`);
 }
-const DEPLOYMENT_POINTS = {
-  "MH1": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.425546,
-    "lng": 39.86387
-  },
-  "MH2": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.424468,
-    "lng": 39.863626
-  },
-  "MH3": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.425116,
-    "lng": 39.865597
-  },
-  "MH4": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.425066,
-    "lng": 39.865984
-  },
-  "MH5": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.425314,
-    "lng": 39.867029
-  },
-  "MH6": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.423748,
-    "lng": 39.865322
-  },
-  "MH7": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.424757,
-    "lng": 39.86711
-  },
-  "MH8": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.425946,
-    "lng": 39.870235
-  },
-  "MH9": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.424427,
-    "lng": 39.868784
-  },
-  "MH10": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.422679,
-    "lng": 39.876464
-  },
-  "MH11": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة",
-    "lat": 21.424594,
-    "lng": 39.872963
-  },
-  "MH12": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.422541,
-    "lng": 39.8765
-  },
-  "MH13": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة",
-    "lat": 21.42235,
-    "lng": 39.868068
-  },
-  "MH14": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.421914,
-    "lng": 39.869211
-  },
-  "MH15": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.42362,
-    "lng": 39.873042
-  },
-  "MH16": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.419938,
-    "lng": 39.872258
-  },
-  "MH17": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.419297,
-    "lng": 39.873766
-  },
-  "MH18": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.422883,
-    "lng": 39.871233
-  },
-  "MH19": {
-    "sector": "الجمرات",
-    "unit_type": "راجلة",
-    "lat": 21.420706,
-    "lng": 39.876611
-  },
-  "MH20": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.425302,
-    "lng": 39.867091
-  },
-  "MH21": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.420791,
-    "lng": 39.876812
-  },
-  "MH22": {
-    "sector": "الجمرات",
-    "unit_type": "راجلة",
-    "lat": 21.420252,
-    "lng": 39.871201
-  },
-  "MH23": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.420067,
-    "lng": 39.877646
-  },
-  "MH24": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.416968,
-    "lng": 39.877064
-  },
-  "MH25": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.423457,
-    "lng": 39.871308
-  },
-  "MH26": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.422453,
-    "lng": 39.877141
-  },
-  "MH27": {
-    "sector": "الجمرات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.422588,
-    "lng": 39.878702
-  },
-  "MH28‏": {
-    "sector": "الجمرات",
-    "unit_type": "راجلة",
-    "lat": 21.422333,
-    "lng": 39.879185
-  },
-  "MH29‏‏": {
-    "sector": "الجمرات",
-    "unit_type": "راجلة",
-    "lat": 21.422707,
-    "lng": 39.877685
-  },
-  "MH30": {
-    "sector": "الجمرات",
-    "unit_type": "راجلة",
-    "lat": 21.420637,
-    "lng": 39.87462
-  },
-  "MH31": {
-    "sector": "الجمرات",
-    "unit_type": "راجلة",
-    "lat": 21.422205,
-    "lng": 39.871614
-  },
-  "MH32": {
-    "sector": "الجمرات",
-    "unit_type": "راجلة",
-    "lat": 21.420539,
-    "lng": 39.872534
-  },
-  "MH33": {
-    "sector": "الجمرات",
-    "unit_type": "راجلة",
-    "lat": 21.419933,
-    "lng": 39.874036
-  },
-  "MH34": {
-    "sector": "الجمرات",
-    "unit_type": "راجلة",
-    "lat": 21.419995,
-    "lng": 39.873977
-  },
-  "MH35": {
-    "sector": "الجمرات",
-    "unit_type": "راجلة",
-    "lat": 21.41991,
-    "lng": 39.874087
-  },
-  "MH36": {
-    "sector": "القطارات",
-    "unit_type": "قولف",
-    "lat": 21.419885,
-    "lng": 39.87414
-  },
-  "MH37": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.422027,
-    "lng": 39.871756
-  },
-  "MH38": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.422112,
-    "lng": 39.871644
-  },
-  "MH39": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.421962,
-    "lng": 39.871955
-  },
-  "MH40": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.419221,
-    "lng": 39.874428
-  },
-  "MH41": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.419401,
-    "lng": 39.874868
-  },
-  "MH42": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.422243,
-    "lng": 39.870157
-  },
-  "MH43": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.420376,
-    "lng": 39.874716
-  },
-  "MH44": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.420419,
-    "lng": 39.87468
-  },
-  "MH45": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.421437,
-    "lng": 39.873249
-  },
-  "MH46": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.421861,
-    "lng": 39.872251
-  },
-  "MH47": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.422352,
-    "lng": 39.871188
-  },
-  "MH48": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.421639,
-    "lng": 39.870778
-  },
-  "MH49": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.42134,
-    "lng": 39.871958
-  },
-  "MH50": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.420853,
-    "lng": 39.872719
-  },
-  "MH51": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.42095,
-    "lng": 39.872647
-  },
-  "MH52": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.419738,
-    "lng": 39.87439
-  },
-  "MH53": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.418786,
-    "lng": 39.877496
-  },
-  "MH54": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.417938,
-    "lng": 39.877104
-  },
-  "MH55": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.412133,
-    "lng": 39.88039
-  },
-  "MH56": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.411564,
-    "lng": 39.884305
-  },
-  "MH57": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.412566,
-    "lng": 39.881988
-  },
-  "MH58": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.422928,
-    "lng": 39.865427
-  },
-  "MH59": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.420532,
-    "lng": 39.868676
-  },
-  "MH60": {
-    "sector": "القطارات",
-    "unit_type": "قولف",
-    "lat": 21.420106,
-    "lng": 39.869124
-  },
-  "MH61": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.4195019,
-    "lng": 39.8707124
-  },
-  "MH62": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.419418,
-    "lng": 39.87085
-  },
-  "MH63": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.4175948,
-    "lng": 39.8733618
-  },
-  "MH64": {
-    "sector": "القطارات",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.419053,
-    "lng": 39.871377
-  },
-  "MH65": {
-    "sector": "بطن منى الجنوبي",
-    "unit_type": "قولف",
-    "lat": 21.416051,
-    "lng": 39.87703
-  },
-  "MH66": {
-    "sector": "بطن منى الجنوبي",
-    "unit_type": "قولف",
-    "lat": 21.41536,
-    "lng": 39.876724
-  },
-  "MH67": {
-    "sector": "بطن منى الجنوبي",
-    "unit_type": "قولف",
-    "lat": 21.4098948,
-    "lng": 39.8850895
-  },
-  "MH68": {
-    "sector": "بطن منى الجنوبي",
-    "unit_type": "راجلة",
-    "lat": 21.413628,
-    "lng": 39.880993
-  },
-  "MH69": {
-    "sector": "بطن منى الجنوبي",
-    "unit_type": "قولف",
-    "lat": 21.408507,
-    "lng": 39.886137
-  },
-  "MH70": {
-    "sector": "بطن منى الجنوبي",
-    "unit_type": "قولف",
-    "lat": 21.407028,
-    "lng": 39.887845
-  },
-  "MH71": {
-    "sector": "بطن منى الجنوبي",
-    "unit_type": "قولف",
-    "lat": 21.415282,
-    "lng": 39.87698
-  },
-  "MH72": {
-    "sector": "بطن منى الجنوبي",
-    "unit_type": "قولف",
-    "lat": 21.42343,
-    "lng": 39.861696
-  },
-  "MH73": {
-    "sector": "بطن منى الجنوبي",
-    "unit_type": "قولف",
-    "lat": 21.4077995,
-    "lng": 39.8868492
-  },
-  "MH74": {
-    "sector": "بطن منى الجنوبي",
-    "unit_type": "راجلة",
-    "lat": 21.4134565,
-    "lng": 39.8777455
-  },
-  "MH75": {
-    "sector": "بطن منى الجنوبي",
-    "unit_type": "راجلة",
-    "lat": 21.4218743,
-    "lng": 39.8671726
-  },
-  "MH76‏‏": {
-    "sector": "بطن منى الجنوبي",
-    "unit_type": "قولف",
-    "lat": 21.4231765,
-    "lng": 39.8640488
-  },
-  "MH77": {
-    "sector": "بطن منى الجنوبي",
-    "unit_type": "مركبة",
-    "lat": 21.4153106,
-    "lng": 39.8753135
-  },
-  "MH78": {
-    "sector": "بطن منى الجنوبي",
-    "unit_type": "راجلة",
-    "lat": 21.40939,
-    "lng": 39.8908049
-  },
-  "MH79": {
-    "sector": "بطن منى الجنوبي",
-    "unit_type": "قولف",
-    "lat": 21.4105,
-    "lng": 39.8904449
-  },
-  "MH80": {
-    "sector": "بطن منى الجنوبي",
-    "unit_type": "راجلة",
-    "lat": 21.40775,
-    "lng": 39.8915449
-  },
-  "MH81": {
-    "sector": "بطن منى الجنوبي",
-    "unit_type": "مركبة",
-    "lat": 21.41402,
-    "lng": 39.8861949
-  },
-  "MH82": {
-    "sector": "بطن منى الجنوبي",
-    "unit_type": "مركبة",
-    "lat": 21.41225,
-    "lng": 39.8900849
-  },
-  "MH83": {
-    "sector": "بطن منى الجنوبي",
-    "unit_type": "مركبة",
-    "lat": 21.410197,
-    "lng": 39.88949
-  },
-  "MH84": {
-    "sector": "بطن منى الجنوبي",
-    "unit_type": "قولف",
-    "lat": 21.414572,
-    "lng": 39.884976
-  },
-  "MH85": {
-    "sector": "بطن منى الجنوبي",
-    "unit_type": "قولف",
-    "lat": 21.412519,
-    "lng": 39.885623
-  },
-  "MH86": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.4150064,
-    "lng": 39.8802659
-  },
-  "MH87": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.416245,
-    "lng": 39.8832549
-  },
-  "MH88": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "تدخل سريع",
-    "lat": 21.413125,
-    "lng": 39.8857449
-  },
-  "MH89": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.417865,
-    "lng": 39.8825649
-  },
-  "MH90‏": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.411215,
-    "lng": 39.8883049
-  },
-  "MH91": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.407645,
-    "lng": 39.8925349
-  },
-  "MH92": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "قولف",
-    "lat": 21.4084,
-    "lng": 39.8931249
-  },
-  "MH93": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "قولف",
-    "lat": 21.417475,
-    "lng": 39.8835549
-  },
-  "MH94": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.41787,
-    "lng": 39.8887049
-  },
-  "MH95": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "قولف",
-    "lat": 21.41533,
-    "lng": 39.8887149
-  },
-  "MH96‏": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.41705,
-    "lng": 39.8898649
-  },
-  "MH97‏": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.41484,
-    "lng": 39.8940749
-  },
-  "MH98‏": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.41895,
-    "lng": 39.8856949
-  },
-  "MH99‏": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "راجلة",
-    "lat": 21.41801,
-    "lng": 39.8863549
-  },
-  "MH100": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "راجلة",
-    "lat": 21.41852,
-    "lng": 39.8871449
-  },
-  "MH101‏": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "راجلة",
-    "lat": 21.41612,
-    "lng": 39.8908049
-  },
-  "MH102": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "قولف",
-    "lat": 21.41934,
-    "lng": 39.8837749
-  },
-  "MH103": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "قولف",
-    "lat": 21.41558,
-    "lng": 39.8904049
-  },
-  "MH104‏‏": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "قولف",
-    "lat": 21.41382,
-    "lng": 39.8930049
-  },
-  "MH105‏‏‏": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "قولف",
-    "lat": 21.41382,
-    "lng": 39.8930049
-  },
-  "MH106‏‏": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "قولف",
-    "lat": 21.42023,
-    "lng": 39.8841849
-  },
-  "MH107": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "قولف",
-    "lat": 21.42023,
-    "lng": 39.8841849
-  },
-  "MH108": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "تدخل سريع",
-    "lat": 21.41065,
-    "lng": 39.8944849
-  },
-  "MH109": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "راجلة",
-    "lat": 21.41284,
-    "lng": 39.8950749
-  },
-  "MH110": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "تدخل سريع",
-    "lat": 21.41284,
-    "lng": 39.8950749
-  },
-  "MH111": {
-    "sector": "بطن منى الشمالي",
-    "unit_type": "راجلة",
-    "lat": 21.4137,
-    "lng": 39.8913249
-  },
-  "MH112": {
-    "sector": "الشعيبين",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.41714,
-    "lng": 39.8862349
-  },
-  "MH113": {
-    "sector": "الشعيبين",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.420315,
-    "lng": 39.8837149
-  },
-  "MH114": {
-    "sector": "الشعيبين",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.419355,
-    "lng": 39.8836549
-  },
-  "MH115": {
-    "sector": "الشعيبين",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.417655,
-    "lng": 39.8849649
-  },
-  "MH116": {
-    "sector": "الشعيبين",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.417265,
-    "lng": 39.8890749
-  },
-  "MH117": {
-    "sector": "الشعيبين",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.41727,
-    "lng": 39.9044749
-  },
-  "MH118": {
-    "sector": "الشعيبين",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.42516,
-    "lng": 39.8958549
-  },
-  "MH119": {
-    "sector": "الشعيبين",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.41971,
-    "lng": 39.8942049
-  },
-  "MH120": {
-    "sector": "الشعيبين",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.4219,
-    "lng": 39.9015749
-  },
-  "MH121": {
-    "sector": "منى الجديد 1",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.4219,
-    "lng": 39.9015749
-  },
-  "MH122": {
-    "sector": "منى الجديد 1",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.41767,
-    "lng": 39.8995449
-  },
-  "MH123": {
-    "sector": "منى الجديد 1",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.4242799,
-    "lng": 39.9057209
-  },
-  "MH124": {
-    "sector": "منى الجديد 1",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.42085,
-    "lng": 39.8947749
-  },
-  "MH125": {
-    "sector": "منى الجديد 1",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.42085,
-    "lng": 39.8947749
-  },
-  "MH126": {
-    "sector": "منى الجديد 1",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.42245,
-    "lng": 39.8797149
-  },
-  "MH127": {
-    "sector": "منى الجديد 1",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.42947,
-    "lng": 39.9080249
-  },
-  "MH128": {
-    "sector": "منى الجديد 1",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.42038,
-    "lng": 39.8880349
-  },
-  "MH129": {
-    "sector": "منى الجديد 1",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.42104,
-    "lng": 39.8964449
-  },
-  "MH130": {
-    "sector": "منى الجديد 1",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.42348,
-    "lng": 39.9034349
-  },
-  "MH131": {
-    "sector": "منى الجديد 1",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.42348,
-    "lng": 39.9034349
-  },
-  "MH132": {
-    "sector": "منى الجديد 1",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.42402,
-    "lng": 39.8975449
-  },
-  "MH133": {
-    "sector": "منى الجديد 2",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.41167,
-    "lng": 39.9120049
-  },
-  "MH134": {
-    "sector": "منى الجديد 2",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.41285,
-    "lng": 39.9022649
-  },
-  "MH135": {
-    "sector": "منى الجديد 2",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.41146,
-    "lng": 39.9120649
-  },
-  "MH136": {
-    "sector": "منى الجديد 2",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.417675,
-    "lng": 39.8995449
-  },
-  "MH137": {
-    "sector": "منى الجديد 2",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.414515,
-    "lng": 39.8988649
-  },
-  "MH138": {
-    "sector": "منى الجديد 2",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.414875,
-    "lng": 39.9015749
-  },
-  "MH139": {
-    "sector": "منى الجديد 2",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.41311,
-    "lng": 39.8968749
-  },
-  "MH140": {
-    "sector": "منى الجديد 2",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.41263,
-    "lng": 39.9013149
-  },
-  "MH141": {
-    "sector": "منى الجديد 2",
-    "unit_type": "قولف",
-    "lat": 21.4055,
-    "lng": 39.8917449
-  },
-  "MH142": {
-    "sector": "منى الجديد 2",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.41101,
-    "lng": 39.9013649
-  },
-  "MH143": {
-    "sector": "منى الجديد 2",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.40654,
-    "lng": 39.8972549
-  },
-  "MH144": {
-    "sector": "منى الجديد 2",
-    "unit_type": "قولف",
-    "lat": 21.40654,
-    "lng": 39.8972549
-  },
-  "MH145": {
-    "sector": "منى الجديد 2",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.4037,
-    "lng": 39.8959249
-  },
-  "MH146": {
-    "sector": "منى الجديد 2",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.40314,
-    "lng": 39.8966349
-  },
-  "MH147": {
-    "sector": "منى الجديد 2",
-    "unit_type": "مركبة اسعافية",
-    "lat": 21.40951,
-    "lng": 39.8979749
-  },
-  "MH148": {
-    "sector": "منى الجديد 2",
-    "unit_type": "قولف",
-    "lat": 21.41226,
-    "lng": 39.8986349
-  }
-};
+
+

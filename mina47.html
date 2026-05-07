@@ -3390,10 +3390,20 @@ async function loadLiveDeploymentData(){
   try {
     const data = await fetchDeploymentFromSheet();
      if(data && data.length > 0){
-      liveDeploymentData = data.map(d => ({
-        id: d["الرمز"] || d["اسم النقطة"] || '',
-        sector: d["القطاع"] || '',
-        type: d["نوع الوحدة"] || '',
+      const latestDataMap = new Map();
+      data.forEach(d => {
+        const id = d["الرمز"] || d["اسم النقطة"];
+        if (id) {
+          const currentTime = new Date(d["وقت الحفظ"]);
+          if (!latestDataMap.has(id) || currentTime > new Date(latestDataMap.get(id)["وقت الحفظ"])) {
+            latestDataMap.set(id, d);
+          }
+        }
+      });
+      liveDeploymentData = Array.from(latestDataMap.values()).map(d => ({
+        id: d["الرمز"] || d["اسم النقطة"] || ",
+        sector: d["القطاع"] || ",
+        type: d["نوع الوحدة"] || ",
         teams: Number(d["عدد الفرق الفعلي"] || d["عدد الفرق"] || 1),
         lat: parseFloat(d["lat"] || d["خط العرض"] || 0),
         lng: parseFloat(d["lng"] || d["خط الطول"] || 0),

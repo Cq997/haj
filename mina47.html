@@ -3401,9 +3401,9 @@ async function loadLiveDeploymentData(){
         }
       });
       liveDeploymentData = Array.from(latestDataMap.values()).map(d => ({
-        id: d["الرمز"] || d["اسم النقطة"] || ",
-        sector: d["القطاع"] || ",
-        type: d["نوع الوحدة"] || ",
+        id: d["الرمز"] || d["اسم النقطة"] || '',
+        sector: d["القطاع"] || '',
+        type: d["نوع الوحدة"] || '',
         teams: Number(d["عدد الفرق الفعلي"] || d["عدد الفرق"] || 1),
         lat: parseFloat(d["lat"] || d["خط العرض"] || 0),
         lng: parseFloat(d["lng"] || d["خط الطول"] || 0),

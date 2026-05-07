@@ -1455,7 +1455,14 @@
       }
     };
 
-    window.medicalItemsData = ['جهاز لوكس', 'جهاز ميندري', 'جهاز لايف باك 15', 'جهاز اتصال لاسلكي', 'المسعف الالكتروني(تابلت)', 'جهاز قياس العلامات الحيوية'];
+    window.medicalItemsData = [
+      'جهاز لوكس',
+      'جهاز ميندري',
+      'جهاز لايف باك 15',
+      'جهاز اتصال لاسلكي',
+      'المسعف الالكتروني(تابلت)',
+      'جهاز قياس العلامات الحيوية'
+    ];
     const oldMedicalItemsData = [
       "جهاز لوكس","جهاز صدمات خارجي AED","جهاز تنفس صناعي","جهاز لايف باك","جهاز ميندري","جهاز قياس العلامات الحيوية",
       "جهاز قياس النبض ونسبة الأكسجين بالدم","جهاز قياس السكر بالدم","جهاز الشفط المتنقل الكهربائي","جهاز الدريل العظمي",
@@ -2062,12 +2069,12 @@ ${supportLines}
         "الفترة": document.getElementById('units_check_shift').value,
         "كبير المسعفين": document.getElementById('ems_lead_display').value,
         "مستلم العهد": document.getElementById('employee_receiver_name').value,
-        "جهاز لوكس": document.getElementById('medical_count_0')?.value || '0',
-        "جهاز ميندري": document.getElementById('medical_count_1')?.value || '0',
-        "جهاز لايف باك 15": document.getElementById('medical_count_2')?.value || '0',
-        "جهاز اتصال لاسلكي": document.getElementById('medical_count_3')?.value || '0',
-        "المسعف الالكتروني(تابلت)": document.getElementById('medical_count_4')?.value || '0',
-        "جهاز قياس العلامات الحيوية": document.getElementById('medical_count_5')?.value || '0',
+        "جهاز لوكس": `${document.getElementById('medical_status_0')?.value} (${document.getElementById('medical_count_0')?.value || '0'})`,
+        "جهاز ميندري": `${document.getElementById('medical_status_1')?.value} (${document.getElementById('medical_count_1')?.value || '0'})`,
+        "جهاز لايف باك 15": `${document.getElementById('medical_status_2')?.value} (${document.getElementById('medical_count_2')?.value || '0'})`,
+        "جهاز اتصال لاسلكي": `${document.getElementById('medical_status_3')?.value} (${document.getElementById('medical_count_3')?.value || '0'})`,
+        "المسعف الالكتروني(تابلت)": `${document.getElementById('medical_status_4')?.value} (${document.getElementById('medical_count_4')?.value || '0'})`,
+        "جهاز قياس العلامات الحيوية": `${document.getElementById('medical_status_5')?.value} (${document.getElementById('medical_count_5')?.value || '0'})`,
         "ملاحظات عامة": document.getElementById('units_check_notes').value
       };
 
@@ -2087,12 +2094,13 @@ ${supportLines}
       msg += `👤 *كبير المسعفين:* ${row["كبير المسعفين"]}\n`;
       msg += `👤 *مستلم العهد:* ${row["مستلم العهد"]}\n\n`;
       msg += `✅ *العهد:* \n`;
-      msg += `• جهاز لوكس: ${row["جهاز لوكس"]}\n`;
-      msg += `• جهاز ميندري: ${row["جهاز ميندري"]}\n`;
-      msg += `• جهاز لايف باك 15: ${row["جهاز لايف باك 15"]}\n`;
-      msg += `• جهاز اتصال لاسلكي: ${row["جهاز اتصال لاسلكي"]}\n`;
-      msg += `• المسعف الالكتروني(تابلت): ${row["المسعف الالكتروني(تابلت)"]}\n`;
-      msg += `• جهاز قياس العلامات الحيوية: ${row["جهاز قياس العلامات الحيوية"]}\n\n`;
+      window.medicalItemsData.forEach((item, index) => {
+        const status = document.getElementById(`medical_status_${index}`).value;
+        const count = document.getElementById(`medical_count_${index}`).value;
+        const note = document.getElementById(`medical_note_${index}`).value;
+        msg += `• ${item}: [${status}] - العدد: ${count}${note ? ' - ملاحظة: ' + note : ''}\n`;
+      });
+      msg += `\n`;
       msg += `📝 *الملاحظات:* \n${row["ملاحظات عامة"]}`;
       openWhatsApp(msg);
     }

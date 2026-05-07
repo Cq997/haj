@@ -413,8 +413,7 @@
       <li class="active" data-target="homePanel"><i class="fas fa-home"></i> الرئيسية</li>
       <li data-target="groundEMS"><i class="fas fa-clipboard-list"></i> التحضير اليومي</li>
       <li data-target="handoverPanel"><i class="fas fa-exchange-alt"></i> تسليم المناوبة</li>
-      <li data-target="unitsCheckPanel"><i class="fas fa-briefcase"></i> العهد الشخصية</li>
-      <li data-target="stockPanel"><i class="fas fa-boxes-stacked"></i> الخزن الاستراتيجي</li>
+     <li data-target="unitsCheckPanel"><i class="fas fa-briefcase"></i> العهد الشخصية</li>      <li data-target="stockPanel"><i class="fas fa-boxes-stacked"></i> الخزن الاستراتيجي</li>
       <li data-target="deploymentPanel"><i class="fas fa-map-marked-alt"></i> خطة الانتشار</li>
       <li data-target="mapsPanel"><i class="fas fa-map"></i> خرائط النطاق</li>
       <li data-target="supportPlanPanel"><i class="fas fa-handshake"></i> خطة الدعم</li>
@@ -440,10 +439,6 @@
     <!-- ═══════ KPI Row ═══════ -->
     <div class="kpi-row">
       <div class="kpi-card"><div class="kpi-val" id="kpi_total">0</div><div class="kpi-label">إجمالي النقاط</div></div>
-      <div class="kpi-card">
-        <div class="kpi-val" id="kpi_total_teams" style="color:var(--secondary)">0</div>
-        <div class="kpi-label">إجمالي عدد الفرق</div>
-      </div>
       <div class="kpi-card"><div class="kpi-val" id="kpi_ready" style="color:var(--success)">0</div><div class="kpi-label">جاهزة</div></div>
       <div class="kpi-card"><div class="kpi-val" id="kpi_supported" style="color:var(--secondary)">0</div><div class="kpi-label">مدعمة</div></div>
       <div class="kpi-card"><div class="kpi-val" id="kpi_oos" style="color:var(--danger)">0</div><div class="kpi-label">خارج الخدمة</div></div>
@@ -1000,7 +995,7 @@
         <div class="panel-head">
           <div>
             <h3>نموذج العهد الشخصية للقطاعات</h3>
-            <p>النموذج الميداني لتسليم واستلام العهد الشخصية للطواقم الإسعافية.</p>
+            <p>النموذج الميداني لتسجيل العهد الشخصية في القطاعات.</p>
           </div>
         </div>
 
@@ -1026,7 +1021,17 @@
               </select>
             </div>
 
-            <div class="field"><label for="lead_paramedic_name">اسم كبير المسعفين</label><input type="text" id="lead_paramedic_name"></div>
+            <div class="field">
+              <label for="units_check_shift">الفترة</label>
+              <select id="units_check_shift">
+                <option value="" selected>اختر الفترة</option>
+                <option value="الصباحية">الصباحية</option>
+                <option value="المسائية">المسائية</option>
+                <option value="اوفرلاب">اوفرلاب</option>
+              </select>
+            </div>
+
+            <div class="field"><label for="ems_lead_display">اسم كبير المسعفين</label><input type="text" id="ems_lead_display" readonly></div>
             <div class="field"><label for="employee_receiver_name">اسم الموظف مستلم العهد</label><input type="text" id="employee_receiver_name"></div>
           </div>
         </div>
@@ -1645,7 +1650,6 @@ async function fetchDeploymentFromSheet(){
       const shift = document.getElementById("units_check_shift").value;
       const team = teamsData?.[sector]?.[shift];
       document.getElementById("ems_lead_display").value = team?.lead || "";
-      document.getElementById("assistants_display").value = (team?.assistants || []).filter(a => a).join(" - ") || "";
     }
 
     function fillTeamData(){
@@ -1682,7 +1686,7 @@ async function fetchDeploymentFromSheet(){
     }
 
     async function sendGroundEMS(){
-      const required = ['sector','shift_time','shift_datetime'];
+      const required = ['scope','sector','shift_time','shift_datetime'];
       for(const id of required){
         const el = document.getElementById(id);
         if(!el || !String(el.value).trim()){
@@ -1693,7 +1697,7 @@ async function fetchDeploymentFromSheet(){
 
       const row = {
         "وقت الحفظ": new Date().toLocaleString('ar-SA'),
-        "النطاق": document.getElementById('scope')?.value || 'نطاق منى',
+        "النطاق": document.getElementById('scope').value,
         "القطاع": document.getElementById('sector').value,
         "الفترة": document.getElementById('shift_time').value,
         "التاريخ والوقت": document.getElementById('shift_datetime').value,
@@ -1713,7 +1717,12 @@ async function fetchDeploymentFromSheet(){
         "الملاحظات": document.getElementById('notes').value.trim() || 'لا توجد ملاحظات'
       };
 
-      await saveToGoogleSheets('التحضير اليومي', [row]);
+      const save = await saveToGoogleSheets('التحضير اليومي', [row]);
+      if(!save.success){
+        showAlert('dailyAlert','error','تعذر حفظ البيانات');
+        return;
+      }
+
       showAlert('dailyAlert','success','تم حفظ تقرير التحضير اليومي بنجاح');
 
       let msg = `🚑 *منصة نطاق منى – التحضير اليومي* 🚑\n\n`;
@@ -2036,7 +2045,7 @@ ${supportLines}
     }
 
     async function sendUnitsCheck(){
-      const required = ['units_check_date','units_check_time','units_check_sector'];
+      const required = ['units_check_date','units_check_sector','units_check_shift'];
       for(const id of required){
         const el = document.getElementById(id);
         if(!el || !String(el.value).trim()){
@@ -2050,25 +2059,33 @@ ${supportLines}
         "التاريخ": document.getElementById('units_check_date').value,
         "الوقت": document.getElementById('units_check_time').value,
         "القطاع": document.getElementById('units_check_sector').value,
-        "اسم كبير المسعفين": document.getElementById('lead_paramedic_name').value || '-',
-        "اسم الموظف مستلم العهد": document.getElementById('employee_receiver_name').value || '-',
+        "الفترة": document.getElementById('units_check_shift').value,
+        "كبير المسعفين": document.getElementById('ems_lead_display').value,
+        "مستلم العهد": document.getElementById('employee_receiver_name').value,
         "جهاز لوكس": document.getElementById('medical_count_0')?.value || '0',
         "جهاز ميندري": document.getElementById('medical_count_1')?.value || '0',
         "جهاز لايف باك 15": document.getElementById('medical_count_2')?.value || '0',
         "جهاز اتصال لاسلكي": document.getElementById('medical_count_3')?.value || '0',
         "المسعف الالكتروني(تابلت)": document.getElementById('medical_count_4')?.value || '0',
         "جهاز قياس العلامات الحيوية": document.getElementById('medical_count_5')?.value || '0',
-        "ملاحظات عامة": document.getElementById('units_check_notes').value.trim() || 'لا توجد ملاحظات'
+        "ملاحظات عامة": document.getElementById('units_check_notes').value
       };
 
-      await saveToGoogleSheets('العهد الشخصية', [row]);
+      const save = await saveToGoogleSheets('نموذج العهد الشخصية للقطاعات', [row]);
+      if(!save.success){
+        showAlert('unitCheckAlert','error','تعذر حفظ بيانات العهد');
+        return;
+      }
+
       showAlert('unitCheckAlert','success','تم حفظ نموذج العهد بنجاح');
 
       let msg = `🩺 *نموذج العهد الشخصية للقطاعات* 🩺\n\n`;
       msg += `📍 *القطاع:* ${row["القطاع"]}\n`;
-      msg += `📅 *التاريخ:* ${row["التاريخ"]} | *الوقت:* ${row["الوقت"]}\n\n`;
-      msg += `👤 *كبير المسعفين:* ${row["اسم كبير المسعفين"]}\n`;
-      msg += `👤 *مستلم العهد:* ${row["اسم الموظف مستلم العهد"]}\n\n`;
+      msg += `🕘 *الفترة:* ${row["الفترة"]}\n`;
+      msg += `📅 *التاريخ:* ${row["التاريخ"]}\n`;
+      msg += `⏰ *الوقت:* ${row["الوقت"]}\n\n`;
+      msg += `👤 *كبير المسعفين:* ${row["كبير المسعفين"]}\n`;
+      msg += `👤 *مستلم العهد:* ${row["مستلم العهد"]}\n\n`;
       msg += `✅ *العهد:* \n`;
       msg += `• جهاز لوكس: ${row["جهاز لوكس"]}\n`;
       msg += `• جهاز ميندري: ${row["جهاز ميندري"]}\n`;
@@ -2076,7 +2093,7 @@ ${supportLines}
       msg += `• جهاز اتصال لاسلكي: ${row["جهاز اتصال لاسلكي"]}\n`;
       msg += `• المسعف الالكتروني(تابلت): ${row["المسعف الالكتروني(تابلت)"]}\n`;
       msg += `• جهاز قياس العلامات الحيوية: ${row["جهاز قياس العلامات الحيوية"]}\n\n`;
-      msg += `📝 *الملاحظات:* ${row["ملاحظات عامة"]}`;
+      msg += `📝 *الملاحظات:* \n${row["ملاحظات عامة"]}`;
       openWhatsApp(msg);
     }
 
@@ -2839,47 +2856,23 @@ function resetDashboardFilters(){
 }
 
 function updateDashboard(data){
-  if (!data) data = [];
   // Define sectors first
   const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
   
   // Missing Sectors
-  const submittedData = data.filter(d =>
-    d["التاريخ"] || d["الوقت"] || d["اسم كبير المسعفين"] || d["اسم مدخل البيانات"] || d.saved === true
-  );
-
-  const respondedSectors = new Set(submittedData.map(d => d.sector));
+  const respondedSectors = new Set(data.map(d => d.sector));
   const missingSectors = sectors.filter(s => !respondedSectors.has(s));
   const missingEl = document.getElementById('missingSectorsList');
-  if(missingEl) {
-    missingEl.innerHTML = missingSectors.length ? missingSectors.join(' - ') : 'الكل أرسل';
-    const alertEl = missingEl.closest('.alert-warning');
-    if (alertEl) {
-      alertEl.style.display = missingSectors.length ? 'block' : 'none';
-    }
-  }
+  if(missingEl) missingEl.innerHTML = missingSectors.length ? missingSectors.join(' - ') : 'الكل أرسل';
 
   // KPIs
   const total = data.length;
-
-  // إجمالي عدد الفرق وليس النقاط
-  const totalTeams = data.reduce((sum, d) => {
-    return sum + Number(d.teams || d["عدد الفرق"] || d.count || 1);
-  }, 0);
-
-  // الفرق الجاهزة = مجموع عدد الفرق في النقاط الجاهزة
-  const ready = data
-    .filter(d => d.status === 'جاهزة' || d.status === 'جاهز')
-    .reduce((sum, d) => {
-      return sum + Number(d.teams || d["عدد الفرق"] || d.count || 1);
-    }, 0);
-
+  const ready = data.filter(d => d.status === 'جاهزة' || d.status === 'جاهز').length;
   const supported = data.filter(d => d.status === 'مدعمة' || d.status === 'مدعم').length;
   const oos = data.filter(d => d.status === 'خارج الخدمة').length;
   const broken = data.filter(d => d.status === 'متعطلة' || d.status === 'موقوف').length;
 
   document.getElementById('kpi_total').textContent = total;
-  document.getElementById('kpi_total_teams').textContent = totalTeams;
   document.getElementById('kpi_ready').textContent = ready;
   document.getElementById('kpi_supported').textContent = supported;
   document.getElementById('kpi_oos').textContent = oos;

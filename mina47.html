@@ -3142,80 +3142,45 @@ async function updateSupportSummary() {
     const tbody = document.querySelector('#dashSupportTable tbody');
     if (!tbody) return;
     
-    // جلب بيانات الدعم من Google Sheets
-    let result = { data: [] };
-    
-    try {
-      const response = await fetch(SCRIPT_URL + '?action=getSupportData', {
-        method: 'GET',
-        mode: 'cors'
-      });
-      
-      if (response.ok) {
-        result = await response.json();
-      } else {
-        console.log('استجابة الخادم غير صحيحة:', response.status);
-      }
-    } catch (e) {
-      console.log('لم يتم جلب البيانات من Google Sheets، سيتم استخدام البيانات المحلية:', e.message);
-    }
-    
-    // استخدام البيانات المحلية إذا لم تتوفر بيانات من الخادم
-    if (!result.data || result.data.length === 0) {
-      result.data = window.supportPlanData || [];
-    }
+    const response = await fetch(`${SCRIPT_URL}?action=getSupportData&t=${Date.now()}`);
+    if (!response.ok) throw new Error('Network error');
+    const result = await response.json();
     
     if (!result.data || result.data.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم -</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم حالية -</td></tr>';
       return;
     }
 
-    // تجميع البيانات حسب القطاع/النطاق والتاريخ والفترة
-    const supportMap = {};
+    // تجميع أحدث بيانات الدعم لكل قطاع/نطاق لضمان بقائها طوال المناوبة
+    const latestSupport = new Map();
     result.data.forEach(row => {
-      if (!row) return;
-      const type = row['النوع'] || (row['نوع التدعيم'] === 'داخل_النطاق' ? 
-        (row['القطاع المدعم له'] || 'بين القطاعات') : 
-        (row['النطاق المدعم له'] || 'بين النطاقات'));
-      const date = row['التاريخ'] || '-';
-      const period = row['الفترة'] || '-';
-      const key = `${type}|${date}|${period}`;
+      const target = row['القطاع المدعم له'] || row['النطاق المدعم له'] || 'عام';
+      const stamp = row['وقت الحفظ'] || `${row['التاريخ']} ${row['الوقت']}`;
+      const timeValue = new Date(stamp).getTime() || 0;
       
-      if (!supportMap[key]) {
-        supportMap[key] = {
-          type,
-          date,
-          period,
-          count: 0,
-          teams: 0
-        };
+      if (!latestSupport.has(target) || timeValue > latestSupport.get(target).time) {
+        latestSupport.set(target, {
+          type: target,
+          teams: row['عدد الفرق'] || 1,
+          date: row['التاريخ'],
+          period: row['الوقت'],
+          time: timeValue
+        });
       }
-      supportMap[key].count++;
-      supportMap[key].teams += parseInt(row['عدد الفرق'] || row['عدد الفرق المدعمة'] || 1);
     });
 
-    // عرض البيانات في الجدول
     tbody.innerHTML = '';
-    const items = Object.values(supportMap).slice(0, 10);
-    if (items.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم -</td></tr>';
-    } else {
-      items.forEach(item => {
-        tbody.innerHTML += `<tr>
-          <td style="font-weight:700">${item.type}</td>
-          <td>${item.count}</td>
-          <td>${item.teams}</td>
-          <td>${item.date}</td>
-          <td>${item.period}</td>
-        </tr>`;
-      });
-    }
+    Array.from(latestSupport.values()).sort((a,b) => b.time - a.time).forEach(item => {
+      tbody.innerHTML += `<tr>
+        <td style="font-weight:700">${item.type}</td>
+        <td>1</td>
+        <td>${item.teams}</td>
+        <td>${item.date}</td>
+        <td>${item.period}</td>
+      </tr>`;
+    });
   } catch (err) {
-    console.error('خطأ في جلب بيانات الدعم:', err);
-    const tbody = document.querySelector('#dashSupportTable tbody');
-    if (tbody) {
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم متاحة حالياً -</td></tr>';
-    }
+    console.error('Support Error:', err);
   }
 }
 

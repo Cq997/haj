@@ -1585,6 +1585,12 @@
       });
     });
 
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof setDashboardLinks === 'function') setDashboardLinks();
+      if (typeof setMapLink === 'function') setMapLink();
+      if (typeof loadLiveDeploymentData === 'function') loadLiveDeploymentData();
+    });
+
     function activatePanel(targetId){
       document.querySelectorAll('.nav li').forEach(i => i.classList.remove('active'));
       document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
@@ -3244,16 +3250,11 @@ window.loadLiveDeploymentData = async function() {
   else if (typeof renderMapMarkers === 'function') renderMapMarkers(liveDeploymentData);
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  if (typeof setDashboardLinks === 'function') setDashboardLinks();
-  if (typeof setMapLink === 'function') setMapLink();
-  if (typeof loadLiveDeploymentData === 'function') loadLiveDeploymentData();
-});
+// تحميل البيانات عند بدء التشغيل
+loadLiveDeploymentData();
 
-// تحديث تلقائي كل دقيقة
-setInterval(() => {
-  if (typeof loadLiveDeploymentData === 'function') loadLiveDeploymentData();
-}, 60000);
+// تحديث تلقائي كل 3 دقائق
+setInterval(loadLiveDeploymentData, 60000);
 
 /* لتحميل النقاط الافتراضية للقطاع المختار */
 function loadDefaultDeploymentPoints(){

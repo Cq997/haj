@@ -1400,7 +1400,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzZbKI_TyVIm89MuJIGgnlom-e4dcbY2oNtX9FDQiLgEK8KyWcplu93k6vLKm_-H6_kIg/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz-wAtxJQVdoUrJ2I9XAaabnUJXTAkc65ZTsvU4FbzLPeGIxdg4Au-9dXm4m4k8Gx1N3w/exec";
 
     // ===== Static Deployment Points Data =====
     window.staticDeploymentPoints = [
@@ -1701,16 +1701,17 @@
       document.getElementById('quickLinks').classList.toggle('show');
     }
 
-    function updateMapWithDeploymentData(){
-      // تحديث الخريطة التفاعلية بعد حفظ بيانات خطة الانتشار
-      if(window.map && window.deploymentMarkers){
-        window.deploymentMarkers.forEach(marker => window.map.removeLayer(marker));
-        window.deploymentMarkers = [];
-        fetchDeploymentFromSheet().then(() => {
-          renderDeploymentMarkers();
-          console.log('تم تحديث الخريطة بنجاح');
-        });
+    async function updateMapWithDeploymentData(){
+      // تحديث الداشبورد والخريطة مباشرة من Google Sheets بعد حفظ خطة الانتشار
+      if (typeof loadLiveDeploymentData === 'function') {
+        await loadLiveDeploymentData();
+      } else if (typeof renderMapMarkers === 'function') {
+        const data = await fetchDeploymentFromSheet();
+        liveDeploymentData = normalizeDeploymentRowsForDashboard(data);
+        renderMapMarkers(liveDeploymentData);
+        updateDashboard(liveDeploymentData);
       }
+      console.log('تم تحديث نقاط الانتشار في الداشبورد والخريطة');
     }
 
     function showAlert(elId, type, message){
@@ -1774,28 +1775,63 @@ async function saveToGoogleSheets(sheetName, rows){
 📥 جلب نقاط الانتشار من الشيت
 ***********************/
 async function fetchDeploymentFromSheet(){
-
   try{
+    const url = `${SCRIPT_URL}?action=getDeployment&ts=${Date.now()}`;
+    const res = await fetch(url, { method:'GET', cache:'no-store' });
+    if(!res.ok) throw new Error(`فشل الاتصال: ${res.status}`);
 
-    const res = await fetch(`${SCRIPT_URL}?action=getDeployment`);
+    const payload = await res.json();
+    // يدعم الحالتين: رجوع Array مباشرة أو رجوع {success:true,data:[...]}
+    if(Array.isArray(payload)) return payload;
+    if(payload && Array.isArray(payload.data)) return payload.data;
 
-    if(!res.ok) throw new Error("فشل الاتصال");
-
-    const data = await res.json();
-
-    if(!Array.isArray(data)){
-      console.error("⚠️ البيانات غير صحيحة:", data);
-      return [];
-    }
-
-    return data;
-
+    console.error('⚠️ صيغة بيانات خطة الانتشار غير متوقعة:', payload);
+    return [];
   } catch (error){
-
-    console.error("❌ خطأ:", error);
-
+    console.error('❌ خطأ في جلب نقاط الانتشار:', error);
     return [];
   }
+}
+
+function normalizeDeploymentRowsForDashboard(data){
+  const rows = Array.isArray(data) ? data : [];
+  const latestMap = new Map();
+
+  rows.forEach(d => {
+    if(!d) return;
+    const code = String(d.id || d.code || d['الرمز'] || d['اسم النقطة'] || '').trim();
+    const sector = String(d.sector || d['القطاع'] || '').trim();
+    const shift = String(d.shift || d['المناوبة'] || d['مناوبة النقطة'] || d['فترة المناوبة'] || d['العرض الزمني'] || '').trim();
+    if(!code) return;
+
+    const key = `${sector}|${code}|${shift}`;
+    const timeValue = Number(d._time || d['آخر تحديث رقمي'] || 0) || Date.parse(d.saveTime || d['وقت الحفظ'] || d.Timestamp || `${d['التاريخ'] || ''} ${d['الوقت'] || ''}`) || 0;
+
+    if(!latestMap.has(key) || timeValue >= latestMap.get(key)._time){
+      const latValue = d.lat ?? d.Latitude ?? d['Latitude'] ?? d['خط العرض'] ?? d.latitude ?? '';
+      const lngValue = d.lng ?? d.Longitude ?? d['Longitude'] ?? d['خط الطول'] ?? d.longitude ?? '';
+      latestMap.set(key, {
+        ...d,
+        _time: timeValue,
+        id: code,
+        code: code,
+        sector: sector,
+        type: d.type || d['نوع الوحدة'] || d['نوع الآلية'] || d.unitType || '',
+        teams: Number(d.teams || d.count || d['عدد الفرق'] || d['عدد الفرق الفعلي'] || 1) || 1,
+        count: Number(d.count || d.teams || d['عدد الفرق'] || d['عدد الفرق الفعلي'] || 1) || 1,
+        lat: parseFloat(latValue),
+        lng: parseFloat(lngValue),
+        status: d.status || d['الحالة'] || 'جاهز',
+        shift: shift || 'الصباحية',
+        saved: true,
+        'التاريخ': d['التاريخ'] || '',
+        'الوقت': d['الوقت'] || '',
+        'وقت الحفظ': d.saveTime || d['وقت الحفظ'] || d.Timestamp || ''
+      });
+    }
+  });
+
+  return Array.from(latestMap.values()).filter(p => !isNaN(p.lat) && !isNaN(p.lng));
 }
 
     function openWhatsApp(text){
@@ -2610,11 +2646,10 @@ const items = data.filter(d =>
 
       showAlert('deploymentAlert','success','تم حفظ خطة الانتشار بنجاح');
       
-      // تحديث الداشبورد والخريطة ديناميكياً بعد الحفظ
-      setTimeout(() => {
-        updateDashboard();
-        updateMapWithDeploymentData();
-      }, 1000);
+      // تحديث الداشبورد والخريطة مباشرة بعد الحفظ من آخر بيانات محفوظة في الشيت
+      setTimeout(async () => {
+        await updateMapWithDeploymentData();
+      }, 1500);
 
       let msg = `📍 *خطة الانتشار - نطاق منى* 📍\n\n`;
       msg += `📍 *القطاع:* ${sector}\n`;
@@ -3033,7 +3068,8 @@ function resetDashboardFilters(){
   updateDashboard(liveDeploymentData);
 }
 
-function updateDashboard(data){
+function updateDashboard(data = liveDeploymentData || []){
+  data = Array.isArray(data) ? data : [];
   const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
   
   // منطق الاستجابة: يعتبر القطاع أرسل فقط إذا كانت البيانات تحتوي على علامة الحفظ الفعلية
@@ -3389,49 +3425,28 @@ console.log('✓ Deployment data loaded successfully:', window.staticDeploymentP
 async function loadLiveDeploymentData(){
   try {
     const data = await fetchDeploymentFromSheet();
-     if(data && data.length > 0){
-      const latestDataMap = new Map();
-      data.forEach(d => {
-        const id = d["الرمز"] || d["اسم النقطة"];
-        if (id) {
-          const currentTime = new Date(d["وقت الحفظ"]);
-          if (!latestDataMap.has(id) || currentTime > new Date(latestDataMap.get(id)["وقت الحفظ"])) {
-            latestDataMap.set(id, d);
-          }
-        }
-      });
-      liveDeploymentData = Array.from(latestDataMap.values()).map(d => ({
-        id: d["الرمز"] || d["اسم النقطة"] || '',
-        sector: d["القطاع"] || '',
-        type: d["نوع الوحدة"] || '',
-        teams: Number(d["عدد الفرق الفعلي"] || d["عدد الفرق"] || 1),
-        lat: parseFloat(d["lat"] || d["خط العرض"] || 0),
-        lng: parseFloat(d["lng"] || d["خط الطول"] || 0),
-        status: d["الحالة"] || 'جاهزة',
-        shift: d["الفترة"] || d["العرض الزمني"] || 'الصباحية',
-        saved: true,
-        ...d
-      }));
+    const normalized = normalizeDeploymentRowsForDashboard(data);
+
+    if(normalized.length > 0){
+      liveDeploymentData = normalized;
     } else {
-      // إذا لم تتوفر بيانات من الشيت، نستخدم البيانات الثابتة
-      liveDeploymentData = [...(window.staticDeploymentPoints || [])];
+      // إذا لم تحفظ أي خطة انتشار بعد، تظهر النقاط الافتراضية فقط كمرجع أولي
+      liveDeploymentData = [...(window.staticDeploymentPoints || [])].map(p => ({...p, saved:false}));
     }
   } catch(e) {
     console.log('استخدام البيانات الثابتة بسبب خطأ:', e);
-    liveDeploymentData = [...(window.staticDeploymentPoints || [])];
+    liveDeploymentData = [...(window.staticDeploymentPoints || [])].map(p => ({...p, saved:false}));
   }
-  
-  if (!liveDeploymentData || liveDeploymentData.length === 0) {
-    liveDeploymentData = [...(window.staticDeploymentPoints || [])];
-  }
-  
+
   updateDashboard(liveDeploymentData);
+
   if(typeof renderMapMarkers === 'function') {
     renderMapMarkers(liveDeploymentData);
   } else if(typeof renderDeploymentMarkers === 'function') {
     renderDeploymentMarkers(liveDeploymentData);
   }
 }
+
 
 			/* لتحميل النقاط الافتراضية للقطاع المختار */
 					function loadDefaultDeploymentPoints(){

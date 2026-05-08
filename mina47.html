@@ -1400,7 +1400,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxx7TSY7Ge0oL1gqacSuBP6WkuEDZA40_A9hHumRhLWbvKRAjYbC7qzvnU6hnxHwr2EDw/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyt6fDl0zMPmbHQG6oQkzGKmjqSAX7CDF9Z8LtcfwGjYqb9WVDEbMxESWFZJftk08Uj/exec";
 
     // ===== Static Deployment Points Data =====
     window.staticDeploymentPoints = [
@@ -1780,17 +1780,18 @@ async function fetchDeploymentFromSheet(){
     if(!res.ok) throw new Error("فشل الاتصال");
 
     const payload = await res.json();
-    const data = Array.isArray(payload) ? payload : (Array.isArray(payload.data) ? payload.data : []);
 
-    if(!Array.isArray(data)){
-      console.error("⚠️ البيانات غير صحيحة:", payload);
-      return [];
-    }
-    return data;
+    // يدعم كل أشكال الرد: Array مباشرة أو {success:true,data:[...]} أو {rows:[...]}
+    if (Array.isArray(payload)) return payload;
+    if (payload && Array.isArray(payload.data)) return payload.data;
+    if (payload && Array.isArray(payload.rows)) return payload.rows;
+
+    console.error("⚠️ رد getDeployment غير متوافق:", payload);
+    return [];
 
   } catch (error){
     console.error("❌ خطأ في جلب خطة الانتشار:", error);
-    return null; // null تعني فشل اتصال، حتى لا نمسح النقاط الموجودة بعد التحديث
+    return null; // null = فشل اتصال، لا نمسح آخر بيانات ظاهرة
   }
 }
 
@@ -2621,11 +2622,10 @@ const items = data.filter(d =>
 
       showAlert('deploymentAlert','success','تم حفظ خطة الانتشار بنجاح');
       
-      // تحديث الداشبورد والخريطة ديناميكياً بعد الحفظ
-      setTimeout(() => {
-        updateDashboard();
-        updateMapWithDeploymentData();
-      }, 1000);
+      // تحديث الداشبورد والخريطة مباشرة بعد الحفظ من الشيت نفسه
+      if (typeof loadLiveDeploymentData === 'function') {
+        await loadLiveDeploymentData();
+      }
 
       let msg = `📍 *خطة الانتشار - نطاق منى* 📍\n\n`;
       msg += `📍 *القطاع:* ${sector}\n`;
@@ -3048,7 +3048,7 @@ function updateDashboard(data){
   const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
   
   // منطق الاستجابة: يعتمد على القطاعات التي وصلت من الشيت فعلياً، وليس على البيانات الثابتة
-  const normalizeSector = v => String(v || '').trim().replace(/\s+/g, ' ');
+  const normalizeSector = v => (typeof normalizeSectorName === 'function' ? normalizeSectorName(v) : String(v || '').trim().replace(/\s+/g, ' '));
   const respondedSectors = new Set();
 
   if (window.submittedDeploymentSectors && window.submittedDeploymentSectors.size) {
@@ -3097,7 +3097,7 @@ function updateDashboard(data){
   const sectorBody = document.querySelector('#dashSectorTable tbody');
   sectorBody.innerHTML = '';
   sectors.forEach(sec => {
-    const pts = data.filter(d => d.sector === sec);
+    const pts = data.filter(d => normalizeSector(d.sector) === normalizeSector(sec));
     const r = pts.filter(d => d.status === 'جاهزة' || d.status === 'جاهز').length;
     const s = pts.filter(d => d.status === 'مدعمة' || d.status === 'مدعم').length;
     const o = pts.filter(d => d.status === 'خارج الخدمة').length;
@@ -3410,30 +3410,38 @@ async function loadLiveDeploymentData(){
   try {
     const data = await fetchDeploymentFromSheet();
 
-    // في حال فشل الاتصال لا نمسح آخر نقاط ظاهرة؛ هذا سبب اختفاء النقاط بعد التحديث سابقاً
+    // عند فشل الاتصال لا نمسح النقاط الظاهرة حالياً
     if (data === null) {
-      console.warn('تعذر جلب البيانات، تم الاحتفاظ بآخر بيانات ظاهرة.');
-    } else if (Array.isArray(data) && data.length > 0) {
+      console.warn('تعذر جلب بيانات خطة الانتشار، تم الاحتفاظ بآخر بيانات ظاهرة.');
+    }
+    // عند وجود بيانات من الشيت نأخذ آخر تحديث لكل نقطة حسب القطاع + الرمز + المناوبة
+    else if (Array.isArray(data) && data.length > 0) {
       const latestDataMap = new Map();
       const submittedSectors = new Set();
 
       data.forEach(d => {
         const normalized = normalizeDeploymentPoint(d, true);
         if (!normalized.id) return;
-        if (normalized.sector) submittedSectors.add(normalized.sector);
 
-        const key = `${normalized.sector}|${normalized.id}|${normalized.shift || ''}`;
+        if (normalized.sector) submittedSectors.add(normalizeSectorName(normalized.sector));
+
+        const key = `${normalizeSectorName(normalized.sector)}|${normalized.id}|${normalized.shift || ''}`;
         if (!latestDataMap.has(key) || normalized._time >= latestDataMap.get(key)._time) {
           latestDataMap.set(key, normalized);
         }
       });
 
-      const fresh = Array.from(latestDataMap.values()).filter(p => p.lat && p.lng);
+      const fresh = Array.from(latestDataMap.values()).filter(p => p.id && p.sector && p.lat && p.lng);
       if (fresh.length > 0) {
         liveDeploymentData = fresh;
         window.submittedDeploymentSectors = submittedSectors;
+      } else {
+        // لو وصلت بيانات لكن بدون إحداثيات لا نمسح القديم، فقط نحدث القطاعات المستجيبة
+        window.submittedDeploymentSectors = submittedSectors;
       }
-    } else if (!liveDeploymentData || liveDeploymentData.length === 0) {
+    }
+    // إذا لا توجد بيانات محفوظة بعد، نعرض الافتراضي فقط كخريطة تأسيسية ولا نعتبر القطاعات مرسلة
+    else if (!liveDeploymentData || liveDeploymentData.length === 0) {
       liveDeploymentData = (window.staticDeploymentPoints || []).map(p => normalizeDeploymentPoint(p, false));
       window.submittedDeploymentSectors = new Set();
     }
@@ -3446,11 +3454,31 @@ async function loadLiveDeploymentData(){
   }
 
   updateDashboard(liveDeploymentData || []);
+
   if(typeof renderMapMarkers === 'function') {
     renderMapMarkers(liveDeploymentData || []);
   } else if(typeof renderDeploymentMarkers === 'function') {
     renderDeploymentMarkers(liveDeploymentData || []);
   }
+
+  const last = (liveDeploymentData || [])
+    .map(d => d.saveTime || d['وقت الحفظ'] || d.Timestamp || '')
+    .filter(Boolean)[0];
+
+  const el = document.getElementById('dashLastUpdate');
+  if (el) {
+    el.innerHTML = last
+      ? `آخر تحديث: ${last}`
+      : `تم تحديث البيانات - عدد النقاط المعروضة: ${(liveDeploymentData || []).length}`;
+  }
+}
+
+function normalizeSectorName(v){
+  return String(v || '')
+    .trim()
+    .replace(/\s+/g, ' ')
+    .replace('بطنى', 'بطن')
+    .replace('الشعبين', 'الشعيبين');
 }
 
 function normalizeDeploymentPoint(d, fromSheet){
@@ -3477,13 +3505,13 @@ function normalizeDeploymentPoint(d, fromSheet){
   return {
     id: String(first('id','code','pointCode','الرمز','اسم النقطة')).trim(),
     code: String(first('code','id','pointCode','الرمز','اسم النقطة')).trim(),
-    sector: String(first('sector','القطاع')).trim(),
-    type: String(first('type','unitType','نوع الوحدة','نوع الآلية')).trim(),
+    sector: normalizeSectorName(first('sector','القطاع')),
+    type: String(first('type','unitType','نوع الوحدة','نوع الآلية','الالية المشغلة بالنقطة')).trim(),
     teams: Number(first('teams','count','عدد الفرق','عدد الفرق الفعلي') || 1) || 1,
     lat: parseNum(first('lat','latitude','Latitude','خط العرض')),
     lng: parseNum(first('lng','longitude','Longitude','خط الطول')),
     status,
-    shift: String(first('shift','المناوبة','فترة المناوبة','العرض الزمني','الفترة') || 'الصباحية').trim(),
+    shift: String(first('shift','المناوبة','مناوبة النقطة','فترة المناوبة','العرض الزمني','الفترة') || 'الصباحية').trim(),
     startTime: first('startTime','وقت البداية'),
     endTime: first('endTime','وقت النهاية'),
     supportType: first('supportType','نوع التدعيم'),

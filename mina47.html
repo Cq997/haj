@@ -1709,17 +1709,41 @@
         loadDeploymentTemplate();
     });
 
-    window.activatePanel = function(targetId){
+    window.activatePanel = function(targetId) {
+      console.log("تفعيل اللوحة:", targetId);
+      
+      // 1. تحديث حالة القائمة الجانبية
       document.querySelectorAll('.nav li').forEach(i => i.classList.remove('active'));
       document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
-      document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
-      document.getElementById(targetId)?.classList.add('active');
+
+      // 2. إخفاء جميع اللوحات
+      const panels = document.querySelectorAll('.panel');
+      panels.forEach(p => {
+        p.style.display = 'none';
+        p.classList.remove('active');
+      });
       
-      if(targetId === 'unitsCheckPanel'){
-        buildMedicalCheckTable();
+      // 3. إظهار اللوحة المستهدفة
+      const target = document.getElementById(targetId);
+      if (target) {
+        target.style.display = 'block';
+        target.classList.add('active');
+        window.scrollTo({top: 0, behavior: 'smooth'});
+        
+        // وظائف خاصة ببعض اللوحات
+        if(targetId === 'unitsCheckPanel'){
+          if(typeof buildMedicalCheckTable === 'function') buildMedicalCheckTable();
+        }
+
+        // تهيئة الخريطة إذا كانت اللوحة هي لوحة الخريطة أو الرئيسية
+        if ((targetId === 'mapsPanel' || targetId === 'homePanel') && typeof map !== 'undefined') {
+          setTimeout(() => { 
+            if (typeof map !== 'undefined') {
+              map.invalidateSize(); 
+            }
+          }, 400);
+        }
       }
-      
-      window.scrollTo({top:0,behavior:'smooth'});
     };
 
     function toggleQuickLinks(){

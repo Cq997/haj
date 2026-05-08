@@ -413,7 +413,8 @@
       <li class="active" data-target="homePanel"><i class="fas fa-home"></i> الرئيسية</li>
       <li data-target="groundEMS"><i class="fas fa-clipboard-list"></i> التحضير اليومي</li>
       <li data-target="handoverPanel"><i class="fas fa-exchange-alt"></i> تسليم المناوبة</li>
-     <li data-target="unitsCheckPanel"><i class="fas fa-briefcase"></i> العهد الشخصية</li>      <li data-target="stockPanel"><i class="fas fa-boxes-stacked"></i> الخزن الاستراتيجي</li>
+      <li data-target="unitsCheckPanel"><i class="fas fa-stethoscope"></i> تشييك الوحدات</li>
+      <li data-target="stockPanel"><i class="fas fa-boxes-stacked"></i> الخزن الاستراتيجي</li>
       <li data-target="deploymentPanel"><i class="fas fa-map-marked-alt"></i> خطة الانتشار</li>
       <li data-target="mapsPanel"><i class="fas fa-map"></i> خرائط النطاق</li>
       <li data-target="supportPlanPanel"><i class="fas fa-handshake"></i> خطة الدعم</li>
@@ -439,11 +440,7 @@
     <!-- ═══════ KPI Row ═══════ -->
     <div class="kpi-row">
       <div class="kpi-card"><div class="kpi-val" id="kpi_total">0</div><div class="kpi-label">إجمالي النقاط</div></div>
-      <div class="kpi-card">
-        <div class="kpi-val" id="kpi_total_teams" style="color:var(--secondary)">0</div>
-        <div class="kpi-label">إجمالي الفرق</div>
-      </div>
-      <div class="kpi-card"><div class="kpi-val" id="kpi_ready" style="color:var(--success)">0</div><div class="kpi-label">الفرق الجاهزة</div></div>
+      <div class="kpi-card"><div class="kpi-val" id="kpi_ready" style="color:var(--success)">0</div><div class="kpi-label">جاهزة</div></div>
       <div class="kpi-card"><div class="kpi-val" id="kpi_supported" style="color:var(--secondary)">0</div><div class="kpi-label">مدعمة</div></div>
       <div class="kpi-card"><div class="kpi-val" id="kpi_oos" style="color:var(--danger)">0</div><div class="kpi-label">خارج الخدمة</div></div>
       <div class="kpi-card"><div class="kpi-val" id="kpi_broken" style="color:var(--muted)">0</div><div class="kpi-label">متعطلة</div></div>
@@ -688,27 +685,27 @@
 
             <div class="field">
               <label for="ems_lead">اسم كبير مسعفي القطاع</label>
-              <input type="text" id="ems_lead">
+              <input type="text" id="ems_lead" readonly>
             </div>
 
             <div class="field">
               <label for="assistant1">مساعد كبير المسعفين 1</label>
-              <input type="text" id="assistant1">
+              <input type="text" id="assistant1" readonly>
             </div>
 
             <div class="field">
               <label for="assistant2">مساعد كبير المسعفين 2</label>
-              <input type="text" id="assistant2">
+              <input type="text" id="assistant2" readonly>
             </div>
 
             <div class="field">
               <label for="assistant3">مساعد كبير المسعفين 3</label>
-              <input type="text" id="assistant3">
+              <input type="text" id="assistant3" readonly>
             </div>
 
             <div class="field">
               <label for="assistant4">مساعد كبير المسعفين 4</label>
-              <input type="text" id="assistant4">
+              <input type="text" id="assistant4" readonly>
             </div>
           </div>
         </div>
@@ -998,8 +995,8 @@
       <section class="panel" id="unitsCheckPanel">
         <div class="panel-head">
           <div>
-            <h3>نموذج العهد الشخصية للقطاعات</h3>
-            <p>النموذج الميداني لتسجيل العهد الشخصية في القطاعات.</p>
+            <h3>تشييك الوحدة التشغيلية</h3>
+            <p>النموذج الميداني لتشييك الوحدة والطاقم والتجهيزات الطبية.</p>
           </div>
         </div>
 
@@ -1008,8 +1005,8 @@
         <div class="section">
           <div class="section-title">البيانات الأساسية</div>
           <div class="section-body grid-3">
-            <div class="field"><label for="units_check_date">التاريخ</label><input type="date" id="units_check_date"></div>
-            <div class="field"><label for="units_check_time">الوقت</label><input type="time" id="units_check_time"></div>
+            <div class="field"><label for="units_check_date">تاريخ التشييك</label><input type="date" id="units_check_date"></div>
+            <div class="field"><label for="units_check_time">وقت التشييك</label><input type="time" id="units_check_time"></div>
 
             <div class="field">
               <label for="units_check_sector">القطاع</label>
@@ -1026,7 +1023,7 @@
             </div>
 
             <div class="field">
-              <label for="units_check_shift">الفترة</label>
+              <label for="units_check_shift">فترة التشييك</label>
               <select id="units_check_shift">
                 <option value="" selected>اختر الفترة</option>
                 <option value="الصباحية">الصباحية</option>
@@ -1035,8 +1032,86 @@
               </select>
             </div>
 
-            <div class="field"><label for="ems_lead_display">اسم كبير المسعفين</label><input type="text" id="ems_lead_display" readonly></div>
-            <div class="field"><label for="employee_receiver_name">اسم الموظف مستلم العهد</label><input type="text" id="employee_receiver_name"></div>
+            <div class="field"><label for="unit_call_sign">رمز / نداء الوحدة التشغيلية</label><input type="text" id="unit_call_sign"></div>
+
+            <div class="field">
+              <label for="unit_type">نوع الوحدة التشغيلية</label>
+              <select id="unit_type">
+                <option value="" selected>اختر النوع</option>
+                <option value="مركبة إسعافية">مركبة إسعافية</option>
+                <option value="قولف">قولف</option>
+                <option value="راجلة">راجلة</option>
+                <option value="دراجة نارية">دراجة نارية</option>
+                <option value="دراجة هوائية">دراجة هوائية</option>
+                <option value="سكوتر">سكوتر</option>
+                <option value="بولاريس">بولاريس</option>
+                <option value="أخرى">أخرى</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="checker_has_third_party">هل الفرقة تحتوي على طرف ثالث؟</label>
+              <select id="checker_has_third_party">
+                <option value="" selected>اختر</option>
+                <option value="نعم">نعم</option>
+                <option value="لا">لا</option>
+              </select>
+            </div>
+
+            <div class="field"><label for="crew1_name">اسم الطاقم الإسعافي 1</label><input type="text" id="crew1_name"></div>
+            <div class="field"><label for="crew2_name">اسم الطاقم الإسعافي 2</label><input type="text" id="crew2_name"></div>
+            <div class="field hidden" id="thirdCrewWrap"><label for="crew3_name">اسم الطاقم الإسعافي 3</label><input type="text" id="crew3_name"></div>
+          </div>
+        </div>
+
+        <div class="section hidden" id="ambulanceMechanicalWrap">
+          <div class="section-title">التشييك الميكانيكي - مركبة إسعافية</div>
+          <div class="section-body grid-2">
+            <div class="field"><label for="vehicle_plate_number">رقم اللوحة</label><input type="text" id="vehicle_plate_number"></div>
+            <div class="field">
+              <label for="vehicle_fuel_level">مستوى الوقود</label>
+              <select id="vehicle_fuel_level">
+                <option value="" selected>اختر المستوى</option>
+                <option value="ممتاز">ممتاز</option>
+                <option value="جيد">جيد</option>
+                <option value="متوسط">متوسط</option>
+                <option value="منخفض">منخفض</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="vehicle_ac_status">التكييف</label>
+              <select id="vehicle_ac_status">
+                <option value="" selected>اختر الحالة</option>
+                <option value="يعمل">يعمل</option>
+                <option value="لا يعمل">لا يعمل</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="vehicle_lights_status">الأضواء والأصوات التحذيرية</label>
+              <select id="vehicle_lights_status">
+                <option value="" selected>اختر الحالة</option>
+                <option value="سليمة">سليمة</option>
+                <option value="يوجد ملاحظة">يوجد ملاحظة</option>
+                <option value="لا تعمل">لا تعمل</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="section hidden" id="golfWrap">
+          <div class="section-title">تشييك القولف</div>
+          <div class="section-body grid-2">
+            <div class="field">
+              <label for="golf_charge_level">مستوى الشحن</label>
+              <select id="golf_charge_level">
+                <option value="" selected>اختر المستوى</option>
+                <option value="ممتاز">ممتاز</option>
+                <option value="جيد">جيد</option>
+                <option value="متوسط">متوسط</option>
+                <option value="منخفض">منخفض</option>
+              </select>
+            </div>
+            <div class="field"><label for="golf_notes">ملاحظات القولف</label><textarea id="golf_notes"></textarea></div>
           </div>
         </div>
 
@@ -1399,184 +1474,8 @@
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby9b5WrPUDaz61qi3-qFMzqDuT3u5j7Lw8i08le_BGvXf0lrz4_h407xPEddIfY3eIE6w/exec'; // سيتم تحديثه لاحقاً بالرابط الصحيح إذا لزم الأمر
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    // ===== Static Deployment Points Data =====
-    window.staticDeploymentPoints = [
-  {id:"MH1",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.425546,lng:39.86387,status:"جاهز",shift:"الصباحية"},
-  {id:"MH2",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.424468,lng:39.863626,status:"جاهز",shift:"الصباحية"},
-  {id:"MH3",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.425116,lng:39.865597,status:"جاهز",shift:"الصباحية"},
-  {id:"MH4",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.4250659,lng:39.8659837,status:"جاهز",shift:"الصباحية"},
-  {id:"MH5",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.425314,lng:39.867029,status:"جاهز",shift:"الصباحية"},
-  {id:"MH6",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.425174,lng:39.86701,status:"جاهز",shift:"الصباحية"},
-  {id:"MH7",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.423748,lng:39.865322,status:"جاهز",shift:"الصباحية"},
-  {id:"MH8",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.424757,lng:39.86711,status:"جاهز",shift:"الصباحية"},
-  {id:"MH9",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.425946,lng:39.870235,status:"جاهز",shift:"الصباحية"},
-  {id:"MH10",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.424427,lng:39.868784,status:"جاهز",shift:"الصباحية"},
-  {id:"MH11",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.4226793,lng:39.8764637,status:"جاهز",shift:"الصباحية"},
-  {id:"MH12",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.4245944,lng:39.872963,status:"جاهز",shift:"الصباحية"},
-  {id:"MH13",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.4225412,lng:39.8764999,status:"جاهز",shift:"الصباحية"},
-  {id:"MH14",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.42235,lng:39.868068,status:"جاهز",shift:"الصباحية"},
-  {id:"MH15",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.421914,lng:39.869211,status:"جاهز",shift:"الصباحية"},
-  {id:"MH16",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.4236195,lng:39.8730425,status:"جاهز",shift:"الصباحية"},
-  {id:"MH17",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.419938,lng:39.872258,status:"جاهز",shift:"الصباحية"},
-  {id:"MH18",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.4192968,lng:39.8737655,status:"جاهز",shift:"الصباحية"},
-  {id:"MH19",sector:"الجمرات",type:"راجلة",teams:1,lat:21.4228831,lng:39.8712326,status:"جاهز",shift:"الصباحية"},
-  {id:"MH20",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.4207064,lng:39.8766112,status:"جاهز",shift:"الصباحية"},
-  {id:"MH21",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.4201379,lng:39.8767965,status:"جاهز",shift:"الصباحية"},
-  {id:"MH22",sector:"الجمرات",type:"راجلة",teams:1,lat:21.4253017,lng:39.8670914,status:"جاهز",shift:"الصباحية"},
-  {id:"MH23",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.420791,lng:39.8768115,status:"جاهز",shift:"الصباحية"},
-  {id:"MH24",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.4203237,lng:39.8712934,status:"جاهز",shift:"الصباحية"},
-  {id:"MH25",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.4200672,lng:39.8776463,status:"جاهز",shift:"الصباحية"},
-  {id:"MH26",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.416968,lng:39.8770642,status:"جاهز",shift:"الصباحية"},
-  {id:"MH27",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.4234574,lng:39.8713077,status:"جاهز",shift:"الصباحية"},
-  {id:"MH28",sector:"الجمرات",type:"راجلة",teams:1,lat:21.4187865,lng:39.877496,status:"جاهز",shift:"الصباحية"},
-  {id:"MH29",sector:"الجمرات",type:"راجلة",teams:1,lat:21.4179375,lng:39.8771044,status:"جاهز",shift:"الصباحية"},
-  {id:"MH30",sector:"الجمرات",type:"راجلة",teams:1,lat:21.4213962,lng:39.8708725,status:"جاهز",shift:"الصباحية"},
-  {id:"MH31",sector:"الجمرات",type:"راجلة",teams:1,lat:21.4223201,lng:39.8713338,status:"جاهز",shift:"الصباحية"},
-  {id:"MH32",sector:"الجمرات",type:"راجلة",teams:1,lat:21.4206621,lng:39.8727285,status:"جاهز",shift:"الصباحية"},
-  {id:"MH33",sector:"الجمرات",type:"راجلة",teams:1,lat:21.4214612,lng:39.8732703,status:"جاهز",shift:"الصباحية"},
-  {id:"MH34",sector:"الجمرات",type:"راجلة",teams:1,lat:21.419973,lng:39.8737746,status:"جاهز",shift:"الصباحية"},
-  {id:"MH35",sector:"الجمرات",type:"راجلة",teams:1,lat:21.4205972,lng:39.8744827,status:"جاهز",shift:"الصباحية"},
-  {id:"MH36",sector:"القطارات",type:"قولف",teams:1,lat:21.414271,lng:39.8782808,status:"جاهز",shift:"الصباحية"},
-  {id:"MH37",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4160506,lng:39.8770301,status:"جاهز",shift:"الصباحية"},
-  {id:"MH38",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4153602,lng:39.8767243,status:"جاهز",shift:"الصباحية"},
-  {id:"MH39",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.413141,lng:39.881431,status:"جاهز",shift:"الصباحية"},
-  {id:"MH40",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4136279,lng:39.8809927,status:"جاهز",shift:"الصباحية"},
-  {id:"MH41",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4123168,lng:39.8824058,status:"جاهز",shift:"الصباحية"},
-  {id:"MH42",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4085071,lng:39.8861372,status:"جاهز",shift:"الصباحية"},
-  {id:"MH43",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.407028,lng:39.887845,status:"جاهز",shift:"الصباحية"},
-  {id:"MH44",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4152823,lng:39.8769795,status:"جاهز",shift:"الصباحية"},
-  {id:"MH45",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.42343,lng:39.861696,status:"جاهز",shift:"الصباحية"},
-  {id:"MH46",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.412738,lng:39.882661,status:"جاهز",shift:"الصباحية"},
-  {id:"MH47",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4121327,lng:39.88039,status:"جاهز",shift:"الصباحية"},
-  {id:"MH48",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4114845,lng:39.8840906,status:"جاهز",shift:"الصباحية"},
-  {id:"MH49",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4125658,lng:39.8819877,status:"جاهز",shift:"الصباحية"},
-  {id:"MH50",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4229275,lng:39.8654266,status:"جاهز",shift:"الصباحية"},
-  {id:"MH51",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4208641,lng:39.8683662,status:"جاهز",shift:"الصباحية"},
-  {id:"MH52",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4201062,lng:39.8691237,status:"جاهز",shift:"الصباحية"},
-  {id:"MH53",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.419427,lng:39.870766,status:"جاهز",shift:"الصباحية"},
-  {id:"MH54",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.419418,lng:39.87085,status:"جاهز",shift:"الصباحية"},
-  {id:"MH55",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4202552,lng:39.8694404,status:"جاهز",shift:"الصباحية"},
-  {id:"MH56",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4233439,lng:39.8631645,status:"جاهز",shift:"الصباحية"},
-  {id:"MH57",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.419053,lng:39.871377,status:"جاهز",shift:"الصباحية"},
-  {id:"MH58",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4173595,lng:39.8736606,status:"جاهز",shift:"الصباحية"},
-  {id:"MH59",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4124092,lng:39.8796805,status:"جاهز",shift:"الصباحية"},
-  {id:"MH60",sector:"القطارات",type:"قولف",teams:1,lat:21.4138865,lng:39.8773178,status:"جاهز",shift:"الصباحية"},
-  {id:"MH61",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4192661,lng:39.8708881,status:"جاهز",shift:"الصباحية"},
-  {id:"MH62",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4157995,lng:39.8752371,status:"جاهز",shift:"الصباحية"},
-  {id:"MH63",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4099329,lng:39.8851583,status:"جاهز",shift:"الصباحية"},
-  {id:"MH64",sector:"القطارات",type:"مركبة اسعافية",teams:1,lat:21.4066742,lng:39.8890287,status:"جاهز",shift:"الصباحية"},
-  {id:"MH65",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4101968,lng:39.8894904,status:"جاهز",shift:"الصباحية"},
-  {id:"MH66",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4098272,lng:39.8886697,status:"جاهز",shift:"الصباحية"},
-  {id:"MH67",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4145719,lng:39.8849757,status:"جاهز",shift:"الصباحية"},
-  {id:"MH68",sector:"بطن منى الجنوبي",type:"راجلة",teams:1,lat:21.4125191,lng:39.8856227,status:"جاهز",shift:"الصباحية"},
-  {id:"MH69",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4086113,lng:39.8874781,status:"جاهز",shift:"الصباحية"},
-  {id:"MH70",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4140273,lng:39.8836217,status:"جاهز",shift:"الصباحية"},
-  {id:"MH71",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4144967,lng:39.8813124,status:"جاهز",shift:"الصباحية"},
-  {id:"MH72",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4162396,lng:39.8806847,status:"جاهز",shift:"الصباحية"},
-  {id:"MH73",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4178627,lng:39.8799981,status:"جاهز",shift:"الصباحية"},
-  {id:"MH74",sector:"بطن منى الجنوبي",type:"راجلة",teams:1,lat:21.4112106,lng:39.8857311,status:"جاهز",shift:"الصباحية"},
-  {id:"MH75",sector:"بطن منى الجنوبي",type:"راجلة",teams:1,lat:21.4076471,lng:39.8899628,status:"جاهز",shift:"الصباحية"},
-  {id:"MH76",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4093845,lng:39.8907603,status:"جاهز",shift:"الصباحية"},
-  {id:"MH77",sector:"بطن منى الجنوبي",type:"مركبة اسعافية",teams:1,lat:21.4133375,lng:39.8826844,status:"جاهز",shift:"الصباحية"},
-  {id:"MH78",sector:"بطن منى الجنوبي",type:"راجلة",teams:1,lat:21.4163028,lng:39.883399,status:"جاهز",shift:"الصباحية"},
-  {id:"MH79",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4078273,lng:39.8901072,status:"جاهز",shift:"الصباحية"},
-  {id:"MH80",sector:"بطن منى الجنوبي",type:"راجلة",teams:1,lat:21.4166004,lng:39.8789371,status:"جاهز",shift:"الصباحية"},
-  {id:"MH81",sector:"بطن منى الجنوبي",type:"مركبة اسعافية",teams:1,lat:21.4138466,lng:39.88183,status:"جاهز",shift:"الصباحية"},
-  {id:"MH82",sector:"بطن منى الجنوبي",type:"مركبة اسعافية",teams:1,lat:21.4136918,lng:39.8820177,status:"جاهز",shift:"الصباحية"},
-  {id:"MH83",sector:"بطن منى الجنوبي",type:"مركبة اسعافية",teams:1,lat:21.4134848,lng:39.8824484,status:"جاهز",shift:"الصباحية"},
-  {id:"MH84",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4122543,lng:39.8875193,status:"جاهز",shift:"الصباحية"},
-  {id:"MH85",sector:"بطن منى الجنوبي",type:"قولف",teams:1,lat:21.4093626,lng:39.8880329,status:"جاهز",shift:"الصباحية"},
-  {id:"MH86",sector:"بطن منى الشمالي",type:"مركبة اسعافية",teams:1,lat:21.4193403,lng:39.8812049,status:"جاهز",shift:"الصباحية"},
-  {id:"MH87",sector:"بطن منى الشمالي",type:"مركبة اسعافية",teams:1,lat:21.4142091,lng:39.892582,status:"جاهز",shift:"الصباحية"},
-  {id:"MH88",sector:"بطن منى الشمالي",type:"تدخل سريع",teams:1,lat:21.4165745,lng:39.8846857,status:"جاهز",shift:"الصباحية"},
-  {id:"MH89",sector:"بطن منى الشمالي",type:"مركبة اسعافية",teams:1,lat:21.4203267,lng:39.8812256,status:"جاهز",shift:"الصباحية"},
-  {id:"MH90",sector:"بطن منى الشمالي",type:"مركبة اسعافية",teams:1,lat:21.4203141,lng:39.8811459,status:"جاهز",shift:"الصباحية"},
-  {id:"MH91",sector:"بطن منى الشمالي",type:"مركبة اسعافية",teams:1,lat:21.4197049,lng:39.8839032,status:"جاهز",shift:"الصباحية"},
-  {id:"MH92",sector:"بطن منى الشمالي",type:"قولف",teams:1,lat:21.4106591,lng:39.8919189,status:"جاهز",shift:"الصباحية"},
-  {id:"MH93",sector:"بطن منى الشمالي",type:"قولف",teams:1,lat:21.4128478,lng:39.8925071,status:"جاهز",shift:"الصباحية"},
-  {id:"MH94",sector:"بطن منى الشمالي",type:"مركبة اسعافية",teams:1,lat:21.4154277,lng:39.8905918,status:"جاهز",shift:"الصباحية"},
-  {id:"MH95",sector:"بطن منى الشمالي",type:"قولف",teams:1,lat:21.4137018,lng:39.888756,status:"جاهز",shift:"الصباحية"},
-  {id:"MH96",sector:"بطن منى الشمالي",type:"مركبة اسعافية",teams:1,lat:21.418529,lng:39.8845792,status:"جاهز",shift:"الصباحية"},
-  {id:"MH97",sector:"بطن منى الشمالي",type:"مركبة اسعافية",teams:1,lat:21.4161219,lng:39.8882369,status:"جاهز",shift:"الصباحية"},
-  {id:"MH98",sector:"بطن منى الشمالي",type:"مركبة اسعافية",teams:1,lat:21.4193403,lng:39.8812049,status:"جاهز",shift:"الصباحية"},
-  {id:"MH99",sector:"بطن منى الشمالي",type:"راجلة",teams:1,lat:21.4178668,lng:39.885717,status:"جاهز",shift:"الصباحية"},
-  {id:"MH100",sector:"بطن منى الشمالي",type:"راجلة",teams:1,lat:21.4171427,lng:39.8836652,status:"جاهز",shift:"الصباحية"},
-  {id:"MH101",sector:"بطن منى الشمالي",type:"راجلة",teams:1,lat:21.4155846,lng:39.8878333,status:"جاهز",shift:"الصباحية"},
-  {id:"MH102",sector:"بطن منى الشمالي",type:"قولف",teams:1,lat:21.4182014,lng:39.8809615,status:"جاهز",shift:"الصباحية"},
-  {id:"MH103",sector:"بطن منى الشمالي",type:"قولف",teams:1,lat:21.4176508,lng:39.8823898,status:"جاهز",shift:"الصباحية"},
-  {id:"MH104",sector:"بطن منى الشمالي",type:"قولف",teams:1,lat:21.4138279,lng:39.8904369,status:"جاهز",shift:"الصباحية"},
-  {id:"MH105",sector:"بطن منى الشمالي",type:"قولف",teams:1,lat:21.412497,lng:39.8903364,status:"جاهز",shift:"الصباحية"},
-  {id:"MH106",sector:"بطن منى الشمالي",type:"قولف",teams:1,lat:21.4153377,lng:39.8861448,status:"جاهز",shift:"الصباحية"},
-  {id:"MH107",sector:"بطن منى الشمالي",type:"قولف",teams:1,lat:21.4183002,lng:39.8834344,status:"جاهز",shift:"الصباحية"},
-  {id:"MH108",sector:"بطن منى الشمالي",type:"تدخل سريع",teams:1,lat:21.4148416,lng:39.8871924,status:"جاهز",shift:"الصباحية"},
-  {id:"MH109",sector:"بطن منى الشمالي",type:"راجلة",teams:1,lat:21.4168485,lng:39.8862187,status:"جاهز",shift:"الصباحية"},
-  {id:"MH110",sector:"بطن منى الشمالي",type:"تدخل سريع",teams:1,lat:21.4131959,lng:39.8883795,status:"جاهز",shift:"الصباحية"},
-  {id:"MH111",sector:"بطن منى الشمالي",type:"راجلة",teams:1,lat:21.4103555,lng:39.8914814,status:"جاهز",shift:"الصباحية"},
-  {id:"MH112",sector:"الشعيبين",type:"مركبة اسعافية",teams:1,lat:21.4131758,lng:39.9008867,status:"جاهز",shift:"الصباحية"},
-  {id:"MH113",sector:"الشعيبين",type:"مركبة اسعافية",teams:1,lat:21.4185277,lng:39.895871,status:"جاهز",shift:"الصباحية"},
-  {id:"MH114",sector:"الشعيبين",type:"مركبة اسعافية",teams:1,lat:21.419911,lng:39.8925505,status:"جاهز",shift:"الصباحية"},
-  {id:"MH115",sector:"الشعيبين",type:"مركبة اسعافية",teams:1,lat:21.4294735,lng:39.9054542,status:"جاهز",shift:"الصباحية"},
-  {id:"MH116",sector:"الشعيبين",type:"مركبة اسعافية",teams:1,lat:21.4244071,lng:39.8998937,status:"جاهز",shift:"الصباحية"},
-  {id:"MH117",sector:"الشعيبين",type:"مركبة اسعافية",teams:1,lat:21.4205294,lng:39.8923298,status:"جاهز",shift:"الصباحية"},
-  {id:"MH118",sector:"الشعيبين",type:"مركبة اسعافية",teams:1,lat:21.4240413,lng:39.8951289,status:"جاهز",shift:"الصباحية"},
-  {id:"MH119",sector:"الشعيبين",type:"مركبة اسعافية",teams:1,lat:21.4116982,lng:39.9093006,status:"جاهز",shift:"الصباحية"},
-  {id:"MH120",sector:"الشعيبين",type:"مركبة اسعافية",teams:1,lat:21.4114686,lng:39.9094944,status:"جاهز",shift:"الصباحية"},
-  {id:"MH121",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.4125453,lng:39.8959471,status:"جاهز",shift:"الصباحية"},
-  {id:"MH122",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.4030243,lng:39.8948683,status:"جاهز",shift:"الصباحية"},
-  {id:"MH123",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.4031416,lng:39.8940651,status:"جاهز",shift:"الصباحية"},
-  {id:"MH124",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.405504,lng:39.8891763,status:"جاهز",shift:"الصباحية"},
-  {id:"MH125",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.4110131,lng:39.8987977,status:"جاهز",shift:"الصباحية"},
-  {id:"MH126",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.4070409,lng:39.8974509,status:"جاهز",shift:"الصباحية"},
-  {id:"MH127",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.4122599,lng:39.8960615,status:"جاهز",shift:"الصباحية"},
-  {id:"MH128",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.4092911,lng:39.8915339,status:"جاهز",shift:"الصباحية"},
-  {id:"MH129",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.4116284,lng:39.8929019,status:"جاهز",shift:"الصباحية"},
-  {id:"MH130",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.4054508,lng:39.8901446,status:"جاهز",shift:"الصباحية"},
-  {id:"MH131",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.4028988,lng:39.8948493,status:"جاهز",shift:"الصباحية"},
-  {id:"MH132",sector:"منى الجديد 1",type:"مركبة اسعافية",teams:1,lat:21.4037029,lng:39.893358,status:"جاهز",shift:"الصباحية"},
-  {id:"MH133",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.4013019,lng:39.8964704,status:"جاهز",shift:"الصباحية"},
-  {id:"MH134",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.397855,lng:39.8995292,status:"جاهز",shift:"الصباحية"},
-  {id:"MH135",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.3952977,lng:39.90072,status:"جاهز",shift:"الصباحية"},
-  {id:"MH136",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.4017411,lng:39.905956,status:"جاهز",shift:"الصباحية"},
-  {id:"MH137",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.3995185,lng:39.8998245,status:"جاهز",shift:"الصباحية"},
-  {id:"MH138",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.4029697,lng:39.8979496,status:"جاهز",shift:"الصباحية"},
-  {id:"MH139",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.4030097,lng:39.8979496,status:"جاهز",shift:"الصباحية"},
-  {id:"MH140",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.4058664,lng:39.9019533,status:"جاهز",shift:"الصباحية"},
-  {id:"MH141",sector:"منى الجديد 2",type:"قولف",teams:1,lat:21.4104178,lng:39.9018903,status:"جاهز",shift:"الصباحية"},
-  {id:"MH142",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.4028911,lng:39.8980762,status:"جاهز",shift:"الصباحية"},
-  {id:"MH143",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.4028661,lng:39.8981352,status:"جاهز",shift:"الصباحية"},
-  {id:"MH144",sector:"منى الجديد 2",type:"قولف",teams:1,lat:21.4059077,lng:39.8978724,status:"جاهز",shift:"الصباحية"},
-  {id:"MH145",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.4011816,lng:39.9003908,status:"جاهز",shift:"الصباحية"},
-  {id:"MH146",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.3959698,lng:39.9073243,status:"جاهز",shift:"الصباحية"},
-  {id:"MH147",sector:"منى الجديد 2",type:"مركبة اسعافية",teams:1,lat:21.3958074,lng:39.9038401,status:"جاهز",shift:"الصباحية"},
-  {id:"MH148",sector:"منى الجديد 2",type:"قولف",teams:1,lat:21.3935148,lng:39.905436,status:"جاهز",shift:"الصباحية"}
-];
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby9b5WrPUDaz61qi3-qFMzqDuT3u5j7Lw8i08le_BGvXf0lrz4_h407xPEddIfY3eIE6w/exec';
 
     const deploymentPlanData = {
       "الجمرات": [
@@ -1604,7 +1503,7 @@
       ]
     };
 
-    window.teamsData = {
+    const teamsData = {
       "الجمرات": {
         "الصباحية": { lead:"راكان منصور الحصيني", assistants:["فواز حميد الظفيري","تركي أحمد عبدالله الغامدي","محمد علي عبدالله القحطاني","فيصل جري المطيري"] },
         "المسائية": { lead:"محمد عبدالکريم إبراهيم الدعيجي", assistants:["عبدالله علي القحطاني","عبدالعزيز محمد الجهني","أحمد عبدالرحمن التركستاني",""] }
@@ -1635,17 +1534,7 @@
       }
     };
 
-    window.medicalItemsData = [
-      'جهاز لوكس',
-      'جهاز ميندري',
-      'جهاز لايف باك 15',
-      'جهاز اتصال لاسلكي',
-      'المسعف الالكتروني(تابلت)',
-      'جهاز قياس العلامات الحيوية'
-    ];
-
-    // تهيئة مصفوفة البيانات الحية بالنقاط الثابتة فوراً لضمان ظهورها
-    var liveDeploymentData = [...window.staticDeploymentPoints];
+    const medicalItemsData = ['جهاز لوكس', 'جهاز ميندري', 'جهاز لايف باك 15', 'جهاز اتصال لاسلكي', 'المسعف الالكتروني(تابلت)', 'جهاز قياس العلامات الحيوية'];
     const oldMedicalItemsData = [
       "جهاز لوكس","جهاز صدمات خارجي AED","جهاز تنفس صناعي","جهاز لايف باك","جهاز ميندري","جهاز قياس العلامات الحيوية",
       "جهاز قياس النبض ونسبة الأكسجين بالدم","جهاز قياس السكر بالدم","جهاز الشفط المتنقل الكهربائي","جهاز الدريل العظمي",
@@ -1696,55 +1585,13 @@
       });
     });
 
-    // إضافة مستمعي الأحداث لخطة الانتشار
-    const deploySector = document.getElementById('deploy_sector');
-    const deployShift = document.getElementById('deploy_shift');
-    if(deploySector) deploySector.addEventListener('change', () => {
-        fillDeploymentPeople();
-        loadDeploymentTemplate();
-    });
-    
-    if(deployShift) deployShift.addEventListener('change', () => {
-        fillDeploymentPeople();
-        loadDeploymentTemplate();
-    });
-
-    window.activatePanel = function(targetId) {
-      console.log("تفعيل اللوحة:", targetId);
-      
-      // 1. تحديث حالة القائمة الجانبية
+    function activatePanel(targetId){
       document.querySelectorAll('.nav li').forEach(i => i.classList.remove('active'));
       document.querySelector(`.nav li[data-target="${targetId}"]`)?.classList.add('active');
-
-      // 2. إخفاء جميع اللوحات
-      const panels = document.querySelectorAll('.panel');
-      panels.forEach(p => {
-        p.style.display = 'none';
-        p.classList.remove('active');
-      });
-      
-      // 3. إظهار اللوحة المستهدفة
-      const target = document.getElementById(targetId);
-      if (target) {
-        target.style.display = 'block';
-        target.classList.add('active');
-        window.scrollTo({top: 0, behavior: 'smooth'});
-        
-        // وظائف خاصة ببعض اللوحات
-        if(targetId === 'unitsCheckPanel'){
-          if(typeof buildMedicalCheckTable === 'function') buildMedicalCheckTable();
-        }
-
-        // تهيئة الخريطة إذا كانت اللوحة هي لوحة الخريطة أو الرئيسية
-        if ((targetId === 'mapsPanel' || targetId === 'homePanel') && typeof map !== 'undefined') {
-          setTimeout(() => { 
-            if (typeof map !== 'undefined') {
-              map.invalidateSize(); 
-            }
-          }, 400);
-        }
-      }
-    };
+      document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
+      document.getElementById(targetId)?.classList.add('active');
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
 
     function toggleQuickLinks(){
       document.getElementById('quickLinks').classList.toggle('show');
@@ -1757,9 +1604,8 @@
         window.deploymentMarkers = [];
         fetchDeploymentFromSheet().then(() => {
           renderDeploymentMarkers();
-      console.log('Map markers rendered with live data.');
           console.log('تم تحديث الخريطة بنجاح');
-        
+        });
       }
     }
 
@@ -1781,7 +1627,7 @@ function setDashboardLinks(){
   ['dashboardLinkTop','dashboardLinkCard','dashboardLinkMap'].forEach(id => {
     const el = document.getElementById(id);
     if(el) el.href = dashboardUrl;
-  
+  });
 }
 
 function setMapLink(){
@@ -1805,7 +1651,7 @@ async function saveToGoogleSheets(sheetName, rows){
         sheetName: sheetName,
         rows: rows
       })
-    
+    });
     
     // In no-cors mode, we can't read the response, so we assume success if no error
     return { success: true, message: "تم إرسال البيانات بنجاح" };
@@ -1835,7 +1681,8 @@ async function fetchDeploymentFromSheet(){
     return [];
   }
 }
-}ion openWhatsApp(text){
+
+    function openWhatsApp(text){
       const encoded = encodeURIComponent(text);
       // استخدام api.whatsapp.com كخيار أكثر استقراراً لجميع المنصات
       const url = `https://api.whatsapp.com/send?text=${encoded}`;
@@ -1858,6 +1705,7 @@ async function fetchDeploymentFromSheet(){
       const shift = document.getElementById("units_check_shift").value;
       const team = teamsData?.[sector]?.[shift];
       document.getElementById("ems_lead_display").value = team?.lead || "";
+      document.getElementById("assistants_display").value = (team?.assistants || []).filter(a => a).join(" - ") || "";
     }
 
     function fillTeamData(){
@@ -1883,12 +1731,12 @@ async function fetchDeploymentFromSheet(){
           if(el.tagName === 'SELECT') el.selectedIndex = 0;
           else el.value = '';
         }
-      
+      });
 
       ['operational_units','total_providers','employees_count','volunteers_count','vehicles_count','golf_count','walking_count','rapid_intervention_count'].forEach(id => {
         const el = document.getElementById(id);
         if(el) el.value = 0;
-      
+      });
 
       fillTeamData();
     }
@@ -1916,12 +1764,13 @@ async function fetchDeploymentFromSheet(){
         "مساعد4": document.getElementById('assistant4').value || '-',
         "الوحدات التشغيلية": document.getElementById('operational_units').value || 0,
         "مقدمي الخدمة": document.getElementById('total_providers').value || 0,
-        "الموظفين": document.getElementById(\'employees_count\').value || 0,
-        "المتطوعين": document.getElementById(\'volunteers_count\').value || 0,
-        "المركبات": document.getElementById(\'vehicles_count\').value || 0,
-        "القولف": document.getElementById(\'golf_count\').value || 0,
-        "الراجلة": document.getElementById(\'walking_count\').value || 0,
-        "الملاحظات": document.getElementById(\'notes\').value.trim() || \'لا توجد ملاحظات\'
+        "الموظفين": document.getElementById('employees_count').value || 0,
+        "المتطوعين": document.getElementById('volunteers_count').value || 0,
+        "المركبات": document.getElementById('vehicles_count').value || 0,
+        "القولف": document.getElementById('golf_count').value || 0,
+        "الراجلة": document.getElementById('walking_count').value || 0,
+        "مركبات التدخل السريع": document.getElementById('rapid_intervention_count').value || 0,
+        "الملاحظات": document.getElementById('notes').value.trim() || 'لا توجد ملاحظات'
       };
 
       const save = await saveToGoogleSheets('التحضير اليومي', [row]);
@@ -1952,31 +1801,6 @@ async function fetchDeploymentFromSheet(){
 
     document.getElementById('handover_sector').addEventListener('change', fillHandoverTeamData);
     document.getElementById('handover_shift').addEventListener('change', fillHandoverTeamData);
-    
-    document.getElementById('deploy_sector').addEventListener('change', fillDeploymentTeamData);
-    document.getElementById('deploy_shift').addEventListener('change', fillDeploymentTeamData);
-
-    function fillDeploymentTeamData(){
-      const sector = document.getElementById('deploy_sector').value;
-      const shift = document.getElementById('deploy_shift').value;
-      const team = window.teamsData?.[sector]?.[shift === 'صباحية' ? 'الصباحية' : (shift === 'مسائية' ? 'المسائية' : shift)];
-      
-      if(team){
-        document.getElementById('deploy_lead_name').value = team.lead || '';
-        document.getElementById('deploy_current_lead').value = team.lead || '';
-        document.getElementById('deploy_assistant1_auto').value = team.assistants?.[0] || '';
-        document.getElementById('deploy_assistant2_auto').value = team.assistants?.[1] || '';
-        document.getElementById('deploy_assistant3_auto').value = team.assistants?.[2] || '';
-        document.getElementById('deploy_assistant4_auto').value = team.assistants?.[3] || '';
-      } else {
-        document.getElementById('deploy_lead_name').value = '';
-        document.getElementById('deploy_current_lead').value = '';
-        document.getElementById('deploy_assistant1_auto').value = '';
-        document.getElementById('deploy_assistant2_auto').value = '';
-        document.getElementById('deploy_assistant3_auto').value = '';
-        document.getElementById('deploy_assistant4_auto').value = '';
-      }
-    }
 
     function fillHandoverTeamData(){
       const sector = document.getElementById('handover_sector').value;
@@ -2134,7 +1958,8 @@ ${supportLines}
 
       const row = {
         "وقت الحفظ": new Date().toLocaleString('ar-SA'),
-        "القطاع": document.getElementById(\'sector\').value,       "نوع المناوبة": document.getElementById('handover_shift').value,
+        "القطاع": document.getElementById('handover_sector').value,
+        "نوع المناوبة": document.getElementById('handover_shift').value,
         "التاريخ": document.getElementById('handover_date').value,
         "الوقت من": document.getElementById('handover_time_from').value,
         "الوقت إلى": document.getElementById('handover_time_to').value,
@@ -2233,7 +2058,7 @@ ${supportLines}
     function buildMedicalCheckTable(){
       const medicalBody = document.getElementById('medicalCheckTableBody');
       medicalBody.innerHTML = '';
-      (window.medicalItemsData || []).forEach((item,index)=>{
+      medicalItemsData.forEach((item,index)=>{
         const row = document.createElement('tr');
         row.innerHTML = `
           <td>${item}</td>
@@ -2247,7 +2072,7 @@ ${supportLines}
           <td><input type="text" id="medical_note_${index}" placeholder="ملاحظات"></td>
         `;
         medicalBody.appendChild(row);
-      
+      });
     }
 
     async function sendUnitsCheck(){
@@ -2260,27 +2085,24 @@ ${supportLines}
         }
       }
 
-       const medicalItems = window.medicalItemsData.map((item, index) => {
-         const status = document.getElementById(`medical_status_${index}`).value;
-         const count = document.getElementById(`medical_count_${index}`).value;
-         const note = document.getElementById(`medical_note_${index}`).value;
-         return `${item}: [${status}] - العدد: ${count}${note ? \' - ملاحظة: \' + note : \'\'}`;
-       }).join('\n');
+      const row = {
+        "وقت الحفظ": new Date().toLocaleString('ar-SA'),
+        "تاريخ التشييك": document.getElementById('units_check_date').value,
+        "وقت التشييك": new Date().toLocaleTimeString('ar-SA'),
+        "القطاع": document.getElementById('units_check_sector').value,
+        "الفترة": document.getElementById('units_check_shift').value,
+        "كبير المسعفين": document.getElementById('ems_lead_display').value,
+        "المساعدين": document.getElementById('assistants_display').value,
+        "جهاز لوكس": document.getElementById('medical_count_0')?.value || '0',
+        "جهاز ميندري": document.getElementById('medical_count_1')?.value || '0',
+        "جهاز لايف باك 15": document.getElementById('medical_count_2')?.value || '0',
+        "جهاز اتصال لاسلكي": document.getElementById('medical_count_3')?.value || '0',
+        "المسعف الالكتروني(تابلت)": document.getElementById('medical_count_4')?.value || '0',
+        "جهاز قياس العلامات الحيوية": document.getElementById('medical_count_5')?.value || '0',
+        "ملاحظات عامة": document.getElementById('units_check_notes').value.trim() || 'لا توجد ملاحظات'
+      };
 
-       const row = {
-         "وقت الحفظ": new Date().toLocaleString(\'ar-SA\'),
-         "تاريخ العهدة": document.getElementById(\'units_check_date\').value,
-         "وقت العهدة": document.getElementById(\'units_check_time\').value,
-         "القطاع": document.getElementById(\'units_check_sector\').value,
-         "الفترة": document.getElementById(\'units_check_shift\').value,
-         "نوع العهدة": document.getElementById(\'covenant_type\').value || \'-\',
-         "رقم العهدة/المعرف": document.getElementById(\'covenant_id\').value || \'-\',
-         "الأصناف": medicalItems,
-         "ملاحظات عامة": document.getElementById(\'units_check_notes\').value || \'-\',
-         "اسم كبير المسعفين والمساعدين": document.getElementById(\'ems_lead_display\').value || \'-\',
-         "اسم مدخل البيانات": document.getElementById(\'employee_receiver_name\').value || \'-\'
-       };
-      const save = await saveToGoogleSheets(\'العهد الشخصية\', [row]);
+      const save = await saveToGoogleSheets('نموذج العهد الشخصية للقطاعات', [row]);
       if(!save.success){
         showAlert('unitCheckAlert','error','تعذر حفظ بيانات العهد');
         return;
@@ -2288,22 +2110,38 @@ ${supportLines}
 
       showAlert('unitCheckAlert','success','تم حفظ نموذج العهد بنجاح');
 
-      let msg = `🩺 *نموذج العهد الشخصية للقطاعات* 🩺\n\n`;
-      msg += `📍 *القطاع:* ${row["القطاع"]}\n`;
-      msg += `🕘 *الفترة:* ${row["الفترة"]}\n`;
-      msg += `📅 *التاريخ:* ${row["التاريخ"]}\n`;
-      msg += `⏰ *الوقت:* ${row["الوقت"]}\n\n`;
-      msg += `👤 *كبير المسعفين:* ${row["كبير المسعفين"]}\n`;
-      msg += `👤 *مستلم العهد:* ${row["مستلم العهد"]}\n\n`;
-      msg += `✅ *العهد:* \n`;
-      window.medicalItemsData.forEach((item, index) => {
-        const status = document.getElementById(`medical_status_${index}`).value;
-        const count = document.getElementById(`medical_count_${index}`).value;
-        const note = document.getElementById(`medical_note_${index}`).value;
-        msg += `• ${item}: [${status}] - العدد: ${count}${note ? ' - ملاحظة: ' + note : ''}\n`;
-      
-      msg += `\n`;
-      msg += `📝 *الملاحظات:* \n${row["ملاحظات عامة"]}`;
+      let msg = `🩺 *نموذج العهد الشخصية للقطاعات* 🩺
+
+`;
+      msg += `📍 *القطاع:* ${row["القطاع"]}
+`;
+      msg += `🕘 *المناوبة:* ${row["الفترة"]}
+`;
+      msg += `📅 *التاريخ:* ${row["تاريخ التشييك"]}
+
+`;
+      msg += `👤 *كبير المسعفين:* ${row["كبير المسعفين"]}
+`;
+      msg += `👥 *المساعدين:* ${row["المساعدين"]}
+
+`;
+      msg += `✅ *العهد:* 
+`;
+      msg += `• جهاز لوكس: ${row["جهاز لوكس"]}
+`;
+      msg += `• جهاز ميندري: ${row["جهاز ميندري"]}
+`;
+      msg += `• جهاز لايف باك 15: ${row["جهاز لايف باك 15"]}
+`;
+      msg += `• جهاز اتصال لاسلكي: ${row["جهاز اتصال لاسلكي"]}
+`;
+      msg += `• المسعف الالكتروني(تابلت): ${row["المسعف الالكتروني(تابلت)"]}
+`;
+      msg += `• جهاز قياس العلامات الحيوية: ${row["جهاز قياس العلامات الحيوية"]}
+
+`;
+      msg += `📝 *الملاحظات:* 
+${row["ملاحظات عامة"]}`;
       openWhatsApp(msg);
     }
 
@@ -2327,10 +2165,6 @@ ${supportLines}
           "وقت التشييك": time,
           "القائم بالتشييك": checker,
           "موقع الخزن": location,
-          "الفئة": document.getElementById(\'stock_category\').value || \'-\',
-          "الصنف": document.getElementById(\'stock_item\').value || \'-\',
-          "الحالة": document.getElementById(\'stock_status\').value || \'-\',
-          "الكمية الحالية": document.getElementById(\'stock_quantity\').value || 0,
           "هل يوجد نواقص": hasShortage,
           "النواقص الطبية": shortages || 'لا يوجد',
           "ملاحظات": notes || '-'
@@ -2364,52 +2198,34 @@ ${supportLines}
       openWhatsApp(msg);
     }
 
-    // التأكد من وجود العناصر قبل إضافة المستمعين
-    const sectorEl = document.getElementById('deploy_sector');
-    const shiftEl = document.getElementById('deploy_shift');
-    const roleEl = document.getElementById('deploy_role');
-
-    if (sectorEl) sectorEl.addEventListener('change', handleDeploymentContextChange);
-    if (shiftEl) shiftEl.addEventListener('change', handleDeploymentContextChange);
-    if (roleEl) roleEl.addEventListener('change', handleDeploymentRoleChange);
+    document.getElementById('deploy_sector').addEventListener('change', handleDeploymentContextChange);
+    document.getElementById('deploy_shift').addEventListener('change', handleDeploymentContextChange);
+    document.getElementById('deploy_role').addEventListener('change', handleDeploymentRoleChange);
 
     function handleDeploymentContextChange(){
       fillDeploymentPeople();
-      loadDefaultDeploymentPoints();
+      loadDeploymentTemplate();
     }
 
     function handleDeploymentRoleChange(){
       fillDeploymentPeople();
       refreshDeploymentAdminMode();
     }
+
     function fillDeploymentPeople(){
-      const sectorEl = document.getElementById('deploy_sector');
-      const shiftEl = document.getElementById('deploy_shift');
-      if (!sectorEl || !shiftEl) return;
+      const sector = document.getElementById('deploy_sector').value;
+      const shift = document.getElementById('deploy_shift').value;
+      const teamShift = shift === 'المسائية' ? 'المسائية' : 'الصباحية';
+      const team = teamsData?.[sector]?.[teamShift];
 
-      const sector = sectorEl.value;
-      const shift = shiftEl.value;
-      
-      if (!sector || sector === 'اختر القطاع') return;
+      document.getElementById('deploy_lead_name').value = team?.lead || '';
+      document.getElementById('deploy_current_lead').value = team?.lead || '';
+      document.getElementById('deploy_assistant1_auto').value = team?.assistants?.[0] || '';
+      document.getElementById('deploy_assistant2_auto').value = team?.assistants?.[1] || '';
+      document.getElementById('deploy_assistant3_auto').value = team?.assistants?.[2] || '';
+      document.getElementById('deploy_assistant4_auto').value = team?.assistants?.[3] || '';
 
-      let teamShift = 'الصباحية';
-      if (shift === 'مسائية' || shift === 'المسائية') teamShift = 'المسائية';
-      else if (shift === 'صباحية' || shift === 'الصباحية') teamShift = 'الصباحية';
-      
-      const data = typeof teamsData !== 'undefined' ? teamsData : {};
-      const team = data[sector] ? data[sector][teamShift] : null;
-      
-      const leadInput = document.getElementById('deploy_current_lead');
-      const asst1Input = document.getElementById('deploy_assistant1_auto');
-      const asst2Input = document.getElementById('deploy_assistant2_auto');
-      const asst3Input = document.getElementById('deploy_assistant3_auto');
-      const asst4Input = document.getElementById('deploy_assistant4_auto');
 
-      if (leadInput) leadInput.value = team ? (team.lead || '') : '';
-      if (asst1Input) asst1Input.value = team && team.assistants ? (team.assistants[0] || '') : '';
-      if (asst2Input) asst2Input.value = team && team.assistants ? (team.assistants[1] || '') : '';
-      if (asst3Input) asst3Input.value = team && team.assistants ? (team.assistants[2] || '') : '';
-      if (asst4Input) asst4Input.value = team && team.assistants ? (team.assistants[3] || '') : '';
     }
 
     function getDefaultTimes(shift){
@@ -2418,7 +2234,7 @@ ${supportLines}
       return { start:'12:00', end:'18:00' };
     }
 
-    function createDeploymentRowHTML(rowData = {}) {
+    function createDeploymentRowHTML(rowData = {}){
       const code = rowData.code || '';
       const type = rowData.type || 'مركبة إسعافية';
       const shift = rowData.shift || 'الصباحية';
@@ -2522,8 +2338,8 @@ ${supportLines}
           if (!el.classList.contains('btn-blue')) {
             el.disabled = !canEdit;
           }
-        
-      
+        });
+      });
     }
 
    async function loadDeploymentTemplate(){
@@ -2555,7 +2371,7 @@ const items = data.filter(d =>
       lng: item["Longitude"] || '',
       note: item["ملاحظة السجل"] || ''
     }));
-  
+  });
 
   refreshDeploymentAdminMode();
 }
@@ -2642,7 +2458,7 @@ const items = data.filter(d =>
           "ملاحظة السجل": row.querySelector('.dep-note')?.value || '-',
           "ملاحظات عامة": notes || '-'
         };
-      
+      });
 
       const save = await saveToGoogleSheets('خطة الانتشار', rows);
       if(!save.success){
@@ -2653,9 +2469,9 @@ const items = data.filter(d =>
       showAlert('deploymentAlert','success','تم حفظ خطة الانتشار بنجاح');
       
       // تحديث الداشبورد والخريطة ديناميكياً بعد الحفظ
-setTimeout(async () => {
+      setTimeout(async () => {
         await loadLiveDeploymentData();
-        showAlert(\'deploymentAlert\',\'success\',\'تم حفظ خطة الانتشار وتحديث لوحة القائد والخريطة\');
+        showAlert('deploymentAlert','success','تم حفظ خطة الانتشار وتحديث لوحة القائد والخريطة');
       }, 1200);
 
       let msg = `📍 *خطة الانتشار - نطاق منى* 📍\n\n`;
@@ -2671,7 +2487,7 @@ setTimeout(async () => {
       const statusCounts = rows.reduce((acc, r) => {
         acc[r["الحالة"]] = (acc[r["الحالة"]] || 0) + 1;
         return acc;
-      }, {
+      }, {});
       
       msg += `• جاهزة: ${statusCounts["جاهز"] || 0}\n`;
       msg += `• مدعمة: ${statusCounts["مدعم"] || 0}\n`;
@@ -2768,7 +2584,7 @@ ${row["ملاحظات إضافية"]}
         if (!el) return;
         if (el.tagName === 'SELECT') el.selectedIndex = 0;
         else el.value = '';
-      
+      });
 
       const alertBox = document.getElementById('methaneAlert');
       if (alertBox) alertBox.style.display = 'none';
@@ -2898,7 +2714,7 @@ ${row["ملاحظات إضافية"]}
         if (el.tagName === 'SELECT') el.selectedIndex = 0;
         else if (el.type === 'number') el.value = '1';
         else el.value = '';
-      
+      });
 
       document.getElementById('internalSupportWrap').classList.add('hidden');
       document.getElementById('externalSupportWrap').classList.add('hidden');
@@ -2907,376 +2723,15 @@ ${row["ملاحظات إضافية"]}
       if (alertBox) alertBox.style.display = 'none';
     }
 
-// تم نقل الاستدعاءات إلى حدث DOMContentLoaded لضمان تحميل العناصر أولاً
+buildMedicalCheckTable();
+buildStrategicTable();
+setDashboardLinks();
+setMapLink();
 
 /* ═══════════════════════════════════════════
-   بيانات الخريطة والداشبورد المباشرة
+   بيانات نقاط الانتشار الثابتة (148 نقطة)
    ═══════════════════════════════════════════ */
-var liveDeploymentData = [];
-          console.log(\'Updated liveDeploymentData:\', liveDeploymentData);
-var mapInstance = null;
-var mapMarkers = [];
-
-// تحديث تلقائي كل دقيقة
-setInterval(() => {
-  if (typeof loadLiveDeploymentData === 'function') loadLiveDeploymentData();
-}, 60000);
-
-/* ─── تبديل التابات الرئيسية ─── */
-function switchMainTab(tabId, btn){
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.main-tabs .tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(tabId)?.classList.add('active');
-  btn?.classList.add('active');
-  if(tabId === 'tabMap') initMap();
-}
-
-/* ─── ألوان حسب الحالة ─── */
-function getStatusColor(status){
-  const s = (status || '').trim();
-  if(s === 'جاهزة' || s === 'جاهز') return '#00b894';
-  if(s === 'مدعمة' || s === 'مدعم') return '#0b5ed7';
-  if(s === 'خارج الخدمة') return '#d63031';
-  if(s === 'متعطلة' || s === 'موقوف') return '#636e72';
-  return '#6c5ce7';
-}
-
-/* ─── أيقونات حسب نوع الوحدة ─── */
-function getTypeIcon(type){
-  const t = (type || '').trim();
-  if(t.includes('مركبة') || t.includes('إسعاف') || t.includes('اسعاف')) return '🚑';
-  if(t.includes('قولف')) return '🏎️';
-  if(t.includes('راجلة')) return '🚶';
-  if(t.includes('تدخل سريع')) return '⚡';
-  return '📍';
-}
-
-/* ─── تهيئة الخريطة ─── */
-function initMap(){
-  if(mapInstance) {
-    mapInstance.invalidateSize();
-    return;
-  }
-  mapInstance = L.map('deploymentMap').setView([21.4150, 39.8850], 14);
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap',
-    maxZoom: 19
-  }).addTo(mapInstance);
-  renderMapMarkers(liveDeploymentData);
-}
-
-/* ─── عرض النقاط على الخريطة ─── */
-function renderMapMarkers(data){
-  if(!mapInstance) return;
-  if(mapMarkers && mapMarkers.length > 0) {
-    mapMarkers.forEach(m => {
-      try { mapInstance.removeLayer(m); } catch(e) {}
-    
-  }
-  mapMarkers = [];
-  
-  if(!data || !Array.isArray(data)) return;
-  
-  data.forEach(pt => {
-    if(!pt.lat || !pt.lng) return;
-    const color = getStatusColor(pt.status);
-    const icon = L.divIcon({
-      className: 'custom-marker',
-      html: `<div style="background:${color};width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.3);cursor:pointer">${getTypeIcon(pt.type)}</div>`,
-      iconSize: [28, 28],
-      iconAnchor: [14, 14]
-    
-    const marker = L.marker([pt.lat, pt.lng], {icon}).addTo(mapInstance);
-    marker.bindPopup(`
-      <div style="font-family:Cairo,sans-serif;direction:rtl;min-width:200px">
-        <div style="font-weight:800;font-size:1rem;color:#c1121f;margin-bottom:6px">${pt.id}</div>
-        <table style="font-size:.82rem;width:100%">
-          <tr><td style="font-weight:700;padding:2px 8px">القطاع</td><td>${pt.sector}</td></tr>
-          <tr><td style="font-weight:700;padding:2px 8px">النوع</td><td>${pt.type}</td></tr>
-          <tr><td style="font-weight:700;padding:2px 8px">الحالة</td><td><span style="background:${color};color:#fff;padding:2px 8px;border-radius:10px;font-size:.75rem">${pt.status}</span></td></tr>
-          <tr><td style="font-weight:700;padding:2px 8px">الفرق</td><td>${pt.teams}</td></tr>
-          <tr><td style="font-weight:700;padding:2px 8px">المناوبة</td><td>${pt.shift || '-'}</td></tr>
-        </table>
-        <div style="margin-top:8px;text-align:center">
-          <a href="https://www.google.com/maps?q=${pt.lat},${pt.lng}" target="_blank" style="color:#0b5ed7;font-size:.8rem">فتح في Google Maps</a>
-        </div>
-      </div>
-    `);
-    mapMarkers.push(marker);
-  
-  const countEl = document.getElementById('mapPointCount');
-  if(countEl) countEl.textContent = `النقاط المعروضة: ${data.length} من ${liveDeploymentData.length}`;
-}
-
-/* ─── فلترة الخريطة ─── */
-function applyMapFilters(){
-  const sector = document.getElementById('mapFilterSector').value;
-  const status = document.getElementById('mapFilterStatus').value;
-  const type = document.getElementById('mapFilterType').value;
-  const shift = document.getElementById('mapFilterShift').value;
-
-  let filtered = liveDeploymentData.filter(pt => {
-    if(sector !== 'الكل' && pt.sector !== sector) return false;
-    if(status !== 'الكل' && pt.status !== status) return false;
-    if(type !== 'الكل'){
-      const t = (pt.type || '').trim();
-      if(type === 'مركبة اسعافية' && !t.includes('مركبة')) return false;
-      if(type === 'قولف' && !t.includes('قولف')) return false;
-      if(type === 'راجلة' && !t.includes('راجلة')) return false;
-      if(type === 'تدخل سريع' && !t.includes('تدخل')) return false;
-    }
-    if(shift !== 'الكل' && pt.shift !== shift) return false;
-    return true;
-  
-  renderMapMarkers(filtered);
-}
-
-function resetMapFilters(){
-  document.getElementById('mapFilterSector').value = 'الكل';
-  document.getElementById('mapFilterStatus').value = 'الكل';
-  document.getElementById('mapFilterType').value = 'الكل';
-  document.getElementById('mapFilterShift').value = 'الكل';
-  renderMapMarkers(liveDeploymentData);
-}
-
-/* ─── تحديث الداشبورد ─── */
-function applyDashboardFilters(){
-  const date = document.getElementById('dashFilterDate').value;
-  const time = document.getElementById('dashFilterTime').value;
-  const sector = document.getElementById('dashFilterSector').value;
-  const shift = document.getElementById('dashFilterShift').value;
-
-  let filtered = liveDeploymentData;
-
-  if(date){
-    filtered = filtered.filter(d => d["التاريخ"] === date);
-  }
-  if(time){
-    const filterHour = time.split(':')[0];
-    filtered = filtered.filter(d => {
-      const dTime = d["الوقت"] || "";
-      return dTime.startsWith(filterHour + ":");
-    
-  }
-  if(sector !== 'الكل'){
-    filtered = filtered.filter(d => d.sector === sector);
-  }
-  if(shift !== 'الكل'){
-    filtered = filtered.filter(d => d["العرض الزمني"] === shift || d.shift === shift);
-  }
-
-  updateDashboard(filtered);
-}
-
-function resetDashboardFilters(){
-  document.getElementById('dashFilterDate').value = '';
-  document.getElementById('dashFilterTime').value = '';
-  document.getElementById('dashFilterSector').value = 'الكل';
-  document.getElementById('dashFilterShift').value = 'الكل';
-  updateDashboard(liveDeploymentData);
-}
-
-win){
-  console.log('updateDashboard called with data:', data);
-  const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
-  
-  // منطق الاستجابة: يعتبر القطاع أرسل فقط إذا كانت البيانات تحتوي على علامة الحفظ الفعلية
-  const submittedData = data.filter(d => 
-    d.saved === true && d["الحالة"]
-  );
-  const respondedSectors = new Set(submittedData.map(d => d.sector));
-  const missingSectors = sectors.filter(s => !respondedSectors.has(s));
-  const missingEl = document.getElementById('missingSectorsList');
-  if(missingEl) missingEl.innerHTML = missingSectors.length ? missingSectors.join(' - ') : 'الكل أرسل';
-
-  // إجمالي النقاط = عدد مواقع الانتشار
-  const total = data.length;
-  
-  // إجمالي عدد الفرق = مجموع الفرق داخل النقاط
-  const totalTeams = data.reduce((sum, d) => {
-    return sum + Number(d.teams || d["عدد الفرق"] || d.count || 1);
-  }, 0);
-
-  // الفرق الجاهزة = مجموع عدد الفرق في النقاط الجاهزة
-  const ready = data
-    .filter(d => d.status === 'جاهزة' || d.status === 'جاهز')
-    .reduce((sum, d) => {
-      return sum + Number(d.teams || d["عدد الفرق"] || d.count || 1);
-    }, 0);
-
-  const supported = data.filter(d => d.status === 'مدعمة' || d.status === 'مدعم').length;
-  const oos = data.filter(d => d.status === 'خارج الخدمة').length;
-  const broken = data.filter(d => d.status === 'متعطلة' || d.status === 'موقوف').length;
-
-  document.getElementById('kpi_total').textContent = total;
-  if(document.getElementById('kpi_total_teams')) {
-    document.getElementById('kpi_total_teams').textContent = totalTeams;
-  }
-  document.getElementById('kpi_ready').textContent = ready;
-  document.getElementById('kpi_supported').textContent = supported;
-  document.getElementById('kpi_oos').textContent = oos;
-  document.getElementById('kpi_broken').textContent = broken;
-
-  // Sector Table
-  const sectorBody = document.querySelector('#dashSectorTable tbody');
-  sectorBody.innerHTML = '';
-  sectors.forEach(sec => {
-    const pts = data.filter(d => d.sector === sec);
-    const r = pts.filter(d => d.status === 'جاهزة' || d.status === 'جاهز').length;
-    const s = pts.filter(d => d.status === 'مدعمة' || d.status === 'مدعم').length;
-    const o = pts.filter(d => d.status === 'خارج الخدمة').length;
-    const b = pts.filter(d => d.status === 'متعطلة' || d.status === 'موقوف').length;
-    sectorBody.innerHTML += `<tr>
-      <td style="font-weight:700">${sec}</td>
-      <td>${pts.length}</td>
-      <td><span class="status-badge ready">${r}</span></td>
-      <td><span class="status-badge supported">${s}</span></td>
-      <td><span class="status-badge oos">${o}</span></td>
-      <td><span class="status-badge broken">${b}</span></td>
-    </tr>`;
-  
-
-  // Type Table
-  const types = {};
-  data.forEach(d => {
-    let t = (d.type || 'أخرى').trim();
-    if(t.includes('مركبة') || t.includes('إسعاف') || t.includes('اسعاف')) t = 'مركبة إسعافية';
-    types[t] = (types[t] || 0) + 1;
-  
-  const typeBody = document.querySelector('#dashTypeTable tbody');
-  typeBody.innerHTML = '';
-  Object.entries(types).sort((a,b) => b[1]-a[1]).forEach(([t,c]) => {
-    typeBody.innerHTML += `<tr>
-      <td style="font-weight:700">${getTypeIcon(t)} ${t}</td>
-      <td>${c}</td>
-      <td>${total ? Math.round(c/total*100) : 0}%</td>
-    </tr>`;
-  
-
-  // Status Chart (simple visual bars)
-  const statuses = [
-    {name:'جاهزة',count:ready,color:'#00b894'},
-    {name:'مدعمة',count:supported,color:'#0b5ed7'},
-    {name:'خارج الخدمة',count:oos,color:'#d63031'},
-    {name:'متعطلة',count:broken,color:'#636e72'}
-  ];
-  const chartEl = document.getElementById('dashStatusChart');
-  chartEl.innerHTML = '';
-  statuses.forEach(s => {
-    const pct = total ? Math.round(s.count/total*100) : 0;
-    chartEl.innerHTML += `
-      <div style="text-align:center;min-width:80px">
-        <div style="font-size:1.6rem;font-weight:900;color:${s.color}">${s.count}</div>
-        <div style="font-size:.72rem;color:var(--muted);margin-bottom:4px">${s.name}</div>
-        <div style="background:var(--line);border-radius:6px;height:8px;overflow:hidden">
-          <div style="background:${s.color};height:100%;width:${pct}%;border-radius:6px;transition:width .5s"></div>
-        </div>
-        <div style="font-size:.7rem;color:var(--muted);margin-top:2px">${pct}%</div>
-      </div>
-    `;
-  
-
-  // Support Summary
-  updateSupportSummary();
-
-  // Last Update
-  document.getElementById('dashLastUpdate').innerHTML = `
-    <div style="font-size:.85rem;color:var(--success);font-weight:700">
-      <i class="fas fa-check-circle"></i> تم تحديث البيانات
-    </div>
-    <div style="font-size:.78rem;color:var(--muted);margin-top:4px">
-      ${new Date().toLocaleString('ar-SA')} | إجمالي ${total} نقطة
-    </div>
-  `;
-}
-
-/* ═══════════════════════════════════════════
-   تحديث ملخص عمليات الدعم في الداشبورد
-   ═══════════════════════════════════════════ */
-async function updateSupportSummary() {
-  try {
-    const tbody = document.querySelector('#dashSupportTable tbody');
-    if (!tbody) return;
-    
-    // جلب بيانات الدعم من Google Sheets
-    let result = { data: [] };
-    
-    try {
-      const response = await fetch(SCRIPT_URL + '?action=getSupportData', {
-        method: 'GET',
-        mode: 'cors'
-      
-      
-      if (response.ok) {
-        result = await response.json();
-      } else {
-        console.log('استجابة الخادم غير صحيحة:', response.status);
-      }
-    } catch (e) {
-      console.log('لم يتم جلب البيانات من Google Sheets، سيتم استخدام البيانات المحلية:', e.message);
-    }
-    
-    // استخدام البيانات المحلية إذا لم تتوفر بيانات من الخادم
-    if (!result.data || result.data.length === 0) {
-      result.data = window.supportPlanData || [];
-    }
-    
-    if (!result.data || result.data.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم -</td></tr>';
-      return;
-    }
-
-    // تجميع البيانات حسب القطاع/النطاق والتاريخ والفترة
-    const supportMap = {};
-    result.data.forEach(row => {
-      if (!row) return;
-      const type = row['النوع'] || (row['نوع التدعيم'] === 'داخل_النطاق' ? 
-        (row['القطاع المدعم له'] || 'بين القطاعات') : 
-        (row['النطاق المدعم له'] || 'بين النطاقات'));
-      const date = row['التاريخ'] || '-';
-      const period = row['الفترة'] || '-';
-      const key = `${type}|${date}|${period}`;
-      
-      if (!supportMap[key]) {
-        supportMap[key] = {
-          type,
-          date,
-          period,
-          count: 0,
-          teams: 0
-        };
-      }
-      supportMap[key].count++;
-      supportMap[key].teams += parseInt(row['عدد الفرق'] || row['عدد الفرق المدعمة'] || 1);
-    
-
-    // عرض البيانات في الجدول
-    tbody.innerHTML = '';
-    const items = Object.values(supportMap).slice(0, 10);
-    if (items.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم -</td></tr>';
-    } else {
-      items.forEach(item => {
-        tbody.innerHTML += `<tr>
-          <td style="font-weight:700">${item.type}</td>
-          <td>${item.count}</td>
-          <td>${item.teams}</td>
-          <td>${item.date}</td>
-          <td>${item.period}</td>
-        </tr>`;
-      
-    }
-  } catch (err) {
-    console.error('خطأ في جلب بيانات الدعم:', err);
-    const tbody = document.querySelector('#dashSupportTable tbody');
-    if (tbody) {
-      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم متاحة حالياً -</td></tr>';
-    }
-  }
-}
-
-// ===== Static Deployment Points Data (يجب أن يكون قبل الدوال التي تستخدمه) =====
-window.staticDeploymentPoints = [
+const staticDeploymentPoints = [
   {id:"MH1",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.425546,lng:39.86387,status:"جاهز",shift:"الصباحية"},
   {id:"MH2",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.424468,lng:39.863626,status:"جاهز",shift:"الصباحية"},
   {id:"MH3",sector:"الجمرات",type:"مركبة اسعافية",teams:1,lat:21.425116,lng:39.865597,status:"جاهز",shift:"الصباحية"},
@@ -3427,24 +2882,353 @@ window.staticDeploymentPoints = [
   {id:"MH148",sector:"منى الجديد 2",type:"قولف",teams:1,lat:21.3935148,lng:39.905436,status:"جاهز",shift:"الصباحية"}
 ];
 
+/* ═══════════════════════════════════════════
+   بيانات الخريطة والداشبورد المباشرة
+   ═══════════════════════════════════════════ */
+let liveDeploymentData = [...staticDeploymentPoints];
+let mapInstance = null;
+let mapMarkers = [];
 
+/* ─── تبديل التابات الرئيسية ─── */
+function switchMainTab(tabId, btn){
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.main-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabId)?.classList.add('active');
+  btn?.classList.add('active');
+  if(tabId === 'tabMap') initMap();
+}
 
+/* ─── ألوان حسب الحالة ─── */
+function getStatusColor(status){
+  const s = (status || '').trim();
+  if(s === 'جاهزة' || s === 'جاهز') return '#00b894';
+  if(s === 'مدعمة' || s === 'مدعم') return '#0b5ed7';
+  if(s === 'خارج الخدمة') return '#d63031';
+  if(s === 'متعطلة' || s === 'موقوف') return '#636e72';
+  return '#6c5ce7';
+}
 
+/* ─── أيقونات حسب نوع الوحدة ─── */
+function getTypeIcon(type){
+  const t = (type || '').trim();
+  if(t.includes('مركبة') || t.includes('إسعاف') || t.includes('اسعاف')) return '🚑';
+  if(t.includes('قولف')) return '🏎️';
+  if(t.includes('راجلة')) return '🚶';
+  if(t.includes('تدخل سريع')) return '⚡';
+  return '📍';
+}
 
+/* ─── تهيئة الخريطة ─── */
+function initMap(){
+  if(mapInstance) {
+    mapInstance.invalidateSize();
+    return;
+  }
+  mapInstance = L.map('deploymentMap').setView([21.4150, 39.8850], 14);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap',
+    maxZoom: 19
+  }).addTo(mapInstance);
+  renderMapMarkers(liveDeploymentData);
+}
+
+/* ─── عرض النقاط على الخريطة ─── */
+function renderMapMarkers(data){
+  mapMarkers.forEach(m => mapInstance.removeLayer(m));
+  mapMarkers = [];
+  data.forEach(pt => {
+    if(!pt.lat || !pt.lng) return;
+    const color = getStatusColor(pt.status);
+    const icon = L.divIcon({
+      className: 'custom-marker',
+      html: `<div style="background:${color};width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.3);cursor:pointer">${getTypeIcon(pt.type)}</div>`,
+      iconSize: [28, 28],
+      iconAnchor: [14, 14]
+    });
+    const marker = L.marker([pt.lat, pt.lng], {icon}).addTo(mapInstance);
+    marker.bindPopup(`
+      <div style="font-family:Cairo,sans-serif;direction:rtl;min-width:200px">
+        <div style="font-weight:800;font-size:1rem;color:#c1121f;margin-bottom:6px">${pt.id}</div>
+        <table style="font-size:.82rem;width:100%">
+          <tr><td style="font-weight:700;padding:2px 8px">القطاع</td><td>${pt.sector}</td></tr>
+          <tr><td style="font-weight:700;padding:2px 8px">النوع</td><td>${pt.type}</td></tr>
+          <tr><td style="font-weight:700;padding:2px 8px">الحالة</td><td><span style="background:${color};color:#fff;padding:2px 8px;border-radius:10px;font-size:.75rem">${pt.status}</span></td></tr>
+          <tr><td style="font-weight:700;padding:2px 8px">الفرق</td><td>${pt.teams}</td></tr>
+          <tr><td style="font-weight:700;padding:2px 8px">المناوبة</td><td>${pt.shift || '-'}</td></tr>
+        </table>
+        <div style="margin-top:8px;text-align:center">
+          <a href="https://www.google.com/maps?q=${pt.lat},${pt.lng}" target="_blank" style="color:#0b5ed7;font-size:.8rem">فتح في Google Maps</a>
+        </div>
+      </div>
+    `);
+    mapMarkers.push(marker);
+  });
+  document.getElementById('mapPointCount').textContent = `النقاط المعروضة: ${data.length} من ${liveDeploymentData.length}`;
+}
+
+/* ─── فلترة الخريطة ─── */
+function applyMapFilters(){
+  const sector = document.getElementById('mapFilterSector').value;
+  const status = document.getElementById('mapFilterStatus').value;
+  const type = document.getElementById('mapFilterType').value;
+  const shift = document.getElementById('mapFilterShift').value;
+
+  let filtered = liveDeploymentData.filter(pt => {
+    if(sector !== 'الكل' && pt.sector !== sector) return false;
+    if(status !== 'الكل' && pt.status !== status) return false;
+    if(type !== 'الكل'){
+      const t = (pt.type || '').trim();
+      if(type === 'مركبة اسعافية' && !t.includes('مركبة')) return false;
+      if(type === 'قولف' && !t.includes('قولف')) return false;
+      if(type === 'راجلة' && !t.includes('راجلة')) return false;
+      if(type === 'تدخل سريع' && !t.includes('تدخل')) return false;
+    }
+    if(shift !== 'الكل' && pt.shift !== shift) return false;
+    return true;
+  });
+  renderMapMarkers(filtered);
+}
+
+function resetMapFilters(){
+  document.getElementById('mapFilterSector').value = 'الكل';
+  document.getElementById('mapFilterStatus').value = 'الكل';
+  document.getElementById('mapFilterType').value = 'الكل';
+  document.getElementById('mapFilterShift').value = 'الكل';
+  renderMapMarkers(liveDeploymentData);
+}
+
+/* ─── تحديث الداشبورد ─── */
+function applyDashboardFilters(){
+  const date = document.getElementById('dashFilterDate').value;
+  const time = document.getElementById('dashFilterTime').value;
+  const sector = document.getElementById('dashFilterSector').value;
+  const shift = document.getElementById('dashFilterShift').value;
+
+  let filtered = liveDeploymentData;
+
+  if(date){
+    filtered = filtered.filter(d => d["التاريخ"] === date);
+  }
+  if(time){
+    const filterHour = time.split(':')[0];
+    filtered = filtered.filter(d => {
+      const dTime = d["الوقت"] || "";
+      return dTime.startsWith(filterHour + ":");
+    });
+  }
+  if(sector !== 'الكل'){
+    filtered = filtered.filter(d => d.sector === sector);
+  }
+  if(shift !== 'الكل'){
+    filtered = filtered.filter(d => d["العرض الزمني"] === shift || d.shift === shift);
+  }
+
+  updateDashboard(filtered);
+}
+
+function resetDashboardFilters(){
+  document.getElementById('dashFilterDate').value = '';
+  document.getElementById('dashFilterTime').value = '';
+  document.getElementById('dashFilterSector').value = 'الكل';
+  document.getElementById('dashFilterShift').value = 'الكل';
+  updateDashboard(liveDeploymentData);
+}
+
+function updateDashboard(data){
+  // Missing Sectors
+  const respondedSectors = new Set(data.map(d => d.sector));
+  const missingSectors = sectors.filter(s => !respondedSectors.has(s));
+  const missingEl = document.getElementById('missingSectorsList');
+  if(missingEl) missingEl.innerHTML = missingSectors.length ? missingSectors.join(' - ') : 'الكل أرسل';
+
+  // KPIs
+  const total = data.length;
+  const ready = data.filter(d => d.status === 'جاهزة' || d.status === 'جاهز').length;
+  const supported = data.filter(d => d.status === 'مدعمة' || d.status === 'مدعم').length;
+  const oos = data.filter(d => d.status === 'خارج الخدمة').length;
+  const broken = data.filter(d => d.status === 'متعطلة' || d.status === 'موقوف').length;
+
+  document.getElementById('kpi_total').textContent = total;
+  document.getElementById('kpi_ready').textContent = ready;
+  document.getElementById('kpi_supported').textContent = supported;
+  document.getElementById('kpi_oos').textContent = oos;
+  document.getElementById('kpi_broken').textContent = broken;
+
+  // Sector Table
+  const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
+  const sectorBody = document.querySelector('#dashSectorTable tbody');
+  sectorBody.innerHTML = '';
+  sectors.forEach(sec => {
+    const pts = data.filter(d => d.sector === sec);
+    const r = pts.filter(d => d.status === 'جاهزة' || d.status === 'جاهز').length;
+    const s = pts.filter(d => d.status === 'مدعمة' || d.status === 'مدعم').length;
+    const o = pts.filter(d => d.status === 'خارج الخدمة').length;
+    const b = pts.filter(d => d.status === 'متعطلة' || d.status === 'موقوف').length;
+    sectorBody.innerHTML += `<tr>
+      <td style="font-weight:700">${sec}</td>
+      <td>${pts.length}</td>
+      <td><span class="status-badge ready">${r}</span></td>
+      <td><span class="status-badge supported">${s}</span></td>
+      <td><span class="status-badge oos">${o}</span></td>
+      <td><span class="status-badge broken">${b}</span></td>
+    </tr>`;
+  });
+
+  // Type Table
+  const types = {};
+  data.forEach(d => {
+    let t = (d.type || 'أخرى').trim();
+    if(t.includes('مركبة') || t.includes('إسعاف') || t.includes('اسعاف')) t = 'مركبة إسعافية';
+    types[t] = (types[t] || 0) + 1;
+  });
+  const typeBody = document.querySelector('#dashTypeTable tbody');
+  typeBody.innerHTML = '';
+  Object.entries(types).sort((a,b) => b[1]-a[1]).forEach(([t,c]) => {
+    typeBody.innerHTML += `<tr>
+      <td style="font-weight:700">${getTypeIcon(t)} ${t}</td>
+      <td>${c}</td>
+      <td>${total ? Math.round(c/total*100) : 0}%</td>
+    </tr>`;
+  });
+
+  // Status Chart (simple visual bars)
+  const statuses = [
+    {name:'جاهزة',count:ready,color:'#00b894'},
+    {name:'مدعمة',count:supported,color:'#0b5ed7'},
+    {name:'خارج الخدمة',count:oos,color:'#d63031'},
+    {name:'متعطلة',count:broken,color:'#636e72'}
+  ];
+  const chartEl = document.getElementById('dashStatusChart');
+  chartEl.innerHTML = '';
+  statuses.forEach(s => {
+    const pct = total ? Math.round(s.count/total*100) : 0;
+    chartEl.innerHTML += `
+      <div style="text-align:center;min-width:80px">
+        <div style="font-size:1.6rem;font-weight:900;color:${s.color}">${s.count}</div>
+        <div style="font-size:.72rem;color:var(--muted);margin-bottom:4px">${s.name}</div>
+        <div style="background:var(--line);border-radius:6px;height:8px;overflow:hidden">
+          <div style="background:${s.color};height:100%;width:${pct}%;border-radius:6px;transition:width .5s"></div>
+        </div>
+        <div style="font-size:.7rem;color:var(--muted);margin-top:2px">${pct}%</div>
+      </div>
+    `;
+  });
+
+  // Support Summary
+  updateSupportSummary();
+
+  // Last Update
+  document.getElementById('dashLastUpdate').innerHTML = `
+    <div style="font-size:.85rem;color:var(--success);font-weight:700">
+      <i class="fas fa-check-circle"></i> تم تحديث البيانات
+    </div>
+    <div style="font-size:.78rem;color:var(--muted);margin-top:4px">
+      ${new Date().toLocaleString('ar-SA')} | إجمالي ${total} نقطة
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════════
+   تحديث ملخص عمليات الدعم في الداشبورد
+   ═══════════════════════════════════════════ */
+async function updateSupportSummary() {
+  try {
+    const tbody = document.querySelector('#dashSupportTable tbody');
+    if (!tbody) return;
+    
+    // جلب بيانات الدعم من Google Sheets
+    let result = { data: [] };
+    
+    try {
+      const response = await fetch(SCRIPT_URL + '?action=getSupportData', {
+        method: 'GET',
+        mode: 'cors'
+      });
+      
+      if (response.ok) {
+        result = await response.json();
+      } else {
+        console.log('استجابة الخادم غير صحيحة:', response.status);
+      }
+    } catch (e) {
+      console.log('لم يتم جلب البيانات من Google Sheets، سيتم استخدام البيانات المحلية:', e.message);
+    }
+    
+    // استخدام البيانات المحلية إذا لم تتوفر بيانات من الخادم
+    if (!result.data || result.data.length === 0) {
+      result.data = window.supportPlanData || [];
+    }
+    
+    if (!result.data || result.data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم -</td></tr>';
+      return;
+    }
+
+    // تجميع البيانات حسب القطاع/النطاق والتاريخ والفترة
+    const supportMap = {};
+    result.data.forEach(row => {
+      if (!row) return;
+      const type = row['النوع'] || (row['نوع التدعيم'] === 'داخل_النطاق' ? 
+        (row['القطاع المدعم له'] || 'بين القطاعات') : 
+        (row['النطاق المدعم له'] || 'بين النطاقات'));
+      const date = row['التاريخ'] || '-';
+      const period = row['الفترة'] || '-';
+      const key = `${type}|${date}|${period}`;
+      
+      if (!supportMap[key]) {
+        supportMap[key] = {
+          type,
+          date,
+          period,
+          count: 0,
+          teams: 0
+        };
+      }
+      supportMap[key].count++;
+      supportMap[key].teams += parseInt(row['عدد الفرق'] || row['عدد الفرق المدعمة'] || 1);
+    });
+
+    // عرض البيانات في الجدول
+    tbody.innerHTML = '';
+    const items = Object.values(supportMap).slice(0, 10);
+    if (items.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم -</td></tr>';
+    } else {
+      items.forEach(item => {
+        tbody.innerHTML += `<tr>
+          <td style="font-weight:700">${item.type}</td>
+          <td>${item.count}</td>
+          <td>${item.teams}</td>
+          <td>${item.date}</td>
+          <td>${item.period}</td>
+        </tr>`;
+      });
+    }
+  } catch (err) {
+    console.error('خطأ في جلب بيانات الدعم:', err);
+    const tbody = document.querySelector('#dashSupportTable tbody');
+    if (tbody) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted)">- لا توجد بيانات دعم متاحة حالياً -</td></tr>';
+    }
+  }
+}
+
+/* ─── جلب البيانات من Google Sheets وتحديث الخريطة والداشبورد ─── */
+window.loadLiveDeploymentData = async function() {
   try {
     const data = await fetchDeploymentFromSheet();
 
     if (data && data.length > 0) {
       liveDeploymentData = data.map(d => ({
-        id: d["الرمز"] || d["اسم النقطة"] || \'\',
-        sector: d["القطاع"] || \'\',
-        type: d["نوع الآلية"] || \'\',
+        id: d["الرمز"] || d["اسم النقطة"] || '',
+        sector: d["القطاع"] || '',
+        type: d["نوع الآلية"] || '',
         teams: Number(d["عدد الفرق الفعلي"] || d["عدد الفرق"] || 1),
         lat: parseFloat(d["Latitude"] || d["lat"] || d["خط العرض"] || 0),
         lng: parseFloat(d["Longitude"] || d["lng"] || d["خط الطول"] || 0),
-        status: d["الحالة"] || \'جاهز\',
-        shift: d["مناوبة النقطة"] || d["العرض الزمني"] || \'الصباحية\',
-        savedAt: d["وقت الحفظ"] || \'\',
+        status: d["الحالة"] || 'جاهز',
+        shift: d["مناوبة النقطة"] || d["العرض الزمني"] || 'الصباحية',
+        savedAt: d["وقت الحفظ"] || '',
         ...d
       })).filter(p => p.id && p.lat && p.lng);
     } else {
@@ -3456,123 +3240,957 @@ window.staticDeploymentPoints = [
   }
 
   updateDashboard(liveDeploymentData);
-  if (typeof applyMapFilters === \'function\') applyMapFilters();
-  else if (typeof renderMapMarkers === \'function\') renderMapMarkers(liveDeploymentData);
+  if (typeof applyMapFilters === 'function') applyMapFilters();
+  else if (typeof renderMapMarkers === 'function') renderMapMarkers(liveDeploymentData);
 };
 
-			/* لتحميل النقاط الافتراضية للقطاع المختار */
-					function loadDefaultDeploymentPoints(){
-				  const sectorEl = document.getElementById('deploy_sector');
-				  const shiftEl = document.getElementById('deploy_shift');
-				  if (!sectorEl || !shiftEl) return;
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof setDashboardLinks === 'function') setDashboardLinks();
+  if (typeof setMapLink === 'function') setMapLink();
+  if (typeof loadLiveDeploymentData === 'function') loadLiveDeploymentData();
+});
 
-				  const sector = sectorEl.value;
-				  let shift = shiftEl.value || 'الصباحية';
-				  
-				  if (shift === 'صباحية') shift = 'الصباحية';
-				  if (shift === 'مسائية') shift = 'المسائية';
-				  
-				  if(!sector || sector === 'اختر القطاع'){
-				    showAlert('deploymentAlert','error','يرجى اختيار قطاع أولاً');
-				    return;
-				  }
-				  
-				  const tbody = document.getElementById('deploymentTableBody');
-				  if (!tbody) return;
-				  
-				  tbody.innerHTML = '';
-				  
-				  // استخدام staticDeploymentPoints (المصفوفة) بدلاً من DEPLOYMENT_POINTS (الكائن)
-				  const pointsArray = window.staticDeploymentPoints || [];
-				  
-				  
-				  
-				  
-				  const sectorPoints = pointsArray.filter(p => String(p.sector).trim() === String(sector).trim());
-				  
-				  
-				  
-				  if(sectorPoints.length === 0){
-				    showAlert('deploymentAlert','warning','لا توجد نقاط افتراضية لهذا القطاع');
-				    return;
-				  }
-				  
-				  sectorPoints.forEach(point => {
-				    // توحيد مسمى نوع الوحدة ليتطابق مع خيارات الـ select في createDeploymentRowHTML
-				    let unitType = point.type || 'مركبة إسعافية';
-				    if (unitType === 'مركبة اسعافية') unitType = 'مركبة إسعافية';
-				    
-				    const rowData = {
-				      code: point.id || '',
-				      type: unitType,
-				      shift: shift,
-				      count: 1,
-				      lat: point.lat || '',
-				      lng: point.lng || '',
-				      note: ''
-				    };
-				    const rowHTML = createDeploymentRowHTML(rowData);
-				    tbody.insertAdjacentHTML('beforeend', rowHTML);
-				  
-				  
-				  showAlert('deploymentAlert','success',`تم تحميل ${sectorPoints.length} نقطة بنجاح لقطاع ${sector}`);
-				  if (typeof refreshDeploymentAdminMode === 'function') refreshDeploymentAdminMode();
-				}
+// تحديث تلقائي كل دقيقة
+setInterval(() => {
+  if (typeof loadLiveDeploymentData === 'function') loadLiveDeploymentData();
+}, 60000);
 
-// تهيئة البيانات عند التحميل
-
-    async function fetchDeploymentFromSheet(){
-      try{
-        const url = `${SCRIPT_URL}?action=getDeployment&t=${Date.now()}`;
-        const response = await fetch(url, { cache: 'no-store' });
-        if(!response.ok) throw new Error('فشل الاتصال');
-        const data = await response.json();
-        return Array.isArray(data) ? data : [];
-      } catch (error){
-        console.error('❌ خطأ في جلب خطة الانتشار:', error);
-        return [];
-      }
-    }
-
-    window.loadLiveDeploymentData = async function() {
-      try {
-        const data = await fetchDeploymentFromSheet();
-
-        if (data && data.length > 0) {
-          liveDeploymentData = data.map(d => ({
-            id: d["الرمز"] || d["اسم النقطة"] || '',
-            sector: d["القطاع"] || '',
-            type: d["نوع الآلية"] || '',
-            teams: Number(d["عدد الفرق الفعلي"] || d["عدد الفرق"] || 1),
-            lat: parseFloat(d["Latitude"] || d["lat"] || d["خط العرض"] || 0),
-            lng: parseFloat(d["Longitude"] || d["lng"] || d["خط الطول"] || 0),
-            status: d["الحالة"] || 'جاهز',
-            shift: d["مناوبة النقطة"] || d["العرض الزمني"] || 'الصباحية',
-            savedAt: d["وقت الحفظ"] || '',
-            ...d
-          })).filter(p => p.id && p.lat && p.lng);
-        } else {
-          liveDeploymentData = [...(window.staticDeploymentPoints || [])];
-        }
-      } catch(e) {
-        console.error(e);
-        liveDeploymentData = [...(window.staticDeploymentPoints || [])];
-      }
-
-      updateDashboard(liveDeploymentData);
-      if (typeof applyMapFilters === 'function') applyMapFilters();
-      else if (typeof renderMapMarkers === 'function') renderMapMarkers(liveDeploymentData);
+/* لتحميل النقاط الافتراضية للقطاع المختار */
+function loadDefaultDeploymentPoints(){
+  const sector = document.getElementById('deploy_sector').value;
+  const shift = document.getElementById('deploy_shift').value || 'الصباحية';
+  
+  if(!sector || sector === 'اختر القطاع'){
+    showAlert('deploymentAlert','error','يرجى اختيار قطاع أولاً');
+    return;
+  }
+  
+  const tbody = document.getElementById('deploymentTableBody');
+  if (!tbody) {
+    console.error('Table body not found');
+    return;
+  }
+  
+  tbody.innerHTML = '';
+  
+  // البحث عن النقاط التابعة للقطاع المختار
+  const sectorPoints = Object.entries(DEPLOYMENT_POINTS).filter(([code, point]) => point.sector === sector);
+  
+  if(sectorPoints.length === 0){
+    showAlert('deploymentAlert','warning','لا توجد نقاط افتراضية لهذا القطاع');
+    return;
+  }
+  
+  // إضافة كل نقطة إلى الجدول
+  sectorPoints.forEach(([code, point]) => {
+    const rowData = {
+      code: code,
+      type: point.unit_type || 'مركبة إسعافية',
+      shift: shift,
+      count: 1,
+      lat: point.lat || '',
+      lng: point.lng || '',
+      note: ''
     };
-
-    document.addEventListener('DOMContentLoaded', () => {
-      setDashboardLinks?.();
-      setMapLink?.();
-      window.loadLiveDeploymentData?.();
-      
-      // تحديث تلقائي كل 3 دقائق
-      setInterval(window.loadLiveDeploymentData, 180000);
-    });
-
+    tbody.insertAdjacentHTML('beforeend', createDeploymentRowHTML(rowData));
+  });
+  
+  showAlert('deploymentAlert','success',`تم تحميل ${sectorPoints.length} نقطة بنجاح لقطاع ${sector}`);
+}
 </script>
+<script>
+const DEPLOYMENT_POINTS = {
+  "MH1": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.425546,
+    "lng": 39.86387
+  },
+  "MH2": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.424468,
+    "lng": 39.863626
+  },
+  "MH3": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.425116,
+    "lng": 39.865597
+  },
+  "MH4": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.425066,
+    "lng": 39.865984
+  },
+  "MH5": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.425314,
+    "lng": 39.867029
+  },
+  "MH6": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.423748,
+    "lng": 39.865322
+  },
+  "MH7": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.424757,
+    "lng": 39.86711
+  },
+  "MH8": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.425946,
+    "lng": 39.870235
+  },
+  "MH9": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.424427,
+    "lng": 39.868784
+  },
+  "MH10": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.422679,
+    "lng": 39.876464
+  },
+  "MH11": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة",
+    "lat": 21.424594,
+    "lng": 39.872963
+  },
+  "MH12": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.422541,
+    "lng": 39.8765
+  },
+  "MH13": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة",
+    "lat": 21.42235,
+    "lng": 39.868068
+  },
+  "MH14": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.421914,
+    "lng": 39.869211
+  },
+  "MH15": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.42362,
+    "lng": 39.873042
+  },
+  "MH16": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.419938,
+    "lng": 39.872258
+  },
+  "MH17": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.419297,
+    "lng": 39.873766
+  },
+  "MH18": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.422883,
+    "lng": 39.871233
+  },
+  "MH19": {
+    "sector": "الجمرات",
+    "unit_type": "راجلة",
+    "lat": 21.420706,
+    "lng": 39.876611
+  },
+  "MH20": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.425302,
+    "lng": 39.867091
+  },
+  "MH21": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.420791,
+    "lng": 39.876812
+  },
+  "MH22": {
+    "sector": "الجمرات",
+    "unit_type": "راجلة",
+    "lat": 21.420252,
+    "lng": 39.871201
+  },
+  "MH23": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.420067,
+    "lng": 39.877646
+  },
+  "MH24": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.416968,
+    "lng": 39.877064
+  },
+  "MH25": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.423457,
+    "lng": 39.871308
+  },
+  "MH26": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.422453,
+    "lng": 39.877141
+  },
+  "MH27": {
+    "sector": "الجمرات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.422588,
+    "lng": 39.878702
+  },
+  "MH28‏": {
+    "sector": "الجمرات",
+    "unit_type": "راجلة",
+    "lat": 21.422333,
+    "lng": 39.879185
+  },
+  "MH29‏‏": {
+    "sector": "الجمرات",
+    "unit_type": "راجلة",
+    "lat": 21.422707,
+    "lng": 39.877685
+  },
+  "MH30": {
+    "sector": "الجمرات",
+    "unit_type": "راجلة",
+    "lat": 21.420637,
+    "lng": 39.87462
+  },
+  "MH31": {
+    "sector": "الجمرات",
+    "unit_type": "راجلة",
+    "lat": 21.422205,
+    "lng": 39.871614
+  },
+  "MH32": {
+    "sector": "الجمرات",
+    "unit_type": "راجلة",
+    "lat": 21.420539,
+    "lng": 39.872534
+  },
+  "MH33": {
+    "sector": "الجمرات",
+    "unit_type": "راجلة",
+    "lat": 21.419933,
+    "lng": 39.874036
+  },
+  "MH34": {
+    "sector": "الجمرات",
+    "unit_type": "راجلة",
+    "lat": 21.419995,
+    "lng": 39.873977
+  },
+  "MH35": {
+    "sector": "الجمرات",
+    "unit_type": "راجلة",
+    "lat": 21.41991,
+    "lng": 39.874087
+  },
+  "MH36": {
+    "sector": "القطارات",
+    "unit_type": "قولف",
+    "lat": 21.419885,
+    "lng": 39.87414
+  },
+  "MH37": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.422027,
+    "lng": 39.871756
+  },
+  "MH38": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.422112,
+    "lng": 39.871644
+  },
+  "MH39": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.421962,
+    "lng": 39.871955
+  },
+  "MH40": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.419221,
+    "lng": 39.874428
+  },
+  "MH41": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.419401,
+    "lng": 39.874868
+  },
+  "MH42": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.422243,
+    "lng": 39.870157
+  },
+  "MH43": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.420376,
+    "lng": 39.874716
+  },
+  "MH44": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.420419,
+    "lng": 39.87468
+  },
+  "MH45": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.421437,
+    "lng": 39.873249
+  },
+  "MH46": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.421861,
+    "lng": 39.872251
+  },
+  "MH47": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.422352,
+    "lng": 39.871188
+  },
+  "MH48": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.421639,
+    "lng": 39.870778
+  },
+  "MH49": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.42134,
+    "lng": 39.871958
+  },
+  "MH50": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.420853,
+    "lng": 39.872719
+  },
+  "MH51": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.42095,
+    "lng": 39.872647
+  },
+  "MH52": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.419738,
+    "lng": 39.87439
+  },
+  "MH53": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.418786,
+    "lng": 39.877496
+  },
+  "MH54": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.417938,
+    "lng": 39.877104
+  },
+  "MH55": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.412133,
+    "lng": 39.88039
+  },
+  "MH56": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.411564,
+    "lng": 39.884305
+  },
+  "MH57": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.412566,
+    "lng": 39.881988
+  },
+  "MH58": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.422928,
+    "lng": 39.865427
+  },
+  "MH59": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.420532,
+    "lng": 39.868676
+  },
+  "MH60": {
+    "sector": "القطارات",
+    "unit_type": "قولف",
+    "lat": 21.420106,
+    "lng": 39.869124
+  },
+  "MH61": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.4195019,
+    "lng": 39.8707124
+  },
+  "MH62": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.419418,
+    "lng": 39.87085
+  },
+  "MH63": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.4175948,
+    "lng": 39.8733618
+  },
+  "MH64": {
+    "sector": "القطارات",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.419053,
+    "lng": 39.871377
+  },
+  "MH65": {
+    "sector": "بطن منى الجنوبي",
+    "unit_type": "قولف",
+    "lat": 21.416051,
+    "lng": 39.87703
+  },
+  "MH66": {
+    "sector": "بطن منى الجنوبي",
+    "unit_type": "قولف",
+    "lat": 21.41536,
+    "lng": 39.876724
+  },
+  "MH67": {
+    "sector": "بطن منى الجنوبي",
+    "unit_type": "قولف",
+    "lat": 21.4098948,
+    "lng": 39.8850895
+  },
+  "MH68": {
+    "sector": "بطن منى الجنوبي",
+    "unit_type": "راجلة",
+    "lat": 21.413628,
+    "lng": 39.880993
+  },
+  "MH69": {
+    "sector": "بطن منى الجنوبي",
+    "unit_type": "قولف",
+    "lat": 21.408507,
+    "lng": 39.886137
+  },
+  "MH70": {
+    "sector": "بطن منى الجنوبي",
+    "unit_type": "قولف",
+    "lat": 21.407028,
+    "lng": 39.887845
+  },
+  "MH71": {
+    "sector": "بطن منى الجنوبي",
+    "unit_type": "قولف",
+    "lat": 21.415282,
+    "lng": 39.87698
+  },
+  "MH72": {
+    "sector": "بطن منى الجنوبي",
+    "unit_type": "قولف",
+    "lat": 21.42343,
+    "lng": 39.861696
+  },
+  "MH73": {
+    "sector": "بطن منى الجنوبي",
+    "unit_type": "قولف",
+    "lat": 21.4077995,
+    "lng": 39.8868492
+  },
+  "MH74": {
+    "sector": "بطن منى الجنوبي",
+    "unit_type": "راجلة",
+    "lat": 21.4134565,
+    "lng": 39.8777455
+  },
+  "MH75": {
+    "sector": "بطن منى الجنوبي",
+    "unit_type": "راجلة",
+    "lat": 21.4218743,
+    "lng": 39.8671726
+  },
+  "MH76‏‏": {
+    "sector": "بطن منى الجنوبي",
+    "unit_type": "قولف",
+    "lat": 21.4231765,
+    "lng": 39.8640488
+  },
+  "MH77": {
+    "sector": "بطن منى الجنوبي",
+    "unit_type": "مركبة",
+    "lat": 21.4153106,
+    "lng": 39.8753135
+  },
+  "MH78": {
+    "sector": "بطن منى الجنوبي",
+    "unit_type": "راجلة",
+    "lat": 21.40939,
+    "lng": 39.8908049
+  },
+  "MH79": {
+    "sector": "بطن منى الجنوبي",
+    "unit_type": "قولف",
+    "lat": 21.4105,
+    "lng": 39.8904449
+  },
+  "MH80": {
+    "sector": "بطن منى الجنوبي",
+    "unit_type": "راجلة",
+    "lat": 21.40775,
+    "lng": 39.8915449
+  },
+  "MH81": {
+    "sector": "بطن منى الجنوبي",
+    "unit_type": "مركبة",
+    "lat": 21.41402,
+    "lng": 39.8861949
+  },
+  "MH82": {
+    "sector": "بطن منى الجنوبي",
+    "unit_type": "مركبة",
+    "lat": 21.41225,
+    "lng": 39.8900849
+  },
+  "MH83": {
+    "sector": "بطن منى الجنوبي",
+    "unit_type": "مركبة",
+    "lat": 21.410197,
+    "lng": 39.88949
+  },
+  "MH84": {
+    "sector": "بطن منى الجنوبي",
+    "unit_type": "قولف",
+    "lat": 21.414572,
+    "lng": 39.884976
+  },
+  "MH85": {
+    "sector": "بطن منى الجنوبي",
+    "unit_type": "قولف",
+    "lat": 21.412519,
+    "lng": 39.885623
+  },
+  "MH86": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.4150064,
+    "lng": 39.8802659
+  },
+  "MH87": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.416245,
+    "lng": 39.8832549
+  },
+  "MH88": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "تدخل سريع",
+    "lat": 21.413125,
+    "lng": 39.8857449
+  },
+  "MH89": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.417865,
+    "lng": 39.8825649
+  },
+  "MH90‏": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.411215,
+    "lng": 39.8883049
+  },
+  "MH91": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.407645,
+    "lng": 39.8925349
+  },
+  "MH92": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "قولف",
+    "lat": 21.4084,
+    "lng": 39.8931249
+  },
+  "MH93": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "قولف",
+    "lat": 21.417475,
+    "lng": 39.8835549
+  },
+  "MH94": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.41787,
+    "lng": 39.8887049
+  },
+  "MH95": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "قولف",
+    "lat": 21.41533,
+    "lng": 39.8887149
+  },
+  "MH96‏": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.41705,
+    "lng": 39.8898649
+  },
+  "MH97‏": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.41484,
+    "lng": 39.8940749
+  },
+  "MH98‏": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.41895,
+    "lng": 39.8856949
+  },
+  "MH99‏": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "راجلة",
+    "lat": 21.41801,
+    "lng": 39.8863549
+  },
+  "MH100": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "راجلة",
+    "lat": 21.41852,
+    "lng": 39.8871449
+  },
+  "MH101‏": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "راجلة",
+    "lat": 21.41612,
+    "lng": 39.8908049
+  },
+  "MH102": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "قولف",
+    "lat": 21.41934,
+    "lng": 39.8837749
+  },
+  "MH103": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "قولف",
+    "lat": 21.41558,
+    "lng": 39.8904049
+  },
+  "MH104‏‏": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "قولف",
+    "lat": 21.41382,
+    "lng": 39.8930049
+  },
+  "MH105‏‏‏": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "قولف",
+    "lat": 21.41382,
+    "lng": 39.8930049
+  },
+  "MH106‏‏": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "قولف",
+    "lat": 21.42023,
+    "lng": 39.8841849
+  },
+  "MH107": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "قولف",
+    "lat": 21.42023,
+    "lng": 39.8841849
+  },
+  "MH108": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "تدخل سريع",
+    "lat": 21.41065,
+    "lng": 39.8944849
+  },
+  "MH109": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "راجلة",
+    "lat": 21.41284,
+    "lng": 39.8950749
+  },
+  "MH110": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "تدخل سريع",
+    "lat": 21.41284,
+    "lng": 39.8950749
+  },
+  "MH111": {
+    "sector": "بطن منى الشمالي",
+    "unit_type": "راجلة",
+    "lat": 21.4137,
+    "lng": 39.8913249
+  },
+  "MH112": {
+    "sector": "الشعيبين",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.41714,
+    "lng": 39.8862349
+  },
+  "MH113": {
+    "sector": "الشعيبين",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.420315,
+    "lng": 39.8837149
+  },
+  "MH114": {
+    "sector": "الشعيبين",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.419355,
+    "lng": 39.8836549
+  },
+  "MH115": {
+    "sector": "الشعيبين",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.417655,
+    "lng": 39.8849649
+  },
+  "MH116": {
+    "sector": "الشعيبين",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.417265,
+    "lng": 39.8890749
+  },
+  "MH117": {
+    "sector": "الشعيبين",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.41727,
+    "lng": 39.9044749
+  },
+  "MH118": {
+    "sector": "الشعيبين",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.42516,
+    "lng": 39.8958549
+  },
+  "MH119": {
+    "sector": "الشعيبين",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.41971,
+    "lng": 39.8942049
+  },
+  "MH120": {
+    "sector": "الشعيبين",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.4219,
+    "lng": 39.9015749
+  },
+  "MH121": {
+    "sector": "منى الجديد 1",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.4219,
+    "lng": 39.9015749
+  },
+  "MH122": {
+    "sector": "منى الجديد 1",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.41767,
+    "lng": 39.8995449
+  },
+  "MH123": {
+    "sector": "منى الجديد 1",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.4242799,
+    "lng": 39.9057209
+  },
+  "MH124": {
+    "sector": "منى الجديد 1",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.42085,
+    "lng": 39.8947749
+  },
+  "MH125": {
+    "sector": "منى الجديد 1",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.42085,
+    "lng": 39.8947749
+  },
+  "MH126": {
+    "sector": "منى الجديد 1",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.42245,
+    "lng": 39.8797149
+  },
+  "MH127": {
+    "sector": "منى الجديد 1",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.42947,
+    "lng": 39.9080249
+  },
+  "MH128": {
+    "sector": "منى الجديد 1",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.42038,
+    "lng": 39.8880349
+  },
+  "MH129": {
+    "sector": "منى الجديد 1",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.42104,
+    "lng": 39.8964449
+  },
+  "MH130": {
+    "sector": "منى الجديد 1",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.42348,
+    "lng": 39.9034349
+  },
+  "MH131": {
+    "sector": "منى الجديد 1",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.42348,
+    "lng": 39.9034349
+  },
+  "MH132": {
+    "sector": "منى الجديد 1",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.42402,
+    "lng": 39.8975449
+  },
+  "MH133": {
+    "sector": "منى الجديد 2",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.41167,
+    "lng": 39.9120049
+  },
+  "MH134": {
+    "sector": "منى الجديد 2",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.41285,
+    "lng": 39.9022649
+  },
+  "MH135": {
+    "sector": "منى الجديد 2",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.41146,
+    "lng": 39.9120649
+  },
+  "MH136": {
+    "sector": "منى الجديد 2",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.417675,
+    "lng": 39.8995449
+  },
+  "MH137": {
+    "sector": "منى الجديد 2",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.414515,
+    "lng": 39.8988649
+  },
+  "MH138": {
+    "sector": "منى الجديد 2",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.414875,
+    "lng": 39.9015749
+  },
+  "MH139": {
+    "sector": "منى الجديد 2",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.41311,
+    "lng": 39.8968749
+  },
+  "MH140": {
+    "sector": "منى الجديد 2",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.41263,
+    "lng": 39.9013149
+  },
+  "MH141": {
+    "sector": "منى الجديد 2",
+    "unit_type": "قولف",
+    "lat": 21.4055,
+    "lng": 39.8917449
+  },
+  "MH142": {
+    "sector": "منى الجديد 2",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.41101,
+    "lng": 39.9013649
+  },
+  "MH143": {
+    "sector": "منى الجديد 2",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.40654,
+    "lng": 39.8972549
+  },
+  "MH144": {
+    "sector": "منى الجديد 2",
+    "unit_type": "قولف",
+    "lat": 21.40654,
+    "lng": 39.8972549
+  },
+  "MH145": {
+    "sector": "منى الجديد 2",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.4037,
+    "lng": 39.8959249
+  },
+  "MH146": {
+    "sector": "منى الجديد 2",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.40314,
+    "lng": 39.8966349
+  },
+  "MH147": {
+    "sector": "منى الجديد 2",
+    "unit_type": "مركبة اسعافية",
+    "lat": 21.40951,
+    "lng": 39.8979749
+  },
+  "MH148": {
+    "sector": "منى الجديد 2",
+    "unit_type": "قولف",
+    "lat": 21.41226,
+    "lng": 39.8986349
+  }
+};
+</script>
+
+
 </body>
 </html>

@@ -1884,7 +1884,8 @@ async function fetchDeploymentFromSheet(){
         "المركبات": document.getElementById('vehicles_count').value || 0,
         "القولف": document.getElementById('golf_count').value || 0,
         "الراجلة": document.getElementById('walking_count').value || 0,
-        "مركبات التدخل السريع": document.getElementById(\'rapid_intervention_count\').value || 0,       "الملاحظات": document.getElementById('notes').value.trim() || 'لا توجد ملاحظات'
+        "مركبات التدخل السريع": document.getElementById('rapid_intervention_count').value || 0,
+        "الملاحظات": document.getElementById('notes').value.trim() || 'لا توجد ملاحظات'
       };
 
       const save = await saveToGoogleSheets('التحضير اليومي', [row]);
@@ -2097,7 +2098,8 @@ ${supportLines}
 
       const row = {
         "وقت الحفظ": new Date().toLocaleString('ar-SA'),
-        "القطاع": document.getElementById(\'sector\').value,       "نوع المناوبة": document.getElementById('handover_shift').value,
+        "القطاع": document.getElementById('handover_sector').value,
+        "نوع المناوبة": document.getElementById('handover_shift').value,
         "التاريخ": document.getElementById('handover_date').value,
         "الوقت من": document.getElementById('handover_time_from').value,
         "الوقت إلى": document.getElementById('handover_time_to').value,

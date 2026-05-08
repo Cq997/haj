@@ -1400,7 +1400,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz-wAtxJQVdoUrJ2I9XAaabnUJXTAkc65ZTsvU4FbzLPeGIxdg4Au-9dXm4m4k8Gx1N3w/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxx7TSY7Ge0oL1gqacSuBP6WkuEDZA40_A9hHumRhLWbvKRAjYbC7qzvnU6hnxHwr2EDw/exec";
 
     // ===== Static Deployment Points Data =====
     window.staticDeploymentPoints = [
@@ -1701,17 +1701,16 @@
       document.getElementById('quickLinks').classList.toggle('show');
     }
 
-    async function updateMapWithDeploymentData(){
-      // تحديث الداشبورد والخريطة مباشرة من Google Sheets بعد حفظ خطة الانتشار
-      if (typeof loadLiveDeploymentData === 'function') {
-        await loadLiveDeploymentData();
-      } else if (typeof renderMapMarkers === 'function') {
-        const data = await fetchDeploymentFromSheet();
-        liveDeploymentData = normalizeDeploymentRowsForDashboard(data);
-        renderMapMarkers(liveDeploymentData);
-        updateDashboard(liveDeploymentData);
+    function updateMapWithDeploymentData(){
+      // تحديث الخريطة التفاعلية بعد حفظ بيانات خطة الانتشار
+      if(window.map && window.deploymentMarkers){
+        window.deploymentMarkers.forEach(marker => window.map.removeLayer(marker));
+        window.deploymentMarkers = [];
+        fetchDeploymentFromSheet().then(() => {
+          renderDeploymentMarkers();
+          console.log('تم تحديث الخريطة بنجاح');
+        });
       }
-      console.log('تم تحديث نقاط الانتشار في الداشبورد والخريطة');
     }
 
     function showAlert(elId, type, message){
@@ -1776,75 +1775,38 @@ async function saveToGoogleSheets(sheetName, rows){
 ***********************/
 async function fetchDeploymentFromSheet(){
   try{
-    const url = `${SCRIPT_URL}?action=getDeployment&ts=${Date.now()}`;
-    const res = await fetch(url, { method:'GET', cache:'no-store' });
-    if(!res.ok) throw new Error(`فشل الاتصال: ${res.status}`);
+    const url = `${SCRIPT_URL}?action=getDeployment&_=${Date.now()}`;
+    const res = await fetch(url, { cache: 'no-store' });
+    if(!res.ok) throw new Error("فشل الاتصال");
 
     const payload = await res.json();
-    // يدعم الحالتين: رجوع Array مباشرة أو رجوع {success:true,data:[...]}
-    if(Array.isArray(payload)) return payload;
-    if(payload && Array.isArray(payload.data)) return payload.data;
+    const data = Array.isArray(payload) ? payload : (Array.isArray(payload.data) ? payload.data : []);
 
-    console.error('⚠️ صيغة بيانات خطة الانتشار غير متوقعة:', payload);
-    return [];
+    if(!Array.isArray(data)){
+      console.error("⚠️ البيانات غير صحيحة:", payload);
+      return [];
+    }
+    return data;
+
   } catch (error){
-    console.error('❌ خطأ في جلب نقاط الانتشار:', error);
-    return [];
+    console.error("❌ خطأ في جلب خطة الانتشار:", error);
+    return null; // null تعني فشل اتصال، حتى لا نمسح النقاط الموجودة بعد التحديث
   }
 }
 
-function normalizeDeploymentRowsForDashboard(data){
-  const rows = Array.isArray(data) ? data : [];
-  const latestMap = new Map();
+    function openWhatsApp(text, preOpenedWindow){
+      const encoded = encodeURIComponent(text || '');
+      const url = `https://wa.me/?text=${encoded}`;
 
-  rows.forEach(d => {
-    if(!d) return;
-    const code = String(d.id || d.code || d['الرمز'] || d['اسم النقطة'] || '').trim();
-    const sector = String(d.sector || d['القطاع'] || '').trim();
-    const shift = String(d.shift || d['المناوبة'] || d['مناوبة النقطة'] || d['فترة المناوبة'] || d['العرض الزمني'] || '').trim();
-    if(!code) return;
+      // إذا فتحنا نافذة مسبقاً من نفس ضغطة الزر، نستخدمها حتى لا يمنعها المتصفح
+      if (preOpenedWindow && !preOpenedWindow.closed) {
+        preOpenedWindow.location.href = url;
+        preOpenedWindow.focus();
+        return;
+      }
 
-    const key = `${sector}|${code}|${shift}`;
-    const timeValue = Number(d._time || d['آخر تحديث رقمي'] || 0) || Date.parse(d.saveTime || d['وقت الحفظ'] || d.Timestamp || `${d['التاريخ'] || ''} ${d['الوقت'] || ''}`) || 0;
-
-    if(!latestMap.has(key) || timeValue >= latestMap.get(key)._time){
-      const latValue = d.lat ?? d.Latitude ?? d['Latitude'] ?? d['خط العرض'] ?? d.latitude ?? '';
-      const lngValue = d.lng ?? d.Longitude ?? d['Longitude'] ?? d['خط الطول'] ?? d.longitude ?? '';
-      latestMap.set(key, {
-        ...d,
-        _time: timeValue,
-        id: code,
-        code: code,
-        sector: sector,
-        type: d.type || d['نوع الوحدة'] || d['نوع الآلية'] || d.unitType || '',
-        teams: Number(d.teams || d.count || d['عدد الفرق'] || d['عدد الفرق الفعلي'] || 1) || 1,
-        count: Number(d.count || d.teams || d['عدد الفرق'] || d['عدد الفرق الفعلي'] || 1) || 1,
-        lat: parseFloat(latValue),
-        lng: parseFloat(lngValue),
-        status: d.status || d['الحالة'] || 'جاهز',
-        shift: shift || 'الصباحية',
-        saved: true,
-        'التاريخ': d['التاريخ'] || '',
-        'الوقت': d['الوقت'] || '',
-        'وقت الحفظ': d.saveTime || d['وقت الحفظ'] || d.Timestamp || ''
-      });
-    }
-  });
-
-  return Array.from(latestMap.values()).filter(p => !isNaN(p.lat) && !isNaN(p.lng));
-}
-
-    function openWhatsApp(text){
-      const encoded = encodeURIComponent(text);
-      // استخدام api.whatsapp.com كخيار أكثر استقراراً لجميع المنصات
-      const url = `https://api.whatsapp.com/send?text=${encoded}`;
-      
-      // محاولة فتح الرابط في نافذة جديدة
       const win = window.open(url, '_blank');
-      
-      // إذا تم حظر النافذة المنبثقة، نقوم بتنبيه المستخدم أو تغيير الموقع الحالي
       if (!win || win.closed || typeof win.closed === 'undefined') {
-        // خيار بديل في حال حظر النوافذ المنبثقة
         window.location.href = url;
       }
     }
@@ -1902,30 +1864,42 @@ function normalizeDeploymentRowsForDashboard(data){
         }
       }
 
+      // مهم: فتح نافذة واتساب من نفس ضغطة المستخدم قبل await حتى لا يمنعها المتصفح
+      const waWindow = window.open('', '_blank');
+      if (waWindow) {
+        waWindow.document.write('<div style="font-family:Cairo,Arial;text-align:center;margin-top:40px">جاري تجهيز رسالة الواتساب...</div>');
+      }
+
       const row = {
         "وقت الحفظ": new Date().toLocaleString('ar-SA'),
         "النطاق": document.getElementById('scope').value,
         "القطاع": document.getElementById('sector').value,
+        "فترة المناوبة": document.getElementById('shift_time').value,
         "الفترة": document.getElementById('shift_time').value,
         "التاريخ والوقت": document.getElementById('shift_datetime').value,
+        "اسم كبير مسعفي القطاع": document.getElementById('ems_lead').value || '-',
         "كبير المسعفين": document.getElementById('ems_lead').value || '-',
+        "مساعد كبير المسعفين 1": document.getElementById('assistant1').value || '-',
+        "مساعد كبير المسعفين 2": document.getElementById('assistant2').value || '-',
+        "مساعد كبير المسعفين 3": document.getElementById('assistant3').value || '-',
+        "مساعد كبير المسعفين 4": document.getElementById('assistant4').value || '-',
         "مساعد1": document.getElementById('assistant1').value || '-',
         "مساعد2": document.getElementById('assistant2').value || '-',
         "مساعد3": document.getElementById('assistant3').value || '-',
         "مساعد4": document.getElementById('assistant4').value || '-',
-        "الوحدات التشغيلية": document.getElementById('operational_units').value || 0,
-        "مقدمي الخدمة": document.getElementById('total_providers').value || 0,
-        "الموظفين": document.getElementById('employees_count').value || 0,
-        "المتطوعين": document.getElementById('volunteers_count').value || 0,
-        "المركبات": document.getElementById('vehicles_count').value || 0,
-        "القولف": document.getElementById('golf_count').value || 0,
-        "الراجلة": document.getElementById('walking_count').value || 0,
-        "مركبات التدخل السريع": document.getElementById('rapid_intervention_count').value || 0,
+        "عدد الوحدات التشغيلية": document.getElementById('operational_units').value || 0,
+        "عدد مقدمي الخدمة الإسعافية": document.getElementById('total_providers').value || 0,
+        "عدد الموظفين": document.getElementById('employees_count').value || 0,
+        "عدد المتطوعين": document.getElementById('volunteers_count').value || 0,
+        "عدد فرق المركبات الإسعافية": document.getElementById('vehicles_count').value || 0,
+        "عدد فرق عربات القولف": document.getElementById('golf_count').value || 0,
+        "عدد الفرق الراجلة": document.getElementById('walking_count').value || 0,
         "الملاحظات": document.getElementById('notes').value.trim() || 'لا توجد ملاحظات'
       };
 
       const save = await saveToGoogleSheets('التحضير اليومي', [row]);
       if(!save.success){
+        if (waWindow && !waWindow.closed) waWindow.close();
         showAlert('dailyAlert','error','تعذر حفظ البيانات');
         return;
       }
@@ -1934,20 +1908,21 @@ function normalizeDeploymentRowsForDashboard(data){
 
       let msg = `🚑 *منصة نطاق منى – التحضير اليومي* 🚑\n\n`;
       msg += `📍 *القطاع:* ${row["القطاع"]}\n`;
-      msg += `🕘 *الفترة:* ${row["الفترة"]}\n`;
+      msg += `🕘 *الفترة:* ${row["فترة المناوبة"]}\n`;
       msg += `🕒 *التاريخ والوقت:* ${row["التاريخ والوقت"]}\n\n`;
       msg += `👤 *كبير المسعفين:* ${row["كبير المسعفين"]}\n`;
       msg += `👥 *المساعدون:* ${row["مساعد1"]} | ${row["مساعد2"]} | ${row["مساعد3"]} | ${row["مساعد4"]}\n\n`;
       msg += `📊 *الإحصائيات:* \n`;
-      msg += `• الوحدات التشغيلية: ${row["الوحدات التشغيلية"]}\n`;
-      msg += `• إجمالي مقدمي الخدمة: ${row["مقدمي الخدمة"]}\n`;
-      msg += `• الموظفين: ${row["الموظفين"]} | المتطوعين: ${row["المتطوعين"]}\n\n`;
+      msg += `• الوحدات التشغيلية: ${row["عدد الوحدات التشغيلية"]}\n`;
+      msg += `• إجمالي مقدمي الخدمة: ${row["عدد مقدمي الخدمة الإسعافية"]}\n`;
+      msg += `• الموظفين: ${row["عدد الموظفين"]} | المتطوعين: ${row["عدد المتطوعين"]}\n\n`;
       msg += `🚑 *توزيع الآليات:* \n`;
-      msg += `• المركبات الإسعافية: ${row["المركبات"]}\n`;
-      msg += `• عربات القولف: ${row["القولف"]}\n`;
-      msg += `• الفرق الراجلة: ${row["الراجلة"]}\n\n`;
+      msg += `• المركبات الإسعافية: ${row["عدد فرق المركبات الإسعافية"]}\n`;
+      msg += `• عربات القولف: ${row["عدد فرق عربات القولف"]}\n`;
+      msg += `• الفرق الراجلة: ${row["عدد الفرق الراجلة"]}\n\n`;
       msg += `📝 *الملاحظات:* \n${row["الملاحظات"]}`;
-      openWhatsApp(msg);
+
+      openWhatsApp(msg, waWindow);
     }
 
     document.getElementById('handover_sector').addEventListener('change', fillHandoverTeamData);
@@ -2646,10 +2621,11 @@ const items = data.filter(d =>
 
       showAlert('deploymentAlert','success','تم حفظ خطة الانتشار بنجاح');
       
-      // تحديث الداشبورد والخريطة مباشرة بعد الحفظ من آخر بيانات محفوظة في الشيت
-      setTimeout(async () => {
-        await updateMapWithDeploymentData();
-      }, 1500);
+      // تحديث الداشبورد والخريطة ديناميكياً بعد الحفظ
+      setTimeout(() => {
+        updateDashboard();
+        updateMapWithDeploymentData();
+      }, 1000);
 
       let msg = `📍 *خطة الانتشار - نطاق منى* 📍\n\n`;
       msg += `📍 *القطاع:* ${sector}\n`;
@@ -3068,18 +3044,26 @@ function resetDashboardFilters(){
   updateDashboard(liveDeploymentData);
 }
 
-function updateDashboard(data = liveDeploymentData || []){
-  data = Array.isArray(data) ? data : [];
+function updateDashboard(data){
   const sectors = ['الجمرات','القطارات','بطن منى الجنوبي','بطن منى الشمالي','الشعيبين','منى الجديد 1','منى الجديد 2'];
   
-  // منطق الاستجابة: يعتبر القطاع أرسل فقط إذا كانت البيانات تحتوي على علامة الحفظ الفعلية
-  const submittedData = data.filter(d => 
-    d.saved === true && (d["التاريخ"] || d["الوقت"] || d["اسم كبير المسعفين"] || d["اسم مدخل البيانات"])
-  );
-  const respondedSectors = new Set(submittedData.map(d => d.sector));
-  const missingSectors = sectors.filter(s => !respondedSectors.has(s));
+  // منطق الاستجابة: يعتمد على القطاعات التي وصلت من الشيت فعلياً، وليس على البيانات الثابتة
+  const normalizeSector = v => String(v || '').trim().replace(/\s+/g, ' ');
+  const respondedSectors = new Set();
+
+  if (window.submittedDeploymentSectors && window.submittedDeploymentSectors.size) {
+    window.submittedDeploymentSectors.forEach(sec => respondedSectors.add(normalizeSector(sec)));
+  } else {
+    (data || []).forEach(d => {
+      if (d && d.saved === true && d.sector) respondedSectors.add(normalizeSector(d.sector));
+    });
+  }
+
+  const missingSectors = sectors.filter(s => !respondedSectors.has(normalizeSector(s)));
   const missingEl = document.getElementById('missingSectorsList');
-  if(missingEl) missingEl.innerHTML = missingSectors.length ? missingSectors.join(' - ') : 'الكل أرسل';
+  if(missingEl) {
+    missingEl.innerHTML = missingSectors.length ? missingSectors.join(' - ') : 'الكل أرسل';
+  }
 
   // إجمالي النقاط = عدد مواقع الانتشار
   const total = data.length;
@@ -3425,30 +3409,94 @@ console.log('✓ Deployment data loaded successfully:', window.staticDeploymentP
 async function loadLiveDeploymentData(){
   try {
     const data = await fetchDeploymentFromSheet();
-    const normalized = normalizeDeploymentRowsForDashboard(data);
 
-    if(normalized.length > 0){
-      liveDeploymentData = normalized;
-    } else {
-      // إذا لم تحفظ أي خطة انتشار بعد، تظهر النقاط الافتراضية فقط كمرجع أولي
-      liveDeploymentData = [...(window.staticDeploymentPoints || [])].map(p => ({...p, saved:false}));
+    // في حال فشل الاتصال لا نمسح آخر نقاط ظاهرة؛ هذا سبب اختفاء النقاط بعد التحديث سابقاً
+    if (data === null) {
+      console.warn('تعذر جلب البيانات، تم الاحتفاظ بآخر بيانات ظاهرة.');
+    } else if (Array.isArray(data) && data.length > 0) {
+      const latestDataMap = new Map();
+      const submittedSectors = new Set();
+
+      data.forEach(d => {
+        const normalized = normalizeDeploymentPoint(d, true);
+        if (!normalized.id) return;
+        if (normalized.sector) submittedSectors.add(normalized.sector);
+
+        const key = `${normalized.sector}|${normalized.id}|${normalized.shift || ''}`;
+        if (!latestDataMap.has(key) || normalized._time >= latestDataMap.get(key)._time) {
+          latestDataMap.set(key, normalized);
+        }
+      });
+
+      const fresh = Array.from(latestDataMap.values()).filter(p => p.lat && p.lng);
+      if (fresh.length > 0) {
+        liveDeploymentData = fresh;
+        window.submittedDeploymentSectors = submittedSectors;
+      }
+    } else if (!liveDeploymentData || liveDeploymentData.length === 0) {
+      liveDeploymentData = (window.staticDeploymentPoints || []).map(p => normalizeDeploymentPoint(p, false));
+      window.submittedDeploymentSectors = new Set();
     }
   } catch(e) {
-    console.log('استخدام البيانات الثابتة بسبب خطأ:', e);
-    liveDeploymentData = [...(window.staticDeploymentPoints || [])].map(p => ({...p, saved:false}));
+    console.error('خطأ غير متوقع في تحديث خطة الانتشار:', e);
+    if (!liveDeploymentData || liveDeploymentData.length === 0) {
+      liveDeploymentData = (window.staticDeploymentPoints || []).map(p => normalizeDeploymentPoint(p, false));
+      window.submittedDeploymentSectors = new Set();
+    }
   }
 
-  updateDashboard(liveDeploymentData);
-
+  updateDashboard(liveDeploymentData || []);
   if(typeof renderMapMarkers === 'function') {
-    renderMapMarkers(liveDeploymentData);
+    renderMapMarkers(liveDeploymentData || []);
   } else if(typeof renderDeploymentMarkers === 'function') {
-    renderDeploymentMarkers(liveDeploymentData);
+    renderDeploymentMarkers(liveDeploymentData || []);
   }
 }
 
+function normalizeDeploymentPoint(d, fromSheet){
+  const first = (...keys) => {
+    for (const k of keys) {
+      if (d && d[k] !== undefined && d[k] !== null && String(d[k]).trim() !== '') return d[k];
+    }
+    return '';
+  };
+  const parseNum = v => {
+    if (v === undefined || v === null || v === '') return 0;
+    const n = parseFloat(String(v).replace(',', '.'));
+    return isNaN(n) ? 0 : n;
+  };
+  const timeRaw = first('_time','آخر تحديث رقمي','saveTime','وقت الحفظ','Timestamp','timestamp');
+  let timeVal = Number(timeRaw);
+  if (!timeVal) timeVal = new Date(timeRaw).getTime();
+  if (!timeVal || isNaN(timeVal)) timeVal = 0;
 
-			/* لتحميل النقاط الافتراضية للقطاع المختار */
+  let status = String(first('status','الحالة') || 'جاهز').trim();
+  if (status === 'جاهزة') status = 'جاهز';
+  if (status === 'مدعمة') status = 'مدعم';
+
+  return {
+    id: String(first('id','code','pointCode','الرمز','اسم النقطة')).trim(),
+    code: String(first('code','id','pointCode','الرمز','اسم النقطة')).trim(),
+    sector: String(first('sector','القطاع')).trim(),
+    type: String(first('type','unitType','نوع الوحدة','نوع الآلية')).trim(),
+    teams: Number(first('teams','count','عدد الفرق','عدد الفرق الفعلي') || 1) || 1,
+    lat: parseNum(first('lat','latitude','Latitude','خط العرض')),
+    lng: parseNum(first('lng','longitude','Longitude','خط الطول')),
+    status,
+    shift: String(first('shift','المناوبة','فترة المناوبة','العرض الزمني','الفترة') || 'الصباحية').trim(),
+    startTime: first('startTime','وقت البداية'),
+    endTime: first('endTime','وقت النهاية'),
+    supportType: first('supportType','نوع التدعيم'),
+    supportFrom: first('supportFrom','جهة التدعيم'),
+    note: first('note','ملاحظات السجل','ملاحظة السجل'),
+    saveTime: first('saveTime','وقت الحفظ','Timestamp'),
+    saved: !!fromSheet,
+    _time: timeVal,
+    ...d
+  };
+}
+
+/* لتحميل النقاط الافتراضية للقطاع المختار */
 					function loadDefaultDeploymentPoints(){
 				  const sectorEl = document.getElementById('deploy_sector');
 				  const shiftEl = document.getElementById('deploy_shift');

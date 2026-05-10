@@ -1400,7 +1400,7 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzE0CBm6DoPezpkb34cnKsjI5X-nZj92_nw3h5Kh96uTXaLzoLWJQ2q_M9FSzl-ca2dMw/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxwBxROK9_fDOlyt7FB_Cr-RRh7hNVSNLUcrkwOBSxC0FE1UtLVHoeMmsylI2aqmNTRVw/exec";
 
     // ===== Static Deployment Points Data =====
     window.staticDeploymentPoints = [
@@ -2558,8 +2558,7 @@ const items = data.filter(d =>
         const old = map.get(key);
         if (!old || Number(n._time || 0) >= Number(old._time || 0)) map.set(key, n);
       });
-      liveDeploymentData = Array.from(map.values()).filter(p => p.id && p.sector && p.lat && p.lng && isDeploymentVisible(p));
-      saveDeploymentCache(liveDeploymentData);
+      liveDeploymentData = Array.from(map.values()).filter(p => p.id && p.sector && p.lat && p.lng);
 
       const submitted = new Set(window.submittedDeploymentSectors || []);
       (points || []).forEach(p => { if (p.sector) submitted.add(normalizeSectorName(p.sector)); });
@@ -2614,6 +2613,11 @@ function addManualDeploymentRow(){
         return;
       }
 
+      const waWindow = window.open('', '_blank');
+      if (waWindow) {
+        waWindow.document.write('<div style="font-family:Cairo,Arial;text-align:center;margin-top:40px">جاري تجهيز رسالة خطة الانتشار...</div>');
+      }
+
       const autoAssistants = [
         document.getElementById('deploy_assistant1_auto').value || '-',
         document.getElementById('deploy_assistant2_auto').value || '-',
@@ -2621,52 +2625,68 @@ function addManualDeploymentRow(){
         document.getElementById('deploy_assistant4_auto').value || '-'
       ].join(' | ');
 
+      const nowMs = Date.now();
+      const nowIso = new Date(nowMs).toISOString();
+
       const rows = [...document.querySelectorAll('#deploymentTableBody tr')].map(row => {
         const lat = row.querySelector('.dep-lat')?.value || '';
         const lng = row.querySelector('.dep-lng')?.value || '';
         return {
-          "وقت الحفظ": new Date().toLocaleString('ar-SA'),
-          "آخر تحديث رقمي": Date.now(),
+          "وقت الحفظ": nowIso,
+          "آخر تحديث رقمي": nowMs,
           "التاريخ": date,
           "الوقت": time,
           "القطاع": sector,
           "العرض الزمني": shift,
+          "فترة المناوبة": shift,
           "صفة مدخل البيانات": role,
           "اسم مدخل البيانات": entryName,
+          "اسم كبير المسعفين المدخل للبيانات": entryName,
           "اسم كبير المسعفين المناوب": lead,
           "أسماء المساعدين": autoAssistants,
           "الرمز": row.querySelector('.dep-code')?.value || '-',
+          "نوع الوحدة": row.querySelector('.dep-type')?.value || '-',
           "نوع الآلية": row.querySelector('.dep-type')?.value || '-',
-          "مناوبة النقطة": row.querySelector('.dep-shift')?.value || '-',
+          "مناوبة النقطة": row.querySelector('.dep-shift')?.value || shift,
+          "المناوبة": row.querySelector('.dep-shift')?.value || shift,
           "وقت البداية": row.querySelector('.dep-start-time')?.value || '-',
           "وقت النهاية": row.querySelector('.dep-end-time')?.value || '-',
-          "الحالة": row.querySelector('.dep-status')?.value || '-',
-          "عدد الفرق الفعلي": row.querySelector('.dep-count')?.value || 0,
+          "الحالة": row.querySelector('.dep-status')?.value || 'جاهز',
+          "عدد الفرق": row.querySelector('.dep-count')?.value || 1,
+          "عدد الفرق الفعلي": row.querySelector('.dep-count')?.value || 1,
           "Latitude": lat,
           "Longitude": lng,
+          "الخريطة": lat && lng ? `https://www.google.com/maps?q=${lat},${lng}` : '-',
           "رابط النقطة": lat && lng ? `https://www.google.com/maps?q=${lat},${lng}` : '-',
           "نوع التدعيم": row.querySelector('.dep-support-type')?.value || '-',
           "جهة التدعيم": row.querySelector('.dep-support-target')?.value || '-',
+          "ملاحظات السجل": row.querySelector('.dep-note')?.value || '-',
           "ملاحظة السجل": row.querySelector('.dep-note')?.value || '-',
+          "ملاحظات خطة الانتشار": notes || '-',
           "ملاحظات عامة": notes || '-'
         };
-      });
+      }).filter(r => r["الرمز"] && r["الرمز"] !== '-');
+
+      if(!rows.length){
+        showAlert('deploymentAlert','error','لا توجد نقاط في جدول خطة الانتشار للحفظ');
+        if (waWindow && !waWindow.closed) waWindow.close();
+        return;
+      }
+
+      const immediatePoints = deploymentRowsToLivePoints(rows, sector, shift);
+      mergeLiveDeploymentPoints(immediatePoints);
 
       const save = await saveToGoogleSheets('خطة الانتشار', rows);
       if(!save.success){
         showAlert('deploymentAlert','error','تعذر حفظ خطة الانتشار');
+        if (waWindow && !waWindow.closed) waWindow.close();
         return;
       }
 
-      showAlert('deploymentAlert','success','تم حفظ خطة الانتشار بنجاح');
+      showAlert('deploymentAlert','success','تم حفظ خطة الانتشار وتحديث الداشبورد والخريطة بنجاح');
 
-      // تحديث فوري من نفس البيانات المرسلة حتى لا ننتظر Apps Script أو كاش المتصفح
-      const immediatePoints = deploymentRowsToLivePoints(rows, sector, shift);
-      mergeLiveDeploymentPoints(immediatePoints);
-
-      // تحديث مؤكد من Google Sheet بعد ثوانٍ بسيطة لأن POST no-cors قد يتأخر في الظهور
       if (typeof loadLiveDeploymentData === 'function') {
-        setTimeout(() => loadLiveDeploymentData(), 3500);
+        setTimeout(() => loadLiveDeploymentData(), 4000);
       }
 
       let msg = `📍 *خطة الانتشار - نطاق منى* 📍\n\n`;
@@ -2676,21 +2696,22 @@ function addManualDeploymentRow(){
       msg += `👤 *مدخل البيانات:* ${entryName} (${role})\n`;
       msg += `👨‍⚕️ *كبير المسعفين المناوب:* ${lead}\n`;
       msg += `👥 *المساعدون:* ${autoAssistants}\n\n`;
-      msg += `📋 *ملخص الانتشار:* \n`;
+      msg += `📋 *ملخص الانتشار:*\n`;
       msg += `• إجمالي نقاط الانتشار: ${rows.length}\n`;
-      
+
       const statusCounts = rows.reduce((acc, r) => {
-        acc[r["الحالة"]] = (acc[r["الحالة"]] || 0) + 1;
+        const st = r["الحالة"] || 'جاهز';
+        acc[st] = (acc[st] || 0) + 1;
         return acc;
       }, {});
-      
-      msg += `• جاهزة: ${statusCounts["جاهز"] || 0}\n`;
-      msg += `• مدعمة: ${statusCounts["مدعم"] || 0}\n`;
+
+      msg += `• جاهزة: ${(statusCounts["جاهز"] || 0) + (statusCounts["جاهزة"] || 0)}\n`;
+      msg += `• مدعمة: ${(statusCounts["مدعم"] || 0) + (statusCounts["مدعمة"] || 0)}\n`;
       msg += `• خارج الخدمة: ${statusCounts["خارج الخدمة"] || 0}\n`;
       msg += `• متعطلة: ${statusCounts["متعطلة"] || 0}\n`;
 
-      if(notes) msg += `\n📝 *ملاحظات:* \n${notes}`;
-      openWhatsApp(msg);
+      if(notes) msg += `\n📝 *ملاحظات:*\n${notes}`;
+      openWhatsApp(msg, waWindow);
     }
 
     async function sendMethaneReport() {
@@ -2924,13 +2945,16 @@ ${row["ملاحظات إضافية"]}
    بيانات الخريطة والداشبورد المباشرة
    ═══════════════════════════════════════════ */
 var liveDeploymentData = [];
+window.DEPLOYMENT_VISIBLE_HOURS = 12;
 var mapInstance = null;
 var mapMarkers = [];
 
-// تحديث تلقائي كل دقيقة
+// تحديث تلقائي آمن كل 5 دقائق بدون مسح آخر بيانات ناجحة
 setInterval(() => {
-  if (typeof loadLiveDeploymentData === 'function') loadLiveDeploymentData();
-}, 60000);
+  if (typeof loadLiveDeploymentData === 'function') {
+    try { loadLiveDeploymentData(); } catch(e) { console.warn('Refresh skipped', e); }
+  }
+}, 300000);
 
 /* ─── تبديل التابات الرئيسية ─── */
 function switchMainTab(tabId, btn){
@@ -3447,161 +3471,71 @@ window.staticDeploymentPoints = [
 
 console.log('✓ Deployment data loaded successfully:', window.staticDeploymentPoints.length, 'points');
 
-/* ─── جلب البيانات من Google Sheets وتحديث الخريطة والداشبورد ───
-   يعرض آخر استجابة لخطة الانتشار لمدة 12 ساعة حسب فترة المناوبة
-   ولا يمسح النقاط عند فشل التحديث التلقائي أو تأخر Apps Script
-*/
-const DEPLOYMENT_VISIBLE_HOURS = 12;
-const DEPLOYMENT_VISIBLE_MS = DEPLOYMENT_VISIBLE_HOURS * 60 * 60 * 1000;
-const DEPLOYMENT_CACHE_KEY = 'mina_1447_live_deployment_cache_12h';
-let lastSuccessfulDeploymentData = [];
+/* ─── جلب البيانات من Google Sheets وتحديث الخريطة والداشبورد ─── */
+async function loadLiveDeploymentData(){
+  const visibleHours = window.DEPLOYMENT_VISIBLE_HOURS || 12;
+  const visibleMs = visibleHours * 60 * 60 * 1000;
+  const now = Date.now();
 
-function deploymentPointTime(point){
-  const first = (...keys) => {
-    for (const k of keys) {
-      if (point && point[k] !== undefined && point[k] !== null && String(point[k]).trim() !== '') return point[k];
+  try {
+    const data = await fetchDeploymentFromSheet();
+
+    if (data === null) {
+      console.warn('تعذر جلب بيانات خطة الانتشار، تم الاحتفاظ بآخر بيانات ظاهرة.');
+    } else if (Array.isArray(data) && data.length > 0) {
+      const latestDataMap = new Map();
+      const submittedSectors = new Set(window.submittedDeploymentSectors || []);
+
+      data.forEach(d => {
+        const normalized = normalizeDeploymentPoint(d, true);
+        if (!normalized.id) return;
+        if (normalized.sector) submittedSectors.add(normalizeSectorName(normalized.sector));
+
+        // تثبيت ظهور نقاط خطة الانتشار لمدة 12 ساعة من آخر تحديث رقمي/وقت الحفظ
+        const t = Number(normalized._time || 0);
+        if (t && (now - t) > visibleMs) return;
+
+        const key = `${normalizeSectorName(normalized.sector)}|${normalized.id}|${normalized.shift || ''}`;
+        const old = latestDataMap.get(key);
+        if (!old || Number(normalized._time || 0) >= Number(old._time || 0)) {
+          latestDataMap.set(key, normalized);
+        }
+      });
+
+      const fresh = Array.from(latestDataMap.values()).filter(p => p.id && p.sector && p.lat && p.lng);
+      window.submittedDeploymentSectors = submittedSectors;
+
+      // مهم: لا نمسح البيانات الحالية إذا رجع الشيت فارغاً بسبب تأخر Apps Script أو الكاش
+      if (fresh.length > 0) {
+        liveDeploymentData = fresh;
+      } else if (!liveDeploymentData || liveDeploymentData.length === 0) {
+        liveDeploymentData = [];
+      }
+    } else {
+      // إذا رجع Array فارغ، لا تمسح آخر نقاط ظاهرة
+      if (!liveDeploymentData || liveDeploymentData.length === 0) {
+        liveDeploymentData = [];
+      }
     }
-    return '';
-  };
-
-  const candidates = [
-    first('_time','آخر تحديث رقمي'),
-    first('saveTime','وقت الحفظ','Timestamp','timestamp'),
-    `${first('التاريخ')} ${first('الوقت')}`.trim()
-  ];
-
-  for (const raw of candidates) {
-    if (!raw) continue;
-    if (typeof raw === 'number' && raw > 0) return raw;
-    const n = Number(raw);
-    if (!isNaN(n) && n > 0) return n;
-    const parsed = new Date(raw).getTime();
-    if (!isNaN(parsed) && parsed > 0) return parsed;
+  } catch(e) {
+    console.error('خطأ غير متوقع في تحديث خطة الانتشار:', e);
+    // لا تستخدم البيانات الثابتة هنا حتى لا يظهر كل شيء كأنه أرسل، ولا تمسح آخر بيانات ناجحة
+    if (!liveDeploymentData) liveDeploymentData = [];
   }
-
-  // إذا لم نستطع قراءة الوقت من الشيت لا نحذف السجل مباشرة، ونعامله كحديث مؤقتاً
-  return Date.now();
-}
-
-function isDeploymentVisible(point){
-  const t = deploymentPointTime(point);
-  return (Date.now() - t) <= DEPLOYMENT_VISIBLE_MS;
-}
-
-function deploymentKey(point){
-  const n = normalizeDeploymentPoint(point, !!point.saved);
-  return `${normalizeSectorName(n.sector)}|${n.id}|${n.shift || ''}`;
-}
-
-function saveDeploymentCache(points){
-  try{
-    const clean = (points || [])
-      .map(p => normalizeDeploymentPoint(p, !!p.saved))
-      .filter(p => p.id && p.sector && p.lat && p.lng && isDeploymentVisible(p));
-    localStorage.setItem(DEPLOYMENT_CACHE_KEY, JSON.stringify({ savedAt: Date.now(), points: clean }));
-    lastSuccessfulDeploymentData = clean;
-  }catch(e){
-    console.warn('تعذر حفظ كاش خطة الانتشار:', e);
-  }
-}
-
-function loadDeploymentCache(){
-  try{
-    const raw = localStorage.getItem(DEPLOYMENT_CACHE_KEY);
-    if(!raw) return [];
-    const payload = JSON.parse(raw);
-    const points = Array.isArray(payload.points) ? payload.points : [];
-    return points
-      .map(p => normalizeDeploymentPoint(p, !!p.saved))
-      .filter(p => p.id && p.sector && p.lat && p.lng && isDeploymentVisible(p));
-  }catch(e){
-    console.warn('تعذر قراءة كاش خطة الانتشار:', e);
-    return [];
-  }
-}
-
-function refreshDeploymentView(points, message){
-  liveDeploymentData = (points || [])
-    .map(p => normalizeDeploymentPoint(p, !!p.saved))
-    .filter(p => p.id && p.sector && p.lat && p.lng && isDeploymentVisible(p));
 
   updateDashboard(liveDeploymentData || []);
   if(typeof renderMapMarkers === 'function') renderMapMarkers(liveDeploymentData || []);
 
   const sorted = (liveDeploymentData || [])
     .filter(d => d.saved)
-    .sort((a,b) => deploymentPointTime(b) - deploymentPointTime(a));
-
+    .sort((a,b) => Number(b._time || 0) - Number(a._time || 0));
   const last = sorted[0]?.saveTime || sorted[0]?.['وقت الحفظ'] || '';
   const el = document.getElementById('dashLastUpdate');
   if (el) {
-    el.innerHTML = message || (last
-      ? `آخر تحديث: ${last}<br>تظهر نقاط خطة الانتشار لمدة ${DEPLOYMENT_VISIBLE_HOURS} ساعة حسب فترة المناوبة`
-      : `تم تحديث البيانات - عدد النقاط المعروضة: ${(liveDeploymentData || []).length}<br>تظهر النقاط لمدة ${DEPLOYMENT_VISIBLE_HOURS} ساعة`);
+    el.innerHTML = last
+      ? `آخر تحديث: ${last}<br>يتم عرض نقاط آخر ${visibleHours} ساعة`
+      : `لم تصل بيانات خطة انتشار محفوظة خلال آخر ${visibleHours} ساعة`;
   }
-}
-
-async function loadLiveDeploymentData(){
-  let data = null;
-
-  try {
-    data = await fetchDeploymentFromSheet();
-  } catch(e) {
-    console.error('خطأ غير متوقع في تحديث خطة الانتشار:', e);
-    data = null;
-  }
-
-  // فشل الاتصال أو تأخر Apps Script: نحتفظ بآخر نقاط ناجحة لمدة 12 ساعة
-  if (data === null) {
-    const cached = lastSuccessfulDeploymentData.length ? lastSuccessfulDeploymentData : loadDeploymentCache();
-    if (cached.length) {
-      refreshDeploymentView(cached, `تم الاحتفاظ بآخر بيانات ناجحة<br>تظهر نقاط خطة الانتشار لمدة ${DEPLOYMENT_VISIBLE_HOURS} ساعة حسب فترة المناوبة`);
-      return;
-    }
-
-    liveDeploymentData = [];
-    refreshDeploymentView([], 'تعذر جلب بيانات خطة الانتشار ولا توجد بيانات محفوظة خلال آخر 12 ساعة');
-    return;
-  }
-
-  const latestDataMap = new Map();
-  const submittedSectors = new Set();
-
-  if (Array.isArray(data) && data.length > 0) {
-    data.forEach(d => {
-      const normalized = normalizeDeploymentPoint(d, true);
-      if (!normalized.id || !normalized.sector || !normalized.lat || !normalized.lng) return;
-
-      if (!isDeploymentVisible(normalized)) return;
-
-      submittedSectors.add(normalizeSectorName(normalized.sector));
-
-      const key = deploymentKey(normalized);
-      const old = latestDataMap.get(key);
-      if (!old || deploymentPointTime(normalized) >= deploymentPointTime(old)) {
-        latestDataMap.set(key, normalized);
-      }
-    });
-  }
-
-  let fresh = Array.from(latestDataMap.values()).filter(p => p.id && p.sector && p.lat && p.lng);
-
-  // إذا رجع الشيت فارغاً مؤقتاً أو لم تظهر البيانات بسبب تأخر POST no-cors، لا نمسح آخر استجابة
-  if (fresh.length === 0) {
-    const cached = lastSuccessfulDeploymentData.length ? lastSuccessfulDeploymentData : loadDeploymentCache();
-    if (cached.length) {
-      fresh = cached;
-      cached.forEach(p => { if (p.sector) submittedSectors.add(normalizeSectorName(p.sector)); });
-    }
-  }
-
-  window.submittedDeploymentSectors = submittedSectors;
-
-  if (fresh.length > 0) {
-    saveDeploymentCache(fresh);
-  }
-
-  refreshDeploymentView(fresh);
 }
 
 function normalizeSectorName(v){
@@ -3624,8 +3558,15 @@ function normalizeDeploymentPoint(d, fromSheet){
     const n = parseFloat(String(v).replace(',', '.'));
     return isNaN(n) ? 0 : n;
   };
-
-  let timeVal = deploymentPointTime(d || {});
+  const timeRaw = first('_time','آخر تحديث رقمي','saveTime','وقت الحفظ','Timestamp','timestamp');
+  let timeVal = Number(timeRaw);
+  if (!timeVal || isNaN(timeVal)) {
+    timeVal = new Date(timeRaw).getTime();
+  }
+  if ((!timeVal || isNaN(timeVal)) && d && d['التاريخ'] && d['الوقت']) {
+    timeVal = new Date(`${d['التاريخ']}T${String(d['الوقت']).slice(0,5)}:00`).getTime();
+  }
+  if (!timeVal || isNaN(timeVal)) timeVal = Date.now();
 
   let status = String(first('status','الحالة') || 'جاهز').trim();
   if (status === 'جاهزة') status = 'جاهز';
